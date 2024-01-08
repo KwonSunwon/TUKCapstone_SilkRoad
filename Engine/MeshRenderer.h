@@ -21,10 +21,10 @@ public:
 	MeshRenderer();
 	virtual ~MeshRenderer();
 
-	shared_ptr<Mesh> GetMesh() { return _mesh; }
-	shared_ptr<Material> GetMaterial(uint32 idx = 0) { return _materials[idx]; }
+	shared_ptr<Mesh> GetMesh() { return m_mesh; }
+	shared_ptr<Material> GetMaterial(uint32 idx = 0) { return m_materials[idx]; }
 
-	void SetMesh(shared_ptr<Mesh> mesh) { _mesh = mesh; }
+	void SetMesh(shared_ptr<Mesh> mesh) { m_mesh = mesh; }
 	void SetMaterial(shared_ptr<Material> material, uint32 idx = 0);
 
 	void Render();
@@ -34,7 +34,7 @@ public:
 	uint64 GetInstanceID();
 
 private:
-	shared_ptr<Mesh> _mesh;
-	vector<shared_ptr<Material>> _materials;
+	shared_ptr<Mesh> m_mesh;
+	vector<shared_ptr<Material>> m_materials;
 };
 

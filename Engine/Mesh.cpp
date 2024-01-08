@@ -24,23 +24,23 @@ void Mesh::Create(const vector<Vertex>& vertexBuffer, const vector<uint32>& inde
 
 void Mesh::Render(uint32 instanceCount, uint32 idx)
 {
-	GRAPHICS_CMD_LIST->IASetVertexBuffers(0, 1, &_vertexBufferView); // Slot: (0~15)
-	GRAPHICS_CMD_LIST->IASetIndexBuffer(&_vecIndexInfo[idx].bufferView);
+	GRAPHICS_CMD_LIST->IASetVertexBuffers(0, 1, &m_vertexBufferView); // Slot: (0~15)
+	GRAPHICS_CMD_LIST->IASetIndexBuffer(&m_vecIndexInfo[idx].bufferView);
 
 	GEngine->GetGraphicsDescHeap()->CommitTable();
 
-	GRAPHICS_CMD_LIST->DrawIndexedInstanced(_vecIndexInfo[idx].count, instanceCount, 0, 0, 0);
+	GRAPHICS_CMD_LIST->DrawIndexedInstanced(m_vecIndexInfo[idx].count, instanceCount, 0, 0, 0);
 }
 
 void Mesh::Render(shared_ptr<InstancingBuffer>& buffer, uint32 idx)
 {
-	D3D12_VERTEX_BUFFER_VIEW bufferViews[] = { _vertexBufferView, buffer->GetBufferView() };
+	D3D12_VERTEX_BUFFER_VIEW bufferViews[] = { m_vertexBufferView, buffer->GetBufferView() };
 	GRAPHICS_CMD_LIST->IASetVertexBuffers(0, 2, bufferViews);
-	GRAPHICS_CMD_LIST->IASetIndexBuffer(&_vecIndexInfo[idx].bufferView);
+	GRAPHICS_CMD_LIST->IASetIndexBuffer(&m_vecIndexInfo[idx].bufferView);
 
 	GEngine->GetGraphicsDescHeap()->CommitTable();
 
-	GRAPHICS_CMD_LIST->DrawIndexedInstanced(_vecIndexInfo[idx].count, buffer->GetCount(), 0, 0, 0);
+	GRAPHICS_CMD_LIST->DrawIndexedInstanced(m_vecIndexInfo[idx].count, buffer->GetCount(), 0, 0, 0);
 }
 
 shared_ptr<Mesh> Mesh::CreateFromFBX(const FbxMeshInfo* meshInfo, FBXLoader& loader)
@@ -64,7 +64,7 @@ shared_ptr<Mesh> Mesh::CreateFromFBX(const FbxMeshInfo* meshInfo, FBXLoader& loa
 
 	if (meshInfo->hasAnimation)
 		mesh->CreateBonesAndAnimations(loader);
-	
+
 	return mesh;
 }
 
@@ -82,19 +82,19 @@ void Mesh::CreateVertexBuffer(const vector<Vertex>& buffer)
 		&desc,
 		D3D12_RESOURCE_STATE_GENERIC_READ,
 		nullptr,
-		IID_PPV_ARGS(&_vertexBuffer));
+		IID_PPV_ARGS(&m_vertexBuffer));
 
 	// Copy the triangle data to the vertex buffer.
 	void* vertexDataBuffer = nullptr;
 	CD3DX12_RANGE readRange(0, 0); // We do not intend to read from this resource on the CPU.
-	_vertexBuffer->Map(0, &readRange, &vertexDataBuffer);
+	m_vertexBuffer->Map(0, &readRange, &vertexDataBuffer);
 	::memcpy(vertexDataBuffer, &buffer[0], bufferSize);
-	_vertexBuffer->Unmap(0, nullptr);
+	m_vertexBuffer->Unmap(0, nullptr);
 
 	// Initialize the vertex buffer view.
-	_vertexBufferView.BufferLocation = _vertexBuffer->GetGPUVirtualAddress();
-	_vertexBufferView.StrideInBytes = sizeof(Vertex); // 정점 1개 크기
-	_vertexBufferView.SizeInBytes = bufferSize; // 버퍼의 크기	
+	m_vertexBufferView.BufferLocation = m_vertexBuffer->GetGPUVirtualAddress();
+	m_vertexBufferView.StrideInBytes = sizeof(Vertex); // 정점 1개 크기
+	m_vertexBufferView.SizeInBytes = bufferSize; // 버퍼의 크기	
 }
 
 void Mesh::CreateIndexBuffer(const vector<uint32>& buffer)
@@ -133,7 +133,7 @@ void Mesh::CreateIndexBuffer(const vector<uint32>& buffer)
 		indexCount
 	};
 
-	_vecIndexInfo.push_back(info);
+	m_vecIndexInfo.push_back(info);
 }
 
 
@@ -184,7 +184,7 @@ void Mesh::CreateBonesAndAnimations(class FBXLoader& loader)
 			}
 		}
 
-		_animClips.push_back(info);
+		m_animClips.push_back(info);
 	}
 #pragma endregion
 
@@ -196,7 +196,7 @@ void Mesh::CreateBonesAndAnimations(class FBXLoader& loader)
 		boneInfo.parentIdx = bone->parentIndex;
 		boneInfo.matOffset = GetMatrix(bone->matOffset);
 		boneInfo.boneName = bone->boneName;
-		_bones.push_back(boneInfo);
+		m_bones.push_back(boneInfo);
 	}
 #pragma endregion
 
@@ -204,23 +204,23 @@ void Mesh::CreateBonesAndAnimations(class FBXLoader& loader)
 	if (IsAnimMesh())
 	{
 		// BoneOffet 행렬
-		const int32 boneCount = static_cast<int32>(_bones.size());
+		const int32 boneCount = static_cast<int32>(m_bones.size());
 		vector<Matrix> offsetVec(boneCount);
 		for (size_t b = 0; b < boneCount; b++)
-			offsetVec[b] = _bones[b].matOffset;
+			offsetVec[b] = m_bones[b].matOffset;
 
 		// OffsetMatrix StructuredBuffer 세팅
-		_offsetBuffer = make_shared<StructuredBuffer>();
-		_offsetBuffer->Init(sizeof(Matrix), static_cast<uint32>(offsetVec.size()), offsetVec.data());
+		m_offsetBuffer = make_shared<StructuredBuffer>();
+		m_offsetBuffer->Init(sizeof(Matrix), static_cast<uint32>(offsetVec.size()), offsetVec.data());
 
-		const int32 animCount = static_cast<int32>(_animClips.size());
+		const int32 animCount = static_cast<int32>(m_animClips.size());
 		for (int32 i = 0; i < animCount; i++)
 		{
-			AnimClipInfo& animClip = _animClips[i];
+			AnimClipInfo& animClip = m_animClips[i];
 
 			// 애니메이션 프레임 정보
 			vector<AnimFrameParams> frameParams;
-			frameParams.resize(_bones.size() * animClip.frameCount);
+			frameParams.resize(m_bones.size() * animClip.frameCount);
 
 			for (int32 b = 0; b < boneCount; b++)
 			{
@@ -239,8 +239,8 @@ void Mesh::CreateBonesAndAnimations(class FBXLoader& loader)
 			}
 
 			// StructuredBuffer 세팅
-			_frameBuffer.push_back(make_shared<StructuredBuffer>());
-			_frameBuffer.back()->Init(sizeof(AnimFrameParams), static_cast<uint32>(frameParams.size()), frameParams.data());
+			m_frameBuffer.push_back(make_shared<StructuredBuffer>());
+			m_frameBuffer.back()->Init(sizeof(AnimFrameParams), static_cast<uint32>(frameParams.size()), frameParams.data());
 		}
 	}
 #pragma endregion

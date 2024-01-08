@@ -15,30 +15,30 @@ Transform::~Transform()
 
 void Transform::FinalUpdate()
 {
-	Matrix matScale = Matrix::CreateScale(_localScale);
-	Matrix matRotation = Matrix::CreateRotationX(_localRotation.x);
-	matRotation *= Matrix::CreateRotationY(_localRotation.y);
-	matRotation *= Matrix::CreateRotationZ(_localRotation.z);
-	Matrix matTranslation = Matrix::CreateTranslation(_localPosition);
+	Matrix matScale = Matrix::CreateScale(m_localScale);
+	Matrix matRotation = Matrix::CreateRotationX(m_localRotation.x);
+	matRotation *= Matrix::CreateRotationY(m_localRotation.y);
+	matRotation *= Matrix::CreateRotationZ(m_localRotation.z);
+	Matrix matTranslation = Matrix::CreateTranslation(m_localPosition);
 
-	_matLocal = matScale * matRotation * matTranslation;
-	_matWorld = _matLocal;
+	m_matLocal = matScale * matRotation * matTranslation;
+	m_matWorld = m_matLocal;
 
 	shared_ptr<Transform> parent = GetParent().lock();
 	if (parent != nullptr)
 	{
-		_matWorld *= parent->GetLocalToWorldMatrix();
+		m_matWorld *= parent->GetLocalToWorldMatrix();
 	}
 }
 
 void Transform::PushData()
 {
 	TransformParams transformParams = {};
-	transformParams.matWorld = _matWorld;
+	transformParams.matWorld = m_matWorld;
 	transformParams.matView = Camera::S_MatView;
 	transformParams.matProjection = Camera::S_MatProjection;
-	transformParams.matWV = _matWorld * Camera::S_MatView;
-	transformParams.matWVP = _matWorld * Camera::S_MatView * Camera::S_MatProjection;
+	transformParams.matWV = m_matWorld * Camera::S_MatView;
+	transformParams.matWVP = m_matWorld * Camera::S_MatView * Camera::S_MatProjection;
 	transformParams.matViewInv = Camera::S_MatView.Invert();
 
 	CONST_BUFFER(CONSTANT_BUFFER_TYPE::TRANSFORM)->PushGraphicsData(&transformParams, sizeof(transformParams));
@@ -64,7 +64,7 @@ void Transform::LookAt(const Vec3& dir)
 	matrix.Up(up);
 	matrix.Backward(front);
 
-	_localRotation = DecomposeRotationMatrix(matrix);
+	m_localRotation = DecomposeRotationMatrix(matrix);
 }
 
 bool Transform::CloseEnough(const float& a, const float& b, const float& epsilon)

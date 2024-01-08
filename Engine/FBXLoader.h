@@ -84,10 +84,10 @@ public:
 	void LoadFbx(const wstring& path);
 
 public:
-	int32 GetMeshCount() { return static_cast<int32>(_meshes.size()); }
-	const FbxMeshInfo& GetMesh(int32 idx) { return _meshes[idx]; }
-	vector<shared_ptr<FbxBoneInfo>>& GetBones() { return _bones; }
-	vector<shared_ptr<FbxAnimClipInfo>>& GetAnimClip() { return _animClips; }
+	int32 GetMeshCount() { return static_cast<int32>(m_meshes.size()); }
+	const FbxMeshInfo& GetMesh(int32 idx) { return m_meshes[idx]; }
+	vector<shared_ptr<FbxBoneInfo>>& GetBones() { return m_bones; }
+	vector<shared_ptr<FbxAnimClipInfo>>& GetAnimClip() { return m_animClips; }
 private:
 	void Import(const wstring& path);
 
@@ -120,13 +120,13 @@ private:
 	void FillBoneWeight(FbxMesh* mesh, FbxMeshInfo* meshInfo);
 
 private:
-	FbxManager* _manager = nullptr;
-	FbxScene* _scene = nullptr;
-	FbxImporter* _importer = nullptr;
-	wstring			_resourceDirectory;
+	FbxManager* m_manager = nullptr;
+	FbxScene* m_scene = nullptr;
+	FbxImporter* m_importer = nullptr;
+	wstring			m_resourceDirectory;
 
-	vector<FbxMeshInfo>					_meshes;
-	vector<shared_ptr<FbxBoneInfo>>		_bones;
-	vector<shared_ptr<FbxAnimClipInfo>>	_animClips;
-	FbxArray<FbxString*>				_animNames;
+	vector<FbxMeshInfo>					m_meshes;
+	vector<shared_ptr<FbxBoneInfo>>		m_bones;
+	vector<shared_ptr<FbxAnimClipInfo>>	m_animClips;
+	FbxArray<FbxString*>				m_animNames;
 };

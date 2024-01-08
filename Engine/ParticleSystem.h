@@ -36,21 +36,21 @@ public:
 	virtual void Save(const wstring& path) override { }
 
 private:
-	shared_ptr<StructuredBuffer>	_particleBuffer;
-	shared_ptr<StructuredBuffer>	_computeSharedBuffer;
-	uint32							_maxParticle = 1000;
+	shared_ptr<StructuredBuffer>	m_particleBuffer;
+	shared_ptr<StructuredBuffer>	m_computeSharedBuffer;
+	uint32							m_maxParticle = 1000;
 
-	shared_ptr<Material>		_computeMaterial;
-	shared_ptr<Material>		_material;
-	shared_ptr<Mesh>			_mesh;
+	shared_ptr<Material>		m_computeMaterial;
+	shared_ptr<Material>		m_material;
+	shared_ptr<Mesh>			m_mesh;
 
-	float				_createInterval = 0.005f;
-	float				_accTime = 0.f;
+	float				m_createInterval = 0.005f;
+	float				m_accTime = 0.f;
 
-	float				_minLifeTime = 0.5f;
-	float				_maxLifeTime = 1.f;
-	float				_minSpeed = 100;
-	float				_maxSpeed = 50;
-	float				_startScale = 10.f;
-	float				_endScale = 5.f;
+	float				m_minLifeTime = 0.5f;
+	float				m_maxLifeTime = 1.f;
+	float				m_minSpeed = 100;
+	float				m_maxSpeed = 50;
+	float				m_startScale = 10.f;
+	float				m_endScale = 5.f;
 };

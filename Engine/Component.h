@@ -40,8 +40,8 @@ public:
 	virtual void FinalUpdate() { }
 
 public:
-	COMPONENT_TYPE GetType() { return _type; }
-	bool IsValid() { return _gameObject.expired() == false; }
+	COMPONENT_TYPE GetType() { return m_type; }
+	bool IsValid() { return m_gameObject.expired() == false; }
 
 	shared_ptr<GameObject> GetGameObject();
 	shared_ptr<Transform> GetTransform();
@@ -50,10 +50,10 @@ public:
 
 private:
 	friend class GameObject;
-	void SetGameObject(shared_ptr<GameObject> gameObject) { _gameObject = gameObject; }
+	void SetGameObject(shared_ptr<GameObject> gameObject) { m_gameObject = gameObject; }
 
 protected:
-	COMPONENT_TYPE _type;
-	weak_ptr<GameObject> _gameObject;
+	COMPONENT_TYPE m_type;
+	weak_ptr<GameObject> m_gameObject;
 };
 

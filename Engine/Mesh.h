@@ -55,27 +55,27 @@ private:
 	Matrix GetMatrix(FbxAMatrix& matrix);
 
 public:
-	uint32 GetSubsetCount() { return static_cast<uint32>(_vecIndexInfo.size()); }
-	const vector<BoneInfo>*		GetBones() { return &_bones; }
-	uint32						GetBoneCount() { return static_cast<uint32>(_bones.size()); }
-	const vector<AnimClipInfo>* GetAnimClip() { return &_animClips; }
+	uint32 GetSubsetCount() { return static_cast<uint32>(m_vecIndexInfo.size()); }
+	const vector<BoneInfo>* GetBones() { return &m_bones; }
+	uint32						GetBoneCount() { return static_cast<uint32>(m_bones.size()); }
+	const vector<AnimClipInfo>* GetAnimClip() { return &m_animClips; }
 
-	bool							IsAnimMesh() { return !_animClips.empty(); }
-	shared_ptr<StructuredBuffer>	GetBoneFrameDataBuffer(int32 index = 0) { return _frameBuffer[index]; } // 전체 본 프레임 정보
-	shared_ptr<StructuredBuffer>	GetBoneOffsetBuffer() { return  _offsetBuffer; }
+	bool							IsAnimMesh() { return !m_animClips.empty(); }
+	shared_ptr<StructuredBuffer>	GetBoneFrameDataBuffer(int32 index = 0) { return m_frameBuffer[index]; } // 전체 본 프레임 정보
+	shared_ptr<StructuredBuffer>	GetBoneOffsetBuffer() { return  m_offsetBuffer; }
 
 private:
-	ComPtr<ID3D12Resource>		_vertexBuffer;
-	D3D12_VERTEX_BUFFER_VIEW	_vertexBufferView = {};
+	ComPtr<ID3D12Resource>		m_vertexBuffer;
+	D3D12_VERTEX_BUFFER_VIEW	m_vertexBufferView = {};
 	uint32 _vertexCount = 0;
 
-	vector<IndexBufferInfo>		_vecIndexInfo;
+	vector<IndexBufferInfo>		m_vecIndexInfo;
 
 	// Animation
-	vector<AnimClipInfo>			_animClips;
-	vector<BoneInfo>				_bones;
+	vector<AnimClipInfo>			m_animClips;
+	vector<BoneInfo>				m_bones;
 
-	shared_ptr<StructuredBuffer>	_offsetBuffer; // 각 뼈의 offset 행렬
-	vector<shared_ptr<StructuredBuffer>> _frameBuffer; // 전체 본 프레임 정보
+	shared_ptr<StructuredBuffer>	m_offsetBuffer; // 각 뼈의 offset 행렬
+	vector<shared_ptr<StructuredBuffer>> m_frameBuffer; // 전체 본 프레임 정보
 };
 

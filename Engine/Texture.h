@@ -17,30 +17,30 @@ public:
 	void CreateFromResource(ComPtr<ID3D12Resource> tex2D);
 
 public:
-	ComPtr<ID3D12Resource> GetTex2D() { return _tex2D; }
-	ComPtr<ID3D12DescriptorHeap> GetSRV() { return _srvHeap; }
-	ComPtr<ID3D12DescriptorHeap> GetRTV() { return _rtvHeap; }
-	ComPtr<ID3D12DescriptorHeap> GetDSV() { return _dsvHeap; }
-	ComPtr<ID3D12DescriptorHeap> GetUAV() { return _uavHeap; }
+	ComPtr<ID3D12Resource> GetTex2D() { return m_tex2D; }
+	ComPtr<ID3D12DescriptorHeap> GetSRV() { return m_srvHeap; }
+	ComPtr<ID3D12DescriptorHeap> GetRTV() { return m_rtvHeap; }
+	ComPtr<ID3D12DescriptorHeap> GetDSV() { return m_dsvHeap; }
+	ComPtr<ID3D12DescriptorHeap> GetUAV() { return m_uavHeap; }
 
-	D3D12_CPU_DESCRIPTOR_HANDLE GetSRVHandle() { return _srvHeapBegin; }
-	D3D12_CPU_DESCRIPTOR_HANDLE GetUAVHandle() { return _uavHeapBegin; }
+	D3D12_CPU_DESCRIPTOR_HANDLE GetSRVHandle() { return m_srvHeapBegin; }
+	D3D12_CPU_DESCRIPTOR_HANDLE GetUAVHandle() { return m_uavHeapBegin; }
 
-	float GetWidth() { return static_cast<float>(_desc.Width); }
-	float GetHeight() { return static_cast<float>(_desc.Height); }
-
-private:
-	ScratchImage			 		_image;
-	D3D12_RESOURCE_DESC				_desc;
-	ComPtr<ID3D12Resource>			_tex2D;
-
-	ComPtr<ID3D12DescriptorHeap>	_srvHeap;
-	ComPtr<ID3D12DescriptorHeap>	_rtvHeap;
-	ComPtr<ID3D12DescriptorHeap>	_dsvHeap;
-	ComPtr<ID3D12DescriptorHeap>	_uavHeap;
+	float GetWidth() { return static_cast<float>(m_desc.Width); }
+	float GetHeight() { return static_cast<float>(m_desc.Height); }
 
 private:
-	D3D12_CPU_DESCRIPTOR_HANDLE		_srvHeapBegin = {};
-	D3D12_CPU_DESCRIPTOR_HANDLE		_uavHeapBegin = {};
+	ScratchImage			 		m_image;
+	D3D12_RESOURCE_DESC				m_desc;
+	ComPtr<ID3D12Resource>			m_tex2D;
+
+	ComPtr<ID3D12DescriptorHeap>	m_srvHeap;
+	ComPtr<ID3D12DescriptorHeap>	m_rtvHeap;
+	ComPtr<ID3D12DescriptorHeap>	m_dsvHeap;
+	ComPtr<ID3D12DescriptorHeap>	m_uavHeap;
+
+private:
+	D3D12_CPU_DESCRIPTOR_HANDLE		m_srvHeapBegin = {};
+	D3D12_CPU_DESCRIPTOR_HANDLE		m_uavHeapBegin = {};
 };
 

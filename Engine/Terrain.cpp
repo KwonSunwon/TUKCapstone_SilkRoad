@@ -21,20 +21,20 @@ Terrain::~Terrain()
 
 void Terrain::Init(int32 sizeX, int32 sizeZ)
 {
-	_sizeX = sizeX;
-	_sizeZ = sizeZ;
+	m_sizeX = sizeX;
+	m_sizeZ = sizeZ;
 
-	_material = GET_SINGLE(Resources)->Get<Material>(L"Terrain");
+	m_material = GET_SINGLE(Resources)->Get<Material>(L"Terrain");
 
-	_material->SetInt(1, _sizeX);
-	_material->SetInt(2, _sizeZ);
-	_material->SetFloat(0, _maxTesselation);
+	m_material->SetInt(1, m_sizeX);
+	m_material->SetInt(2, m_sizeZ);
+	m_material->SetFloat(0, m_maxTesselation);
 
 	shared_ptr<Texture> heightMap = GET_SINGLE(Resources)->Load<Texture>(L"HeightMap", L"..\\Resources\\Texture\\Terrain\\height.png");
 	Vec2 v = Vec2(heightMap->GetWidth(), heightMap->GetHeight());
-	_material->SetVec2(0, Vec2(heightMap->GetWidth(), heightMap->GetHeight()));
-	_material->SetVec2(1, Vec2(1000.f, 5000.f));
-	_material->SetTexture(2, heightMap);
+	m_material->SetVec2(0, Vec2(heightMap->GetWidth(), heightMap->GetHeight()));
+	m_material->SetVec2(1, Vec2(1000.f, 5000.f));
+	m_material->SetTexture(2, heightMap);
 
 	shared_ptr<MeshRenderer> meshRenderer = GetGameObject()->GetMeshRenderer();
 	{
@@ -54,5 +54,5 @@ void Terrain::FinalUpdate()
 		return;
 
 	Vec3 pos = mainCamera->GetTransform()->GetLocalPosition();
-	_material->SetVec4(0, Vec4(pos.x, pos.y, pos.z, 0));
+	m_material->SetVec4(0, Vec4(pos.x, pos.y, pos.z, 0));
 }

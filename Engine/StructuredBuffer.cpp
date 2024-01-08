@@ -12,13 +12,13 @@ StructuredBuffer::~StructuredBuffer()
 
 void StructuredBuffer::Init(uint32 elementSize, uint32 elementCount, void* initialData)
 {
-	_elementSize = elementSize;
-	_elementCount = elementCount;
-	_resourceState = D3D12_RESOURCE_STATE_COMMON;
+	m_elementSize = elementSize;
+	m_elementCount = elementCount;
+	m_resourceState = D3D12_RESOURCE_STATE_COMMON;
 
 	// Buffer
 	{
-		uint64 bufferSize = static_cast<uint64>(_elementSize) * _elementCount;
+		uint64 bufferSize = static_cast<uint64>(m_elementSize) * m_elementCount;
 		D3D12_RESOURCE_DESC desc = CD3DX12_RESOURCE_DESC::Buffer(bufferSize, D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS);
 		D3D12_HEAP_PROPERTIES heapProperties = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT);
 
@@ -26,9 +26,9 @@ void StructuredBuffer::Init(uint32 elementSize, uint32 elementCount, void* initi
 			&heapProperties,
 			D3D12_HEAP_FLAG_NONE,
 			&desc,
-			_resourceState,
+			m_resourceState,
 			nullptr,
-			IID_PPV_ARGS(&_buffer));
+			IID_PPV_ARGS(&m_buffer));
 
 		if (initialData)
 			CopyInitialData(bufferSize, initialData);
@@ -40,20 +40,20 @@ void StructuredBuffer::Init(uint32 elementSize, uint32 elementCount, void* initi
 		srvHeapDesc.NumDescriptors = 1;
 		srvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
 		srvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
-		DEVICE->CreateDescriptorHeap(&srvHeapDesc, IID_PPV_ARGS(&_srvHeap));
+		DEVICE->CreateDescriptorHeap(&srvHeapDesc, IID_PPV_ARGS(&m_srvHeap));
 
-		_srvHeapBegin = _srvHeap->GetCPUDescriptorHandleForHeapStart();
+		m_srvHeapBegin = m_srvHeap->GetCPUDescriptorHandleForHeapStart();
 
 		D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
 		srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 		srvDesc.Format = DXGI_FORMAT_UNKNOWN;
 		srvDesc.ViewDimension = D3D12_SRV_DIMENSION_BUFFER;
 		srvDesc.Buffer.FirstElement = 0;
-		srvDesc.Buffer.NumElements = _elementCount;
-		srvDesc.Buffer.StructureByteStride = _elementSize;
+		srvDesc.Buffer.NumElements = m_elementCount;
+		srvDesc.Buffer.StructureByteStride = m_elementSize;
 		srvDesc.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_NONE;
 
-		DEVICE->CreateShaderResourceView(_buffer.Get(), &srvDesc, _srvHeapBegin);
+		DEVICE->CreateShaderResourceView(m_buffer.Get(), &srvDesc, m_srvHeapBegin);
 	}
 
 	// UAV
@@ -62,36 +62,36 @@ void StructuredBuffer::Init(uint32 elementSize, uint32 elementCount, void* initi
 		uavheapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
 		uavheapDesc.NumDescriptors = 1;
 		uavheapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
-		DEVICE->CreateDescriptorHeap(&uavheapDesc, IID_PPV_ARGS(&_uavHeap));
+		DEVICE->CreateDescriptorHeap(&uavheapDesc, IID_PPV_ARGS(&m_uavHeap));
 
-		_uavHeapBegin = _uavHeap->GetCPUDescriptorHandleForHeapStart();
+		m_uavHeapBegin = m_uavHeap->GetCPUDescriptorHandleForHeapStart();
 
 		D3D12_UNORDERED_ACCESS_VIEW_DESC uavDesc = {};
 		uavDesc.Format = DXGI_FORMAT_UNKNOWN;
 		uavDesc.ViewDimension = D3D12_UAV_DIMENSION_BUFFER;
 		uavDesc.Buffer.FirstElement = 0;
-		uavDesc.Buffer.NumElements = _elementCount;
-		uavDesc.Buffer.StructureByteStride = _elementSize;
+		uavDesc.Buffer.NumElements = m_elementCount;
+		uavDesc.Buffer.StructureByteStride = m_elementSize;
 		uavDesc.Buffer.CounterOffsetInBytes = 0;
 		uavDesc.Buffer.Flags = D3D12_BUFFER_UAV_FLAG_NONE;
 
-		DEVICE->CreateUnorderedAccessView(_buffer.Get(), nullptr, &uavDesc, _uavHeapBegin);
+		DEVICE->CreateUnorderedAccessView(m_buffer.Get(), nullptr, &uavDesc, m_uavHeapBegin);
 	}
 }
 
 void StructuredBuffer::PushGraphicsData(SRV_REGISTER reg)
 {
-	GEngine->GetGraphicsDescHeap()->SetSRV(_srvHeapBegin, reg);
+	GEngine->GetGraphicsDescHeap()->SetSRV(m_srvHeapBegin, reg);
 }
 
 void StructuredBuffer::PushComputeSRVData(SRV_REGISTER reg)
 {
-	GEngine->GetComputeDescHeap()->SetSRV(_srvHeapBegin, reg);
+	GEngine->GetComputeDescHeap()->SetSRV(m_srvHeapBegin, reg);
 }
 
 void StructuredBuffer::PushComputeUAVData(UAV_REGISTER reg)
 {
-	GEngine->GetComputeDescHeap()->SetUAV(_uavHeapBegin, reg);
+	GEngine->GetComputeDescHeap()->SetUAV(m_uavHeapBegin, reg);
 }
 
 void StructuredBuffer::CopyInitialData(uint64 bufferSize, void* initialData)
@@ -116,22 +116,22 @@ void StructuredBuffer::CopyInitialData(uint64 bufferSize, void* initialData)
 
 	// Common -> Copy
 	{
-		D3D12_RESOURCE_BARRIER barrier = CD3DX12_RESOURCE_BARRIER::Transition(_buffer.Get(),
+		D3D12_RESOURCE_BARRIER barrier = CD3DX12_RESOURCE_BARRIER::Transition(m_buffer.Get(),
 			D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_COPY_DEST);
 
 		RESOURCE_CMD_LIST->ResourceBarrier(1, &barrier);
 	}
 
-	RESOURCE_CMD_LIST->CopyBufferRegion(_buffer.Get(), 0, readBuffer.Get(), 0, bufferSize);
+	RESOURCE_CMD_LIST->CopyBufferRegion(m_buffer.Get(), 0, readBuffer.Get(), 0, bufferSize);
 
 	// Copy -> Common
 	{
-		D3D12_RESOURCE_BARRIER barrier = CD3DX12_RESOURCE_BARRIER::Transition(_buffer.Get(),
+		D3D12_RESOURCE_BARRIER barrier = CD3DX12_RESOURCE_BARRIER::Transition(m_buffer.Get(),
 			D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_COMMON);
 		RESOURCE_CMD_LIST->ResourceBarrier(1, &barrier);
 	}
 
 	GEngine->GetGraphicsCmdQueue()->FlushResourceCommandQueue();
 
-	_resourceState = D3D12_RESOURCE_STATE_COMMON;
+	m_resourceState = D3D12_RESOURCE_STATE_COMMON;
 }

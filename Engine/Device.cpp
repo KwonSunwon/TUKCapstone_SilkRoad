@@ -8,8 +8,8 @@ void Device::Init()
 	// - riid : 디바이스의 COM ID
 	// - ppDevice : 생성된 장치가 매개변수에 설정
 #ifdef _DEBUG
-	::D3D12GetDebugInterface(IID_PPV_ARGS(&_debugController));
-	_debugController->EnableDebugLayer();
+	::D3D12GetDebugInterface(IID_PPV_ARGS(&m_debugController));
+	m_debugController->EnableDebugLayer();
 #endif
 
 	// DXGI(DirectX Graphics Infrastructure)
@@ -19,7 +19,7 @@ void Device::Init()
 	// CreateDXGIFactory
 	// - riid : 디바이스의 COM ID
 	// - ppDevice : 생성된 장치가 매개변수에 설정
-	::CreateDXGIFactory(IID_PPV_ARGS(&_dxgi));
+	::CreateDXGIFactory(IID_PPV_ARGS(&m_dxgi));
 
 	// CreateDevice
 	// - 디스플레이 어댑터(그래픽 카드)를 나타내는 객체
@@ -27,5 +27,5 @@ void Device::Init()
 	// - MinimumFeatureLevel : 응용 프로그램이 요구하는 최소 기능 수준 (구닥다리 걸러낸다)
 	// - riid : 디바이스의 COM ID
 	// - ppDevice : 생성된 장치가 매개변수에 설정
-	::D3D12CreateDevice(nullptr, D3D_FEATURE_LEVEL_11_0, IID_PPV_ARGS(&_device));
+	::D3D12CreateDevice(nullptr, D3D_FEATURE_LEVEL_11_0, IID_PPV_ARGS(&m_device));
 }

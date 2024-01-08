@@ -26,8 +26,8 @@ public:
 	vector<shared_ptr<GameObject>> Instantiate();
 
 private:
-	shared_ptr<Mesh>				_mesh;
-	vector<shared_ptr<Material>>	_materials;
+	shared_ptr<Mesh>				m_mesh;
+	vector<shared_ptr<Material>>	m_materials;
 
-	vector<MeshRenderInfo> _meshRenders;
+	vector<MeshRenderInfo> m_meshRenders;
 };

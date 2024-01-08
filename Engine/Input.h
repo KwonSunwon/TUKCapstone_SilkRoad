@@ -55,15 +55,15 @@ public:
 	bool GetButtonDown(KEY_TYPE key) { return GetState(key) == KEY_STATE::DOWN; }
 	// ∏« √≥¿Ω ¥≠∑∂¥Ÿ ∂√¿ª ∂ß
 	bool GetButtonUp(KEY_TYPE key) { return GetState(key) == KEY_STATE::UP; }
-	
-	const POINT& GetMousePos() { return _mousePos; }
+
+	const POINT& GetMousePos() { return m_mousePos; }
 
 private:
-	inline KEY_STATE GetState(KEY_TYPE key) { return _states[static_cast<uint8>(key)]; }
+	inline KEY_STATE GetState(KEY_TYPE key) { return m_states[static_cast<uint8>(key)]; }
 
 private:
-	HWND _hwnd;
-	vector<KEY_STATE> _states;
-	POINT _mousePos = {};
+	HWND m_hwnd;
+	vector<KEY_STATE> m_states;
+	POINT m_mousePos = {};
 };
 

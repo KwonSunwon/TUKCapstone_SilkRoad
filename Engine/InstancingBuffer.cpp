@@ -12,7 +12,7 @@ InstancingBuffer::~InstancingBuffer()
 
 void InstancingBuffer::Init(uint32 maxCount)
 {
-	_maxCount = maxCount;
+	m_maxCount = maxCount;
 
 	const int32 bufferSize = sizeof(InstancingParams) * maxCount;
 	D3D12_HEAP_PROPERTIES heapProperty = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
@@ -24,34 +24,34 @@ void InstancingBuffer::Init(uint32 maxCount)
 		&desc,
 		D3D12_RESOURCE_STATE_GENERIC_READ,
 		nullptr,
-		IID_PPV_ARGS(&_buffer));
+		IID_PPV_ARGS(&m_buffer));
 }
 
 void InstancingBuffer::Clear()
 {
-	_data.clear();
+	m_data.clear();
 }
 
 void InstancingBuffer::AddData(InstancingParams& params)
 {
-	_data.push_back(params);
+	m_data.push_back(params);
 }
 
 void InstancingBuffer::PushData()
 {
 	const uint32 dataCount = GetCount();
-	if (dataCount > _maxCount)
+	if (dataCount > m_maxCount)
 		Init(dataCount);
 
 	const uint32 bufferSize = dataCount * sizeof(InstancingParams);
 
 	void* dataBuffer = nullptr;
 	D3D12_RANGE readRange{ 0, 0 };
-	_buffer->Map(0, &readRange, &dataBuffer);
-	memcpy(dataBuffer, &_data[0], bufferSize);
-	_buffer->Unmap(0, nullptr);
+	m_buffer->Map(0, &readRange, &dataBuffer);
+	memcpy(dataBuffer, &m_data[0], bufferSize);
+	m_buffer->Unmap(0, nullptr);
 
-	_bufferView.BufferLocation = _buffer->GetGPUVirtualAddress();
-	_bufferView.StrideInBytes = sizeof(InstancingParams);
-	_bufferView.SizeInBytes = bufferSize;
+	m_bufferView.BufferLocation = m_buffer->GetGPUVirtualAddress();
+	m_bufferView.StrideInBytes = sizeof(InstancingParams);
+	m_bufferView.SizeInBytes = bufferSize;
 }

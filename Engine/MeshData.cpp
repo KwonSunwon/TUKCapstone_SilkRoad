@@ -40,7 +40,7 @@ shared_ptr<MeshData> MeshData::LoadFromFBX(const wstring& path)
 		MeshRenderInfo info = {};
 		info.mesh = mesh;
 		info.materials = materials;
-		meshData->_meshRenders.push_back(info);
+		meshData->m_meshRenders.push_back(info);
 	}
 
 	return meshData;
@@ -60,7 +60,7 @@ vector<shared_ptr<GameObject>> MeshData::Instantiate()
 {
 	vector<shared_ptr<GameObject>> v;
 
-	for (MeshRenderInfo& info : _meshRenders)
+	for (MeshRenderInfo& info : m_meshRenders)
 	{
 		shared_ptr<GameObject> gameObject = make_shared<GameObject>();
 		gameObject->AddComponent(make_shared<Transform>());

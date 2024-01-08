@@ -12,31 +12,31 @@ public:
 	void PushComputeSRVData(SRV_REGISTER reg);
 	void PushComputeUAVData(UAV_REGISTER reg);
 
-	ComPtr<ID3D12DescriptorHeap> GetSRV() { return _srvHeap; }
-	ComPtr<ID3D12DescriptorHeap> GetUAV() { return _uavHeap; }
+	ComPtr<ID3D12DescriptorHeap> GetSRV() { return m_srvHeap; }
+	ComPtr<ID3D12DescriptorHeap> GetUAV() { return m_uavHeap; }
 
-	void SetResourceState(D3D12_RESOURCE_STATES state) { _resourceState = state; }
-	D3D12_RESOURCE_STATES GetResourceState() { return _resourceState; }
-	ComPtr<ID3D12Resource> GetBuffer() { return _buffer; }
+	void SetResourceState(D3D12_RESOURCE_STATES state) { m_resourceState = state; }
+	D3D12_RESOURCE_STATES GetResourceState() { return m_resourceState; }
+	ComPtr<ID3D12Resource> GetBuffer() { return m_buffer; }
 
-	uint32	GetElementSize() { return _elementSize; }
-	uint32	GetElementCount() { return _elementCount; }
-	UINT	GetBufferSize() { return _elementSize * _elementCount; }
+	uint32	GetElementSize() { return m_elementSize; }
+	uint32	GetElementCount() { return m_elementCount; }
+	UINT	GetBufferSize() { return m_elementSize * m_elementCount; }
 
 private:
 	void CopyInitialData(uint64 bufferSize, void* initialData);
 
 private:
-	ComPtr<ID3D12Resource>			_buffer;
-	ComPtr<ID3D12DescriptorHeap>	_srvHeap;
-	ComPtr<ID3D12DescriptorHeap>	_uavHeap;
+	ComPtr<ID3D12Resource>			m_buffer;
+	ComPtr<ID3D12DescriptorHeap>	m_srvHeap;
+	ComPtr<ID3D12DescriptorHeap>	m_uavHeap;
 
-	uint32						_elementSize = 0;
-	uint32						_elementCount = 0;
-	D3D12_RESOURCE_STATES		_resourceState = {};
+	uint32						m_elementSize = 0;
+	uint32						m_elementCount = 0;
+	D3D12_RESOURCE_STATES		m_resourceState = {};
 
 private:
-	D3D12_CPU_DESCRIPTOR_HANDLE _srvHeapBegin = {};
-	D3D12_CPU_DESCRIPTOR_HANDLE _uavHeapBegin = {};
+	D3D12_CPU_DESCRIPTOR_HANDLE m_srvHeapBegin = {};
+	D3D12_CPU_DESCRIPTOR_HANDLE m_uavHeapBegin = {};
 };
 

@@ -20,19 +20,19 @@
 
 void SceneManager::Update()
 {
-	if (_activeScene == nullptr)
+	if (m_activeScene == nullptr)
 		return;
 
-	_activeScene->Update();
-	_activeScene->LateUpdate();
-	_activeScene->FinalUpdate();
+	m_activeScene->Update();
+	m_activeScene->LateUpdate();
+	m_activeScene->FinalUpdate();
 }
 
 // TEMP
 void SceneManager::Render()
 {
-	if (_activeScene)
-		_activeScene->Render();
+	if (m_activeScene)
+		m_activeScene->Render();
 }
 
 void SceneManager::LoadScene(wstring sceneName)
@@ -40,26 +40,26 @@ void SceneManager::LoadScene(wstring sceneName)
 	// TODO : 기존 Scene 정리
 	// TODO : 파일에서 Scene 정보 로드
 
-	_activeScene = LoadTestScene();
+	m_activeScene = LoadTestScene();
 
-	_activeScene->Awake();
-	_activeScene->Start();
+	m_activeScene->Awake();
+	m_activeScene->Start();
 }
 
 void SceneManager::SetLayerName(uint8 index, const wstring& name)
 {
 	// 기존 데이터 삭제
-	const wstring& prevName = _layerNames[index];
-	_layerIndex.erase(prevName);
+	const wstring& prevName = m_layerNames[index];
+	m_layerIndex.erase(prevName);
 
-	_layerNames[index] = name;
-	_layerIndex[name] = index;
+	m_layerNames[index] = name;
+	m_layerIndex[name] = index;
 }
 
 uint8 SceneManager::LayerNameToIndex(const wstring& name)
 {
-	auto findIt = _layerIndex.find(name);
-	if (findIt == _layerIndex.end())
+	auto findIt = m_layerIndex.find(name);
+	if (findIt == m_layerIndex.end())
 		return 0;
 
 	return findIt->second;
@@ -142,7 +142,7 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 #pragma endregion
 
 	shared_ptr<Scene> scene = make_shared<Scene>();
-	
+
 #pragma region Camera
 	{
 		shared_ptr<GameObject> camera = make_shared<GameObject>();
@@ -155,7 +155,7 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 		uint8 layerIndex = GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI");
 		camera->GetCamera()->SetCullingMaskLayerOnOff(layerIndex, true); // UI는 안 찍음
 		scene->AddGameObject(camera);
-	}	
+	}
 #pragma endregion
 
 #pragma region UI_Camera
@@ -300,7 +300,7 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 			gameObject->SetName(L"Dragon");
 			gameObject->SetCheckFrustum(false);
 			gameObject->GetTransform()->SetLocalPosition(Vec3(0.f, -100.f, 300.f));
-			gameObject->GetTransform()->SetLocalRotation(Vec3(XMConvertToRadians(-90.f), 0.f,0.f));
+			gameObject->GetTransform()->SetLocalRotation(Vec3(XMConvertToRadians(-90.f), 0.f, 0.f));
 			gameObject->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
 			scene->AddGameObject(gameObject);
 			gameObject->AddComponent(make_shared<TestDragon>());

@@ -38,7 +38,7 @@ void InstancingManager::Render(vector<shared_ptr<GameObject>>& gameObjects)
 				AddParam(instanceId, params);
 			}
 
-			shared_ptr<InstancingBuffer>& buffer = _buffers[instanceId];
+			shared_ptr<InstancingBuffer>& buffer = m_buffers[instanceId];
 			vec[0]->GetMeshRenderer()->Render(buffer);
 		}
 	}
@@ -46,7 +46,7 @@ void InstancingManager::Render(vector<shared_ptr<GameObject>>& gameObjects)
 
 void InstancingManager::ClearBuffer()
 {
-	for (auto& pair : _buffers)
+	for (auto& pair : m_buffers)
 	{
 		shared_ptr<InstancingBuffer>& buffer = pair.second;
 		buffer->Clear();
@@ -55,8 +55,8 @@ void InstancingManager::ClearBuffer()
 
 void InstancingManager::AddParam(uint64 instanceId, InstancingParams& data)
 {
-	if (_buffers.find(instanceId) == _buffers.end())
-		_buffers[instanceId] = make_shared<InstancingBuffer>();
+	if (m_buffers.find(instanceId) == m_buffers.end())
+		m_buffers[instanceId] = make_shared<InstancingBuffer>();
 
-	_buffers[instanceId]->AddData(data);
+	m_buffers[instanceId]->AddData(data);
 }

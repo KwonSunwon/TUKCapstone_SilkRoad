@@ -25,12 +25,12 @@ public:
 	Object(OBJECT_TYPE type);
 	virtual ~Object();
 
-	OBJECT_TYPE GetType() { return _objectType; }
+	OBJECT_TYPE GetType() { return m_objectType; }
 
-	void SetName(const wstring& name) { _name = name; }
-	const wstring& GetName() { return _name; }
+	void SetName(const wstring& name) { m_name = name; }
+	const wstring& GetName() { return m_name; }
 
-	uint32 GetID() { return _id; }
+	uint32 GetID() { return m_id; }
 
 	// TODO : Instantiate
 
@@ -40,10 +40,10 @@ protected:
 	virtual void Save(const wstring& path) { }
 
 protected:
-	OBJECT_TYPE _objectType = OBJECT_TYPE::NONE;
-	wstring _name;
+	OBJECT_TYPE m_objectType = OBJECT_TYPE::NONE;
+	wstring m_name;
 
 protected:
-	uint32 _id = 0;
+	uint32 m_id = 0;
 };
 

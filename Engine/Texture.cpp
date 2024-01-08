@@ -18,30 +18,30 @@ void Texture::Load(const wstring& path)
 	wstring ext = fs::path(path).extension();
 
 	if (ext == L".dds" || ext == L".DDS")
-		::LoadFromDDSFile(path.c_str(), DDS_FLAGS_NONE, nullptr, _image);
+		::LoadFromDDSFile(path.c_str(), DDS_FLAGS_NONE, nullptr, m_image);
 	else if (ext == L".tga" || ext == L".TGA")
-		::LoadFromTGAFile(path.c_str(), nullptr, _image);
+		::LoadFromTGAFile(path.c_str(), nullptr, m_image);
 	else // png, jpg, jpeg, bmp
-		::LoadFromWICFile(path.c_str(), WIC_FLAGS_NONE, nullptr, _image);
+		::LoadFromWICFile(path.c_str(), WIC_FLAGS_NONE, nullptr, m_image);
 
-	HRESULT hr = ::CreateTexture(DEVICE.Get(), _image.GetMetadata(), &_tex2D);
+	HRESULT hr = ::CreateTexture(DEVICE.Get(), m_image.GetMetadata(), &m_tex2D);
 	if (FAILED(hr))
 		assert(nullptr);
 
-	_desc = _tex2D->GetDesc();
+	m_desc = m_tex2D->GetDesc();
 
 	vector<D3D12_SUBRESOURCE_DATA> subResources;
 
 	hr = ::PrepareUpload(DEVICE.Get(),
-		_image.GetImages(),
-		_image.GetImageCount(),
-		_image.GetMetadata(),
+		m_image.GetImages(),
+		m_image.GetImageCount(),
+		m_image.GetMetadata(),
 		subResources);
 
 	if (FAILED(hr))
 		assert(nullptr);
 
-	const uint64 bufferSize = ::GetRequiredIntermediateSize(_tex2D.Get(), 0, static_cast<uint32>(subResources.size()));
+	const uint64 bufferSize = ::GetRequiredIntermediateSize(m_tex2D.Get(), 0, static_cast<uint32>(subResources.size()));
 
 	D3D12_HEAP_PROPERTIES heapProperty = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
 	D3D12_RESOURCE_DESC desc = CD3DX12_RESOURCE_DESC::Buffer(bufferSize);
@@ -59,7 +59,7 @@ void Texture::Load(const wstring& path)
 		assert(nullptr);
 
 	::UpdateSubresources(RESOURCE_CMD_LIST.Get(),
-		_tex2D.Get(),
+		m_tex2D.Get(),
 		textureUploadHeap.Get(),
 		0, 0,
 		static_cast<unsigned int>(subResources.size()),
@@ -71,24 +71,24 @@ void Texture::Load(const wstring& path)
 	srvHeapDesc.NumDescriptors = 1;
 	srvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
 	srvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
-	DEVICE->CreateDescriptorHeap(&srvHeapDesc, IID_PPV_ARGS(&_srvHeap));
+	DEVICE->CreateDescriptorHeap(&srvHeapDesc, IID_PPV_ARGS(&m_srvHeap));
 
-	_srvHeapBegin = _srvHeap->GetCPUDescriptorHandleForHeapStart();
+	m_srvHeapBegin = m_srvHeap->GetCPUDescriptorHandleForHeapStart();
 
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
-	srvDesc.Format = _image.GetMetadata().format;
+	srvDesc.Format = m_image.GetMetadata().format;
 	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
 	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 	srvDesc.Texture2D.MipLevels = 1;
-	DEVICE->CreateShaderResourceView(_tex2D.Get(), &srvDesc, _srvHeapBegin);
+	DEVICE->CreateShaderResourceView(m_tex2D.Get(), &srvDesc, m_srvHeapBegin);
 }
 
 void Texture::Create(DXGI_FORMAT format, uint32 width, uint32 height,
 	const D3D12_HEAP_PROPERTIES& heapProperty, D3D12_HEAP_FLAGS heapFlags,
 	D3D12_RESOURCE_FLAGS resFlags, Vec4 clearColor)
 {
-	_desc = CD3DX12_RESOURCE_DESC::Tex2D(format, width, height);
-	_desc.Flags = resFlags;
+	m_desc = CD3DX12_RESOURCE_DESC::Tex2D(format, width, height);
+	m_desc.Flags = resFlags;
 
 	D3D12_CLEAR_VALUE optimizedClearValue = {};
 	D3D12_CLEAR_VALUE* pOptimizedClearValue = nullptr;
@@ -113,27 +113,27 @@ void Texture::Create(DXGI_FORMAT format, uint32 width, uint32 height,
 	HRESULT hr = DEVICE->CreateCommittedResource(
 		&heapProperty,
 		heapFlags,
-		&_desc,
+		&m_desc,
 		resourceStates,
 		pOptimizedClearValue,
-		IID_PPV_ARGS(&_tex2D));
+		IID_PPV_ARGS(&m_tex2D));
 
 	assert(SUCCEEDED(hr));
 
-	CreateFromResource(_tex2D);
+	CreateFromResource(m_tex2D);
 }
 
 void Texture::CreateFromResource(ComPtr<ID3D12Resource> tex2D)
 {
-	_tex2D = tex2D;
+	m_tex2D = tex2D;
 
-	_desc = tex2D->GetDesc();
+	m_desc = tex2D->GetDesc();
 
 	// 주요 조합
 	// - DSV 단독 (조합X)
 	// - SRV
 	// - RTV + SRV
-	if (_desc.Flags & D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL)
+	if (m_desc.Flags & D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL)
 	{
 		// DSV
 		D3D12_DESCRIPTOR_HEAP_DESC heapDesc = {};
@@ -141,14 +141,14 @@ void Texture::CreateFromResource(ComPtr<ID3D12Resource> tex2D)
 		heapDesc.NumDescriptors = 1;
 		heapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
 		heapDesc.NodeMask = 0;
-		DEVICE->CreateDescriptorHeap(&heapDesc, IID_PPV_ARGS(&_dsvHeap));
+		DEVICE->CreateDescriptorHeap(&heapDesc, IID_PPV_ARGS(&m_dsvHeap));
 
-		D3D12_CPU_DESCRIPTOR_HANDLE hDSVHandle = _dsvHeap->GetCPUDescriptorHandleForHeapStart();
-		DEVICE->CreateDepthStencilView(_tex2D.Get(), nullptr, hDSVHandle);
+		D3D12_CPU_DESCRIPTOR_HANDLE hDSVHandle = m_dsvHeap->GetCPUDescriptorHandleForHeapStart();
+		DEVICE->CreateDepthStencilView(m_tex2D.Get(), nullptr, hDSVHandle);
 	}
 	else
 	{
-		if (_desc.Flags & D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET)
+		if (m_desc.Flags & D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET)
 		{
 			// RTV
 			D3D12_DESCRIPTOR_HEAP_DESC heapDesc = {};
@@ -156,13 +156,13 @@ void Texture::CreateFromResource(ComPtr<ID3D12Resource> tex2D)
 			heapDesc.NumDescriptors = 1;
 			heapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
 			heapDesc.NodeMask = 0;
-			DEVICE->CreateDescriptorHeap(&heapDesc, IID_PPV_ARGS(&_rtvHeap));
+			DEVICE->CreateDescriptorHeap(&heapDesc, IID_PPV_ARGS(&m_rtvHeap));
 
-			D3D12_CPU_DESCRIPTOR_HANDLE rtvHeapBegin = _rtvHeap->GetCPUDescriptorHandleForHeapStart();
-			DEVICE->CreateRenderTargetView(_tex2D.Get(), nullptr, rtvHeapBegin);
+			D3D12_CPU_DESCRIPTOR_HANDLE rtvHeapBegin = m_rtvHeap->GetCPUDescriptorHandleForHeapStart();
+			DEVICE->CreateRenderTargetView(m_tex2D.Get(), nullptr, rtvHeapBegin);
 		}
 
-		if (_desc.Flags & D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS)
+		if (m_desc.Flags & D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS)
 		{
 			// UAV
 			D3D12_DESCRIPTOR_HEAP_DESC uavHeapDesc = {};
@@ -170,15 +170,15 @@ void Texture::CreateFromResource(ComPtr<ID3D12Resource> tex2D)
 			uavHeapDesc.NumDescriptors = 1;
 			uavHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
 			uavHeapDesc.NodeMask = 0;
-			DEVICE->CreateDescriptorHeap(&uavHeapDesc, IID_PPV_ARGS(&_uavHeap));
+			DEVICE->CreateDescriptorHeap(&uavHeapDesc, IID_PPV_ARGS(&m_uavHeap));
 
-			_uavHeapBegin = _uavHeap->GetCPUDescriptorHandleForHeapStart();
+			m_uavHeapBegin = m_uavHeap->GetCPUDescriptorHandleForHeapStart();
 
 			D3D12_UNORDERED_ACCESS_VIEW_DESC uavDesc = {};
-			uavDesc.Format = _image.GetMetadata().format;
+			uavDesc.Format = m_image.GetMetadata().format;
 			uavDesc.ViewDimension = D3D12_UAV_DIMENSION_TEXTURE2D;
 
-			DEVICE->CreateUnorderedAccessView(_tex2D.Get(), nullptr, &uavDesc, _uavHeapBegin);
+			DEVICE->CreateUnorderedAccessView(m_tex2D.Get(), nullptr, &uavDesc, m_uavHeapBegin);
 		}
 
 		// SRV
@@ -186,15 +186,15 @@ void Texture::CreateFromResource(ComPtr<ID3D12Resource> tex2D)
 		srvHeapDesc.NumDescriptors = 1;
 		srvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
 		srvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
-		DEVICE->CreateDescriptorHeap(&srvHeapDesc, IID_PPV_ARGS(&_srvHeap));
+		DEVICE->CreateDescriptorHeap(&srvHeapDesc, IID_PPV_ARGS(&m_srvHeap));
 
-		_srvHeapBegin = _srvHeap->GetCPUDescriptorHandleForHeapStart();
+		m_srvHeapBegin = m_srvHeap->GetCPUDescriptorHandleForHeapStart();
 
 		D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
 		srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-		srvDesc.Format = _image.GetMetadata().format;
+		srvDesc.Format = m_image.GetMetadata().format;
 		srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
 		srvDesc.Texture2D.MipLevels = 1;
-		DEVICE->CreateShaderResourceView(_tex2D.Get(), &srvDesc, _srvHeapBegin);
+		DEVICE->CreateShaderResourceView(m_tex2D.Get(), &srvDesc, m_srvHeapBegin);
 	}
 }

@@ -10,7 +10,7 @@
 
 void Scene::Awake()
 {
-	for (const shared_ptr<GameObject>& gameObject : _gameObjects)
+	for (const shared_ptr<GameObject>& gameObject : m_gameObjects)
 	{
 		gameObject->Awake();
 	}
@@ -18,7 +18,7 @@ void Scene::Awake()
 
 void Scene::Start()
 {
-	for (const shared_ptr<GameObject>& gameObject : _gameObjects)
+	for (const shared_ptr<GameObject>& gameObject : m_gameObjects)
 	{
 		gameObject->Start();
 	}
@@ -26,7 +26,7 @@ void Scene::Start()
 
 void Scene::Update()
 {
-	for (const shared_ptr<GameObject>& gameObject : _gameObjects)
+	for (const shared_ptr<GameObject>& gameObject : m_gameObjects)
 	{
 		gameObject->Update();
 	}
@@ -34,7 +34,7 @@ void Scene::Update()
 
 void Scene::LateUpdate()
 {
-	for (const shared_ptr<GameObject>& gameObject : _gameObjects)
+	for (const shared_ptr<GameObject>& gameObject : m_gameObjects)
 	{
 		gameObject->LateUpdate();
 	}
@@ -42,7 +42,7 @@ void Scene::LateUpdate()
 
 void Scene::FinalUpdate()
 {
-	for (const shared_ptr<GameObject>& gameObject : _gameObjects)
+	for (const shared_ptr<GameObject>& gameObject : m_gameObjects)
 	{
 		gameObject->FinalUpdate();
 	}
@@ -50,10 +50,10 @@ void Scene::FinalUpdate()
 
 shared_ptr<Camera> Scene::GetMainCamera()
 {
-	if (_cameras.empty())
+	if (m_cameras.empty())
 		return nullptr;
 
-	return _cameras[0];
+	return m_cameras[0];
 }
 
 void Scene::Render()
@@ -62,11 +62,11 @@ void Scene::Render()
 
 	ClearRTV();
 
-	RenderShadow(); 
-	
+	RenderShadow();
+
 	RenderDeferred();
 
-	RenderLights();	
+	RenderLights();
 
 	RenderFinal();
 
@@ -90,7 +90,7 @@ void Scene::RenderShadow()
 {
 	GEngine->GetRTGroup(RENDER_TARGET_GROUP_TYPE::SHADOW)->OMSetRenderTargets();
 
-	for (auto& light : _lights)
+	for (auto& light : m_lights)
 	{
 		if (light->GetLightType() != LIGHT_TYPE::DIRECTIONAL_LIGHT)
 			continue;
@@ -106,7 +106,7 @@ void Scene::RenderDeferred()
 	// Deferred OMSet
 	GEngine->GetRTGroup(RENDER_TARGET_GROUP_TYPE::G_BUFFER)->OMSetRenderTargets();
 
-	shared_ptr<Camera> mainCamera = _cameras[0];
+	shared_ptr<Camera> mainCamera = m_cameras[0];
 	mainCamera->SortGameObject();
 	mainCamera->Render_Deferred();
 
@@ -115,14 +115,14 @@ void Scene::RenderDeferred()
 
 void Scene::RenderLights()
 {
-	shared_ptr<Camera> mainCamera = _cameras[0];
+	shared_ptr<Camera> mainCamera = m_cameras[0];
 	Camera::S_MatView = mainCamera->GetViewMatrix();
 	Camera::S_MatProjection = mainCamera->GetProjectionMatrix();
 
 	GEngine->GetRTGroup(RENDER_TARGET_GROUP_TYPE::LIGHTING)->OMSetRenderTargets();
 
 	// 광원을 그린다.
-	for (auto& light : _lights)
+	for (auto& light : m_lights)
 	{
 		light->Render();
 	}
@@ -142,10 +142,10 @@ void Scene::RenderFinal()
 
 void Scene::RenderForward()
 {
-	shared_ptr<Camera> mainCamera = _cameras[0];
+	shared_ptr<Camera> mainCamera = m_cameras[0];
 	mainCamera->Render_Forward();
 
-	for (auto& camera : _cameras)
+	for (auto& camera : m_cameras)
 	{
 		if (camera == mainCamera)
 			continue;
@@ -159,7 +159,7 @@ void Scene::PushLightData()
 {
 	LightParams lightParams = {};
 
-	for (auto& light : _lights)
+	for (auto& light : m_lights)
 	{
 		const LightInfo& lightInfo = light->GetLightInfo();
 
@@ -176,32 +176,32 @@ void Scene::AddGameObject(shared_ptr<GameObject> gameObject)
 {
 	if (gameObject->GetCamera() != nullptr)
 	{
-		_cameras.push_back(gameObject->GetCamera());
+		m_cameras.push_back(gameObject->GetCamera());
 	}
 	else if (gameObject->GetLight() != nullptr)
 	{
-		_lights.push_back(gameObject->GetLight());
+		m_lights.push_back(gameObject->GetLight());
 	}
 
-	_gameObjects.push_back(gameObject);
+	m_gameObjects.push_back(gameObject);
 }
 
 void Scene::RemoveGameObject(shared_ptr<GameObject> gameObject)
 {
 	if (gameObject->GetCamera())
 	{
-		auto findIt = std::find(_cameras.begin(), _cameras.end(), gameObject->GetCamera());
-		if (findIt != _cameras.end())
-			_cameras.erase(findIt);
+		auto findIt = std::find(m_cameras.begin(), m_cameras.end(), gameObject->GetCamera());
+		if (findIt != m_cameras.end())
+			m_cameras.erase(findIt);
 	}
 	else if (gameObject->GetLight())
 	{
-		auto findIt = std::find(_lights.begin(), _lights.end(), gameObject->GetLight());
-		if (findIt != _lights.end())
-			_lights.erase(findIt);
+		auto findIt = std::find(m_lights.begin(), m_lights.end(), gameObject->GetLight());
+		if (findIt != m_lights.end())
+			m_lights.erase(findIt);
 	}
 
-	auto findIt = std::find(_gameObjects.begin(), _gameObjects.end(), gameObject);
-	if (findIt != _gameObjects.end())
-		_gameObjects.erase(findIt);
+	auto findIt = std::find(m_gameObjects.begin(), m_gameObjects.end(), gameObject);
+	if (findIt != m_gameObjects.end())
+		m_gameObjects.erase(findIt);
 }

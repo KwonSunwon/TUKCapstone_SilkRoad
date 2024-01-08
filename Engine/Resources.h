@@ -36,7 +36,7 @@ public:
 		D3D12_RESOURCE_FLAGS resFlags = D3D12_RESOURCE_FLAG_NONE, Vec4 clearColor = Vec4());
 
 	shared_ptr<Texture> CreateTextureFromResource(const wstring& name, ComPtr<ID3D12Resource> tex2D);
-	
+
 	shared_ptr<class MeshData> LoadFBX(const wstring& path);
 
 private:
@@ -45,14 +45,14 @@ private:
 
 private:
 	using KeyObjMap = std::map<wstring/*key*/, shared_ptr<Object>>;
-	array<KeyObjMap, OBJECT_TYPE_COUNT> _resources;
+	array<KeyObjMap, OBJECT_TYPE_COUNT> m_resources;
 };
 
 template<typename T>
 inline shared_ptr<T> Resources::Load(const wstring& key, const wstring& path)
 {
 	OBJECT_TYPE objectType = GetObjectType<T>();
-	KeyObjMap& keyObjMap = _resources[static_cast<uint8>(objectType)];
+	KeyObjMap& keyObjMap = m_resources[static_cast<uint8>(objectType)];
 
 	auto findIt = keyObjMap.find(key);
 	if (findIt != keyObjMap.end())
@@ -69,7 +69,7 @@ template<typename T>
 bool Resources::Add(const wstring& key, shared_ptr<T> object)
 {
 	OBJECT_TYPE objectType = GetObjectType<T>();
-	KeyObjMap& keyObjMap = _resources[static_cast<uint8>(objectType)];
+	KeyObjMap& keyObjMap = m_resources[static_cast<uint8>(objectType)];
 
 	auto findIt = keyObjMap.find(key);
 	if (findIt != keyObjMap.end())
@@ -84,7 +84,7 @@ template<typename T>
 shared_ptr<T> Resources::Get(const wstring& key)
 {
 	OBJECT_TYPE objectType = GetObjectType<T>();
-	KeyObjMap& keyObjMap = _resources[static_cast<uint8>(objectType)];
+	KeyObjMap& keyObjMap = m_resources[static_cast<uint8>(objectType)];
 
 	auto findIt = keyObjMap.find(key);
 	if (findIt != keyObjMap.end())

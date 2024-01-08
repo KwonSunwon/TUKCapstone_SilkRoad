@@ -22,13 +22,13 @@ GameObject::~GameObject()
 
 void GameObject::Awake()
 {
-	for (shared_ptr<Component>& component : _components)
+	for (shared_ptr<Component>& component : m_components)
 	{
 		if (component)
 			component->Awake();
 	}
 
-	for (shared_ptr<MonoBehaviour>& script : _scripts)
+	for (shared_ptr<MonoBehaviour>& script : m_scripts)
 	{
 		script->Awake();
 	}
@@ -36,13 +36,13 @@ void GameObject::Awake()
 
 void GameObject::Start()
 {
-	for (shared_ptr<Component>& component : _components)
+	for (shared_ptr<Component>& component : m_components)
 	{
 		if (component)
 			component->Start();
 	}
 
-	for (shared_ptr<MonoBehaviour>& script : _scripts)
+	for (shared_ptr<MonoBehaviour>& script : m_scripts)
 	{
 		script->Start();
 	}
@@ -50,13 +50,13 @@ void GameObject::Start()
 
 void GameObject::Update()
 {
-	for (shared_ptr<Component>& component : _components)
+	for (shared_ptr<Component>& component : m_components)
 	{
 		if (component)
 			component->Update();
 	}
 
-	for (shared_ptr<MonoBehaviour>& script : _scripts)
+	for (shared_ptr<MonoBehaviour>& script : m_scripts)
 	{
 		script->Update();
 	}
@@ -64,13 +64,13 @@ void GameObject::Update()
 
 void GameObject::LateUpdate()
 {
-	for (shared_ptr<Component>& component : _components)
+	for (shared_ptr<Component>& component : m_components)
 	{
 		if (component)
 			component->LateUpdate();
 	}
 
-	for (shared_ptr<MonoBehaviour>& script : _scripts)
+	for (shared_ptr<MonoBehaviour>& script : m_scripts)
 	{
 		script->LateUpdate();
 	}
@@ -78,7 +78,7 @@ void GameObject::LateUpdate()
 
 void GameObject::FinalUpdate()
 {
-	for (shared_ptr<Component>& component : _components)
+	for (shared_ptr<Component>& component : m_components)
 	{
 		if (component)
 			component->FinalUpdate();
@@ -89,7 +89,7 @@ shared_ptr<Component> GameObject::GetFixedComponent(COMPONENT_TYPE type)
 {
 	uint8 index = static_cast<uint8>(type);
 	assert(index < FIXED_COMPONENT_COUNT);
-	return _components[index];
+	return m_components[index];
 }
 
 shared_ptr<Transform> GameObject::GetTransform()
@@ -147,10 +147,10 @@ void GameObject::AddComponent(shared_ptr<Component> component)
 	uint8 index = static_cast<uint8>(component->GetType());
 	if (index < FIXED_COMPONENT_COUNT)
 	{
-		_components[index] = component;
+		m_components[index] = component;
 	}
 	else
 	{
-		_scripts.push_back(dynamic_pointer_cast<MonoBehaviour>(component));
+		m_scripts.push_back(dynamic_pointer_cast<MonoBehaviour>(component));
 	}
 }

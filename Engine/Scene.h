@@ -32,11 +32,11 @@ public:
 	void AddGameObject(shared_ptr<GameObject> gameObject);
 	void RemoveGameObject(shared_ptr<GameObject> gameObject);
 
-	const vector<shared_ptr<GameObject>>& GetGameObjects() { return _gameObjects; }
+	const vector<shared_ptr<GameObject>>& GetGameObjects() { return m_gameObjects; }
 
 private:
-	vector<shared_ptr<GameObject>>		_gameObjects;
-	vector<shared_ptr<class Camera>>	_cameras;
-	vector<shared_ptr<class Light>>		_lights;
+	vector<shared_ptr<GameObject>>		m_gameObjects;
+	vector<shared_ptr<class Camera>>	m_cameras;
+	vector<shared_ptr<class Light>>		m_lights;
 };
 

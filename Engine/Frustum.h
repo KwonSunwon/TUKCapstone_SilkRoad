@@ -19,6 +19,6 @@ public:
 	bool ContainsSphere(const Vec3& pos, float radius);
 
 private:
-	array<Vec4, PLANE_END> _planes;
+	array<Vec4, PLANE_END> m_planes;
 };
 

@@ -19,17 +19,17 @@ MeshRenderer::~MeshRenderer()
 
 void MeshRenderer::SetMaterial(shared_ptr<Material> material, uint32 idx)
 {
-	if (_materials.size() <= static_cast<size_t>(idx))
-		_materials.resize(static_cast<size_t>(idx + 1));
+	if (m_materials.size() <= static_cast<size_t>(idx))
+		m_materials.resize(static_cast<size_t>(idx + 1));
 
-	_materials[idx] = material;
+	m_materials[idx] = material;
 }
 
 void MeshRenderer::Render()
 {
-	for (uint32 i = 0; i < _materials.size(); i++)
+	for (uint32 i = 0; i < m_materials.size(); i++)
 	{
-		shared_ptr<Material>& material = _materials[i];
+		shared_ptr<Material>& material = m_materials[i];
 
 		if (material == nullptr || material->GetShader() == nullptr)
 			continue;
@@ -43,15 +43,15 @@ void MeshRenderer::Render()
 		}
 
 		material->PushGraphicsData();
-		_mesh->Render(1, i);
+		m_mesh->Render(1, i);
 	}
 }
 
 void MeshRenderer::Render(shared_ptr<InstancingBuffer>& buffer)
 {
-	for (uint32 i = 0; i < _materials.size(); i++)
+	for (uint32 i = 0; i < m_materials.size(); i++)
 	{
-		shared_ptr<Material>& material = _materials[i];
+		shared_ptr<Material>& material = m_materials[i];
 
 		if (material == nullptr || material->GetShader() == nullptr)
 			continue;
@@ -65,7 +65,7 @@ void MeshRenderer::Render(shared_ptr<InstancingBuffer>& buffer)
 		}
 
 		material->PushGraphicsData();
-		_mesh->Render(buffer, i);
+		m_mesh->Render(buffer, i);
 	}
 }
 
@@ -73,15 +73,15 @@ void MeshRenderer::RenderShadow()
 {
 	GetTransform()->PushData();
 	GET_SINGLE(Resources)->Get<Material>(L"Shadow")->PushGraphicsData();
-	_mesh->Render();
+	m_mesh->Render();
 }
 
 uint64 MeshRenderer::GetInstanceID()
 {
-	if (_mesh == nullptr || _materials.empty())
+	if (m_mesh == nullptr || m_materials.empty())
 		return 0;
 
 	//uint64 id = (_mesh->GetID() << 32) | _material->GetID();
-	InstanceID instanceID{ _mesh->GetID(), _materials[0]->GetID() };
+	InstanceID instanceID{ m_mesh->GetID(), m_materials[0]->GetID() };
 	return instanceID.id;
 }

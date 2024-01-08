@@ -37,21 +37,21 @@ public:
 
 	void AddComponent(shared_ptr<Component> component);
 
-	void SetCheckFrustum(bool checkFrustum) { _checkFrustum = checkFrustum; }
-	bool GetCheckFrustum() { return _checkFrustum; }
+	void SetCheckFrustum(bool checkFrustum) { m_checkFrustum = checkFrustum; }
+	bool GetCheckFrustum() { return m_checkFrustum; }
 
-	void SetLayerIndex(uint8 layer) { _layerIndex = layer; }
-	uint8 GetLayerIndex() { return _layerIndex; }
+	void SetLayerIndex(uint8 layer) { m_layerIndex = layer; }
+	uint8 GetLayerIndex() { return m_layerIndex; }
 
-	void SetStatic(bool flag) { _static = flag; }
-	bool IsStatic() { return _static; }
+	void SetStatic(bool flag) { m_static = flag; }
+	bool IsStatic() { return m_static; }
 
 private:
-	array<shared_ptr<Component>, FIXED_COMPONENT_COUNT> _components;
-	vector<shared_ptr<MonoBehaviour>> _scripts;
+	array<shared_ptr<Component>, FIXED_COMPONENT_COUNT> m_components;
+	vector<shared_ptr<MonoBehaviour>> m_scripts;
 
-	bool _checkFrustum = true;
-	uint8 _layerIndex = 0;
-	bool _static = true;
+	bool m_checkFrustum = true;
+	uint8 m_layerIndex = 0;
+	bool m_static = true;
 };
 

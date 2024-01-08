@@ -42,20 +42,20 @@ public:
 	Material();
 	virtual ~Material();
 
-	shared_ptr<Shader> GetShader() { return _shader; }
+	shared_ptr<Shader> GetShader() { return m_shader; }
 
-	void SetShader(shared_ptr<Shader> shader) { _shader = shader; }
-	void SetInt(uint8 index, int32 value) { _params.SetInt(index, value); }
-	void SetFloat(uint8 index, float value) { _params.SetFloat(index, value); }
-	void SetTexture(uint8 index, shared_ptr<Texture> texture) 
-	{ 
-		_textures[index] = texture;
-		_params.SetTexOn(index, (texture == nullptr ? 0 : 1));
+	void SetShader(shared_ptr<Shader> shader) { m_shader = shader; }
+	void SetInt(uint8 index, int32 value) { m_params.SetInt(index, value); }
+	void SetFloat(uint8 index, float value) { m_params.SetFloat(index, value); }
+	void SetTexture(uint8 index, shared_ptr<Texture> texture)
+	{
+		m_textures[index] = texture;
+		m_params.SetTexOn(index, (texture == nullptr ? 0 : 1));
 	}
 
-	void SetVec2(uint8 index, Vec2 value) { _params.SetVec2(index, value); }
-	void SetVec4(uint8 index, Vec4 value) { _params.SetVec4(index, value); }
-	void SetMatrix(uint8 index, Matrix& value) { _params.SetMatrix(index, value); }
+	void SetVec2(uint8 index, Vec2 value) { m_params.SetVec2(index, value); }
+	void SetVec4(uint8 index, Vec4 value) { m_params.SetVec4(index, value); }
+	void SetMatrix(uint8 index, Matrix& value) { m_params.SetMatrix(index, value); }
 
 	void PushGraphicsData();
 	void PushComputeData();
@@ -64,8 +64,8 @@ public:
 	shared_ptr<Material> Clone();
 
 private:
-	shared_ptr<Shader>	_shader;
-	MaterialParams		_params;
-	array<shared_ptr<Texture>, MATERIAL_ARG_COUNT> _textures;
+	shared_ptr<Shader>	m_shader;
+	MaterialParams		m_params;
+	array<shared_ptr<Texture>, MATERIAL_ARG_COUNT> m_textures;
 };
 

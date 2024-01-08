@@ -64,10 +64,10 @@ public:
 
 	void CreateGraphicsShader(const wstring& path, ShaderInfo info = ShaderInfo(), ShaderArg arg = ShaderArg());
 	void CreateComputeShader(const wstring& path, const string& name, const string& version);
-	
+
 	void Update();
 
-	SHADER_TYPE GetShaderType() { return _info.shaderType; }
+	SHADER_TYPE GetShaderType() { return m_info.shaderType; }
 
 	static D3D12_PRIMITIVE_TOPOLOGY_TYPE GetTopologyType(D3D_PRIMITIVE_TOPOLOGY topology);
 
@@ -80,20 +80,20 @@ private:
 	void CreatePixelShader(const wstring& path, const string& name, const string& version);
 
 private:
-	ShaderInfo _info;
-	ComPtr<ID3D12PipelineState>			_pipelineState;
+	ShaderInfo m_info;
+	ComPtr<ID3D12PipelineState>			m_pipelineState;
 
 	// GraphicsShader
-	ComPtr<ID3DBlob>					_vsBlob;
-	ComPtr<ID3DBlob>					_hsBlob;
-	ComPtr<ID3DBlob>					_dsBlob;	
-	ComPtr<ID3DBlob>					_gsBlob;
-	ComPtr<ID3DBlob>					_psBlob;
-	ComPtr<ID3DBlob>					_errBlob;	
-	D3D12_GRAPHICS_PIPELINE_STATE_DESC  _graphicsPipelineDesc = {};
+	ComPtr<ID3DBlob>					m_vsBlob;
+	ComPtr<ID3DBlob>					m_hsBlob;
+	ComPtr<ID3DBlob>					m_dsBlob;
+	ComPtr<ID3DBlob>					m_gsBlob;
+	ComPtr<ID3DBlob>					m_psBlob;
+	ComPtr<ID3DBlob>					m_errBlob;
+	D3D12_GRAPHICS_PIPELINE_STATE_DESC  m_graphicsPipelineDesc = {};
 
 	// ComputeShader
-	ComPtr<ID3DBlob>					_csBlob;
-	D3D12_COMPUTE_PIPELINE_STATE_DESC   _computePipelineDesc = {};
+	ComPtr<ID3DBlob>					m_csBlob;
+	D3D12_COMPUTE_PIPELINE_STATE_DESC   m_computePipelineDesc = {};
 };
 

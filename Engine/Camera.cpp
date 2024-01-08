@@ -16,8 +16,8 @@ Matrix Camera::S_MatProjection;
 
 Camera::Camera() : Component(COMPONENT_TYPE::CAMERA)
 {
-	_width = static_cast<float>(GEngine->GetWindow().width);
-	_height = static_cast<float>(GEngine->GetWindow().height);
+	m_width = static_cast<float>(GEngine->GetWindow().width);
+	m_height = static_cast<float>(GEngine->GetWindow().height);
 }
 
 Camera::~Camera()
@@ -26,14 +26,14 @@ Camera::~Camera()
 
 void Camera::FinalUpdate()
 {
-	_matView = GetTransform()->GetLocalToWorldMatrix().Invert();
+	m_matView = GetTransform()->GetLocalToWorldMatrix().Invert();
 
-	if (_type == PROJECTION_TYPE::PERSPECTIVE)
-		_matProjection = ::XMMatrixPerspectiveFovLH(_fov, _width / _height, _near, _far);
+	if (m_type == PROJECTION_TYPE::PERSPECTIVE)
+		m_matProjection = ::XMMatrixPerspectiveFovLH(m_fov, m_width / m_height, m_near, m_far);
 	else
-		_matProjection = ::XMMatrixOrthographicLH(_width * _scale, _height * _scale, _near, _far);
+		m_matProjection = ::XMMatrixOrthographicLH(m_width * m_scale, m_height * m_scale, m_near, m_far);
 
-	_frustum.FinalUpdate();
+	m_frustum.FinalUpdate();
 }
 
 void Camera::SortGameObject()
@@ -41,9 +41,9 @@ void Camera::SortGameObject()
 	shared_ptr<Scene> scene = GET_SINGLE(SceneManager)->GetActiveScene();
 	const vector<shared_ptr<GameObject>>& gameObjects = scene->GetGameObjects();
 
-	_vecForward.clear();
-	_vecDeferred.clear();
-	_vecParticle.clear();
+	m_vecForward.clear();
+	m_vecDeferred.clear();
+	m_vecParticle.clear();
 
 	for (auto& gameObject : gameObjects)
 	{
@@ -55,7 +55,7 @@ void Camera::SortGameObject()
 
 		if (gameObject->GetCheckFrustum())
 		{
-			if (_frustum.ContainsSphere(
+			if (m_frustum.ContainsSphere(
 				gameObject->GetTransform()->GetWorldPosition(),
 				gameObject->GetTransform()->GetBoundingSphereRadius()) == false)
 			{
@@ -69,16 +69,16 @@ void Camera::SortGameObject()
 			switch (shaderType)
 			{
 			case SHADER_TYPE::DEFERRED:
-				_vecDeferred.push_back(gameObject);
+				m_vecDeferred.push_back(gameObject);
 				break;
 			case SHADER_TYPE::FORWARD:
-				_vecForward.push_back(gameObject);
+				m_vecForward.push_back(gameObject);
 				break;
 			}
 		}
 		else
 		{
-			_vecParticle.push_back(gameObject);
+			m_vecParticle.push_back(gameObject);
 		}
 	}
 }
@@ -88,7 +88,7 @@ void Camera::SortShadowObject()
 	shared_ptr<Scene> scene = GET_SINGLE(SceneManager)->GetActiveScene();
 	const vector<shared_ptr<GameObject>>& gameObjects = scene->GetGameObjects();
 
-	_vecShadow.clear();
+	m_vecShadow.clear();
 
 	for (auto& gameObject : gameObjects)
 	{
@@ -103,7 +103,7 @@ void Camera::SortShadowObject()
 
 		if (gameObject->GetCheckFrustum())
 		{
-			if (_frustum.ContainsSphere(
+			if (m_frustum.ContainsSphere(
 				gameObject->GetTransform()->GetWorldPosition(),
 				gameObject->GetTransform()->GetBoundingSphereRadius()) == false)
 			{
@@ -111,26 +111,26 @@ void Camera::SortShadowObject()
 			}
 		}
 
-		_vecShadow.push_back(gameObject);
+		m_vecShadow.push_back(gameObject);
 	}
 }
 
 void Camera::Render_Deferred()
 {
-	S_MatView = _matView;
-	S_MatProjection = _matProjection;
+	S_MatView = m_matView;
+	S_MatProjection = m_matProjection;
 
-	GET_SINGLE(InstancingManager)->Render(_vecDeferred);
+	GET_SINGLE(InstancingManager)->Render(m_vecDeferred);
 }
 
 void Camera::Render_Forward()
 {
-	S_MatView = _matView;
-	S_MatProjection = _matProjection;
+	S_MatView = m_matView;
+	S_MatProjection = m_matProjection;
 
-	GET_SINGLE(InstancingManager)->Render(_vecForward);
+	GET_SINGLE(InstancingManager)->Render(m_vecForward);
 
-	for (auto& gameObject : _vecParticle)
+	for (auto& gameObject : m_vecParticle)
 	{
 		gameObject->GetParticleSystem()->Render();
 	}
@@ -138,10 +138,10 @@ void Camera::Render_Forward()
 
 void Camera::Render_Shadow()
 {
-	S_MatView = _matView;
-	S_MatProjection = _matProjection;
+	S_MatView = m_matView;
+	S_MatProjection = m_matProjection;
 
-	for (auto& gameObject : _vecShadow)
+	for (auto& gameObject : m_vecShadow)
 	{
 		gameObject->GetMeshRenderer()->RenderShadow();
 	}

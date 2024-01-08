@@ -10,14 +10,14 @@ public:
 	virtual void FinalUpdate() override;
 	virtual bool Intersects(Vec4 rayOrigin, Vec4 rayDir, OUT float& distance) override;
 
-	void SetRadius(float radius) { _radius = radius; }
-	void SetCenter(Vec3 center) { _center = center; }
+	void SetRadius(float radius) { m_radius = radius; }
+	void SetCenter(Vec3 center) { m_center = center; }
 
 private:
 	// Local ±‚¡ÿ
-	float		_radius = 1.f;
-	Vec3		_center = Vec3(0, 0, 0);
+	float		m_radius = 1.f;
+	Vec3		m_center = Vec3(0, 0, 0);
 
-	BoundingSphere _boundingSphere;
+	BoundingSphere m_boundingSphere;
 };
 

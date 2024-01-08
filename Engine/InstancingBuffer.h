@@ -20,18 +20,18 @@ public:
 	void PushData();
 
 public:
-	uint32						GetCount() { return static_cast<uint32>(_data.size()); }
-	ComPtr<ID3D12Resource>		GetBuffer() { return _buffer; }
-	D3D12_VERTEX_BUFFER_VIEW	GetBufferView() { return _bufferView; }
+	uint32						GetCount() { return static_cast<uint32>(m_data.size()); }
+	ComPtr<ID3D12Resource>		GetBuffer() { return m_buffer; }
+	D3D12_VERTEX_BUFFER_VIEW	GetBufferView() { return m_bufferView; }
 
-	void	SetID(uint64 instanceId) { _instanceId = instanceId; }
-	uint64	GetID() { return _instanceId; }
+	void	SetID(uint64 instanceId) { m_instanceId = instanceId; }
+	uint64	GetID() { return m_instanceId; }
 
 private:
-	uint64						_instanceId = 0;
-	ComPtr<ID3D12Resource>		_buffer;
-	D3D12_VERTEX_BUFFER_VIEW	_bufferView;
+	uint64						m_instanceId = 0;
+	ComPtr<ID3D12Resource>		m_buffer;
+	D3D12_VERTEX_BUFFER_VIEW	m_bufferView;
 
-	uint32						_maxCount = 0;
-	vector<InstancingParams>	_data;
+	uint32						m_maxCount = 0;
+	vector<InstancingParams>	m_data;
 };

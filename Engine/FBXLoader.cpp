@@ -12,10 +12,10 @@ FBXLoader::FBXLoader()
 
 FBXLoader::~FBXLoader()
 {
-	if (_scene)
-		_scene->Destroy();
-	if (_manager)
-		_manager->Destroy();
+	if (m_scene)
+		m_scene->Destroy();
+	if (m_manager)
+		m_manager->Destroy();
 }
 
 void FBXLoader::LoadFbx(const wstring& path)
@@ -24,11 +24,11 @@ void FBXLoader::LoadFbx(const wstring& path)
 	Import(path);
 
 	// Animation	
-	LoadBones(_scene->GetRootNode());
+	LoadBones(m_scene->GetRootNode());
 	LoadAnimationInfo();
 
 	// 로드된 데이터 파싱 (Mesh/Material/Skin)
-	ParseNode(_scene->GetRootNode());
+	ParseNode(m_scene->GetRootNode());
 
 	// 우리 구조에 맞게 Texture / Material 생성
 	CreateTextures();
@@ -38,32 +38,32 @@ void FBXLoader::LoadFbx(const wstring& path)
 void FBXLoader::Import(const wstring& path)
 {
 	// FBX SDK 관리자 객체 생성
-	_manager = FbxManager::Create();
+	m_manager = FbxManager::Create();
 
 	// IOSettings 객체 생성 및 설정
-	FbxIOSettings* settings = FbxIOSettings::Create(_manager, IOSROOT);
-	_manager->SetIOSettings(settings);
+	FbxIOSettings* settings = FbxIOSettings::Create(m_manager, IOSROOT);
+	m_manager->SetIOSettings(settings);
 
 	// FbxImporter 객체 생성
-	_scene = FbxScene::Create(_manager, "");
+	m_scene = FbxScene::Create(m_manager, "");
 
 	// 나중에 Texture 경로 계산할 때 쓸 것
-	_resourceDirectory = fs::path(path).parent_path().wstring() + L"\\" + fs::path(path).filename().stem().wstring() + L".fbm";
+	m_resourceDirectory = fs::path(path).parent_path().wstring() + L"\\" + fs::path(path).filename().stem().wstring() + L".fbm";
 
-	_importer = FbxImporter::Create(_manager, "");
+	m_importer = FbxImporter::Create(m_manager, "");
 
 	string strPath = ws2s(path);
-	_importer->Initialize(strPath.c_str(), -1, _manager->GetIOSettings());
+	m_importer->Initialize(strPath.c_str(), -1, m_manager->GetIOSettings());
 
-	_importer->Import(_scene);
+	m_importer->Import(m_scene);
 
-	_scene->GetGlobalSettings().SetAxisSystem(FbxAxisSystem::DirectX);
+	m_scene->GetGlobalSettings().SetAxisSystem(FbxAxisSystem::DirectX);
 
 	// 씬 내에서 삼각형화 할 수 있는 모든 노드를 삼각형화 시킨다.
-	FbxGeometryConverter geometryConverter(_manager);
-	geometryConverter.Triangulate(_scene, true);
+	FbxGeometryConverter geometryConverter(m_manager);
+	geometryConverter.Triangulate(m_scene, true);
 
-	_importer->Destroy();
+	m_importer->Destroy();
 }
 
 void FBXLoader::ParseNode(FbxNode* node)
@@ -96,8 +96,8 @@ void FBXLoader::ParseNode(FbxNode* node)
 
 void FBXLoader::LoadMesh(FbxMesh* mesh)
 {
-	_meshes.push_back(FbxMeshInfo());
-	FbxMeshInfo& meshInfo = _meshes.back();
+	m_meshes.push_back(FbxMeshInfo());
+	FbxMeshInfo& meshInfo = m_meshes.back();
 
 	meshInfo.name = s2ws(mesh->GetName());
 
@@ -164,7 +164,7 @@ void FBXLoader::LoadMaterial(FbxSurfaceMaterial* surfaceMaterial)
 	material.normalTexName = GetTextureRelativeName(surfaceMaterial, FbxSurfaceMaterial::sNormalMap);
 	material.specularTexName = GetTextureRelativeName(surfaceMaterial, FbxSurfaceMaterial::sSpecular);
 
-	_meshes.back().materials.push_back(material);
+	m_meshes.back().materials.push_back(material);
 }
 
 void FBXLoader::GetNormal(FbxMesh* mesh, FbxMeshInfo* container, int32 idx, int32 vertexCounter)
@@ -283,33 +283,33 @@ wstring FBXLoader::GetTextureRelativeName(FbxSurfaceMaterial* surface, const cha
 
 void FBXLoader::CreateTextures()
 {
-	for (size_t i = 0; i < _meshes.size(); i++)
+	for (size_t i = 0; i < m_meshes.size(); i++)
 	{
-		for (size_t j = 0; j < _meshes[i].materials.size(); j++)
+		for (size_t j = 0; j < m_meshes[i].materials.size(); j++)
 		{
 			// DiffuseTexture
 			{
-				wstring relativePath = _meshes[i].materials[j].diffuseTexName.c_str();
+				wstring relativePath = m_meshes[i].materials[j].diffuseTexName.c_str();
 				wstring filename = fs::path(relativePath).filename();
-				wstring fullPath = _resourceDirectory + L"\\" + filename;
+				wstring fullPath = m_resourceDirectory + L"\\" + filename;
 				if (filename.empty() == false)
 					GET_SINGLE(Resources)->Load<Texture>(filename, fullPath);
 			}
 
 			// NormalTexture
 			{
-				wstring relativePath = _meshes[i].materials[j].normalTexName.c_str();
+				wstring relativePath = m_meshes[i].materials[j].normalTexName.c_str();
 				wstring filename = fs::path(relativePath).filename();
-				wstring fullPath = _resourceDirectory + L"\\" + filename;
+				wstring fullPath = m_resourceDirectory + L"\\" + filename;
 				if (filename.empty() == false)
 					GET_SINGLE(Resources)->Load<Texture>(filename, fullPath);
 			}
 
 			// SpecularTexture
 			{
-				wstring relativePath = _meshes[i].materials[j].specularTexName.c_str();
+				wstring relativePath = m_meshes[i].materials[j].specularTexName.c_str();
 				wstring filename = fs::path(relativePath).filename();
-				wstring fullPath = _resourceDirectory + L"\\" + filename;
+				wstring fullPath = m_resourceDirectory + L"\\" + filename;
 				if (filename.empty() == false)
 					GET_SINGLE(Resources)->Load<Texture>(filename, fullPath);
 			}
@@ -319,17 +319,17 @@ void FBXLoader::CreateTextures()
 
 void FBXLoader::CreateMaterials()
 {
-	for (size_t i = 0; i < _meshes.size(); i++)
+	for (size_t i = 0; i < m_meshes.size(); i++)
 	{
-		for (size_t j = 0; j < _meshes[i].materials.size(); j++)
+		for (size_t j = 0; j < m_meshes[i].materials.size(); j++)
 		{
 			shared_ptr<Material> material = make_shared<Material>();
-			wstring key = _meshes[i].materials[j].name;
+			wstring key = m_meshes[i].materials[j].name;
 			material->SetName(key);
 			material->SetShader(GET_SINGLE(Resources)->Get<Shader>(L"Deferred"));
 
 			{
-				wstring diffuseName = _meshes[i].materials[j].diffuseTexName.c_str();
+				wstring diffuseName = m_meshes[i].materials[j].diffuseTexName.c_str();
 				wstring filename = fs::path(diffuseName).filename();
 				wstring key = filename;
 				shared_ptr<Texture> diffuseTexture = GET_SINGLE(Resources)->Get<Texture>(key);
@@ -338,7 +338,7 @@ void FBXLoader::CreateMaterials()
 			}
 
 			{
-				wstring normalName = _meshes[i].materials[j].normalTexName.c_str();
+				wstring normalName = m_meshes[i].materials[j].normalTexName.c_str();
 				wstring filename = fs::path(normalName).filename();
 				wstring key = filename;
 				shared_ptr<Texture> normalTexture = GET_SINGLE(Resources)->Get<Texture>(key);
@@ -347,7 +347,7 @@ void FBXLoader::CreateMaterials()
 			}
 
 			{
-				wstring specularName = _meshes[i].materials[j].specularTexName.c_str();
+				wstring specularName = m_meshes[i].materials[j].specularTexName.c_str();
 				wstring filename = fs::path(specularName).filename();
 				wstring key = filename;
 				shared_ptr<Texture> specularTexture = GET_SINGLE(Resources)->Get<Texture>(key);
@@ -369,42 +369,42 @@ void FBXLoader::LoadBones(FbxNode* node, int32 idx, int32 parentIdx)
 		shared_ptr<FbxBoneInfo> bone = make_shared<FbxBoneInfo>();
 		bone->boneName = s2ws(node->GetName());
 		bone->parentIndex = parentIdx;
-		_bones.push_back(bone);
+		m_bones.push_back(bone);
 	}
 
 	const int32 childCount = node->GetChildCount();
 	for (int32 i = 0; i < childCount; i++)
-		LoadBones(node->GetChild(i), static_cast<int32>(_bones.size()), idx);
+		LoadBones(node->GetChild(i), static_cast<int32>(m_bones.size()), idx);
 }
 
 void FBXLoader::LoadAnimationInfo()
 {
-	_scene->FillAnimStackNameArray(OUT _animNames);
+	m_scene->FillAnimStackNameArray(OUT m_animNames);
 
-	const int32 animCount = _animNames.GetCount();
+	const int32 animCount = m_animNames.GetCount();
 	for (int32 i = 0; i < animCount; i++)
 	{
-		FbxAnimStack* animStack = _scene->FindMember<FbxAnimStack>(_animNames[i]->Buffer());
+		FbxAnimStack* animStack = m_scene->FindMember<FbxAnimStack>(m_animNames[i]->Buffer());
 		if (animStack == nullptr)
 			continue;
 
 		shared_ptr<FbxAnimClipInfo> animClip = make_shared<FbxAnimClipInfo>();
 		animClip->name = s2ws(animStack->GetName());
-		animClip->keyFrames.resize(_bones.size()); // 키프레임은 본의 개수만큼
+		animClip->keyFrames.resize(m_bones.size()); // 키프레임은 본의 개수만큼
 
-		FbxTakeInfo* takeInfo = _scene->GetTakeInfo(animStack->GetName());
+		FbxTakeInfo* takeInfo = m_scene->GetTakeInfo(animStack->GetName());
 		animClip->startTime = takeInfo->mLocalTimeSpan.GetStart();
 		animClip->endTime = takeInfo->mLocalTimeSpan.GetStop();
-		animClip->mode = _scene->GetGlobalSettings().GetTimeMode();
+		animClip->mode = m_scene->GetGlobalSettings().GetTimeMode();
 
-		_animClips.push_back(animClip);
+		m_animClips.push_back(animClip);
 	}
 }
 
 void FBXLoader::LoadAnimationData(FbxMesh* mesh, FbxMeshInfo* meshInfo)
 {
 	const int32 skinCount = mesh->GetDeformerCount(FbxDeformer::eSkin);
-	if (skinCount <= 0 || _animClips.empty())
+	if (skinCount <= 0 || m_animClips.empty())
 		return;
 
 	meshInfo->hasAnimation = true;
@@ -432,7 +432,7 @@ void FBXLoader::LoadAnimationData(FbxMesh* mesh, FbxMeshInfo* meshInfo)
 					LoadBoneWeight(cluster, boneIdx, meshInfo);
 					LoadOffsetMatrix(cluster, matNodeTransform, boneIdx, meshInfo);
 
-					const int32 animCount = _animNames.Size();
+					const int32 animCount = m_animNames.Size();
 					for (int32 k = 0; k < animCount; k++)
 						LoadKeyframe(k, mesh->GetNode(), cluster, matNodeTransform, boneIdx, meshInfo);
 				}
@@ -502,12 +502,12 @@ void FBXLoader::LoadOffsetMatrix(FbxCluster* cluster, const FbxAMatrix& matNodeT
 	matOffset = matClusterLinkTrans.Inverse() * matClusterTrans;
 	matOffset = matReflect * matOffset * matReflect;
 
-	_bones[boneIdx]->matOffset = matOffset.Transpose();
+	m_bones[boneIdx]->matOffset = matOffset.Transpose();
 }
 
 void FBXLoader::LoadKeyframe(int32 animIndex, FbxNode* node, FbxCluster* cluster, const FbxAMatrix& matNodeTransform, int32 boneIdx, FbxMeshInfo* meshInfo)
 {
-	if (_animClips.empty())
+	if (m_animClips.empty())
 		return;
 
 	FbxVector4	v1 = { 1, 0, 0, 0 };
@@ -520,14 +520,14 @@ void FBXLoader::LoadKeyframe(int32 animIndex, FbxNode* node, FbxCluster* cluster
 	matReflect.mData[2] = v3;
 	matReflect.mData[3] = v4;
 
-	FbxTime::EMode timeMode = _scene->GetGlobalSettings().GetTimeMode();
+	FbxTime::EMode timeMode = m_scene->GetGlobalSettings().GetTimeMode();
 
 	// 애니메이션 골라줌
-	FbxAnimStack* animStack = _scene->FindMember<FbxAnimStack>(_animNames[animIndex]->Buffer());
-	_scene->SetCurrentAnimationStack(OUT animStack);
+	FbxAnimStack* animStack = m_scene->FindMember<FbxAnimStack>(m_animNames[animIndex]->Buffer());
+	m_scene->SetCurrentAnimationStack(OUT animStack);
 
-	FbxLongLong startFrame = _animClips[animIndex]->startTime.GetFrameCount(timeMode);
-	FbxLongLong endFrame = _animClips[animIndex]->endTime.GetFrameCount(timeMode);
+	FbxLongLong startFrame = m_animClips[animIndex]->startTime.GetFrameCount(timeMode);
+	FbxLongLong endFrame = m_animClips[animIndex]->endTime.GetFrameCount(timeMode);
 
 	for (FbxLongLong frame = startFrame; frame < endFrame; frame++)
 	{
@@ -543,7 +543,7 @@ void FBXLoader::LoadKeyframe(int32 animIndex, FbxNode* node, FbxCluster* cluster
 		keyFrameInfo.time = fbxTime.GetSecondDouble();
 		keyFrameInfo.matTransform = matTransform;
 
-		_animClips[animIndex]->keyFrames[boneIdx].push_back(keyFrameInfo);
+		m_animClips[animIndex]->keyFrames[boneIdx].push_back(keyFrameInfo);
 	}
 }
 
@@ -551,9 +551,9 @@ int32 FBXLoader::FindBoneIndex(string name)
 {
 	wstring boneName = wstring(name.begin(), name.end());
 
-	for (UINT i = 0; i < _bones.size(); ++i)
+	for (UINT i = 0; i < m_bones.size(); ++i)
 	{
-		if (_bones[i]->boneName == boneName)
+		if (m_bones[i]->boneName == boneName)
 			return i;
 	}
 

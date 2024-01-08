@@ -13,28 +13,28 @@ public:
 	virtual ~Animator();
 
 public:
-	void SetBones(const vector<BoneInfo>* bones) { _bones = bones; }
+	void SetBones(const vector<BoneInfo>* bones) { m_bones = bones; }
 	void SetAnimClip(const vector<AnimClipInfo>* animClips);
 	void PushData();
 
-	int32 GetAnimCount() { return static_cast<uint32>(_animClips->size()); }
-	int32 GetCurrentClipIndex() { return _clipIndex; }
+	int32 GetAnimCount() { return static_cast<uint32>(m_animClips->size()); }
+	int32 GetCurrentClipIndex() { return m_clipIndex; }
 	void Play(uint32 idx);
 
 public:
 	virtual void FinalUpdate() override;
 
 private:
-	const vector<BoneInfo>* _bones;
-	const vector<AnimClipInfo>* _animClips;
+	const vector<BoneInfo>* m_bones;
+	const vector<AnimClipInfo>* m_animClips;
 
-	float							_updateTime = 0.f;
-	int32							_clipIndex = 0;
-	int32							_frame = 0;
-	int32							_nextFrame = 0;
-	float							_frameRatio = 0;
+	float							m_updateTime = 0.f;
+	int32							m_clipIndex = 0;
+	int32							m_frame = 0;
+	int32							m_nextFrame = 0;
+	float							m_frameRatio = 0;
 
-	shared_ptr<Material>			_computeMaterial;
-	shared_ptr<StructuredBuffer>	_boneFinalMatrix;  // 특정 프레임의 최종 행렬
-	bool							_boneFinalUpdated = false;
+	shared_ptr<Material>			m_computeMaterial;
+	shared_ptr<StructuredBuffer>	m_boneFinalMatrix;  // 특정 프레임의 최종 행렬
+	bool							m_boneFinalUpdated = false;
 };
