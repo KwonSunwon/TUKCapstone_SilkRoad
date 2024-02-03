@@ -153,6 +153,9 @@
     <ClCompile Include="TestDragon.cpp">
       <Filter>Object\Test</Filter>
     </ClCompile>
+    <ClCompile Include="RigidBody.cpp">
+      <Filter>Object\Component</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -280,6 +283,9 @@
     </ClInclude>
     <ClInclude Include="TestDragon.h">
       <Filter>Object\Test</Filter>
+    </ClInclude>
+    <ClInclude Include="RigidBody.h">
+      <Filter>Object\Component</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

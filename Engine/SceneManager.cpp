@@ -9,6 +9,7 @@
 #include "Transform.h"
 #include "Camera.h"
 #include "Light.h"
+#include "RigidBody.h"
 
 #include "TestCameraScript.h"
 #include "Resources.h"
@@ -25,6 +26,7 @@ void SceneManager::Update()
 
 	m_activeScene->Update();
 	m_activeScene->LateUpdate();
+	//collision¿¹Á¤
 	m_activeScene->FinalUpdate();
 }
 
@@ -276,12 +278,12 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 	{
 		shared_ptr<GameObject> light = make_shared<GameObject>();
 		light->AddComponent(make_shared<Transform>());
-		light->GetTransform()->SetLocalPosition(Vec3(0, 1000, 500));
+		light->GetTransform()->SetLocalPosition(Vec3(0, 500, 0));
 		light->AddComponent(make_shared<Light>());
 		light->GetLight()->SetLightDirection(Vec3(0, -1, 1.f));
 		light->GetLight()->SetLightType(LIGHT_TYPE::DIRECTIONAL_LIGHT);
 		light->GetLight()->SetDiffuse(Vec3(1.f, 1.f, 1.f));
-		light->GetLight()->SetAmbient(Vec3(0.1f, 0.1f, 0.1f));
+		light->GetLight()->SetAmbient(Vec3(0.5f, 0.5f, 0.5f));
 		light->GetLight()->SetSpecular(Vec3(0.1f, 0.1f, 0.1f));
 
 		scene->AddGameObject(light);
@@ -291,21 +293,31 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 
 #pragma region FBX
 	{
-		shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Chr_ScifiWorlds_AlienArmor_02.fbx");
+		
+		
+		for (int i = 0; i < 5; ++i) {
+			shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Chr_ScifiWorlds_AlienArmor_02.fbx");
+			vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
+			gameObjects[0]->GetTransform()->SetLocalRotation(Vec3(0.f, XMConvertToRadians(180.f), 0.f));
+			gameObjects[0]->GetTransform()->SetLocalPosition(Vec3(-150.f + 150.f * i, -100.f, 500.f));
+			gameObjects[0]->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
+			gameObjects[0]->SetCheckFrustum(false);
+			if (i == 0) {
+				gameObjects[0]->AddComponent(make_shared<TestDragon>());
+				gameObjects[0]->AddComponent(make_shared<RigidBody>());
+			}
+			
+			gameObjects[0]->AddComponent(make_shared<SphereCollider>());
 
-		vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
 
-		for (auto& gameObject : gameObjects)
-		{
-			gameObject->SetName(L"Dragon");
-			gameObject->SetCheckFrustum(false);
-			gameObject->GetTransform()->SetLocalPosition(Vec3(0.f, -100.f, 300.f));
-			gameObject->GetTransform()->SetLocalRotation(Vec3(XMConvertToRadians(-90.f), 0.f, 0.f));
-			gameObject->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
-			scene->AddGameObject(gameObject);
-			gameObject->AddComponent(make_shared<TestDragon>());
+			scene->AddGameObject(gameObjects[0]);
+
+
 		}
+	
+			
 	}
+
 #pragma endregion
 
 	return scene;

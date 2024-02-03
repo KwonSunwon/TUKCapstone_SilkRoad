@@ -7,8 +7,11 @@ public:
 	SphereCollider();
 	virtual ~SphereCollider();
 
+	virtual void Awake() override;
+
 	virtual void FinalUpdate() override;
 	virtual bool Intersects(Vec4 rayOrigin, Vec4 rayDir, OUT float& distance) override;
+	virtual void draw() override;
 
 	void SetRadius(float radius) { m_radius = radius; }
 	void SetCenter(Vec3 center) { m_center = center; }
