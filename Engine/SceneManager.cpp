@@ -16,6 +16,7 @@
 #include "ParticleSystem.h"
 #include "Terrain.h"
 #include "SphereCollider.h"
+#include "BoxCollider.h"
 #include "MeshData.h"
 #include "TestDragon.h"
 
@@ -27,6 +28,9 @@ void SceneManager::Update()
 	m_activeScene->Update();
 	m_activeScene->LateUpdate();
 	//collision¿¹Á¤
+	m_activeScene->testCollision();
+
+
 	m_activeScene->FinalUpdate();
 }
 
@@ -302,12 +306,19 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 			gameObjects[0]->GetTransform()->SetLocalPosition(Vec3(-150.f + 150.f * i, -100.f, 500.f));
 			gameObjects[0]->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
 			gameObjects[0]->SetCheckFrustum(false);
-			if (i == 0) {
+			if (i < 2) {
 				gameObjects[0]->AddComponent(make_shared<TestDragon>());
-				gameObjects[0]->AddComponent(make_shared<RigidBody>());
+				
+			}
+			gameObjects[0]->AddComponent(make_shared<RigidBody>());
+			gameObjects[0]->GetRigidBody()->m_useGravity = false;
+			if (i & 1) {
+				gameObjects[0]->AddComponent(make_shared<BoxCollider>());
+			}
+			else {
+				gameObjects[0]->AddComponent(make_shared<SphereCollider>());
 			}
 			
-			gameObjects[0]->AddComponent(make_shared<SphereCollider>());
 
 
 			scene->AddGameObject(gameObjects[0]);

@@ -7,6 +7,10 @@
 #include "Light.h"
 #include "Engine.h"
 #include "Resources.h"
+#include "BaseCollider.h"
+#include "SphereCollider.h"
+#include "BoxCollider.h"
+#include "MeshRenderer.h"
 
 void Scene::Awake()
 {
@@ -174,6 +178,12 @@ void Scene::PushLightData()
 
 void Scene::AddGameObject(shared_ptr<GameObject> gameObject)
 {
+	if (gameObject->GetRigidBody() != nullptr)
+	{
+		m_collidableGameObjects.push_back(gameObject);
+	}
+
+
 	if (gameObject->GetCamera() != nullptr)
 	{
 		m_cameras.push_back(gameObject->GetCamera());
@@ -188,6 +198,13 @@ void Scene::AddGameObject(shared_ptr<GameObject> gameObject)
 
 void Scene::RemoveGameObject(shared_ptr<GameObject> gameObject)
 {
+	if (gameObject->GetRigidBody())
+	{
+		auto findIt = std::find(m_collidableGameObjects.begin(), m_collidableGameObjects.end(), gameObject);
+		if (findIt != m_collidableGameObjects.end())
+			m_collidableGameObjects.erase(findIt);
+	}
+
 	if (gameObject->GetCamera())
 	{
 		auto findIt = std::find(m_cameras.begin(), m_cameras.end(), gameObject->GetCamera());
@@ -204,4 +221,49 @@ void Scene::RemoveGameObject(shared_ptr<GameObject> gameObject)
 	auto findIt = std::find(m_gameObjects.begin(), m_gameObjects.end(), gameObject);
 	if (findIt != m_gameObjects.end())
 		m_gameObjects.erase(findIt);
+
+}
+
+
+void Scene::IntersectColliders(shared_ptr<BaseCollider> collider1, shared_ptr<BaseCollider> collider2)
+{
+	if (!collider1 || !collider2)
+		return;
+
+	switch (collider2->GetColliderType()) {
+	case ColliderType::Sphere: {
+		auto sphereCollider = dynamic_pointer_cast<SphereCollider>(collider2);
+
+		if (collider1->Intersects(sphereCollider->GetBoundingSphere())) {
+			collider1->setColor(1);
+			collider2->setColor(1);
+		}
+		break;
+	}
+	case ColliderType::Box: {
+		auto boxCollider = dynamic_pointer_cast<BoxCollider>(collider2);
+		if (collider1->Intersects(boxCollider->GetBoundingBox())) {
+			collider1->setColor(1);
+			collider2->setColor(1);
+		}
+		break;
+	}
+	default:
+		// Handle other collider types if necessary
+		break;
+	}
+}
+
+void Scene::testCollision()
+{
+	for (auto& cgo : m_collidableGameObjects)
+	{
+		cgo->GetCollider()->setColor(0);
+	}
+
+	for (int i = 0; i < m_collidableGameObjects.size(); ++i) {
+		for (int j = i + 1; j < m_collidableGameObjects.size(); ++j) {
+			IntersectColliders(m_collidableGameObjects[i]->GetCollider(), m_collidableGameObjects[j]->GetCollider());
+		}
+	}
 }

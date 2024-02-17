@@ -10,7 +10,6 @@
 
 SphereCollider::SphereCollider() : BaseCollider(ColliderType::Sphere)
 {
-
 }
 
 SphereCollider::~SphereCollider()
@@ -20,10 +19,18 @@ SphereCollider::~SphereCollider()
 
 void SphereCollider::Awake()
 {
+	
 	m_go = make_shared<GameObject>();
 	m_go->AddComponent(make_shared<Transform>());
 	m_go->GetTransform()->SetLocalPosition(this->GetTransform()->GetLocalPosition()+Vec3(0,50,0));
-	m_go->GetTransform()->SetLocalScale(Vec3(200, 200, 200));
+	m_go->GetTransform()->SetLocalScale(Vec3(180, 180, 180));
+
+	m_boundingSphere = make_shared<BoundingSphere>();
+	m_go->GetTransform()->SetLocalPosition(this->GetTransform()->GetLocalPosition() + Vec3(0, 75, 0));
+	m_boundingSphere->Center = GetGameObject()->GetTransform()->GetWorldPosition();
+
+	Vec3 scale = m_go->GetTransform()->GetLocalScale();
+	m_boundingSphere->Radius = 90;
 
 	shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
 	{
@@ -46,15 +53,25 @@ void SphereCollider::Awake()
 void SphereCollider::FinalUpdate()
 {
 	m_go->GetTransform()->SetLocalPosition(this->GetTransform()->GetLocalPosition() + Vec3(0, 75, 0));
-	m_boundingSphere.Center = GetGameObject()->GetTransform()->GetWorldPosition();
+	m_boundingSphere->Center = GetGameObject()->GetTransform()->GetWorldPosition();
 
 	Vec3 scale = GetGameObject()->GetTransform()->GetLocalScale();
-	m_boundingSphere.Radius = m_radius * max(max(scale.x, scale.y), scale.z);
+	m_boundingSphere->Radius = 90;
 }
 
 bool SphereCollider::Intersects(Vec4 rayOrigin, Vec4 rayDir, OUT float& distance)
 {
-	return m_boundingSphere.Intersects(rayOrigin, rayDir, OUT distance);
+	return m_boundingSphere->Intersects(rayOrigin, rayDir, OUT distance);
+}
+
+bool SphereCollider::Intersects(shared_ptr<BoundingSphere> boundingSphere)
+{
+	return m_boundingSphere->Intersects(*boundingSphere);
+}
+
+bool SphereCollider::Intersects(shared_ptr<BoundingBox> boundingBox)
+{
+	return m_boundingSphere->Intersects(*boundingBox);
 }
 
 void SphereCollider::draw()

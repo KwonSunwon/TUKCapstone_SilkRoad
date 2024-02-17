@@ -36,6 +36,13 @@ void TestDragon::Update()
 	if (INPUT->GetButton(KEY_TYPE::S))
 		rb->addForce(GetTransform()->GetLook() * -20, FORCEMODE::VELOCITYCHANGE);
 
+	if (INPUT->GetButton(KEY_TYPE::A))
+		rb->addForce(GetTransform()->GetRight() * 20, FORCEMODE::VELOCITYCHANGE);
+
+
+	if (INPUT->GetButton(KEY_TYPE::D))
+		rb->addForce(GetTransform()->GetRight() * -20, FORCEMODE::VELOCITYCHANGE);
+
 	//if (INPUT->GetButton(KEY_TYPE::A))
 	//	pos -= GetTransform()->GetRight() * m_speed * DELTA_TIME;
 
