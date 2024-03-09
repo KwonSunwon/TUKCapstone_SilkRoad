@@ -55,19 +55,15 @@ enum class NETWORK_STATE {
 	GUEST,
 };
 
-struct ClientInfo {
-	ushort id;
-	SOCKET socket;
-};
-
 struct PacketQueue {
-	LockQueue<Packet> in;
-	LockQueue<Packet> out;
+	LockQueue<Packet> toServer;
+	LockQueue<Packet> toClient;
 };
 
 struct GuestInfo {
 	ushort id;
 	SOCKET socket;
+	shared_ptr<PacketQueue> eventQue = make_shared<PacketQueue>();
 };
 
 /*
@@ -169,7 +165,7 @@ public:
 	void GameLoop();
 	void Connection(ushort id);
 
-	//void Send(Packet packet) override;
+	void Send(Packet packet) override;
 	//Packet Recv() override;
 
 private:
@@ -180,7 +176,11 @@ private:
 	thread m_waitLoopThread;
 
 	// 호스트 클라이언트에서 send(정확히는 push)한 패킷 큐
-	LockQueue<Packet> m_packetQueue;
+	PacketQueue m_eventQue;
+
+	// 임시
+	array<Packet, 2> m_gameData;
+	array<Packet, 2> m_lastGameData;
 };
 
 class Guest : public Network {
@@ -218,6 +218,9 @@ public:
 	NETWORK_STATE GetNetworkState() { return m_network.get()->GetState(); }
 	void SetNetworkState(NETWORK_STATE state) { m_network.get()->SetState(state); }
 
+	void Send(Packet packet) { m_network->Send(packet); }
+	bool Recv(shared_ptr<Packet> packet) { return m_network.get()->Recv(packet); }
+
 private:
 	unique_ptr<Network> m_network;
 };
@@ -228,4 +231,7 @@ public:
 	virtual ~NetworkScript() {}
 
 	virtual void LateUpdate() override;
+
+private:
+	ushort m_id = 0;
 };

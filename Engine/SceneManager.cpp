@@ -199,13 +199,13 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 #pragma endregion
 
 #pragma region Object
-	/*{
+	{
 		shared_ptr<GameObject> obj = make_shared<GameObject>();
 		obj->SetName(L"OBJ");
 		obj->AddComponent(make_shared<Transform>());
 		obj->AddComponent(make_shared<SphereCollider>());
 		obj->GetTransform()->SetLocalScale(Vec3(100.f, 100.f, 100.f));
-		obj->GetTransform()->SetLocalPosition(Vec3(0, 0.f, 500.f));
+		obj->GetTransform()->SetLocalPosition(Vec3(0, 0.f, 0.f));
 		obj->SetStatic(false);
 		shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
 		{
@@ -219,8 +219,10 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 		dynamic_pointer_cast<SphereCollider>(obj->GetCollider())->SetRadius(0.5f);
 		dynamic_pointer_cast<SphereCollider>(obj->GetCollider())->SetCenter(Vec3(0.f, 0.f, 0.f));
 		obj->AddComponent(meshRenderer);
+		obj->AddComponent(make_shared<TestCameraScript>());
 		scene->AddGameObject(obj);
-	}*/
+		scene->SetPlayer(obj);
+	}
 #pragma endregion
 
 #pragma region Terrain
@@ -292,7 +294,7 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 
 
 #pragma region FBX
-	{
+	/*{
 		shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Chr_ScifiWorlds_AlienArmor_02.fbx");
 
 		vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
@@ -307,7 +309,7 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 			scene->AddGameObject(gameObject);
 			gameObject->AddComponent(make_shared<TestDragon>());
 		}
-	}
+	}*/
 #pragma endregion
 
 #pragma region Network

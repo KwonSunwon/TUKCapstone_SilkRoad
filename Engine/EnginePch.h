@@ -229,7 +229,6 @@ struct Packet {
 	//char data[1024];
 
 	// юс╫ц
-	float x;
-	float y;
-	float z;
+	Vec3 pos;
+	ushort id;
 };

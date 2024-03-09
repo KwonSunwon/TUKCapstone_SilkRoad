@@ -2,6 +2,10 @@
 
 #include "Network.h"
 #include "Input.h"
+#include "Scene.h"
+#include "SceneManager.h"
+#include "GameObject.h"
+#include "Transform.h"
 
 #pragma region Legacy
 /*
@@ -244,37 +248,82 @@ Network::Network()
 Host::Host() : Network()
 {
 	m_mainLoopThread = thread{ &Host::MainLoop, this };
+
+	m_gameData[0].pos = Vec3{ 0, 0, 0 };
+	m_gameData[0].id = 0;
+	m_gameData[1].pos = Vec3{ 0, 0, 0 };
+	m_gameData[1].id = 1;
+	m_lastGameData[0].pos = Vec3{ 0, 0, 0 };
+	m_lastGameData[0].id = 0;
+	m_lastGameData[1].pos = Vec3{ 0, 0, 0 };
+	m_lastGameData[1].id = 1;
 }
 
 void Host::MainLoop()
 {
 	while (GetState() != NETWORK_STATE::GUEST) {
-		if (GetState() == NETWORK_STATE::HOST) {
-			// 게스트가 보낸 패킷을 받아 갱신
+		{
+			Packet packet;
+			if (GetState() == NETWORK_STATE::HOST) {
+				// 게스트가 보낸 패킷을 받아 갱신
+				for (auto& guest : m_guestInfos) {
+					while (guest.eventQue->toServer.TryPop(packet))
+						m_gameData[guest.id] = packet;
+				}
+			}
+			// 호스트 클라이언트가 푸시한 패킷을 받아 갱신
+			string str = "MainLoop: Queue Size - " + to_string(m_eventQue.toServer.Size()) + "\n";
+			while (m_eventQue.toServer.TryPop(packet)) {
+				m_gameData[0] = packet;
+			}
 		}
-		// 호스트 클라이언트가 푸시한 패킷을 받아 갱신
-
 		GameLoop();
-
-		if (GetState() == NETWORK_STATE::HOST) {
-			// 게스트에게 보낼 패킷을 큐에 푸시
+		{
+			//Packet packet;
+			//if (GetState() == NETWORK_STATE::HOST) {
+			//	// 게스트에게 보낼 패킷을 큐에 푸시
+			//	for (auto& guest : m_guestInfos)
+			//		guest.eventQue.get()->toClient.Push(packet);
+			//}
+			//// 호스트 클라이언트에게 보낼 패킷을 큐에 푸시	
+			//m_eventQue.toClient.Push(packet);
 		}
-		// 호스트 클라이언트에게 보낼 패킷을 큐에 푸시
 	}
 	OutputDebugString(L"Host MainLoop End\n");
-	return;
 }
 
 void Host::GameLoop()
 {
+	for (int i = 0; i < 2; i++) {
+		if (m_gameData[i].pos != m_lastGameData[i].pos) {
+			m_lastGameData[i] = m_gameData[i];
 
+			for (auto& guest : m_guestInfos) {
+				guest.eventQue->toClient.Push(m_gameData[i]);
+			}
+			m_eventQue.toClient.Push(m_gameData[i]);
+		}
+	}
 }
 
 void Host::Update()
 {
+	int count = 0;
 	Packet packet;
-	while (m_packetQueue.TryPop(packet)) {
+	while (m_eventQue.toClient.TryPop(packet)) {
 		// 게임에 적용
+		if (packet.id == 0) {
+			string str = "Update: Packet " + to_string(count++) + " - " + to_string(packet.pos.x) + ", " + to_string(packet.pos.y) + ", " + to_string(packet.pos.z) + "\n";
+			OutputDebugStringA(str.c_str());
+		}
+		if (packet.id == 1) {
+			string str2 = "Update: Packet2 " + to_string(count++) + " - " + to_string(packet.pos.x) + ", " + to_string(packet.pos.y) + ", " + to_string(packet.pos.z) + "\n";
+			OutputDebugStringA(str2.c_str());
+			break;
+		}
+
+		shared_ptr<GameObject> player = GET_SINGLE(SceneManager)->GetActiveScene()->GetPlayer();
+		player->GetTransform()->SetLocalPosition(packet.pos);
 	}
 }
 
@@ -307,9 +356,6 @@ void Host::Stop()
 {
 	//m_waitLoopThread.join();
 	//m_mainLoopThread.join();
-
-	if (m_listenSocket)
-		closesocket(m_listenSocket);
 }
 
 void Host::WaitLoop()
@@ -330,47 +376,55 @@ void Host::WaitLoop()
 		setsockopt(tempSocket, SOL_SOCKET, SO_RCVTIMEO, (const char*)&optval, sizeof(optval));
 
 		GuestInfo guest;
-		guest.id = playerCount++;
+		guest.id = ++playerCount;
 		guest.socket = move(tempSocket);
 		m_guestInfos.emplace_back(guest);
 
 		thread connectionThread = thread{ &Host::Connection, this, guest.id };
 		connectionThread.detach();
 	}
+	closesocket(m_listenSocket);
 	OutputDebugString(L"Host WaitLoop End\n");
-	return;
 }
-
-//thread_local shared_ptr<PacketQueue> tl_packetQueue = make_shared<PacketQueue>();
 
 void Host::Connection(ushort id)
 {
-	// 게스트와 패킷 송수신
-	int retval;
+	SOCKET socket;
+	shared_ptr<PacketQueue> eventQue;
 	for (auto& guest : m_guestInfos) {
 		if (guest.id == id) {
-			while (GetState() == NETWORK_STATE::HOST) {
-				//Packet packet;
-				//// 서버에서 게스트로 보내는 패킷
-				//while (tl_packetQueue.get()->out.TryPop(packet)) {
-				//	retval = send(guest.socket, (char*)&packet, sizeof(packet), 0);
-				//	if (retval == SOCKET_ERROR) {
+			socket = guest.socket;
+			eventQue = guest.eventQue;
+			break;
+		}
+	}
 
-				//	}
-				//}
-				//// 게스트에서 서버로 보내는 패킷
-				//while (true) {
-				//	retval = recv(guest.socket, (char*)&packet, sizeof(packet), 0);
-				//	if (retval > 0) {
-				//		tl_packetQueue.get()->in.Push(packet);
-				//	}
-				//	if (retval < 0) {
-				//		break;
-				//	}
-				//}
+	// 게스트와 패킷 송수신
+	int retval;
+	while (GetState() == NETWORK_STATE::HOST) {
+		Packet packet;
+		// 서버에서 게스트로 보내는 패킷
+		while (eventQue->toClient.TryPop(packet)) {
+			retval = send(socket, (char*)&packet, sizeof(packet), 0);
+			if (retval == SOCKET_ERROR) {
+
+			}
+		}
+		// 게스트에서 서버로 보내는 패킷
+		while (true) {
+			retval = recv(socket, (char*)&packet, sizeof(packet), 0);
+			if (retval > 0) {
+				eventQue->toServer.Push(packet);
+			}
+			if (retval < 0) {
+				break;
 			}
 		}
 	}
+}
+void Host::Send(Packet packet)
+{
+	m_eventQue.toServer.Push(packet);
 }
 #pragma endregion
 
@@ -405,10 +459,18 @@ void Guest::Connect()
 void Guest::Update()
 {
 	// 패킷을 받고 게임에 적용하는 부분
+	int count = 0;
 	int retval;
 	shared_ptr<Packet> packet = make_shared<Packet>();
 	while (Recv(packet)) {
-		// 게임에 적용
+		string str = "Update: Packet " + to_string(count++) + " - " + to_string(packet->pos.x) + ", " + to_string(packet->pos.y) + ", " + to_string(packet->pos.z) + "\n";
+		OutputDebugStringA(str.c_str());
+
+		if (packet->id == 0)
+			break;
+
+		shared_ptr<GameObject> player = GET_SINGLE(SceneManager)->GetActiveScene()->GetPlayer();
+		player->GetTransform()->SetLocalPosition(packet->pos);
 	}
 }
 
@@ -461,7 +523,6 @@ void NetworkManager::ConnectAsGuest()
 		m_network = make_unique<Guest>();
 
 		dynamic_cast<Guest*>(m_network.get())->Connect();
-
 	}
 }
 
@@ -469,15 +530,25 @@ void NetworkScript::LateUpdate()
 {
 	if (INPUT->GetButtonDown(KEY_TYPE::KEY_1)) {
 		GET_SINGLE(NetworkManager)->RunMulti();
+		m_id = 0;
 	}
 
 	if (INPUT->GetButtonDown(KEY_TYPE::KEY_2)) {
 		// 호스트에서 게스트로 전환
 		GET_SINGLE(NetworkManager)->ConnectAsGuest();
+		m_id = 1;
 	}
 
 	if (INPUT->GetButtonDown(KEY_TYPE::KEY_3)) {
 		// 게스트에서 호스트로 전환
 	}
+
+	Packet packet;
+	shared_ptr<GameObject> player = GET_SINGLE(SceneManager)->GetActiveScene()->GetPlayer();
+	packet.pos = player->GetTransform()->GetLocalPosition();
+	packet.id = m_id;
+	//string str = "Send: " + to_string(packet.pos.x) + ", " + to_string(packet.pos.y) + ", " + to_string(packet.pos.z) + "\n";
+	//OutputDebugStringA(str.c_str());
+	GET_SINGLE(NetworkManager)->Send(packet);
 }
 #pragma endregion
