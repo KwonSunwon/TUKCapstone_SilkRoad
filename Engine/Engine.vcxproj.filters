@@ -28,6 +28,9 @@
     <Filter Include="Object\Component\Collider">
       <UniqueIdentifier>{054eccde-e1ba-451d-925b-5547022cbf4e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Server">
+      <UniqueIdentifier>{5a638558-91e5-4352-b1f4-acca415aa0b5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -152,6 +155,12 @@
     </ClCompile>
     <ClCompile Include="TestDragon.cpp">
       <Filter>Object\Test</Filter>
+    </ClCompile>
+    <ClCompile Include="Network.cpp">
+      <Filter>Server</Filter>
+    </ClCompile>
+    <ClCompile Include="LockQueue.cpp">
+      <Filter>Server</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -280,6 +289,12 @@
     </ClInclude>
     <ClInclude Include="TestDragon.h">
       <Filter>Object\Test</Filter>
+    </ClInclude>
+    <ClInclude Include="Network.h">
+      <Filter>Server</Filter>
+    </ClInclude>
+    <ClInclude Include="LockQueue.h">
+      <Filter>Server</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

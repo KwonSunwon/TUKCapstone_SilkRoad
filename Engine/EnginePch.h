@@ -3,6 +3,13 @@
 // std::byte 사용하지 않음
 #define _HAS_STD_BYTE 0
 
+// TCP/IP 통신
+#define _WINSOCK_DEPRECATED_NO_WARNINGS
+#define _WINSOCKAPI_
+#include <WinSock2.h> 
+#include <WS2tcpip.h>
+#pragma comment(lib, "ws2_32")
+
 // 각종 include
 #include <windows.h>
 #include <tchar.h>
@@ -12,9 +19,15 @@
 #include <array>
 #include <list>
 #include <map>
+#include <queue>
+
+// Thread 관련
 #include <thread>
 #include <mutex>
+#include <atomic>
+
 using namespace std;
+
 
 #include <filesystem>
 namespace fs = std::filesystem;
@@ -212,6 +225,11 @@ struct PacketHeader {
 };
 
 struct Packet {
-	PacketHeader header;
-	char data[1024];
+	//PacketHeader header;
+	//char data[1024];
+
+	// 임시
+	float x;
+	float y;
+	float z;
 };

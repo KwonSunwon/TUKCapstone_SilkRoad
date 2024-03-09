@@ -8,6 +8,8 @@
 #include "Light.h"
 #include "Resources.h"
 #include "InstancingManager.h"
+#include "Scene.h"
+#include "Network.h"
 
 void Engine::Init(const WindowInfo& info)
 {
@@ -36,10 +38,22 @@ void Engine::Init(const WindowInfo& info)
 	GET_SINGLE(Input)->Init(info.hwnd);
 	GET_SINGLE(Timer)->Init();
 	GET_SINGLE(Resources)->Init();
+
+	// 서버 생성
+	GET_SINGLE(NetworkManager)->Initialize();
 }
 
 void Engine::Update()
 {
+	// 여기서 서버(자신의 쓰레드 또는 다른 호스트)의 데이터로 업데이트
+	// UpdateFromServer();
+	//{
+	//	auto gameObjects = static_cast<Scene*>(GET_SINGLE(SceneManager)->GetActiveScene().get())->GetGameObjects();
+	//	gameObjects[0]->GetID();
+	//}
+
+	GET_SINGLE(NetworkManager)->Update();
+
 	GET_SINGLE(Input)->Update();
 	GET_SINGLE(Timer)->Update();
 	GET_SINGLE(SceneManager)->Update();

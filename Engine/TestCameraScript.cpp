@@ -6,6 +6,7 @@
 #include "Input.h"
 #include "Timer.h"
 #include "SceneManager.h"
+#include "Network.h"
 
 TestCameraScript::TestCameraScript()
 {
@@ -66,4 +67,8 @@ void TestCameraScript::LateUpdate()
 	}
 
 	GetTransform()->SetLocalPosition(pos);
+
+	// 임시
+	// 매 프레임마다 서버에 위치 정보를 전송
+
 }

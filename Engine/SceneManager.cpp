@@ -18,6 +18,8 @@
 #include "MeshData.h"
 #include "TestDragon.h"
 
+#include "Network.h"
+
 void SceneManager::Update()
 {
 	if (m_activeScene == nullptr)
@@ -305,6 +307,15 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 			scene->AddGameObject(gameObject);
 			gameObject->AddComponent(make_shared<TestDragon>());
 		}
+	}
+#pragma endregion
+
+#pragma region Network
+	{
+		shared_ptr<GameObject> network = make_shared<GameObject>();
+		network->SetName(L"Network");
+		network->AddComponent(make_shared<NetworkScript>());
+		scene->AddGameObject(network);
 	}
 #pragma endregion
 
