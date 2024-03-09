@@ -1,5 +1,7 @@
 #pragma once
 
+class D3D11On12Device;
+
 class Scene;
 
 enum
@@ -14,6 +16,7 @@ class SceneManager
 public:
 	void Update();
 	void Render();
+	void RenderUI(shared_ptr<D3D11On12Device> d3d11On12device);
 	void LoadScene(wstring sceneName);
 
 	void SetLayerName(uint8 index, const wstring& name);

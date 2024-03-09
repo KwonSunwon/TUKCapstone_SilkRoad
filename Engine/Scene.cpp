@@ -169,6 +169,11 @@ void Scene::RenderForward()
 	}
 }
 
+void Scene::RenderUI()
+{
+
+}
+
 void Scene::PushLightData()
 {
 	LightParams lightParams = {};

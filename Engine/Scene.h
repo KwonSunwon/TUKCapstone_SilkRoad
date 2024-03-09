@@ -27,6 +27,8 @@ public:
 
 	void RenderForward();
 
+	void RenderUI();
+
 private:
 	void PushLightData();
 
