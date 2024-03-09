@@ -7,7 +7,7 @@
 BaseCollider::BaseCollider(ColliderType colliderType)
 	: Component(COMPONENT_TYPE::COLLIDER), m_colliderType(colliderType)
 {
-
+	m_id = next_id++;
 }
 
 BaseCollider::~BaseCollider()
@@ -15,7 +15,13 @@ BaseCollider::~BaseCollider()
 
 }
 
-void BaseCollider::setColor(bool color)
+void BaseCollider::setColor(Vec4 color,bool active)
 {
-	m_go->GetMeshRenderer()->GetMaterial()->SetInt(3, color);
+	m_go->GetMeshRenderer()->GetMaterial()->SetInt(3, active);
+	m_go->GetMeshRenderer()->GetMaterial()->SetVec4(3, color);
+}
+
+void BaseCollider::UpdateNodePos()
+{
+	updatePos = true;
 }

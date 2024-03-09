@@ -11,6 +11,13 @@
 #include "SphereCollider.h"
 #include "BoxCollider.h"
 #include "MeshRenderer.h"
+#include "OcNode.h"
+#include "OcTree.h"
+
+Scene::Scene()
+{
+	
+}
 
 void Scene::Awake()
 {
@@ -30,10 +37,12 @@ void Scene::Start()
 
 void Scene::Update()
 {
+	
 	for (const shared_ptr<GameObject>& gameObject : m_gameObjects)
 	{
 		gameObject->Update();
 	}
+
 }
 
 void Scene::LateUpdate()
@@ -50,6 +59,7 @@ void Scene::FinalUpdate()
 	{
 		gameObject->FinalUpdate();
 	}
+	m_ocTree->Update();
 }
 
 shared_ptr<Camera> Scene::GetMainCamera()
@@ -181,6 +191,7 @@ void Scene::AddGameObject(shared_ptr<GameObject> gameObject)
 	if (gameObject->GetRigidBody() != nullptr)
 	{
 		m_collidableGameObjects.push_back(gameObject);
+		m_ocTree->InsertObjectCollider(gameObject->GetCollider());
 	}
 
 
@@ -235,16 +246,16 @@ void Scene::IntersectColliders(shared_ptr<BaseCollider> collider1, shared_ptr<Ba
 		auto sphereCollider = dynamic_pointer_cast<SphereCollider>(collider2);
 
 		if (collider1->Intersects(sphereCollider->GetBoundingSphere())) {
-			collider1->setColor(1);
-			collider2->setColor(1);
+			collider1->setColor(Vec4(1, 0, 0, 0), true);
+			collider2->setColor(Vec4(1, 0, 0, 0), true);
 		}
 		break;
 	}
 	case ColliderType::Box: {
 		auto boxCollider = dynamic_pointer_cast<BoxCollider>(collider2);
 		if (collider1->Intersects(boxCollider->GetBoundingBox())) {
-			collider1->setColor(1);
-			collider2->setColor(1);
+			collider1->setColor(Vec4(1, 0, 0, 0), true);
+			collider2->setColor(Vec4(1, 0, 0, 0), true);
 		}
 		break;
 	}
@@ -258,12 +269,16 @@ void Scene::testCollision()
 {
 	for (auto& cgo : m_collidableGameObjects)
 	{
-		cgo->GetCollider()->setColor(0);
+		cgo->GetCollider()->setColor(Vec4(0,0,0,0),false);
+	}
+	for (auto& cgo : m_collidableGameObjects)
+	{
+		m_ocTree->CollisionInspection(cgo->GetCollider());
 	}
 
-	for (int i = 0; i < m_collidableGameObjects.size(); ++i) {
+	/*for (int i = 0; i < m_collidableGameObjects.size(); ++i) {
 		for (int j = i + 1; j < m_collidableGameObjects.size(); ++j) {
 			IntersectColliders(m_collidableGameObjects[i]->GetCollider(), m_collidableGameObjects[j]->GetCollider());
 		}
-	}
+	}*/
 }

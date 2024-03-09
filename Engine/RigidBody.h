@@ -48,6 +48,7 @@ private:
 	Vec3 m_rotation = {};
 	Vec3 m_angularVelocity = {};
 	Vec3 m_velocity = {};
+	Vec3 m_priorPosition = {};
 
 
 

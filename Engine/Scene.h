@@ -2,10 +2,12 @@
 
 class GameObject;
 class BaseCollider;
+class OcTree;
 
 class Scene
 {
 public:
+	Scene();
 	void Awake();
 	void Start();
 	void Update();
@@ -45,7 +47,7 @@ private:
 
 	//test func
 private:
-	
+	shared_ptr<OcTree> m_ocTree = make_shared<OcTree>(50000, 200);
 	
 };
 

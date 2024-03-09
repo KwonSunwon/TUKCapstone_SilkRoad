@@ -5,6 +5,7 @@
 #include "GameObject.h"
 #include "Transform.h"
 #include "Timer.h"
+#include "BaseCollider.h"
 
 RigidBody::RigidBody() : Component(COMPONENT_TYPE::RIGIDBODY)
 {
@@ -68,10 +69,17 @@ void RigidBody::applyDrag()
 void RigidBody::updatePosition()
 {
 	m_position = GetTransform()->GetLocalPosition();
+	m_priorPosition = m_position;
 	m_velocity += m_acceleration * DELTA_TIME;
 	m_position += m_velocity * DELTA_TIME;
 	m_acceleration = {};
 	GetTransform()->SetLocalPosition(m_position);
+	
+	Vec3 difPos = m_position - m_priorPosition;
+	if (difPos.Length() > FLT_EPSILON)
+	{
+		GetGameObject()->GetCollider()->UpdateNodePos();
+	}
 }
 
 void RigidBody::accelerate(Vec3 acc)

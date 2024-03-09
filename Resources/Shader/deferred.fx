@@ -95,7 +95,7 @@ PS_OUT PS_Main(VS_OUT input)
     
     if(g_int_3 == 1)
     {
-        output.color = float4(1.0, 0, 0, 0);
+        output.color = g_vec4_3;
 
     }
 
