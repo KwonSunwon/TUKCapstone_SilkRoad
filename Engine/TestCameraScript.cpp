@@ -6,6 +6,8 @@
 #include "Input.h"
 #include "Timer.h"
 #include "SceneManager.h"
+#include "Scene.h"
+#include "Terrain.h"
 
 TestCameraScript::TestCameraScript()
 {
@@ -64,6 +66,6 @@ void TestCameraScript::LateUpdate()
 		const POINT& pos = INPUT->GetMousePos();
 		GET_SINGLE(SceneManager)->Pick(pos.x, pos.y);
 	}
-
+	//pos.y = GET_SINGLE(SceneManager)->GetActiveScene()->m_terrain->GetTerrain()->getHeight(pos.x, pos.z);
 	GetTransform()->SetLocalPosition(pos);
 }

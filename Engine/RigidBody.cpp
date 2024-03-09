@@ -6,6 +6,9 @@
 #include "Transform.h"
 #include "Timer.h"
 #include "BaseCollider.h"
+#include "SceneManager.h"
+#include "Scene.h"
+#include "Terrain.h"
 
 RigidBody::RigidBody() : Component(COMPONENT_TYPE::RIGIDBODY)
 {
@@ -73,6 +76,11 @@ void RigidBody::updatePosition()
 	m_velocity += m_acceleration * DELTA_TIME;
 	m_position += m_velocity * DELTA_TIME;
 	m_acceleration = {};
+	float y = GET_SINGLE(SceneManager)->GetActiveScene()->m_terrain->GetTerrain()->getHeight(m_position.x, m_position.z);
+	if (m_position.y - y <= FLT_EPSILON) {
+		m_position.y = y;
+		m_velocity.y = 0;
+	}
 	GetTransform()->SetLocalPosition(m_position);
 	
 	Vec3 difPos = m_position - m_priorPosition;

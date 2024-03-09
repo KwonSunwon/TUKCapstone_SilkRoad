@@ -40,8 +40,8 @@ public:
 	
 
 private:
-	Vec3 m_gravity = { 0.0,-9.8,0.0 };
-	float m_frictionCoef = 100.f;
+	Vec3 m_gravity = { 0.0,-980,0.0 };
+	float m_frictionCoef = 1.f;
 	
 	Vec3 m_position = {};
 	Vec3 m_acceleration = {};

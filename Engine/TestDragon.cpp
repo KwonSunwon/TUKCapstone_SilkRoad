@@ -25,7 +25,7 @@ void TestDragon::Update()
 	}
 	shared_ptr<RigidBody> rb = GetRigidBody();
 	rb->m_drag = 0.001;
-	rb->m_useGravity = false;
+	rb->m_useGravity = true;
 	rb->m_mass = 80.0;
 	rb->m_isKinematic = false;
 
@@ -42,6 +42,9 @@ void TestDragon::Update()
 
 	if (INPUT->GetButton(KEY_TYPE::D))
 		rb->addForce(GetTransform()->GetRight() * -20, FORCEMODE::VELOCITYCHANGE);
+
+	if (INPUT->GetButton(KEY_TYPE::LBUTTON))
+		rb->addForce(GetTransform()->GetUp() * 200000, FORCEMODE::IMPULSE);
 
 	//if (INPUT->GetButton(KEY_TYPE::A))
 	//	pos -= GetTransform()->GetRight() * m_speed * DELTA_TIME;
