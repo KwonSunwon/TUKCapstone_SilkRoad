@@ -248,23 +248,21 @@ Host::Host() : Network()
 
 void Host::MainLoop()
 {
-	// 여기서 게임 루프 처리
-	//Packet packet;
-	//while (m_packetQueue.TryPop(packet)) {
-	//	// 게임에 적용
-	//}
-	//for (auto& guest : m_guestInfos) {
-	//	while (guest.packetQueue.in.TryPop(packet)) {
-	//		// 게임에 적용
-	//	}
-	//}
+	while (GetState() != NETWORK_STATE::GUEST) {
+		if (GetState() == NETWORK_STATE::HOST) {
+			// 게스트가 보낸 패킷을 받아 갱신
+		}
+		// 호스트 클라이언트가 푸시한 패킷을 받아 갱신
 
-	//GameLoop();
+		GameLoop();
 
-	//for (auto& guest : m_guestInfos) {
-	//	guest.packetQueue.out.Push(packet);
-	//}
-	//m_packetQueue.Push(packet);
+		if (GetState() == NETWORK_STATE::HOST) {
+			// 게스트에게 보낼 패킷을 큐에 푸시
+		}
+		// 호스트 클라이언트에게 보낼 패킷을 큐에 푸시
+	}
+	OutputDebugString(L"Host MainLoop End\n");
+	return;
 }
 
 void Host::GameLoop()
@@ -282,8 +280,6 @@ void Host::Update()
 
 void Host::RunMulti()
 {
-	m_isMultiRunning = true;
-
 	SOCKET listenSocket = socket(AF_INET, SOCK_STREAM, 0);
 	if (listenSocket == INVALID_SOCKET) {
 		throw runtime_error("Fail initialize listen socket");
@@ -307,13 +303,22 @@ void Host::RunMulti()
 	m_waitLoopThread = thread{ &Host::WaitLoop, this };
 }
 
+void Host::Stop()
+{
+	//m_waitLoopThread.join();
+	//m_mainLoopThread.join();
+
+	if (m_listenSocket)
+		closesocket(m_listenSocket);
+}
+
 void Host::WaitLoop()
 {
 	struct sockaddr_in clientAddr;
 	int addrLen;
 	m_guestInfos.reserve(MAX_GUEST);
 	int playerCount = 0;
-	while (m_isMultiRunning) {
+	while (GetState() == NETWORK_STATE::HOST) {
 		// WaitForClients
 		addrLen = sizeof(clientAddr);
 		SOCKET tempSocket = ::accept(m_listenSocket, (sockaddr*)&clientAddr, &addrLen);
@@ -332,6 +337,8 @@ void Host::WaitLoop()
 		thread connectionThread = thread{ &Host::Connection, this, guest.id };
 		connectionThread.detach();
 	}
+	OutputDebugString(L"Host WaitLoop End\n");
+	return;
 }
 
 //thread_local shared_ptr<PacketQueue> tl_packetQueue = make_shared<PacketQueue>();
@@ -342,26 +349,26 @@ void Host::Connection(ushort id)
 	int retval;
 	for (auto& guest : m_guestInfos) {
 		if (guest.id == id) {
-			//while (true) {
-			//	Packet packet;
-			//	// 서버에서 게스트로 보내는 패킷
-			//	while (tl_packetQueue.get()->out.TryPop(packet)) {
-			//		retval = send(guest.socket, (char*)&packet, sizeof(packet), 0);
-			//		if (retval == SOCKET_ERROR) {
+			while (GetState() == NETWORK_STATE::HOST) {
+				//Packet packet;
+				//// 서버에서 게스트로 보내는 패킷
+				//while (tl_packetQueue.get()->out.TryPop(packet)) {
+				//	retval = send(guest.socket, (char*)&packet, sizeof(packet), 0);
+				//	if (retval == SOCKET_ERROR) {
 
-			//		}
-			//	}
-			//	// 게스트에서 서버로 보내는 패킷
-			//	while (true) {
-			//		retval = recv(guest.socket, (char*)&packet, sizeof(packet), 0);
-			//		if (retval > 0) {
-			//			tl_packetQueue.get()->in.Push(packet);
-			//		}
-			//		if (retval < 0) {
-			//			break;
-			//		}
-			//	}
-			//}
+				//	}
+				//}
+				//// 게스트에서 서버로 보내는 패킷
+				//while (true) {
+				//	retval = recv(guest.socket, (char*)&packet, sizeof(packet), 0);
+				//	if (retval > 0) {
+				//		tl_packetQueue.get()->in.Push(packet);
+				//	}
+				//	if (retval < 0) {
+				//		break;
+				//	}
+				//}
+			}
 		}
 	}
 }
@@ -391,7 +398,7 @@ void Guest::Connect()
 		throw runtime_error("Fail connect server");
 	}
 
-	DWORD optval = 10;
+	DWORD optval = 5;
 	setsockopt(m_socket, SOL_SOCKET, SO_RCVTIMEO, (const char*)&optval, sizeof(optval));
 }
 
@@ -437,21 +444,24 @@ void NetworkManager::Update()
 void NetworkManager::RunMulti()
 {
 	if (GetNetworkState() == NETWORK_STATE::SINGLE) {
-		dynamic_cast<Host*>(m_network.get())->RunMulti();
-
 		SetNetworkState(NETWORK_STATE::HOST);
+
+		dynamic_cast<Host*>(m_network.get())->RunMulti();
 	}
 }
 
 void NetworkManager::ConnectAsGuest()
 {
-	if (GetNetworkState() == NETWORK_STATE::SINGLE) {
-		m_network.reset();
+	if (GetNetworkState() != NETWORK_STATE::GUEST) {
+		SetNetworkState(NETWORK_STATE::GUEST);
+
+		dynamic_cast<Host*>(m_network.get())->Stop();
+
+		m_network.release();
 		m_network = make_unique<Guest>();
 
 		dynamic_cast<Guest*>(m_network.get())->Connect();
 
-		SetNetworkState(NETWORK_STATE::GUEST);
 	}
 }
 

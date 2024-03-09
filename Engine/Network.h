@@ -148,7 +148,7 @@ public:
 
 private:
 	WSADATA m_wsaData;
-	NETWORK_STATE m_networkState = NETWORK_STATE::SINGLE;
+	atomic<NETWORK_STATE> m_networkState = NETWORK_STATE::SINGLE;
 
 	atomic<bool> m_isRunning = false;
 };
@@ -161,6 +161,8 @@ public:
 	void Update() override;
 
 	void RunMulti();
+
+	void Stop();
 
 	void MainLoop();
 	void WaitLoop();
@@ -179,8 +181,6 @@ private:
 
 	// 호스트 클라이언트에서 send(정확히는 push)한 패킷 큐
 	LockQueue<Packet> m_packetQueue;
-
-	atomic<bool> m_isMultiRunning = false;
 };
 
 class Guest : public Network {
