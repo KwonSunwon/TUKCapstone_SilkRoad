@@ -110,8 +110,8 @@ void FBXLoader::LoadMesh(FbxMesh* mesh)
 	for (int32 i = 0; i < vertexCount; ++i)
 	{
 		meshInfo.vertices[i].pos.x = static_cast<float>(controlPoints[i].mData[0]);
-		meshInfo.vertices[i].pos.y = static_cast<float>(controlPoints[i].mData[2]);
-		meshInfo.vertices[i].pos.z = static_cast<float>(controlPoints[i].mData[1]);
+		meshInfo.vertices[i].pos.y = static_cast<float>(controlPoints[i].mData[1]);
+		meshInfo.vertices[i].pos.z = static_cast<float>(controlPoints[i].mData[2]);
 	}
 
 	const int32 materialCount = mesh->GetNode()->GetMaterialCount();
@@ -142,8 +142,8 @@ void FBXLoader::LoadMesh(FbxMesh* mesh)
 
 		const uint32 subsetIdx = geometryElementMaterial->GetIndexArray().GetAt(i);
 		meshInfo.indices[subsetIdx].push_back(arrIdx[0]);
-		meshInfo.indices[subsetIdx].push_back(arrIdx[2]);
 		meshInfo.indices[subsetIdx].push_back(arrIdx[1]);
+		meshInfo.indices[subsetIdx].push_back(arrIdx[2]);
 	}
 
 	// Animation
@@ -192,8 +192,8 @@ void FBXLoader::GetNormal(FbxMesh* mesh, FbxMeshInfo* container, int32 idx, int3
 
 	FbxVector4 vec = normal->GetDirectArray().GetAt(normalIdx);
 	container->vertices[idx].normal.x = static_cast<float>(vec.mData[0]);
-	container->vertices[idx].normal.y = static_cast<float>(vec.mData[2]);
-	container->vertices[idx].normal.z = static_cast<float>(vec.mData[1]);
+	container->vertices[idx].normal.y = static_cast<float>(vec.mData[1]);
+	container->vertices[idx].normal.z = static_cast<float>(vec.mData[2]);
 }
 
 void FBXLoader::GetTangent(FbxMesh* mesh, FbxMeshInfo* meshInfo, int32 idx, int32 vertexCounter)
@@ -227,8 +227,8 @@ void FBXLoader::GetTangent(FbxMesh* mesh, FbxMeshInfo* meshInfo, int32 idx, int3
 
 	FbxVector4 vec = tangent->GetDirectArray().GetAt(tangentIdx);
 	meshInfo->vertices[idx].tangent.x = static_cast<float>(vec.mData[0]);
-	meshInfo->vertices[idx].tangent.y = static_cast<float>(vec.mData[2]);
-	meshInfo->vertices[idx].tangent.z = static_cast<float>(vec.mData[1]);
+	meshInfo->vertices[idx].tangent.y = static_cast<float>(vec.mData[1]);
+	meshInfo->vertices[idx].tangent.z = static_cast<float>(vec.mData[2]);
 }
 
 void FBXLoader::GetUV(FbxMesh* mesh, FbxMeshInfo* meshInfo, int32 idx, int32 uvIndex)
@@ -354,7 +354,7 @@ void FBXLoader::CreateMaterials()
 				if (specularTexture)
 					material->SetTexture(2, specularTexture);
 			}
-
+			material->SetInt(0, 1);
 			GET_SINGLE(Resources)->Add<Material>(material->GetName(), material);
 		}
 	}
@@ -488,8 +488,8 @@ void FBXLoader::LoadOffsetMatrix(FbxCluster* cluster, const FbxAMatrix& matNodeT
 	cluster->GetTransformLinkMatrix(matClusterLinkTrans);
 
 	FbxVector4 V0 = { 1, 0, 0, 0 };
-	FbxVector4 V1 = { 0, 0, 1, 0 };
-	FbxVector4 V2 = { 0, 1, 0, 0 };
+	FbxVector4 V1 = { 0, 1, 0, 0 };
+	FbxVector4 V2 = { 0, 0, 1, 0 };
 	FbxVector4 V3 = { 0, 0, 0, 1 };
 
 	FbxAMatrix matReflect;
@@ -511,8 +511,8 @@ void FBXLoader::LoadKeyframe(int32 animIndex, FbxNode* node, FbxCluster* cluster
 		return;
 
 	FbxVector4	v1 = { 1, 0, 0, 0 };
-	FbxVector4	v2 = { 0, 0, 1, 0 };
-	FbxVector4	v3 = { 0, 1, 0, 0 };
+	FbxVector4	v2 = { 0, 1, 0, 0 };
+	FbxVector4	v3 = { 0, 0, 1, 0 };
 	FbxVector4	v4 = { 0, 0, 0, 1 };
 	FbxAMatrix	matReflect;
 	matReflect.mData[0] = v1;

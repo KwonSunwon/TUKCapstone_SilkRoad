@@ -153,6 +153,18 @@
     <ClCompile Include="TestDragon.cpp">
       <Filter>Object\Test</Filter>
     </ClCompile>
+    <ClCompile Include="RigidBody.cpp">
+      <Filter>Object\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="BoxCollider.cpp">
+      <Filter>Object\Component\Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="OcNode.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="OcTree.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -280,6 +292,18 @@
     </ClInclude>
     <ClInclude Include="TestDragon.h">
       <Filter>Object\Test</Filter>
+    </ClInclude>
+    <ClInclude Include="RigidBody.h">
+      <Filter>Object\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="BoxCollider.h">
+      <Filter>Object\Component\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="OcNode.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="OcTree.h">
+      <Filter>Manager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

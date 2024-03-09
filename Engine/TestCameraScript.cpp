@@ -6,6 +6,8 @@
 #include "Input.h"
 #include "Timer.h"
 #include "SceneManager.h"
+#include "Scene.h"
+#include "Terrain.h"
 
 TestCameraScript::TestCameraScript()
 {
@@ -19,16 +21,16 @@ void TestCameraScript::LateUpdate()
 {
 	Vec3 pos = GetTransform()->GetLocalPosition();
 
-	if (INPUT->GetButton(KEY_TYPE::W))
+	if (INPUT->GetButton(KEY_TYPE::UP))
 		pos += GetTransform()->GetLook() * m_speed * DELTA_TIME;
 
-	if (INPUT->GetButton(KEY_TYPE::S))
+	if (INPUT->GetButton(KEY_TYPE::DOWN))
 		pos -= GetTransform()->GetLook() * m_speed * DELTA_TIME;
 
-	if (INPUT->GetButton(KEY_TYPE::A))
+	if (INPUT->GetButton(KEY_TYPE::LEFT))
 		pos -= GetTransform()->GetRight() * m_speed * DELTA_TIME;
 
-	if (INPUT->GetButton(KEY_TYPE::D))
+	if (INPUT->GetButton(KEY_TYPE::RIGHT))
 		pos += GetTransform()->GetRight() * m_speed * DELTA_TIME;
 
 	if (INPUT->GetButton(KEY_TYPE::Q))
@@ -64,6 +66,6 @@ void TestCameraScript::LateUpdate()
 		const POINT& pos = INPUT->GetMousePos();
 		GET_SINGLE(SceneManager)->Pick(pos.x, pos.y);
 	}
-
+	//pos.y = GET_SINGLE(SceneManager)->GetActiveScene()->m_terrain->GetTerrain()->getHeight(pos.x, pos.z);
 	GetTransform()->SetLocalPosition(pos);
 }

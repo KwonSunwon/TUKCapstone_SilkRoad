@@ -11,24 +11,16 @@ void Input::Init(HWND hwnd)
 void Input::Update()
 {
 	HWND hwnd = ::GetActiveWindow();
-	if (m_hwnd != hwnd)
-	{
-		for (uint32 key = 0; key < KEY_TYPE_COUNT; key++)
-			m_states[key] = KEY_STATE::NONE;
-
+	if (m_hwnd != hwnd) {
+		for (const KEY_TYPE key : ALL_KEYS)
+			m_states[static_cast<int32>(key)] = KEY_STATE::NONE;
 		return;
 	}
 
-	BYTE asciiKeys[KEY_TYPE_COUNT] = {};
-	if (::GetKeyboardState(asciiKeys) == false)
-		return;
-
-	for (uint32 key = 0; key < KEY_TYPE_COUNT; key++)
-	{
+	for (const KEY_TYPE key : ALL_KEYS) {
 		// 키가 눌려 있으면 true
-		if (asciiKeys[key] & 0x80)
-		{
-			KEY_STATE& state = m_states[key];
+		if (::GetAsyncKeyState(static_cast<int32>(key)) & 0x8000) {
+			KEY_STATE& state = m_states[static_cast<int32>(key)];
 
 			// 이전 프레임에 키를 누른 상태라면 PRESS
 			if (state == KEY_STATE::PRESS || state == KEY_STATE::DOWN)
@@ -36,9 +28,8 @@ void Input::Update()
 			else
 				state = KEY_STATE::DOWN;
 		}
-		else
-		{
-			KEY_STATE& state = m_states[key];
+		else {
+			KEY_STATE& state = m_states[static_cast<int32>(key)];
 
 			// 이전 프레임에 키를 누른 상태라면 UP
 			if (state == KEY_STATE::PRESS || state == KEY_STATE::DOWN)

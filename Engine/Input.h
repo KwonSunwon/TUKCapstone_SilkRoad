@@ -26,6 +26,24 @@ enum class KEY_TYPE
 	RBUTTON = VK_RBUTTON,
 };
 
+constexpr std::array<KEY_TYPE, 14> ALL_KEYS =
+{
+	KEY_TYPE::W,
+	KEY_TYPE::A,
+	KEY_TYPE::S,
+	KEY_TYPE::D,
+	KEY_TYPE::Q,
+	KEY_TYPE::E,
+	KEY_TYPE::Z,
+	KEY_TYPE::C,
+	KEY_TYPE::UP,
+	KEY_TYPE::DOWN,
+	KEY_TYPE::LEFT,
+	KEY_TYPE::RIGHT,
+	KEY_TYPE::LBUTTON,
+	KEY_TYPE::RBUTTON,
+};
+
 enum class KEY_STATE
 {
 	NONE,
