@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="Engine">
@@ -156,6 +156,18 @@
     <ClCompile Include="TestDragon.cpp">
       <Filter>Object\Test</Filter>
     </ClCompile>
+    <ClCompile Include="RigidBody.cpp">
+      <Filter>Object\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="BoxCollider.cpp">
+      <Filter>Object\Component\Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="OcNode.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="OcTree.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
     <ClCompile Include="Network.cpp">
       <Filter>Server</Filter>
     </ClCompile>
@@ -289,6 +301,18 @@
     </ClInclude>
     <ClInclude Include="TestDragon.h">
       <Filter>Object\Test</Filter>
+    </ClInclude>
+    <ClInclude Include="RigidBody.h">
+      <Filter>Object\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="BoxCollider.h">
+      <Filter>Object\Component\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="OcNode.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="OcTree.h">
+      <Filter>Manager</Filter>
     </ClInclude>
     <ClInclude Include="Network.h">
       <Filter>Server</Filter>

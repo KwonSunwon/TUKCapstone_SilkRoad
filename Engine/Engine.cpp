@@ -32,6 +32,9 @@ void Engine::Init(const WindowInfo& info)
 	CreateConstantBuffer(CBV_REGISTER::b2, sizeof(MaterialParams), 256);
 
 	CreateRenderTargetGroups();
+	
+	vector<ComPtr<ID3D12Resource>> rtvec = { m_rtGroups[static_cast<uint8>(RENDER_TARGET_GROUP_TYPE::SWAP_CHAIN)] ->GetRTTexture(0)->GetTex2D(), m_rtGroups[static_cast<uint8>(RENDER_TARGET_GROUP_TYPE::SWAP_CHAIN)]->GetRTTexture(1)->GetTex2D() };
+	m_d3d11on12Device->Init(m_device->GetDevice(), m_device->GetDXGI(), rtvec, m_graphicsCmdQueue->GetCmdQueue());
 
 	ResizeWindow(info.width, info.height);
 
@@ -80,7 +83,13 @@ void Engine::RenderBegin()
 
 void Engine::RenderEnd()
 {
-	m_graphicsCmdQueue->RenderEnd();
+	m_graphicsCmdQueue->RenderEnd();		// UI 출력을 위해 커맨드 큐 실행까지만 수행
+	// UI 렌더(d3d12를 통한 render 완료 이후 수행)
+	GET_SINGLE(SceneManager)->RenderUI(m_d3d11on12Device);
+
+	m_swapChain->Present();
+	m_graphicsCmdQueue->WaitSync();
+	m_swapChain->SwapIndex();
 }
 
 void Engine::ResizeWindow(int32 width, int32 height)

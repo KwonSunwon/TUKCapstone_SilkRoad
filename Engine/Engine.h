@@ -10,6 +10,7 @@
 #include "TableDescriptorHeap.h"
 #include "Texture.h"
 #include "RenderTargetGroup.h"
+#include "D3D1211On12.h"
 
 class Engine
 {
@@ -55,6 +56,7 @@ private:
 	shared_ptr<RootSignature> m_rootSignature = make_shared<RootSignature>();
 	shared_ptr<GraphicsDescriptorHeap> m_graphicsDescHeap = make_shared<GraphicsDescriptorHeap>();
 	shared_ptr<ComputeDescriptorHeap> m_computeDescHeap = make_shared<ComputeDescriptorHeap>();
+	shared_ptr<D3D11On12Device> m_d3d11on12Device = make_shared<D3D11On12Device>();
 
 	vector<shared_ptr<ConstantBuffer>> m_constantBuffers;
 	array<shared_ptr<RenderTargetGroup>, RENDER_TARGET_GROUP_COUNT> m_rtGroups;

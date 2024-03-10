@@ -1,16 +1,16 @@
 #pragma once
 
-// std::byte »ç¿ëÇÏÁö ¾ÊÀ½
+// std::byte ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 #define _HAS_STD_BYTE 0
 
-// TCP/IP Åë½Å
+// TCP/IP ï¿½ï¿½ï¿½
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
 #define _WINSOCKAPI_
 #include <WinSock2.h> 
 #include <WS2tcpip.h>
 #pragma comment(lib, "ws2_32")
 
-// °¢Á¾ include
+// ï¿½ï¿½ï¿½ï¿½ include
 #include <windows.h>
 #include <tchar.h>
 #include <memory>
@@ -19,9 +19,10 @@
 #include <array>
 #include <list>
 #include <map>
+#include <fstream>
 #include <queue>
 
-// Thread °ü·Ã
+// Thread ï¿½ï¿½ï¿½ï¿½
 #include <thread>
 #include <mutex>
 #include <atomic>
@@ -41,6 +42,10 @@ namespace fs = std::filesystem;
 #include <DirectXMath.h>
 #include <DirectXPackedVector.h>
 #include <DirectXColors.h>
+#include <d2d1_3.h>
+#include <dwrite.h>
+#include <d3d11on12.h>
+
 using namespace DirectX;
 using namespace DirectX::PackedVector;
 using namespace Microsoft::WRL;
@@ -50,11 +55,16 @@ using namespace Microsoft::WRL;
 
 #include "FBX/fbxsdk.h"
 
-// °¢Á¾ lib
+// ï¿½ï¿½ï¿½ï¿½ lib
 #pragma comment(lib, "d3d12")
 #pragma comment(lib, "dxgi")
 #pragma comment(lib, "dxguid")
 #pragma comment(lib, "d3dcompiler")
+#pragma comment(lib, "d2d1.lib")
+#pragma comment(lib, "dwrite.lib")
+#pragma comment(lib, "d3d11.lib")
+
+
 
 #ifdef _DEBUG
 #pragma comment(lib, "DirectXTex\\DirectXTex_debug.lib")
@@ -72,7 +82,7 @@ using namespace Microsoft::WRL;
 #pragma comment(lib, "FBX\\release\\zlib-md.lib")
 #endif
 
-// °¢Á¾ typedef
+// ï¿½ï¿½ï¿½ï¿½ typedef
 using int8 = __int8;
 using int16 = __int16;
 using int32 = __int32;
@@ -141,10 +151,10 @@ enum
 
 struct WindowInfo
 {
-	HWND	hwnd; // Ãâ·Â À©µµ¿ì
-	int32	width; // ³Êºñ
-	int32	height; // ³ôÀÌ
-	bool	windowed; // Ã¢¸ðµå or ÀüÃ¼È­¸é
+	HWND	hwnd; // ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	int32	width; // ï¿½Êºï¿½
+	int32	height; // ï¿½ï¿½ï¿½ï¿½
+	bool	windowed; // Ã¢ï¿½ï¿½ï¿½ or ï¿½ï¿½Ã¼È­ï¿½ï¿½
 };
 
 struct Vertex
@@ -213,7 +223,7 @@ extern unique_ptr<class Engine> GEngine;
 wstring s2ws(const string& s);
 string ws2s(const wstring& s);
 
-// ÀÓ½Ã ÆÐÅ¶ Á¤ÀÇ
+// ï¿½Ó½ï¿½ ï¿½ï¿½Å¶ ï¿½ï¿½ï¿½ï¿½
 // Packet Type
 enum class PACKET_TYPE {
 };
@@ -228,7 +238,7 @@ struct Packet {
 	//PacketHeader header;
 	//char data[1024];
 
-	// ÀÓ½Ã
+	// ï¿½Ó½ï¿½
 	Vec3 pos;
 	ushort id;
 };

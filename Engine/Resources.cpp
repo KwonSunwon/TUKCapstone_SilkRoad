@@ -362,6 +362,19 @@ void Resources::CreateDefaultShader()
 		Add<Shader>(L"Deferred", shader);
 	}
 
+	// WireFrame (WireFrame)
+	{
+		ShaderInfo info =
+		{
+			SHADER_TYPE::DEFERRED,
+			RASTERIZER_TYPE::WIREFRAME
+		};
+
+		shared_ptr<Shader> shader = make_shared<Shader>();
+		shader->CreateGraphicsShader(L"..\\Resources\\Shader\\deferred.fx", info);
+		Add<Shader>(L"WireFrame", shader);
+	}
+
 	// Forward (Forward)
 	{
 		ShaderInfo info =
@@ -695,4 +708,5 @@ void Resources::CreateDefaultMaterial()
 
 		Add<Material>(L"ComputeAnimation", material);
 	}
+
 }
