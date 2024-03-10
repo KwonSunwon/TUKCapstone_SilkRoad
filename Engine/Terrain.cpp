@@ -75,10 +75,12 @@ void Terrain::FinalUpdate()
 float Terrain::getHeight(float fx, float fz)
 {
 	Vec3 scale = GetTransform()->GetLocalScale();
-	int x = int(fx * m_texSizeX / (scale.x * m_sizeX));
-	int z = int(fz * m_texSizeZ / (scale.z * m_sizeZ));
-	fx = fx * m_texSizeX / (scale.x * m_sizeX);
-	fz = fz * m_texSizeZ / (scale.z * m_sizeZ);
+	float mapSizeX = scale.x * m_sizeX;
+	float mapSizeZ = scale.z * m_sizeZ;
+	int x = int(fx * m_texSizeX / mapSizeX);
+	int z = int(fz * m_texSizeZ / mapSizeZ);
+	fx = fx * m_texSizeX / mapSizeX;
+	fz = fz * m_texSizeZ / mapSizeZ;
 
 	if (x < 0 || x > m_texSizeX)
 		return 0;
