@@ -82,12 +82,16 @@ float Terrain::getHeight(float fx, float fz)
 	fx = fx * m_texSizeX / mapSizeX;
 	fz = fz * m_texSizeZ / mapSizeZ;
 
+	
+
 	if (x < 0 || x > m_texSizeX)
 		return 0;
 
-	if (z < 0 || z > m_texSizeZ)
+	if (z < 0 || z+2 > m_texSizeZ)
 		return 0;
 	int index = x + m_texSizeX * (m_texSizeZ - 1 - z);
+	if (index+1 >= m_height->size())
+		return 0;
 
 	float fxPercent = fx - x;
 	float fzPercent = fz - z;
@@ -97,6 +101,8 @@ float Terrain::getHeight(float fx, float fz)
 	float fTopRight =		(float)(*m_height)[x + m_texSizeX * (m_texSizeZ - 2 - z) + 1];
 
 
+	if (fzPercent >= fxPercent)fBottomRight = fBottomLeft + (fTopRight - fTopLeft);
+	else fTopLeft = fTopRight + (fBottomLeft - fTopRight);
 
 	float fTopHeight = fTopLeft * (1 - fxPercent) + fTopRight * fxPercent;
 	float fBottomHeight = fBottomLeft * (1 - fxPercent) + fBottomRight * fxPercent;

@@ -68,10 +68,10 @@ PatchTess ConstantHS(InputPatch<VS_OUT, 3> input, int patchID : SV_PrimitiveID)
     //output.edgeTess[2] = edge2TessLevel;
     //output.insideTess = edge2TessLevel;
     
-    output.edgeTess[0] = 1;
-    output.edgeTess[1] = 1;
-    output.edgeTess[2] = 1;
-    output.insideTess = 1;
+    output.edgeTess[0] = 5;
+    output.edgeTess[1] = 5;
+    output.edgeTess[2] = 5;
+    output.insideTess = 5;
 
     return output;
 }

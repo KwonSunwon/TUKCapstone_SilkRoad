@@ -10,7 +10,7 @@
 OcTree::OcTree(int maxSize, int minSize)
 {
 
-	m_rootNode = make_shared<OcNode>(make_shared<BoundingBox>(Vec3(0, 0, 0), Vec3(maxSize, maxSize, maxSize)), nullptr);
+	m_rootNode = make_shared<OcNode>(make_shared<BoundingBox>(Vec3(16000, 0, 16000), Vec3(maxSize, maxSize, maxSize)), nullptr);
 	m_minSize = minSize;
 }
 
