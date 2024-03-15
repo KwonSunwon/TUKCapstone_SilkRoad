@@ -136,7 +136,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <SupportJustMyCode>false</SupportJustMyCode>
     </ClCompile>
     <Link>
@@ -221,6 +221,7 @@
     <ClInclude Include="Terrain.h" />
     <ClInclude Include="TestCameraScript.h" />
     <ClInclude Include="TestDragon.h" />
+    <ClInclude Include="TestPlayer.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Transform.h" />
@@ -276,6 +277,7 @@
     <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="TestCameraScript.cpp" />
     <ClCompile Include="TestDragon.cpp" />
+    <ClCompile Include="TestPlayer.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Transform.cpp" />

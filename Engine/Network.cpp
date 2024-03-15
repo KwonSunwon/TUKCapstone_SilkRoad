@@ -294,7 +294,7 @@ void Host::MainLoop()
 
 void Host::GameLoop()
 {
-	for (int i = 0; i < 2; i++) {
+	for (int i = 0; i < MAX_PLAYER; i++) {
 		if (m_gameData[i].pos != m_lastGameData[i].pos) {
 			m_lastGameData[i] = m_gameData[i];
 
@@ -319,11 +319,18 @@ void Host::Update()
 		if (packet.id == 1) {
 			string str2 = "Update: Packet2 " + to_string(count++) + " - " + to_string(packet.pos.x) + ", " + to_string(packet.pos.y) + ", " + to_string(packet.pos.z) + "\n";
 			OutputDebugStringA(str2.c_str());
-			break;
 		}
 
-		shared_ptr<GameObject> player = GET_SINGLE(SceneManager)->GetActiveScene()->GetPlayer();
-		player->GetTransform()->SetLocalPosition(packet.pos);
+		/*auto players = GET_SINGLE(SceneManager)->GetActiveScene()->GetPlayers();
+		for (auto& player : players) {
+			if (player)
+				if (player->GetID() == packet.id) {
+					player->GetTransform()->SetLocalPosition(packet.pos);
+					break;
+				}
+		}*/
+
+		GET_SINGLE(SceneManager)->GetActiveScene()->GetPlayers()[packet.id]->GetTransform()->SetLocalPosition(packet.pos);
 	}
 }
 
@@ -343,7 +350,7 @@ void Host::RunMulti()
 		throw runtime_error("Fail bind listen socket");
 	};
 
-	if (listen(listenSocket, MAX_GUEST) == SOCKET_ERROR) {
+	if (listen(listenSocket, MAX_PLAYER) == SOCKET_ERROR) {
 		throw runtime_error("Fail listen listen socket");
 	}
 
@@ -362,7 +369,7 @@ void Host::WaitLoop()
 {
 	struct sockaddr_in clientAddr;
 	int addrLen;
-	m_guestInfos.reserve(MAX_GUEST);
+	m_guestInfos.reserve(MAX_PLAYER);
 	int playerCount = 0;
 	while (GetState() == NETWORK_STATE::HOST) {
 		// WaitForClients
@@ -382,6 +389,8 @@ void Host::WaitLoop()
 
 		thread connectionThread = thread{ &Host::Connection, this, guest.id };
 		connectionThread.detach();
+
+		//GET_SINGLE(SceneManager)->AddPlayer(playerCount);
 	}
 	closesocket(m_listenSocket);
 	OutputDebugString(L"Host WaitLoop End\n");
@@ -463,14 +472,19 @@ void Guest::Update()
 	int retval;
 	shared_ptr<Packet> packet = make_shared<Packet>();
 	while (Recv(packet)) {
-		string str = "Update: Packet " + to_string(count++) + " - " + to_string(packet->pos.x) + ", " + to_string(packet->pos.y) + ", " + to_string(packet->pos.z) + "\n";
-		OutputDebugStringA(str.c_str());
+		//string str = "Update: Packet " + to_string(count++) + " - " + to_string(packet->pos.x) + ", " + to_string(packet->pos.y) + ", " + to_string(packet->pos.z) + "\n";
+		//OutputDebugStringA(str.c_str());
 
-		if (packet->id == 0)
-			break;
+		/*auto players = GET_SINGLE(SceneManager)->GetActiveScene()->GetPlayers();
+		for (auto& player : players) {
+			if (player)
+				if (player->GetID() == packet->id) {
+					player->GetTransform()->SetLocalPosition(packet->pos);
+					break;
+				}
+		}*/
 
-		shared_ptr<GameObject> player = GET_SINGLE(SceneManager)->GetActiveScene()->GetPlayer();
-		player->GetTransform()->SetLocalPosition(packet->pos);
+		GET_SINGLE(SceneManager)->GetActiveScene()->GetPlayers()[packet->id]->GetTransform()->SetLocalPosition(packet->pos);
 	}
 }
 
@@ -535,8 +549,10 @@ void NetworkScript::LateUpdate()
 
 	if (INPUT->GetButtonDown(KEY_TYPE::KEY_2)) {
 		// 호스트에서 게스트로 전환
+		GET_SINGLE(NetworkManager)->m_id = 1;
 		GET_SINGLE(NetworkManager)->ConnectAsGuest();
 		m_id = 1;
+		//GET_SINGLE(SceneManager)->AddPlayer(m_id);
 	}
 
 	if (INPUT->GetButtonDown(KEY_TYPE::KEY_3)) {
@@ -544,11 +560,11 @@ void NetworkScript::LateUpdate()
 	}
 
 	Packet packet;
-	shared_ptr<GameObject> player = GET_SINGLE(SceneManager)->GetActiveScene()->GetPlayer();
+	shared_ptr<GameObject> player = GET_SINGLE(SceneManager)->GetActiveScene()->GetPlayers()[m_id];
 	packet.pos = player->GetTransform()->GetLocalPosition();
 	packet.id = m_id;
-	//string str = "Send: " + to_string(packet.pos.x) + ", " + to_string(packet.pos.y) + ", " + to_string(packet.pos.z) + "\n";
-	//OutputDebugStringA(str.c_str());
+	string str = "Send(" + to_string(m_id) + "): " + to_string(packet.pos.x) + ", " + to_string(packet.pos.y) + ", " + to_string(packet.pos.z) + "\n";
+	OutputDebugStringA(str.c_str());
 	GET_SINGLE(NetworkManager)->Send(packet);
 }
 #pragma endregion

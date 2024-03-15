@@ -20,6 +20,8 @@
 #include "MeshData.h"
 #include "TestDragon.h"
 
+#include "TestPlayer.h"
+
 #include "Network.h"
 
 void SceneManager::Update()
@@ -29,7 +31,7 @@ void SceneManager::Update()
 
 	m_activeScene->Update();
 	m_activeScene->LateUpdate();
-	//collision¿¹Á¤
+	//collisionï¿½ï¿½ï¿½ï¿½
 	m_activeScene->testCollision();
 
 
@@ -78,8 +80,8 @@ void SceneManager::RenderUI(shared_ptr<D3D11On12Device> device)
 
 void SceneManager::LoadScene(wstring sceneName)
 {
-	// TODO : ±âÁ¸ Scene Á¤¸®
-	// TODO : ÆÄÀÏ¿¡¼­ Scene Á¤º¸ ·Îµå
+	// TODO : ï¿½ï¿½ï¿½ï¿½ Scene ï¿½ï¿½ï¿½ï¿½
+	// TODO : ï¿½ï¿½ï¿½Ï¿ï¿½ï¿½ï¿½ Scene ï¿½ï¿½ï¿½ï¿½ ï¿½Îµï¿½
 
 	m_activeScene = LoadTestScene();
 
@@ -89,7 +91,7 @@ void SceneManager::LoadScene(wstring sceneName)
 
 void SceneManager::SetLayerName(uint8 index, const wstring& name)
 {
-	// ±âÁ¸ µ¥ÀÌÅÍ »èÁ¦
+	// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	const wstring& prevName = m_layerNames[index];
 	m_layerIndex.erase(prevName);
 
@@ -115,7 +117,7 @@ shared_ptr<GameObject> SceneManager::Pick(int32 screenX, int32 screenY)
 
 	Matrix projectionMatrix = camera->GetProjectionMatrix();
 
-	// ViewSpace¿¡¼­ Picking ÁøÇà
+	// ViewSpaceï¿½ï¿½ï¿½ï¿½ Picking ï¿½ï¿½ï¿½ï¿½
 	float viewX = (+2.0f * screenX / width - 1.0f) / projectionMatrix(0, 0);
 	float viewY = (-2.0f * screenY / height + 1.0f) / projectionMatrix(1, 1);
 
@@ -132,16 +134,16 @@ shared_ptr<GameObject> SceneManager::Pick(int32 screenX, int32 screenY)
 		if (gameObject->GetCollider() == nullptr)
 			continue;
 
-		// ViewSpace¿¡¼­ÀÇ Ray Á¤ÀÇ
+		// ViewSpaceï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ray ï¿½ï¿½ï¿½ï¿½
 		Vec4 rayOrigin = Vec4(0.0f, 0.0f, 0.0f, 1.0f);
 		Vec4 rayDir = Vec4(viewX, viewY, 1.0f, 0.0f);
 
-		// WorldSpace¿¡¼­ÀÇ Ray Á¤ÀÇ
+		// WorldSpaceï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ray ï¿½ï¿½ï¿½ï¿½
 		rayOrigin = XMVector3TransformCoord(rayOrigin, viewMatrixInv);
 		rayDir = XMVector3TransformNormal(rayDir, viewMatrixInv);
 		rayDir.Normalize();
 
-		// WorldSpace¿¡¼­ ¿¬»ê
+		// WorldSpaceï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 		float distance = 0.f;
 		if (gameObject->GetCollider()->Intersects(rayOrigin, rayDir, OUT distance) == false)
 			continue;
@@ -166,7 +168,7 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 	{
 		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"ComputeShader");
 
-		// UAV ¿ë Texture »ý¼º
+		// UAV ï¿½ï¿½ Texture ï¿½ï¿½ï¿½ï¿½
 		shared_ptr<Texture> texture = GET_SINGLE(Resources)->CreateTexture(L"UAVTexture",
 			DXGI_FORMAT_R8G8B8A8_UNORM, 1024, 1024,
 			CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT), D3D12_HEAP_FLAG_NONE,
@@ -177,7 +179,7 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 		material->SetInt(0, 1);
 		GEngine->GetComputeDescHeap()->SetUAV(texture->GetUAVHandle(), UAV_REGISTER::u0);
 
-		// ¾²·¹µå ±×·ì (1 * 1024 * 1)
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½×·ï¿½ (1 * 1024 * 1)
 		material->Dispatch(1, 1024, 1);
 	}
 #pragma endregion
@@ -189,12 +191,12 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 		shared_ptr<GameObject> camera = make_shared<GameObject>();
 		camera->SetName(L"Main_Camera");
 		camera->AddComponent(make_shared<Transform>());
-		camera->AddComponent(make_shared<Camera>()); // Near=1, Far=1000, FOV=45µµ
+		camera->AddComponent(make_shared<Camera>()); // Near=1, Far=1000, FOV=45ï¿½ï¿½
 		camera->AddComponent(make_shared<TestCameraScript>());
 		camera->GetCamera()->SetFar(10000.f);
 		camera->GetTransform()->SetLocalPosition(Vec3(0.f, 900.f, 0.f));
 		uint8 layerIndex = GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI");
-		camera->GetCamera()->SetCullingMaskLayerOnOff(layerIndex, true); // UI´Â ¾È ÂïÀ½
+		camera->GetCamera()->SetCullingMaskLayerOnOff(layerIndex, true); // UIï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 		scene->AddGameObject(camera);
 	}
 #pragma endregion
@@ -208,8 +210,8 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 		camera->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 0.f));
 		camera->GetCamera()->SetProjectionType(PROJECTION_TYPE::ORTHOGRAPHIC);
 		uint8 layerIndex = GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI");
-		camera->GetCamera()->SetCullingMaskAll(); // ´Ù ²ô°í
-		camera->GetCamera()->SetCullingMaskLayerOnOff(layerIndex, false); // UI¸¸ ÂïÀ½
+		camera->GetCamera()->SetCullingMaskAll(); // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+		camera->GetCamera()->SetCullingMaskLayerOnOff(layerIndex, false); // UIï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 		scene->AddGameObject(camera);
 	}
 #pragma endregion
@@ -239,28 +241,54 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 
 #pragma region Object
 	{
+	{
 		shared_ptr<GameObject> obj = make_shared<GameObject>();
 		obj->SetName(L"OBJ");
 		obj->AddComponent(make_shared<Transform>());
 		obj->AddComponent(make_shared<SphereCollider>());
 		obj->GetTransform()->SetLocalScale(Vec3(100.f, 100.f, 100.f));
-		obj->GetTransform()->SetLocalPosition(Vec3(0, 0.f, 0.f));
+			obj->GetTransform()->SetLocalPosition(Vec3(0, 900.f, 300.f));
 		obj->SetStatic(false);
 		shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
 		{
-			shared_ptr<Mesh> sphereMesh = GET_SINGLE(Resources)->LoadSphereMesh();
-			meshRenderer->SetMesh(sphereMesh);
+				shared_ptr<Mesh> cubeMesh = GET_SINGLE(Resources)->LoadCubeMesh();
+				meshRenderer->SetMesh(cubeMesh);
 		}
 		{
 			shared_ptr<Material> material = GET_SINGLE(Resources)->Get<Material>(L"GameObject");
 			meshRenderer->SetMaterial(material->Clone());
 		}
-		dynamic_pointer_cast<SphereCollider>(obj->GetCollider())->SetRadius(0.5f);
-		dynamic_pointer_cast<SphereCollider>(obj->GetCollider())->SetCenter(Vec3(0.f, 0.f, 0.f));
+
+			obj->AddComponent(make_shared<TestPlayer>(0));
+
 		obj->AddComponent(meshRenderer);
-		obj->AddComponent(make_shared<TestCameraScript>());
+			scene->AddGameObject(obj);
+			scene->SetPlayer(obj, static_cast<PlayerType>(0));
+		}
+		{
+			shared_ptr<GameObject> obj = make_shared<GameObject>();
+			obj->SetName(L"OBJ");
+			obj->AddComponent(make_shared<Transform>());
+			obj->AddComponent(make_shared<SphereCollider>());
+			obj->GetTransform()->SetLocalScale(Vec3(100.f, 100.f, 100.f));
+			obj->GetTransform()->SetLocalPosition(Vec3(0, 900.f, 300.f));
+			obj->SetStatic(false);
+			shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
+			{
+				shared_ptr<Mesh> cubeMesh = GET_SINGLE(Resources)->LoadCubeMesh();
+				meshRenderer->SetMesh(cubeMesh);
+			}
+			{
+				shared_ptr<Material> material = GET_SINGLE(Resources)->Get<Material>(L"GameObject");
+				meshRenderer->SetMaterial(material->Clone());
+		}
+
+			obj->AddComponent(make_shared<TestPlayer>(1));
+
+			obj->AddComponent(meshRenderer);
 		scene->AddGameObject(obj);
-		scene->SetPlayer(obj);
+			scene->SetPlayer(obj, static_cast<PlayerType>(1));
+		}
 	}
 #pragma endregion
 
@@ -334,35 +362,35 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 
 #pragma region FBX
 	{
-		shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Chr_ScifiWorlds_AlienArmor_04.fbx");
-		//shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\tank_trexhwm.fbx");
+		//shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Chr_ScifiWorlds_AlienArmor_04.fbx");
+		////shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\tank_trexhwm.fbx");
 
-		for (int i = 0; i < 10; ++i) {
-			for (int j = 0; j < 10; ++j) {
-				vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
-				gameObjects[0]->GetTransform()->SetLocalRotation(Vec3(0.f, XMConvertToRadians(180.f), 0.f));
-				gameObjects[0]->GetTransform()->SetLocalPosition(Vec3(-150.f + 400.f * i, 500.f, 2000.f + 400.f * j));
-				gameObjects[0]->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
-				gameObjects[0]->SetCheckFrustum(false);
+		//for (int i = 0; i < 10; ++i) {
+		//	for (int j = 0; j < 10; ++j) {
+		//		vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
+		//		gameObjects[0]->GetTransform()->SetLocalRotation(Vec3(0.f, XMConvertToRadians(180.f), 0.f));
+		//		gameObjects[0]->GetTransform()->SetLocalPosition(Vec3(-150.f + 400.f * i, 500.f, 2000.f + 400.f * j));
+		//		gameObjects[0]->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
+		//		gameObjects[0]->SetCheckFrustum(false);
 
-				gameObjects[0]->AddComponent(make_shared<TestDragon>());
+		//		gameObjects[0]->AddComponent(make_shared<TestDragon>());
 
-				gameObjects[0]->AddComponent(make_shared<RigidBody>());
-				gameObjects[0]->GetRigidBody()->m_useGravity = true;
-				if (i & 1) {
-					gameObjects[0]->AddComponent(make_shared<BoxCollider>());
-					gameObjects[0]->GetCollider()->SetExtent(Vec3(50, 100, 50));
-					gameObjects[0]->GetCollider()->SetCenter(Vec3(-150.f + 400.f * i, 500.f, 2000.f + 400.f * j));
-				}
-				else {
-					gameObjects[0]->AddComponent(make_shared<SphereCollider>());
-					gameObjects[0]->GetCollider()->SetRadius(90);
-					gameObjects[0]->GetCollider()->SetCenter(Vec3(-150.f + 400.f * i, 500.f, 2000.f + 400.f * j));
-				}
-				scene->AddGameObject(gameObjects[0]->GetCollider()->m_go);
-				scene->AddGameObject(gameObjects[0]);
-			}
-		}
+		//		gameObjects[0]->AddComponent(make_shared<RigidBody>());
+		//		gameObjects[0]->GetRigidBody()->m_useGravity = true;
+		//		if (i & 1) {
+		//			gameObjects[0]->AddComponent(make_shared<BoxCollider>());
+		//			gameObjects[0]->GetCollider()->SetExtent(Vec3(50, 100, 50));
+		//			gameObjects[0]->GetCollider()->SetCenter(Vec3(-150.f + 400.f * i, 500.f, 2000.f + 400.f * j));
+		//		}
+		//		else {
+		//			gameObjects[0]->AddComponent(make_shared<SphereCollider>());
+		//			gameObjects[0]->GetCollider()->SetRadius(90);
+		//			gameObjects[0]->GetCollider()->SetCenter(Vec3(-150.f + 400.f * i, 500.f, 2000.f + 400.f * j));
+		//		}
+		//		scene->AddGameObject(gameObjects[0]->GetCollider()->m_go);
+		//		scene->AddGameObject(gameObjects[0]);
+		//	}
+		//}
 		//{
 		//	vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
 		//	gameObjects[0]->GetTransform()->SetLocalRotation(Vec3(0.f, XMConvertToRadians(180.f), 0.f));

@@ -3,7 +3,7 @@
 #include "LockQueue.h"
 #include "MonoBehaviour.h"
 
-static const ushort MAX_GUEST = 2;
+static const int MAX_PLAYER = 2;
 static const int SERVER_PORT = 9000;
 
 // global
@@ -220,6 +220,8 @@ public:
 
 	void Send(Packet packet) { m_network->Send(packet); }
 	bool Recv(shared_ptr<Packet> packet) { return m_network.get()->Recv(packet); }
+
+	int m_id = 0;
 
 private:
 	unique_ptr<Network> m_network;

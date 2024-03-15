@@ -1,5 +1,12 @@
 #pragma once
 
+enum PlayerType
+{
+	MAIN_PLAYER,
+	GUEST_PLAYER1,
+	GUIDE_PLAYER2
+};
+
 class GameObject;
 class BaseCollider;
 class OcTree;
@@ -33,20 +40,19 @@ private:
 	void PushLightData();
 
 public:
-	void SetPlayer(shared_ptr<GameObject> player) { m_player = player; }
-	shared_ptr<GameObject> GetPlayer() { return m_player; }
+	void SetPlayer(shared_ptr<GameObject> player, PlayerType type) { m_players[type] = player; }
+	array<shared_ptr<GameObject>, 3> GetPlayers() { return m_players; }
 
 	void AddGameObject(shared_ptr<GameObject> gameObject);
 	void RemoveGameObject(shared_ptr<GameObject> gameObject);
 
 	const vector<shared_ptr<GameObject>>& GetGameObjects() { return m_gameObjects; }
 
-
 	void IntersectColliders(shared_ptr<BaseCollider> collider1, shared_ptr<BaseCollider> collider2);
 	void testCollision();
 	shared_ptr<GameObject> m_terrain;
 private:
-	shared_ptr<GameObject> m_player;
+	array<shared_ptr<GameObject>, 3> m_players;
 
 	vector<shared_ptr<GameObject>>		m_gameObjects;
 	vector<shared_ptr<GameObject>>		m_collidableGameObjects;

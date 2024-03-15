@@ -13,6 +13,7 @@
 #include "MeshRenderer.h"
 #include "OcNode.h"
 #include "OcTree.h"
+#include "Network.h"
 
 Scene::Scene()
 {
@@ -89,14 +90,14 @@ void Scene::Render()
 
 void Scene::ClearRTV()
 {
-	// SwapChain Group ÃÊ±âÈ­
+	// SwapChain Group ï¿½Ê±ï¿½È­
 	int8 backIndex = GEngine->GetSwapChain()->GetBackBufferIndex();
 	GEngine->GetRTGroup(RENDER_TARGET_GROUP_TYPE::SWAP_CHAIN)->ClearRenderTargetView(backIndex);
-	// Shadow Group ÃÊ±âÈ­
+	// Shadow Group ï¿½Ê±ï¿½È­
 	GEngine->GetRTGroup(RENDER_TARGET_GROUP_TYPE::SHADOW)->ClearRenderTargetView();
-	// Deferred Group ÃÊ±âÈ­
+	// Deferred Group ï¿½Ê±ï¿½È­
 	GEngine->GetRTGroup(RENDER_TARGET_GROUP_TYPE::G_BUFFER)->ClearRenderTargetView();
-	// Lighting Group ÃÊ±âÈ­
+	// Lighting Group ï¿½Ê±ï¿½È­
 	GEngine->GetRTGroup(RENDER_TARGET_GROUP_TYPE::LIGHTING)->ClearRenderTargetView();
 }
 
@@ -135,7 +136,7 @@ void Scene::RenderLights()
 
 	GEngine->GetRTGroup(RENDER_TARGET_GROUP_TYPE::LIGHTING)->OMSetRenderTargets();
 
-	// ±¤¿øÀ» ±×¸°´Ù.
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½×¸ï¿½ï¿½ï¿½.
 	for (auto& light : m_lights)
 	{
 		light->Render();
