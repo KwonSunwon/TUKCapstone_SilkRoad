@@ -6,6 +6,8 @@ class Material;
 class StructuredBuffer;
 class Mesh;
 
+//mixamo 30«¡∑π¿”, with skin, uniform, fbx binary
+
 class Animator : public Component
 {
 public:

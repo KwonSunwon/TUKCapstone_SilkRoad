@@ -4,14 +4,18 @@
 #include "Animator.h"
 #include "RigidBody.h"
 #include "Transform.h"
+#include "GameObject.h"
 void TestDragon::Update()
 {
-	if (INPUT->GetButtonDown(KEY_TYPE::KEY_1))
+	if (INPUT->GetButtonDown(KEY_TYPE::W))
 	{
 		int32 count = GetAnimator()->GetAnimCount();
-		int32 currentIndex = GetAnimator()->GetCurrentClipIndex();
+		//int32 currentIndex = GetAnimator()->GetCurrentClipIndex();
+		int32 currentIndex = this->GetGameObject()->m_anim;
 
 		int32 index = (currentIndex + 1) % count;
+		//GetAnimator()->Play(index);
+		
 		GetAnimator()->Play(index);
 	}
 

@@ -47,7 +47,8 @@ void SceneManager::RenderUI(shared_ptr<D3D11On12Device> device)
 		m_activeScene->RenderUI();
 	D2D1_SIZE_F rtSize = device->GetD3D11On12RT(backbufferindex)->GetSize();
 	D2D1_RECT_F textRect = D2D1::RectF(0, 0, rtSize.width, rtSize.height);
-	static const WCHAR text[] = L"11On12";
+	static const WCHAR text[] = L"";
+	//static const WCHAR text[] = L"11On12";
 
 	// Acquire our wrapped render target resource for the current back buffer.
 	device->GetD3D11on12Device()->AcquireWrappedResources(device->GetWrappedBackBuffer(backbufferindex).GetAddressOf(), 1);
@@ -331,19 +332,22 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 
 #pragma region FBX
 	{
-		shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Chr_ScifiWorlds_AlienArmor_04.fbx");
-		//shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\tank_trexhwm.fbx");
+		//shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Chr_ScifiWorlds_AlienArmor_04.fbx");
 		
+		//shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Start_Plank.fbx");
+		shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Start_Plank.fbx");
 		
-		for (int i = 0; i < 10; ++i) {
-			for (int j = 0; j < 10; ++j) {
+		for (int i = 0; i < 5; ++i) {
+			for (int j = 0; j < 5; ++j) {
+				
 				vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
 				gameObjects[0]->GetTransform()->SetLocalRotation(Vec3(0.f, XMConvertToRadians(180.f), 0.f));
 				gameObjects[0]->GetTransform()->SetLocalPosition(Vec3(-150.f + 400.f * i, 500.f, 2000.f+400.f*j));
 				gameObjects[0]->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
 				gameObjects[0]->SetCheckFrustum(false);
 
-				gameObjects[0]->AddComponent(make_shared<TestDragon>());
+				if(i==0)
+					gameObjects[0]->AddComponent(make_shared<TestDragon>());
 
 				gameObjects[0]->AddComponent(make_shared<RigidBody>());
 				gameObjects[0]->GetRigidBody()->m_useGravity = true;
@@ -359,8 +363,8 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 				}
 
 
-
-				scene->AddGameObject(gameObjects[0]->GetCollider()->m_go);
+				//gameObjects[0]->GetMeshRenderer()->GetMaterial()->SetInt(0, 0);
+				//scene->AddGameObject(gameObjects[0]->GetCollider()->m_go);
 				scene->AddGameObject(gameObjects[0]);
 			}
 
