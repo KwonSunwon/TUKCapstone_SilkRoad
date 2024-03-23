@@ -3,6 +3,7 @@
 #include "OcNode.h"
 #include "SphereCollider.h"
 #include "BoxCollider.h"
+#include "OrientedBoxCollider.h"
 #include"SceneManager.h"
 #include "Scene.h"
 #include "GameObject.h"
@@ -72,6 +73,34 @@ void OcTree::InsertObjectCollider(shared_ptr<BaseCollider> bs)
 					// 자식 노드에 완전히 포함되면 현재 노드를 
 					// 자식 노드로 변경 후 처음단계부터 다시 검사
 					if (currentNode->GetChildNode(i)->GetBB()->Contains(*boxCollider->GetBoundingBox())==2)
+					{
+						currentNode = currentNode->GetChildNode(i);
+						break;
+					}
+
+					notIncludedCount++;
+				}
+
+				// 완전히 포함되는 자식 노드가 없을 경우 반복문 종료
+				if (notIncludedCount == 8)
+					break;
+			}
+		}
+		else if (bs->GetColliderType() == ColliderType::OrientedBox) {
+			shared_ptr<OrientedBoxCollider> boxOrientedCollider = dynamic_pointer_cast<OrientedBoxCollider>(bs);
+
+			if (currentNode->GetBB()->Contains(*boxOrientedCollider->GetBoundingOrientedBox()) == 2) {
+				if (!currentNode->IsHaveChilds())
+					currentNode->SplitBy8();
+
+				// 완전히 포함되지 않는 자식들의 개수
+				int notIncludedCount = 0;
+
+				for (int i = 0; i < 8; i++)
+				{
+					// 자식 노드에 완전히 포함되면 현재 노드를 
+					// 자식 노드로 변경 후 처음단계부터 다시 검사
+					if (currentNode->GetChildNode(i)->GetBB()->Contains(*boxOrientedCollider->GetBoundingOrientedBox()) == 2)
 					{
 						currentNode = currentNode->GetChildNode(i);
 						break;
@@ -156,6 +185,13 @@ shared_ptr<OcNode> OcTree::FindColliderIncludedNode(shared_ptr<BaseCollider> bs,
 			return currentNode;
 		}
 	}
+	else if (bs->GetColliderType() == ColliderType::OrientedBox) {
+		shared_ptr<OrientedBoxCollider> boxOrientedCollider = dynamic_pointer_cast<OrientedBoxCollider>(bs);
+
+		if (currentNode->GetBB()->Contains(*boxOrientedCollider->GetBoundingOrientedBox()) == 2) {
+			return currentNode;
+		}
+	}
 	
 
 
@@ -201,6 +237,13 @@ void OcTree::CollisionInspectionToParrent(shared_ptr<BaseCollider> bs, shared_pt
 				boxCollider->setColor(Vec4(1, 0, 0, 0), true);
 			}	
 		}
+		else if (currentNode->IncludedObjectAABB(i)->GetColliderType() == ColliderType::OrientedBox) {
+			shared_ptr<OrientedBoxCollider> boxOrientedCollider = dynamic_pointer_cast<OrientedBoxCollider>(currentNode->IncludedObjectAABB(i));
+			if (bs->Intersects(boxOrientedCollider->GetBoundingOrientedBox())) {
+				bs->setColor(Vec4(1, 0, 0, 0), true);
+				boxOrientedCollider->setColor(Vec4(1, 0, 0, 0), true);
+			}
+		}
 		
 	}
 
@@ -241,6 +284,13 @@ void OcTree::CollisionInspectionToChild(shared_ptr<BaseCollider> bs, shared_ptr<
 				if (bs->Intersects(boxCollider->GetBoundingBox())) {
 					bs->setColor(Vec4(1, 0, 0, 0), true);
 					boxCollider->setColor(Vec4(1, 0, 0, 0), true);
+				}
+			}
+			else if (childNode->IncludedObjectAABB(i)->GetColliderType() == ColliderType::OrientedBox) {
+				shared_ptr<OrientedBoxCollider> boxOrientedCollider = dynamic_pointer_cast<OrientedBoxCollider>(childNode->IncludedObjectAABB(i));
+				if (bs->Intersects(boxOrientedCollider->GetBoundingOrientedBox())) {
+					bs->setColor(Vec4(1, 0, 0, 0), true);
+					boxOrientedCollider->setColor(Vec4(1, 0, 0, 0), true);
 				}
 			}
 	

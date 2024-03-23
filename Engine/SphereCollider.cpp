@@ -77,6 +77,11 @@ bool SphereCollider::Intersects(shared_ptr<BoundingBox> boundingBox)
 	return m_boundingSphere->Intersects(*boundingBox);
 }
 
+bool SphereCollider::Intersects(shared_ptr<BoundingOrientedBox> boundingOrientedBox)
+{
+	return m_boundingSphere->Intersects(*boundingOrientedBox);
+}
+
 void SphereCollider::SetRadius(float radius)
 {
 	m_boundingSphere->Radius = radius;
@@ -88,6 +93,10 @@ void SphereCollider::SetCenter(Vec3 center)
 }
 
 void SphereCollider::SetExtent(Vec3 extent)
+{
+}
+
+void SphereCollider::SetRotation(Vec3 rotation)
 {
 }
 

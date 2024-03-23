@@ -17,6 +17,7 @@
 #include "Terrain.h"
 #include "SphereCollider.h"
 #include "BoxCollider.h"
+#include "OrientedBoxCollider.h"
 #include "MeshData.h"
 #include "TestDragon.h"
 
@@ -352,19 +353,22 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 				gameObjects[0]->AddComponent(make_shared<RigidBody>());
 				gameObjects[0]->GetRigidBody()->m_useGravity = true;
 				if (i&1) {
-					gameObjects[0]->AddComponent(make_shared<BoxCollider>());
-					gameObjects[0]->GetCollider()->SetExtent(Vec3(50, 100, 50));
-					gameObjects[0]->GetCollider()->SetCenter(Vec3(-150.f + 400.f * i, 500.f, 2000.f + 400.f * j));
-				}
-				else {
+					
 					gameObjects[0]->AddComponent(make_shared<SphereCollider>());
 					gameObjects[0]->GetCollider()->SetRadius(90);
+					gameObjects[0]->GetCollider()->SetCenter(Vec3(-150.f + 400.f * i, 500.f, 2000.f + 400.f * j));
+					
+				}
+				else {
+					//gameObjects[0]->AddComponent(make_shared<BoxCollider>());
+					gameObjects[0]->AddComponent(make_shared<OrientedBoxCollider>());
+					gameObjects[0]->GetCollider()->SetExtent(Vec3(50, 100, 50));
 					gameObjects[0]->GetCollider()->SetCenter(Vec3(-150.f + 400.f * i, 500.f, 2000.f + 400.f * j));
 				}
 
 
 				//gameObjects[0]->GetMeshRenderer()->GetMaterial()->SetInt(0, 0);
-				//scene->AddGameObject(gameObjects[0]->GetCollider()->m_go);
+				scene->AddGameObject(gameObjects[0]->GetCollider()->m_go);
 				scene->AddGameObject(gameObjects[0]);
 			}
 

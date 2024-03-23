@@ -78,6 +78,11 @@ bool BoxCollider::Intersects(shared_ptr<BoundingBox> boundingBox)
 	return m_boundingBox->Intersects(*boundingBox);
 }
 
+bool BoxCollider::Intersects(shared_ptr<BoundingOrientedBox> boundingOrientedBox)
+{
+	return m_boundingBox->Intersects(*boundingOrientedBox);
+}
+
 void BoxCollider::SetRadius(float radius)
 {
 }
@@ -90,6 +95,10 @@ void BoxCollider::SetCenter(Vec3 center)
 void BoxCollider::SetExtent(Vec3 extent)
 {
 	m_boundingBox->Extents = extent;
+}
+
+void BoxCollider::SetRotation(Vec3 rotation)
+{
 }
 
 void BoxCollider::draw()

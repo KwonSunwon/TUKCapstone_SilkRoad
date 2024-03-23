@@ -10,6 +10,7 @@
 #include "BaseCollider.h"
 #include "SphereCollider.h"
 #include "BoxCollider.h"
+#include "OrientedBoxCollider.h"
 #include "MeshRenderer.h"
 #include "OcNode.h"
 #include "OcTree.h"
@@ -259,6 +260,14 @@ void Scene::IntersectColliders(shared_ptr<BaseCollider> collider1, shared_ptr<Ba
 	case ColliderType::Box: {
 		auto boxCollider = dynamic_pointer_cast<BoxCollider>(collider2);
 		if (collider1->Intersects(boxCollider->GetBoundingBox())) {
+			collider1->setColor(Vec4(1, 0, 0, 0), true);
+			collider2->setColor(Vec4(1, 0, 0, 0), true);
+		}
+		break;
+	}
+	case ColliderType::OrientedBox: {
+		auto boxOrientedCollider = dynamic_pointer_cast<OrientedBoxCollider>(collider2);
+		if (collider1->Intersects(boxOrientedCollider->GetBoundingOrientedBox())) {
 			collider1->setColor(Vec4(1, 0, 0, 0), true);
 			collider2->setColor(Vec4(1, 0, 0, 0), true);
 		}
