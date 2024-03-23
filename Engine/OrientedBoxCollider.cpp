@@ -65,11 +65,21 @@ void OrientedBoxCollider::FinalUpdate()
 	m_goTransform->SetLocalScale(extents * 2);
 	m_goTransform->SetLocalRotation(roatate);
 
+	DirectX::XMFLOAT3 eulerRadians(
+		DirectX::XMConvertToRadians(roatate.x),
+		DirectX::XMConvertToRadians(roatate.y),
+		DirectX::XMConvertToRadians(roatate.z)
+	);
+
+	DirectX::XMVECTOR quaternion = DirectX::XMQuaternionRotationRollPitchYawFromVector(
+		DirectX::XMLoadFloat3(&eulerRadians)
+	);
+
+	DirectX::XMFLOAT4 quatValues;
+	DirectX::XMStoreFloat4(&quatValues, quaternion);
+
 	m_boundingOrientedBox->Center = GetGameObject()->GetTransform()->GetWorldPosition();
-	m_boundingOrientedBox->Orientation = Vec4(XMConvertToRadians(roatate.x),
-		XMConvertToRadians(roatate.y),
-		XMConvertToRadians(roatate.z),
-		1);
+	m_boundingOrientedBox->Orientation = quatValues;
 }
 
 bool OrientedBoxCollider::Intersects(Vec4 rayOrigin, Vec4 rayDir, OUT float& distance)

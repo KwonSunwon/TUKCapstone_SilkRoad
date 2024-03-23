@@ -47,8 +47,15 @@ void TestDragon::Update()
 	if (INPUT->GetButton(KEY_TYPE::D))
 		rb->addForce(GetTransform()->GetRight() * -20, FORCEMODE::VELOCITYCHANGE);
 
+	static float a = 0;
+
+
 	if (INPUT->GetButton(KEY_TYPE::LBUTTON))
-		rb->addForce(GetTransform()->GetUp() * 200000, FORCEMODE::IMPULSE);
+		a += 0.01;
+		//rb->addForce(GetTransform()->GetUp() * 200000, FORCEMODE::IMPULSE);
+
+
+	GetTransform()->SetLocalRotation(Vec3(0, a, 0));
 
 	//if (INPUT->GetButton(KEY_TYPE::A))
 	//	pos -= GetTransform()->GetRight() * m_speed * DELTA_TIME;
