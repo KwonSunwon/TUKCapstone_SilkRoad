@@ -336,11 +336,11 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 		//shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Chr_ScifiWorlds_AlienArmor_04.fbx");
 		
 		//shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Start_Plank.fbx");
-		shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Start_Plank.fbx");
 		
-		for (int i = 0; i < 5; ++i) {
-			for (int j = 0; j < 5; ++j) {
-				
+		for (int i = 0; i < 8; ++i) {
+			for (int j = 0; j < 8; ++j) {
+				shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Start_Plank.fbx");
+		
 				vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
 				gameObjects[0]->GetTransform()->SetLocalRotation(Vec3(0.f, XMConvertToRadians(180.f), 0.f));
 				gameObjects[0]->GetTransform()->SetLocalPosition(Vec3(-150.f + 400.f * i, 500.f, 2000.f+400.f*j));
@@ -367,7 +367,7 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 				}
 
 
-				//gameObjects[0]->GetMeshRenderer()->GetMaterial()->SetInt(0, 0);
+				gameObjects[0]->GetMeshRenderer()->GetMaterial()->SetInt(0, 0);
 				scene->AddGameObject(gameObjects[0]->GetCollider()->m_go);
 				scene->AddGameObject(gameObjects[0]);
 			}

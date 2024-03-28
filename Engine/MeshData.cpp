@@ -68,8 +68,8 @@ vector<shared_ptr<GameObject>> MeshData::Instantiate()
 		gameObject->GetMeshRenderer()->SetMesh(info.mesh);
 
 		for (uint32 i = 0; i < info.materials.size(); i++)
-			//gameObject->GetMeshRenderer()->SetMaterial(info.materials[i]->Clone(), i);
-			gameObject->GetMeshRenderer()->SetMaterial(info.materials[i], i);
+			gameObject->GetMeshRenderer()->SetMaterial(info.materials[i]->Clone(), i);
+			//gameObject->GetMeshRenderer()->SetMaterial(info.materials[i], i);
 
 		if (info.mesh->IsAnimMesh())
 		{
@@ -92,8 +92,8 @@ shared_ptr<MeshData> MeshData::Clone()
 	shared_ptr<MeshData> meshData = make_shared<MeshData>();
 	meshData->m_mesh = m_mesh;
 	meshData->m_materials = m_materials;
-	meshData->m_meshRenders = m_meshRenders;
-
+	//meshData->m_meshRenders = m_meshRenders;
+	copy(m_meshRenders.begin(), m_meshRenders.end(), back_inserter(meshData->m_meshRenders));
 	return meshData;
 }
 
