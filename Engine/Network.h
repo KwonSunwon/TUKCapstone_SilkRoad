@@ -133,7 +133,7 @@ public:
 	Network();
 	~Network() {}
 
-	virtual void Update() {};
+	virtual void Update();
 
 	virtual void Send(Packet packet) {};
 	//virtual Packet Recv();
@@ -166,7 +166,7 @@ public:
 	void Connection(ushort id);
 
 	void Send(Packet packet) override;
-	//Packet Recv() override;
+	bool Recv(shared_ptr<Packet> packet) override;
 
 private:
 	vector<GuestInfo> m_guestInfos;

@@ -244,6 +244,14 @@ Network::Network()
 	}
 }
 
+void Network::Update()
+{
+	shared_ptr<Packet> packet = make_shared<Packet>();
+	while (Recv(packet)) {
+		GET_SINGLE(SceneManager)->GetActiveScene()->GetPlayers()[packet->id]->GetTransform()->SetLocalPosition(packet->pos);
+	}
+}
+
 #pragma region Host
 Host::Host() : Network()
 {
@@ -309,17 +317,17 @@ void Host::GameLoop()
 void Host::Update()
 {
 	int count = 0;
-	Packet packet;
-	while (m_eventQue.toClient.TryPop(packet)) {
-		// 게임에 적용
-		if (packet.id == 0) {
-			string str = "Update: Packet " + to_string(count++) + " - " + to_string(packet.pos.x) + ", " + to_string(packet.pos.y) + ", " + to_string(packet.pos.z) + "\n";
-			OutputDebugStringA(str.c_str());
-		}
-		if (packet.id == 1) {
-			string str2 = "Update: Packet2 " + to_string(count++) + " - " + to_string(packet.pos.x) + ", " + to_string(packet.pos.y) + ", " + to_string(packet.pos.z) + "\n";
-			OutputDebugStringA(str2.c_str());
-		}
+	shared_ptr<Packet> packet = make_shared<Packet>();
+	while (Recv(packet)) {
+		//// 게임에 적용
+		//if (packet.id == 0) {
+		//	string str = "Update: Packet " + to_string(count++) + " - " + to_string(packet.pos.x) + ", " + to_string(packet.pos.y) + ", " + to_string(packet.pos.z) + "\n";
+		//	OutputDebugStringA(str.c_str());
+		//}
+		//if (packet.id == 1) {
+		//	string str2 = "Update: Packet2 " + to_string(count++) + " - " + to_string(packet.pos.x) + ", " + to_string(packet.pos.y) + ", " + to_string(packet.pos.z) + "\n";
+		//	OutputDebugStringA(str2.c_str());
+		//}
 
 		/*auto players = GET_SINGLE(SceneManager)->GetActiveScene()->GetPlayers();
 		for (auto& player : players) {
@@ -330,7 +338,7 @@ void Host::Update()
 				}
 		}*/
 
-		GET_SINGLE(SceneManager)->GetActiveScene()->GetPlayers()[packet.id]->GetTransform()->SetLocalPosition(packet.pos);
+		GET_SINGLE(SceneManager)->GetActiveScene()->GetPlayers()[packet->id]->GetTransform()->SetLocalPosition(packet->pos);
 	}
 }
 
@@ -435,6 +443,12 @@ void Host::Send(Packet packet)
 {
 	m_eventQue.toServer.Push(packet);
 }
+bool Host::Recv(shared_ptr<Packet> packet)
+{
+	if (m_eventQue.toClient.TryPop(*packet.get()))
+		return true;
+	return false;
+}
 #pragma endregion
 
 #pragma region Guest
@@ -514,7 +528,7 @@ void NetworkManager::Initialize()
 
 void NetworkManager::Update()
 {
-	m_network.get()->Update();
+	m_network->Update();
 }
 
 void NetworkManager::RunMulti()
