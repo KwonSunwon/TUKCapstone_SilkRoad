@@ -6,6 +6,7 @@
 #include "SceneManager.h"
 #include "GameObject.h"
 #include "Transform.h"
+#include "Timer.h"
 
 #pragma region Legacy
 /*
@@ -302,6 +303,11 @@ void Host::MainLoop()
 
 void Host::GameLoop()
 {
+	m_timer += DELTA_TIME;
+
+	if (m_timer < 1.0f / 60.0f)
+		return;
+
 	for (int i = 0; i < MAX_PLAYER; i++) {
 		if (m_gameData[i].pos != m_lastGameData[i].pos) {
 			m_lastGameData[i] = m_gameData[i];
@@ -312,6 +318,7 @@ void Host::GameLoop()
 			m_eventQue.toClient.Push(m_gameData[i]);
 		}
 	}
+	m_timer = 0;
 }
 
 void Host::Update()
@@ -387,7 +394,7 @@ void Host::WaitLoop()
 			throw runtime_error("Fail accept client socket");
 		}
 
-		DWORD optval = 10;
+		DWORD optval = 5;
 		setsockopt(tempSocket, SOL_SOCKET, SO_RCVTIMEO, (const char*)&optval, sizeof(optval));
 		optval = TRUE;
 		setsockopt(tempSocket, IPPROTO_TCP, TCP_NODELAY, (const char*)&optval, sizeof(optval));
@@ -406,6 +413,7 @@ void Host::WaitLoop()
 	OutputDebugString(L"Host WaitLoop End\n");
 }
 
+// session
 void Host::Connection(ushort id)
 {
 	SOCKET socket;
@@ -426,7 +434,10 @@ void Host::Connection(ushort id)
 		while (eventQue->toClient.TryPop(packet)) {
 			retval = send(socket, (char*)&packet, sizeof(packet), 0);
 			if (retval == SOCKET_ERROR) {
-
+				// disconnect
+				OutputDebugString(L"Disconnect\n");
+				closesocket(socket);
+				break;
 			}
 		}
 		// 게스트에서 서버로 보내는 패킷
@@ -509,8 +520,14 @@ void Guest::Update()
 void Guest::Send(Packet packet)
 {
 	int retval = send(m_socket, (char*)&packet, sizeof(Packet), 0);
-	if (retval < 0) {
-		//err_display(retval);
+	if (retval == SOCKET_ERROR) {
+		// disconnect
+		OutputDebugString(L"Disconnect\n");
+		closesocket(m_socket);
+
+		// TODO: 연결 해제 시 처리
+		// 재시도 후 연결 실패 시
+		// 다시 싱글로 전환
 	}
 }
 
@@ -581,8 +598,8 @@ void NetworkScript::LateUpdate()
 	shared_ptr<GameObject> player = GET_SINGLE(SceneManager)->GetActiveScene()->GetPlayers()[m_id];
 	packet.pos = player->GetTransform()->GetLocalPosition();
 	packet.id = m_id;
-	string str = "Send(" + to_string(m_id) + "): " + to_string(packet.pos.x) + ", " + to_string(packet.pos.y) + ", " + to_string(packet.pos.z) + "\n";
-	OutputDebugStringA(str.c_str());
+	//string str = "Send(" + to_string(m_id) + "): " + to_string(packet.pos.x) + ", " + to_string(packet.pos.y) + ", " + to_string(packet.pos.z) + "\n";
+	//OutputDebugStringA(str.c_str());
 	GET_SINGLE(NetworkManager)->Send(packet);
 }
 #pragma endregion

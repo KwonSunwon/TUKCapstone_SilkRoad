@@ -49,6 +49,24 @@ static const int SERVER_PORT = 9000;
 //	std::string IPToServerCode(char* ip);
 //};
 
+// Packet Type
+enum class PACKET_TYPE {
+};
+
+// Packet Struct
+struct PacketHeader {
+	uint16 size;
+	PACKET_TYPE type;
+};
+
+struct Packet {
+	//PacketHeader header;
+	//char data[1024];
+
+	Vec3 pos;
+	ushort id;
+};
+
 enum class NETWORK_STATE {
 	SINGLE,
 	HOST,
@@ -174,6 +192,8 @@ private:
 
 	thread m_mainLoopThread;
 	thread m_waitLoopThread;
+
+	float m_timer = 0.f;
 
 	// 호스트 클라이언트에서 send(정확히는 push)한 패킷 큐
 	PacketQueue m_eventQue;

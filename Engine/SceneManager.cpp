@@ -241,27 +241,27 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 
 #pragma region Object
 	{
-	{
-		shared_ptr<GameObject> obj = make_shared<GameObject>();
-		obj->SetName(L"OBJ");
-		obj->AddComponent(make_shared<Transform>());
-		obj->AddComponent(make_shared<SphereCollider>());
-		obj->GetTransform()->SetLocalScale(Vec3(100.f, 100.f, 100.f));
-			obj->GetTransform()->SetLocalPosition(Vec3(0, 900.f, 300.f));
-		obj->SetStatic(false);
-		shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
 		{
+			shared_ptr<GameObject> obj = make_shared<GameObject>();
+			obj->SetName(L"OBJ");
+			obj->AddComponent(make_shared<Transform>());
+			obj->AddComponent(make_shared<SphereCollider>());
+			obj->GetTransform()->SetLocalScale(Vec3(100.f, 100.f, 100.f));
+			obj->GetTransform()->SetLocalPosition(Vec3(0, 900.f, 300.f));
+			obj->SetStatic(false);
+			shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
+			{
 				shared_ptr<Mesh> cubeMesh = GET_SINGLE(Resources)->LoadCubeMesh();
 				meshRenderer->SetMesh(cubeMesh);
-		}
-		{
-			shared_ptr<Material> material = GET_SINGLE(Resources)->Get<Material>(L"GameObject");
-			meshRenderer->SetMaterial(material->Clone());
-		}
+			}
+			{
+				shared_ptr<Material> material = GET_SINGLE(Resources)->Get<Material>(L"GameObject");
+				meshRenderer->SetMaterial(material->Clone());
+			}
 
 			obj->AddComponent(make_shared<TestPlayer>(0));
 
-		obj->AddComponent(meshRenderer);
+			obj->AddComponent(meshRenderer);
 			scene->AddGameObject(obj);
 			scene->SetPlayer(obj, static_cast<PlayerType>(0));
 		}
@@ -281,12 +281,12 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 			{
 				shared_ptr<Material> material = GET_SINGLE(Resources)->Get<Material>(L"GameObject");
 				meshRenderer->SetMaterial(material->Clone());
-		}
+			}
 
 			obj->AddComponent(make_shared<TestPlayer>(1));
 
 			obj->AddComponent(meshRenderer);
-		scene->AddGameObject(obj);
+			scene->AddGameObject(obj);
 			scene->SetPlayer(obj, static_cast<PlayerType>(1));
 		}
 	}
