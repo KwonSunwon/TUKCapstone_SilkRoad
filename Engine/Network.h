@@ -5,13 +5,16 @@
 
 static const int MAX_PLAYER = 2;
 static const int SERVER_PORT = 9000;
+static const int TIMEOUT = 5;
+
+#define SEND_PACKET_PER_SEC 1.f / 60.f
 
 // global
-// ÀÓ½Ã·Î ÀÌ·¸°Ô ¸¸µé±ä Çß´Âµ¥...
-// °ÔÀÓ¿¡¼­ ÇÊ¿ä·Î ÇÏ´Â ¸ðµç °ÍÀ»
-// ÀúÀåÇÒ ¼ö ÀÖ´Â ±¸Á¶Ã¼¿¡ ³Ö¾î¾ß ÇÏ´Â°Å ¾Æ´Ñ°¡ ÇÏ´Â...
-// ¾Æ´Ï¸é Packet¿¡ Å¸ÀÔÀ» ÅëÇØ¼­ ·çÇÁ¸¦ µ¹¸é¼­
-// ²¨³½ °ÍÀ» È®ÀÎÇÏ´Â ¹æ½ÄÀ¸·Î ÇØ¾ß ÇÏ³ª?
+// ï¿½Ó½Ã·ï¿½ ï¿½Ì·ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ß´Âµï¿½...
+// ï¿½ï¿½ï¿½Ó¿ï¿½ï¿½ï¿½ ï¿½Ê¿ï¿½ï¿½ ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½ ï¿½Ö¾ï¿½ï¿½ ï¿½Ï´Â°ï¿½ ï¿½Æ´Ñ°ï¿½ ï¿½Ï´ï¿½...
+// ï¿½Æ´Ï¸ï¿½ Packetï¿½ï¿½ Å¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ø¼ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½é¼­
+// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ø¾ï¿½ ï¿½Ï³ï¿½?
 //extern shared_ptr<LockQueue<Packet>> g_packetQueue;
 
 //class Server {
@@ -26,7 +29,7 @@ static const int SERVER_PORT = 9000;
 //	bool Change(std::string serverCode);
 //	void Update();
 //
-//	// °Ô½ºÆ®¿Í ¿¬°á ¹× ¾²·¹µå »ý¼º
+//	// ï¿½Ô½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 //	bool ConnectGuest();
 //
 //public:
@@ -36,7 +39,7 @@ static const int SERVER_PORT = 9000;
 //	bool m_isRunning;
 //	std::string m_serverCode;
 //
-//	// °¢°¢ÀÇ °Ô½ºÆ®¿Í ¿¬°áÀ» À¯ÁöÇÏ±â À§ÇÑ º¯¼öµé
+//	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ô½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï±ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 //	SOCKET m_guestSocket[MAX_GUEST];
 //	SOCKADDR_IN m_guestAddr[MAX_GUEST];
 //
@@ -44,7 +47,7 @@ static const int SERVER_PORT = 9000;
 //	size_t m_guestCount = 0;
 //
 //private:
-//	// IP ÁÖ¼Ò¸¦ ÄÚµå·Î ÀüÈ¯
+//	// IP ï¿½Ö¼Ò¸ï¿½ ï¿½Úµï¿½ï¿½ ï¿½ï¿½È¯
 //	char* ServerCodeToIP(std::string serverCode);
 //	std::string IPToServerCode(char* ip);
 //};
@@ -101,10 +104,10 @@ struct GameData {
 };
 
 /*
-* ¾²·¹µå »ý¼º ¹× °ü¸®
-* ¾²·¹µå µ¿±âÈ­¿¡ ÇÊ¿äÇÑ Lock º¯¼ö °ü¸®
-* °Ô½ºÆ®¿Í ¿¬°á ¹× ÆÐÅ¶ ¼Û¼ö½Å
-* ¼­¹ö¿¡¼­ Ã³¸®ÇØ¾ß ÇÏ´Â °ÔÀÓ ·çÇÁ
+* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½È­ï¿½ï¿½ ï¿½Ê¿ï¿½ï¿½ï¿½ Lock ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+* ï¿½Ô½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½Å¶ ï¿½Û¼ï¿½ï¿½ï¿½
+* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½ï¿½Ø¾ï¿½ ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 */
 //class Network {
 //	DECLARE_SINGLE(Network);
@@ -127,7 +130,7 @@ struct GameData {
 //	void Guest_Connection();
 //	void Guest_Connect();
 //
-//	// µ¥ÀÌÅÍ ¼Û¼ö½Å
+//	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Û¼ï¿½ï¿½ï¿½
 //	void Send(Packet packet);
 //	Packet Recv();
 //
@@ -211,10 +214,10 @@ private:
 
 	float m_timer = 0.f;
 
-	// È£½ºÆ® Å¬¶óÀÌ¾ðÆ®¿¡¼­ send(Á¤È®È÷´Â push)ÇÑ ÆÐÅ¶ Å¥
+	// È£ï¿½ï¿½Æ® Å¬ï¿½ï¿½ï¿½Ì¾ï¿½Æ®ï¿½ï¿½ï¿½ï¿½ send(ï¿½ï¿½È®ï¿½ï¿½ï¿½ï¿½ push)ï¿½ï¿½ ï¿½ï¿½Å¶ Å¥
 	PacketQueue m_eventQue;
 
-	// ÀÓ½Ã
+	// ï¿½Ó½ï¿½
 	//array<Packet, 2> m_gameData;
 	array<Packet, 2> m_lastGameData;
 
@@ -239,7 +242,7 @@ public:
 private:
 	SOCKET m_socket;
 
-	// ÀÓ½ÃÄÚµå
+	// ï¿½Ó½ï¿½ï¿½Úµï¿½
 	char* m_serverIP = (char*)"127.0.0.1";
 
 	shared_ptr<queue<Packet>> m_toClientEventQue;
