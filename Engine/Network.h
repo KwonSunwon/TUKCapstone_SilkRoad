@@ -9,49 +9,6 @@ static const int TIMEOUT = 5;
 
 #define SEND_PACKET_PER_SEC 1.f / 60.f
 
-// global
-// �ӽ÷� �̷��� ����� �ߴµ�...
-// ���ӿ��� �ʿ�� �ϴ� ��� ����
-// ������ �� �ִ� ����ü�� �־�� �ϴ°� �ƴѰ� �ϴ�...
-// �ƴϸ� Packet�� Ÿ���� ���ؼ� ������ ���鼭
-// ���� ���� Ȯ���ϴ� ������� �ؾ� �ϳ�?
-//extern shared_ptr<LockQueue<Packet>> g_packetQueue;
-
-//class Server {
-//public:
-//	Server() {}
-//	~Server() {}
-//
-//	void Initialize();
-//
-//	//void Run();
-//	void Stop();
-//	bool Change(std::string serverCode);
-//	void Update();
-//
-//	// �Խ�Ʈ�� ���� �� ������ ����
-//	bool ConnectGuest();
-//
-//public:
-//	friend void Run(Server);
-//
-//private:
-//	bool m_isRunning;
-//	std::string m_serverCode;
-//
-//	// ������ �Խ�Ʈ�� ������ �����ϱ� ���� ������
-//	SOCKET m_guestSocket[MAX_GUEST];
-//	SOCKADDR_IN m_guestAddr[MAX_GUEST];
-//
-//	std::array<std::thread, MAX_GUEST> m_guestThread;
-//	size_t m_guestCount = 0;
-//
-//private:
-//	// IP �ּҸ� �ڵ�� ��ȯ
-//	char* ServerCodeToIP(std::string serverCode);
-//	std::string IPToServerCode(char* ip);
-//};
-
 // Packet Type
 enum class PACKET_TYPE {
 	PLAYER,
