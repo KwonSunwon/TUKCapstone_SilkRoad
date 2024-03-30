@@ -389,6 +389,8 @@ void Host::WaitLoop()
 
 		DWORD optval = 10;
 		setsockopt(tempSocket, SOL_SOCKET, SO_RCVTIMEO, (const char*)&optval, sizeof(optval));
+		optval = TRUE;
+		setsockopt(tempSocket, IPPROTO_TCP, TCP_NODELAY, (const char*)&optval, sizeof(optval));
 
 		GuestInfo guest;
 		guest.id = ++playerCount;
@@ -477,6 +479,8 @@ void Guest::Connect()
 
 	DWORD optval = 5;
 	setsockopt(m_socket, SOL_SOCKET, SO_RCVTIMEO, (const char*)&optval, sizeof(optval));
+	optval = TRUE;
+	setsockopt(m_socket, IPPROTO_TCP, TCP_NODELAY, (const char*)&optval, sizeof(optval));
 }
 
 void Guest::Update()
