@@ -51,6 +51,11 @@ static const int SERVER_PORT = 9000;
 
 // Packet Type
 enum class PACKET_TYPE {
+	PLAYER,
+	ENEMY,
+	ITEM,
+	// ...
+	END,
 };
 
 // Packet Struct
@@ -60,7 +65,7 @@ struct PacketHeader {
 };
 
 struct Packet {
-	//PacketHeader header;
+	PacketHeader header;
 	//char data[1024];
 
 	Vec3 pos;
@@ -82,6 +87,17 @@ struct GuestInfo {
 	ushort id;
 	SOCKET socket;
 	shared_ptr<PacketQueue> eventQue = make_shared<PacketQueue>();
+};
+
+struct PlayerData {
+	Vec3 pos;
+	ushort id;
+	// ... Class, Hp, Item, ...
+};
+
+struct GameData {
+	PlayerData playerData[MAX_PLAYER];
+	// ... Enemy, Item, ...
 };
 
 /*
@@ -199,8 +215,13 @@ private:
 	PacketQueue m_eventQue;
 
 	// юс╫ц
-	array<Packet, 2> m_gameData;
+	//array<Packet, 2> m_gameData;
 	array<Packet, 2> m_lastGameData;
+
+	GameData m_gameData;
+
+	queue<Packet> m_gameLoopEventQue;
+	queue<Packet> m_outGameLoopEventQue;
 };
 
 class Guest : public Network {

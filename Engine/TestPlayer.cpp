@@ -20,6 +20,7 @@ void TestPlayer::LateUpdate()
 		return;
 
 	Vec3 pos = GetTransform()->GetLocalPosition();
+	Vec3 prev = pos;
 
 	if (GET_SINGLE(Input)->GetButton(KEY_TYPE::W))
 		pos += GetTransform()->GetLook() * 5.f * DELTA_TIME;
@@ -32,4 +33,12 @@ void TestPlayer::LateUpdate()
 		pos += GetTransform()->GetRight() * 5.f * DELTA_TIME;
 
 	GetTransform()->SetLocalPosition(pos);
+
+	if (prev != pos) {
+		Packet packet;
+		packet.header.type = PACKET_TYPE::PLAYER;
+		packet.pos = pos;
+		packet.id = m_id;
+		GET_SINGLE(NetworkManager)->Send(packet);
+	}
 }

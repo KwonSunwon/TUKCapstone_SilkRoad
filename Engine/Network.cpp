@@ -258,14 +258,14 @@ Host::Host() : Network()
 {
 	m_mainLoopThread = thread{ &Host::MainLoop, this };
 
-	m_gameData[0].pos = Vec3{ 0, 0, 0 };
-	m_gameData[0].id = 0;
-	m_gameData[1].pos = Vec3{ 0, 0, 0 };
-	m_gameData[1].id = 1;
-	m_lastGameData[0].pos = Vec3{ 0, 0, 0 };
-	m_lastGameData[0].id = 0;
-	m_lastGameData[1].pos = Vec3{ 0, 0, 0 };
-	m_lastGameData[1].id = 1;
+	//m_gameData[0].pos = Vec3{ 0, 0, 0 };
+	//m_gameData[0].id = 0;
+	//m_gameData[1].pos = Vec3{ 0, 0, 0 };
+	//m_gameData[1].id = 1;
+	//m_lastGameData[0].pos = Vec3{ 0, 0, 0 };
+	//m_lastGameData[0].id = 0;
+	//m_lastGameData[1].pos = Vec3{ 0, 0, 0 };
+	//m_lastGameData[1].id = 1;
 }
 
 void Host::MainLoop()
@@ -277,25 +277,32 @@ void Host::MainLoop()
 				// 게스트가 보낸 패킷을 받아 갱신
 				for (auto& guest : m_guestInfos) {
 					while (guest.eventQue->toServer.TryPop(packet))
-						m_gameData[guest.id] = packet;
+						m_gameLoopEventQue.push(packet);
 				}
 			}
 			// 호스트 클라이언트가 푸시한 패킷을 받아 갱신
 			string str = "MainLoop: Queue Size - " + to_string(m_eventQue.toServer.Size()) + "\n";
 			while (m_eventQue.toServer.TryPop(packet)) {
-				m_gameData[0] = packet;
+				m_gameLoopEventQue.push(packet);
 			}
 		}
 		GameLoop();
 		{
-			//Packet packet;
-			//if (GetState() == NETWORK_STATE::HOST) {
-			//	// 게스트에게 보낼 패킷을 큐에 푸시
-			//	for (auto& guest : m_guestInfos)
-			//		guest.eventQue.get()->toClient.Push(packet);
-			//}
-			//// 호스트 클라이언트에게 보낼 패킷을 큐에 푸시	
-			//m_eventQue.toClient.Push(packet);
+			m_timer += DELTA_TIME;
+
+			if (m_timer > 1.0f / 60.0f) {
+				while (!m_outGameLoopEventQue.empty()) {
+					Packet packet = m_outGameLoopEventQue.front();
+					m_outGameLoopEventQue.pop();
+					for (int i = 0; i < MAX_PLAYER; i++) {
+						for (auto& guest : m_guestInfos) {
+							guest.eventQue->toClient.Push(packet);
+						}
+						m_eventQue.toClient.Push(packet);
+					}
+				}
+				m_timer = 0.0f;
+			}
 		}
 	}
 	OutputDebugString(L"Host MainLoop End\n");
@@ -303,22 +310,23 @@ void Host::MainLoop()
 
 void Host::GameLoop()
 {
-	m_timer += DELTA_TIME;
+	while (!m_gameLoopEventQue.empty()) {
+		Packet packet = m_gameLoopEventQue.front();
+		m_gameLoopEventQue.pop();
 
-	if (m_timer < 1.0f / 60.0f)
-		return;
-
-	for (int i = 0; i < MAX_PLAYER; i++) {
-		if (m_gameData[i].pos != m_lastGameData[i].pos) {
-			m_lastGameData[i] = m_gameData[i];
-
-			for (auto& guest : m_guestInfos) {
-				guest.eventQue->toClient.Push(m_gameData[i]);
-			}
-			m_eventQue.toClient.Push(m_gameData[i]);
+		switch (packet.header.type) {
+		case PACKET_TYPE::PLAYER:
+			m_gameData.playerData[packet.id].pos = packet.pos;
+			// ... TEMP: 간단하게 플레이어 위치 갱신
+			// 실제 코드는 더 복잡한 물리 계산의 결과
+			m_outGameLoopEventQue.push(packet);
+			break;
+		case PACKET_TYPE::ENEMY:
+			break;
+		default:
+			break;
 		}
 	}
-	m_timer = 0;
 }
 
 void Host::Update()
@@ -594,12 +602,12 @@ void NetworkScript::LateUpdate()
 		// 게스트에서 호스트로 전환
 	}
 
-	Packet packet;
-	shared_ptr<GameObject> player = GET_SINGLE(SceneManager)->GetActiveScene()->GetPlayers()[m_id];
-	packet.pos = player->GetTransform()->GetLocalPosition();
-	packet.id = m_id;
-	//string str = "Send(" + to_string(m_id) + "): " + to_string(packet.pos.x) + ", " + to_string(packet.pos.y) + ", " + to_string(packet.pos.z) + "\n";
-	//OutputDebugStringA(str.c_str());
-	GET_SINGLE(NetworkManager)->Send(packet);
+	//Packet packet;
+	//shared_ptr<GameObject> player = GET_SINGLE(SceneManager)->GetActiveScene()->GetPlayers()[m_id];
+	//packet.pos = player->GetTransform()->GetLocalPosition();
+	//packet.id = m_id;
+	////string str = "Send(" + to_string(m_id) + "): " + to_string(packet.pos.x) + ", " + to_string(packet.pos.y) + ", " + to_string(packet.pos.z) + "\n";
+	////OutputDebugStringA(str.c_str());
+	//GET_SINGLE(NetworkManager)->Send(packet);
 }
 #pragma endregion
