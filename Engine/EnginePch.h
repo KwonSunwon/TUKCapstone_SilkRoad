@@ -4,6 +4,10 @@
 #define _HAS_STD_BYTE 0
 
 // 각종 include
+#include "assimp/Importer.hpp"
+#include "assimp/cimport.h"
+#include "assimp/postprocess.h"
+#include "assimp/scene.h"		// assimp/scene.h 우선적으로 include 안할 시 빌드 에러 발생
 #include <windows.h>
 #include <tchar.h>
 #include <memory>
@@ -18,6 +22,7 @@ using namespace std;
 
 #include <filesystem>
 namespace fs = std::filesystem;
+
 
 #include "d3dx12.h"
 #include "SimpleMath.h"
@@ -67,6 +72,8 @@ using namespace Microsoft::WRL;
 #pragma comment(lib, "FBX\\release\\libxml2-md.lib")
 #pragma comment(lib, "FBX\\release\\zlib-md.lib")
 #endif
+
+#pragma comment(lib, "assimp\\assimp-vc143-mt.lib")
 
 // 각종 typedef
 using int8		= __int8;

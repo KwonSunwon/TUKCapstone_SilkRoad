@@ -91,13 +91,13 @@ public:
 private:
 	void Import(const wstring& path);
 
-	void ParseNode(FbxNode* root);
-	void LoadMesh(FbxMesh* mesh);
+	void ParseNode(FbxNode* root, aiNode* assimpNode, const aiScene* assimpScene);
+	void LoadMesh(FbxMesh* mesh, aiMesh* assimpMesh);
 	void LoadMaterial(FbxSurfaceMaterial* surfaceMaterial);
 
 	void		GetNormal(FbxMesh* mesh, FbxMeshInfo* container, int32 idx, int32 vertexCounter);
 	void		GetTangent(FbxMesh* mesh, FbxMeshInfo* container, int32 idx, int32 vertexCounter);
-	void		GetUV(FbxMesh* mesh, FbxMeshInfo* container, int32 idx, int32 vertexCounter);
+	void		GetUV(FbxMesh* mesh, FbxMeshInfo* container, int32 idx, int32 vertexCounter, aiMesh* assimpMesh);
 	Vec4		GetMaterialData(FbxSurfaceMaterial* surface, const char* materialName, const char* factorName);
 	wstring		GetTextureRelativeName(FbxSurfaceMaterial* surface, const char* materialProperty);
 

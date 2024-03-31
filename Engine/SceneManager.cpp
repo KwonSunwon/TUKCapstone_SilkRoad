@@ -338,8 +338,8 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 		//shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Start_Plank.fbx");
 		
 		for (int i = 0; i < 8; ++i) {
-			for (int j = 0; j < 8; ++j) {
-				shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Start_Plank.fbx");
+			for (int j = 0; j < 1; ++j) {
+				shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Env_Plant_Flower_Large_02.fbx");
 		
 				vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
 				gameObjects[0]->GetTransform()->SetLocalRotation(Vec3(0.f, XMConvertToRadians(180.f), 0.f));
@@ -347,8 +347,8 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 				gameObjects[0]->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
 				gameObjects[0]->SetCheckFrustum(false);
 
-				if(i==0)
-					gameObjects[0]->AddComponent(make_shared<TestDragon>());
+				//if(i==0)
+					//gameObjects[0]->AddComponent(make_shared<TestDragon>());
 
 				gameObjects[0]->AddComponent(make_shared<RigidBody>());
 				gameObjects[0]->GetRigidBody()->m_useGravity = true;

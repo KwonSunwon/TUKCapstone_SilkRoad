@@ -85,7 +85,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)Output\</OutDir>
-    <IncludePath>$(SolutionDir)Library/Include/FBX/;$(SolutionDir)Library/Include/;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Library/Include/FBX/;$(SolutionDir)Library/Include/assimp/;$(SolutionDir)Library/Include/;$(IncludePath)</IncludePath>
     <LibraryPath>$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -176,6 +176,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Animator.h" />
+    <ClInclude Include="AssimpLoader.h" />
     <ClInclude Include="BaseCollider.h" />
     <ClInclude Include="BoxCollider.h" />
     <ClInclude Include="Camera.h" />
@@ -226,6 +227,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animator.cpp" />
+    <ClCompile Include="AssimpLoader.cpp" />
     <ClCompile Include="BaseCollider.cpp" />
     <ClCompile Include="BoxCollider.cpp" />
     <ClCompile Include="Camera.cpp" />
