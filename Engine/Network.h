@@ -27,7 +27,7 @@ struct PacketHeader {
 
 struct Packet {
 	PacketHeader header;
-	char data[1024];
+	char data[ 1024 ];
 
 	// TEMP
 	Vec3 pos;
@@ -58,71 +58,9 @@ struct PlayerData {
 };
 
 struct GameData {
-	PlayerData playerData[MAX_PLAYER];
+	PlayerData playerData[ MAX_PLAYER ];
 	// ... Enemy, Item, ...
 };
-
-/*
-* 쓰레드 생성 및 관리
-* 쓰레드 동기화에 필요한 Lock 변수 관리
-* 게스트와 연결 및 패킷 송수신
-* 서버에서 처리해야 하는 게임 루프
-*/
-//class Network {
-//	DECLARE_SINGLE(Network);
-//
-//public:
-//	void Initialize();
-//
-//	// thread loop functions
-//	void MainLoop();
-//	void GameLoop();
-//
-//	void Host_WaitLoop();
-//
-//	// interface
-//	void Run();
-//	void Stop();
-//
-//	void Host_RunMulti();
-//
-//	void Guest_Connection();
-//	void Guest_Connect();
-//
-//	// 데이터 송수신
-//	void Send(Packet packet);
-//	Packet Recv();
-//
-//	void SendPacket(Packet packet);
-//	Packet RecvPacket();
-//
-//	void PushPacket(Packet packet);
-//	Packet PopPacket();
-//
-//	void SendPacketToServer(Packet packet);
-//	Packet RecvPacketFromServer();
-//
-//	void SendPacketToClient(Packet packet);
-//	Packet RecvPacketFromClient();
-//
-//	NETWORK_STATE GetState() { return m_networkState; }
-//	void SetState(NETWORK_STATE state) { m_networkState = state; }
-//
-//private:
-//	WSADATA m_wsaData;
-//	SOCKET m_listenSocket;
-//
-//	vector<Guest> m_guestInfo;
-//
-//	atomic<bool> m_isRunning{ false };
-//
-//	thread m_serverThread;
-//	thread m_waitThread;
-//
-//	NETWORK_STATE m_networkState = NETWORK_STATE::HOST_SINGLE;
-//
-//	PacketQueue m_packetQueue;
-//};
 
 class Network {
 public:
@@ -173,11 +111,8 @@ private:
 
 	float m_timer = 0.f;
 
-	// ȣ��Ʈ Ŭ���̾�Ʈ���� send(��Ȯ���� push)�� ��Ŷ ť
 	PacketQueue m_eventQue;
 
-	// �ӽ�
-	//array<Packet, 2> m_gameData;
 	array<Packet, 2> m_lastGameData;
 
 	GameData m_gameData;
@@ -202,7 +137,7 @@ private:
 	SOCKET m_socket;
 
 	// 임시코드
-	char* m_serverIP = (char*)"127.0.0.1";
+	char* m_serverIP = ( char* ) "127.0.0.1";
 
 	shared_ptr<queue<Packet>> m_toClientEventQue;
 };
