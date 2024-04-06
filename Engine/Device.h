@@ -1,7 +1,7 @@
 #pragma once
 
 
-// ÀÎ·Â »ç¹«¼Ò
+// ì¸ë ¥ ì‚¬ë¬´ì†Œ
 class Device
 {
 public:
@@ -12,11 +12,11 @@ public:
 
 private:
 	// COM(Component Object Model)
-	// - DXÀÇ ÇÁ·Î±×·¡¹Ö ¾ð¾î µ¶¸³¼º°ú ÇÏÀ§ È£È¯¼ºÀ» °¡´ÉÇÏ°Ô ÇÏ´Â ±â¼ú
-	// - COM °´Ã¼(COM ÀÎÅÍÆäÀÌ½º)¸¦ »ç¿ë. ¼¼ºÎ»çÇ×Àº ¿ì¸®ÇÑÅ× ¼û°ÜÁü
-	// - ComPtr ÀÏÁ¾ÀÇ ½º¸¶Æ® Æ÷ÀÎÅÍ
+	// - DXì˜ í”„ë¡œê·¸ëž˜ë° ì–¸ì–´ ë…ë¦½ì„±ê³¼ í•˜ìœ„ í˜¸í™˜ì„±ì„ ê°€ëŠ¥í•˜ê²Œ í•˜ëŠ” ê¸°ìˆ 
+	// - COM ê°ì²´(COM ì¸í„°íŽ˜ì´ìŠ¤)ë¥¼ ì‚¬ìš©. ì„¸ë¶€ì‚¬í•­ì€ ìš°ë¦¬í•œí…Œ ìˆ¨ê²¨ì§
+	// - ComPtr ì¼ì¢…ì˜ ìŠ¤ë§ˆíŠ¸ í¬ì¸í„°
 	ComPtr<ID3D12Debug>			m_debugController;
-	ComPtr<IDXGIFactory>		m_dxgi; // È­¸é °ü·Ã ±â´Éµé
-	ComPtr<ID3D12Device>		m_device; // °¢Á¾ °´Ã¼ »ý¼º
+	ComPtr<IDXGIFactory>		m_dxgi; // í™”ë©´ ê´€ë ¨ ê¸°ëŠ¥ë“¤
+	ComPtr<ID3D12Device>		m_device; // ê°ì¢… ê°ì²´ ìƒì„±
 };
 

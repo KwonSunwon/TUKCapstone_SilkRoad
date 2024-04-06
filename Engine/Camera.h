@@ -4,8 +4,8 @@
 
 enum class PROJECTION_TYPE
 {
-	PERSPECTIVE, // ¿ø±Ù Åõ¿µ
-	ORTHOGRAPHIC, // Á÷±³ Åõ¿µ
+	PERSPECTIVE, // ì›ê·¼ íˆ¬ì˜
+	ORTHOGRAPHIC, // ì§êµ íˆ¬ì˜
 };
 
 class Camera : public Component

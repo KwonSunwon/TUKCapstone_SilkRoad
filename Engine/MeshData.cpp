@@ -29,7 +29,7 @@ shared_ptr<MeshData> MeshData::LoadFromFBX(const wstring& path)
 
 		GET_SINGLE(Resources)->Add<Mesh>(mesh->GetName(), mesh);
 
-		// Material Ã£¾Æ¼­ ¿¬µ¿
+		// Material ì°¾ì•„ì„œ ì—°ë™
 		vector<shared_ptr<Material>> materials;
 		for (size_t j = 0; j < loader.GetMesh(i).materials.size(); j++)
 		{

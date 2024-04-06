@@ -25,9 +25,9 @@ enum class DEPTH_STENCIL_TYPE : uint8
 	LESS_EQUAL,
 	GREATER,
 	GREATER_EQUAL,
-	NO_DEPTH_TEST, // ±íÀÌ Å×½ºÆ®(X) + ±íÀÌ ±â·Ï(O)
-	NO_DEPTH_TEST_NO_WRITE, // ±íÀÌ Å×½ºÆ®(X) + ±íÀÌ ±â·Ï(X)
-	LESS_NO_WRITE, // ±íÀÌ Å×½ºÆ®(O) + ±íÀÌ ±â·Ï(X)
+	NO_DEPTH_TEST, // ê¹Šì´ í…ŒìŠ¤íŠ¸(X) + ê¹Šì´ ê¸°ë¡(O)
+	NO_DEPTH_TEST_NO_WRITE, // ê¹Šì´ í…ŒìŠ¤íŠ¸(X) + ê¹Šì´ ê¸°ë¡(X)
+	LESS_NO_WRITE, // ê¹Šì´ í…ŒìŠ¤íŠ¸(O) + ê¹Šì´ ê¸°ë¡(X)
 };
 
 enum class BLEND_TYPE : uint8

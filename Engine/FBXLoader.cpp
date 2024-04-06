@@ -20,34 +20,34 @@ FBXLoader::~FBXLoader()
 
 void FBXLoader::LoadFbx(const wstring& path)
 {
-	// ÆÄÀÏ µ¥ÀÌÅÍ ·Îµå
+	// íŒŒì¼ ë°ì´í„° ë¡œë“œ
 	Import(path);
 
 	// Animation	
 	LoadBones(m_scene->GetRootNode());
 	LoadAnimationInfo();
 
-	// ·ÎµåµÈ µ¥ÀÌÅÍ ÆÄ½Ì (Mesh/Material/Skin)
+	// ë¡œë“œëœ ë°ì´í„° íŒŒì‹± (Mesh/Material/Skin)
 	ParseNode(m_scene->GetRootNode());
 
-	// ¿ì¸® ±¸Á¶¿¡ ¸Â°Ô Texture / Material »ı¼º
+	// ìš°ë¦¬ êµ¬ì¡°ì— ë§ê²Œ Texture / Material ìƒì„±
 	CreateTextures();
 	CreateMaterials();
 }
 
 void FBXLoader::Import(const wstring& path)
 {
-	// FBX SDK °ü¸®ÀÚ °´Ã¼ »ı¼º
+	// FBX SDK ê´€ë¦¬ì ê°ì²´ ìƒì„±
 	m_manager = FbxManager::Create();
 
-	// IOSettings °´Ã¼ »ı¼º ¹× ¼³Á¤
+	// IOSettings ê°ì²´ ìƒì„± ë° ì„¤ì •
 	FbxIOSettings* settings = FbxIOSettings::Create(m_manager, IOSROOT);
 	m_manager->SetIOSettings(settings);
 
-	// FbxImporter °´Ã¼ »ı¼º
+	// FbxImporter ê°ì²´ ìƒì„±
 	m_scene = FbxScene::Create(m_manager, "");
 
-	// ³ªÁß¿¡ Texture °æ·Î °è»êÇÒ ¶§ ¾µ °Í
+	// ë‚˜ì¤‘ì— Texture ê²½ë¡œ ê³„ì‚°í•  ë•Œ ì“¸ ê²ƒ
 	m_resourceDirectory = fs::path(path).parent_path().wstring() + L"\\" + fs::path(path).filename().stem().wstring() + L".fbm";
 
 	m_importer = FbxImporter::Create(m_manager, "");
@@ -59,7 +59,7 @@ void FBXLoader::Import(const wstring& path)
 
 	m_scene->GetGlobalSettings().SetAxisSystem(FbxAxisSystem::DirectX);
 
-	// ¾À ³»¿¡¼­ »ï°¢ÇüÈ­ ÇÒ ¼ö ÀÖ´Â ¸ğµç ³ëµå¸¦ »ï°¢ÇüÈ­ ½ÃÅ²´Ù.
+	// ì”¬ ë‚´ì—ì„œ ì‚¼ê°í˜•í™” í•  ìˆ˜ ìˆëŠ” ëª¨ë“  ë…¸ë“œë¥¼ ì‚¼ê°í˜•í™” ì‹œí‚¨ë‹¤.
 	FbxGeometryConverter geometryConverter(m_manager);
 	geometryConverter.Triangulate(m_scene, true);
 
@@ -80,7 +80,7 @@ void FBXLoader::ParseNode(FbxNode* node)
 		}
 	}
 
-	// Material ·Îµå
+	// Material ë¡œë“œ
 	const uint32 materialCount = node->GetMaterialCount();
 	for (uint32 i = 0; i < materialCount; ++i)
 	{
@@ -88,7 +88,7 @@ void FBXLoader::ParseNode(FbxNode* node)
 		LoadMaterial(surfaceMaterial);
 	}
 
-	// Tree ±¸Á¶ Àç±Í È£Ãâ
+	// Tree êµ¬ì¡° ì¬ê·€ í˜¸ì¶œ
 	const int32 childCount = node->GetChildCount();
 	for (int32 i = 0; i < childCount; ++i)
 		ParseNode(node->GetChild(i));
@@ -123,14 +123,14 @@ void FBXLoader::LoadMesh(FbxMesh* mesh)
 	assert(polygonSize == 3);
 
 	uint32 arrIdx[3];
-	uint32 vertexCounter = 0; // Á¤Á¡ÀÇ °³¼ö
+	uint32 vertexCounter = 0; // ì •ì ì˜ ê°œìˆ˜
 
-	const int32 triCount = mesh->GetPolygonCount(); // ¸Ş½¬ÀÇ »ï°¢Çü °³¼ö¸¦ °¡Á®¿Â´Ù
-	for (int32 i = 0; i < triCount; i++) // »ï°¢ÇüÀÇ °³¼ö
+	const int32 triCount = mesh->GetPolygonCount(); // ë©”ì‰¬ì˜ ì‚¼ê°í˜• ê°œìˆ˜ë¥¼ ê°€ì ¸ì˜¨ë‹¤
+	for (int32 i = 0; i < triCount; i++) // ì‚¼ê°í˜•ì˜ ê°œìˆ˜
 	{
-		for (int32 j = 0; j < 3; j++) // »ï°¢ÇüÀº ¼¼ °³ÀÇ Á¤Á¡À¸·Î ±¸¼º
+		for (int32 j = 0; j < 3; j++) // ì‚¼ê°í˜•ì€ ì„¸ ê°œì˜ ì •ì ìœ¼ë¡œ êµ¬ì„±
 		{
-			int32 controlPointIndex = mesh->GetPolygonVertex(i, j); // Á¦¾îÁ¡ÀÇ ÀÎµ¦½º ÃßÃâ
+			int32 controlPointIndex = mesh->GetPolygonVertex(i, j); // ì œì–´ì ì˜ ì¸ë±ìŠ¤ ì¶”ì¶œ
 			arrIdx[j] = controlPointIndex;
 
 			GetNormal(mesh, &meshInfo, controlPointIndex, vertexCounter);
@@ -200,7 +200,7 @@ void FBXLoader::GetTangent(FbxMesh* mesh, FbxMeshInfo* meshInfo, int32 idx, int3
 {
 	if (mesh->GetElementTangentCount() == 0)
 	{
-		// TEMP : ¿ø·¡´Â ÀÌ·± Àú·± ¾Ë°í¸®ÁòÀ¸·Î Tangent ¸¸µé¾îÁà¾ß ÇÔ
+		// TEMP : ì›ë˜ëŠ” ì´ëŸ° ì €ëŸ° ì•Œê³ ë¦¬ì¦˜ìœ¼ë¡œ Tangent ë§Œë“¤ì–´ì¤˜ì•¼ í•¨
 		meshInfo->vertices[idx].tangent.x = 1.f;
 		meshInfo->vertices[idx].tangent.y = 0.f;
 		meshInfo->vertices[idx].tangent.z = 0.f;
@@ -390,7 +390,7 @@ void FBXLoader::LoadAnimationInfo()
 
 		shared_ptr<FbxAnimClipInfo> animClip = make_shared<FbxAnimClipInfo>();
 		animClip->name = s2ws(animStack->GetName());
-		animClip->keyFrames.resize(m_bones.size()); // Å°ÇÁ·¹ÀÓÀº º»ÀÇ °³¼ö¸¸Å­
+		animClip->keyFrames.resize(m_bones.size()); // í‚¤í”„ë ˆì„ì€ ë³¸ì˜ ê°œìˆ˜ë§Œí¼
 
 		FbxTakeInfo* takeInfo = m_scene->GetTakeInfo(animStack->GetName());
 		animClip->startTime = takeInfo->mLocalTimeSpan.GetStart();
@@ -522,7 +522,7 @@ void FBXLoader::LoadKeyframe(int32 animIndex, FbxNode* node, FbxCluster* cluster
 
 	FbxTime::EMode timeMode = m_scene->GetGlobalSettings().GetTimeMode();
 
-	// ¾Ö´Ï¸ŞÀÌ¼Ç °ñ¶óÁÜ
+	// ì• ë‹ˆë©”ì´ì…˜ ê³¨ë¼ì¤Œ
 	FbxAnimStack* animStack = m_scene->FindMember<FbxAnimStack>(m_animNames[animIndex]->Buffer());
 	m_scene->SetCurrentAnimationStack(OUT animStack);
 

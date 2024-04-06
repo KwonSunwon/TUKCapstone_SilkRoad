@@ -19,11 +19,11 @@ VS_OUT VS_Main(VS_IN input)
 {
     VS_OUT output = (VS_OUT)0;
 
-    // TranslationÀº ÇÏÁö ¾Ê°í Rotation¸¸ Àû¿ëÇÑ´Ù
+    // Translationì€ í•˜ì§€ ì•Šê³  Rotationë§Œ ì ìš©í•œë‹¤
     float4 viewPos = mul(float4(input.localPos, 0), g_matView);
     float4 clipSpacePos = mul(viewPos, g_matProjection);
 
-    // w/w=1ÀÌ±â ¶§¹®¿¡ Ç×»ó ±íÀÌ°¡ 1·Î À¯ÁöµÈ´Ù
+    // w/w=1ì´ê¸° ë•Œë¬¸ì— í•­ìƒ ê¹Šì´ê°€ 1ë¡œ ìœ ì§€ëœë‹¤
     output.pos = clipSpacePos.xyww;
     output.uv = input.uv;
 

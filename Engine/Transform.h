@@ -11,7 +11,7 @@ public:
 	void PushData();
 
 public:
-	// Parent ±‚¡ÿ
+	// Parent Í∏∞Ï§Ä
 	const Vec3& GetLocalPosition() { return m_localPosition; }
 	const Vec3& GetLocalRotation() { return m_localRotation; }
 	const Vec3& GetLocalScale() { return m_localScale; }
@@ -40,7 +40,7 @@ public:
 	weak_ptr<Transform> GetParent() { return m_parent; }
 
 private:
-	// Parent ±‚¡ÿ
+	// Parent Í∏∞Ï§Ä
 	Vec3 m_localPosition = {};
 	Vec3 m_localRotation = {};
 	Vec3 m_localScale = { 1.f, 1.f, 1.f };

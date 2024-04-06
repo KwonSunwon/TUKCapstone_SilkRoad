@@ -63,10 +63,10 @@ struct GameData {
 };
 
 /*
-* ������ ���� �� ����
-* ������ ����ȭ�� �ʿ��� Lock ���� ����
-* �Խ�Ʈ�� ���� �� ��Ŷ �ۼ���
-* �������� ó���ؾ� �ϴ� ���� ����
+* 쓰레드 생성 및 관리
+* 쓰레드 동기화에 필요한 Lock 변수 관리
+* 게스트와 연결 및 패킷 송수신
+* 서버에서 처리해야 하는 게임 루프
 */
 //class Network {
 //	DECLARE_SINGLE(Network);
@@ -89,7 +89,7 @@ struct GameData {
 //	void Guest_Connection();
 //	void Guest_Connect();
 //
-//	// ������ �ۼ���
+//	// 데이터 송수신
 //	void Send(Packet packet);
 //	Packet Recv();
 //
@@ -201,7 +201,7 @@ public:
 private:
 	SOCKET m_socket;
 
-	// �ӽ��ڵ�
+	// 임시코드
 	char* m_serverIP = (char*)"127.0.0.1";
 
 	shared_ptr<queue<Packet>> m_toClientEventQue;

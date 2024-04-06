@@ -19,24 +19,24 @@ void SwapChain::SwapIndex()
 
 void SwapChain::CreateSwapChain(const WindowInfo& info, ComPtr<IDXGIFactory> dxgi, ComPtr<ID3D12CommandQueue> cmdQueue)
 {
-	// ÀÌÀü¿¡ ¸¸µç Á¤º¸ ³¯¸°´Ù
+	// ì´ì „ì— ë§Œë“  ì •ë³´ ë‚ ë¦°ë‹¤
 	m_swapChain.Reset();
 
 	DXGI_SWAP_CHAIN_DESC sd;
-	sd.BufferDesc.Width = static_cast<uint32>(info.width); // ¹öÆÛÀÇ ÇØ»óµµ ³Êºñ
-	sd.BufferDesc.Height = static_cast<uint32>(info.height); // ¹öÆÛÀÇ ÇØ»óµµ ³ôÀÌ
-	sd.BufferDesc.RefreshRate.Numerator = 60; // È­¸é °»½Å ºñÀ²
-	sd.BufferDesc.RefreshRate.Denominator = 1; // È­¸é °»½Å ºñÀ²
-	sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM; // ¹öÆÛÀÇ µğ½ºÇÃ·¹ÀÌ Çü½Ä
+	sd.BufferDesc.Width = static_cast<uint32>(info.width); // ë²„í¼ì˜ í•´ìƒë„ ë„ˆë¹„
+	sd.BufferDesc.Height = static_cast<uint32>(info.height); // ë²„í¼ì˜ í•´ìƒë„ ë†’ì´
+	sd.BufferDesc.RefreshRate.Numerator = 60; // í™”ë©´ ê°±ì‹  ë¹„ìœ¨
+	sd.BufferDesc.RefreshRate.Denominator = 1; // í™”ë©´ ê°±ì‹  ë¹„ìœ¨
+	sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM; // ë²„í¼ì˜ ë””ìŠ¤í”Œë ˆì´ í˜•ì‹
 	sd.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
 	sd.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
-	sd.SampleDesc.Count = 1; // ¸ÖÆ¼ »ùÇÃ¸µ OFF
+	sd.SampleDesc.Count = 1; // ë©€í‹° ìƒ˜í”Œë§ OFF
 	sd.SampleDesc.Quality = 0;
-	sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT; // ÈÄ¸é ¹öÆÛ¿¡ ·»´õ¸µÇÒ °Í 
-	sd.BufferCount = SWAP_CHAIN_BUFFER_COUNT; // Àü¸é+ÈÄ¸é ¹öÆÛ
+	sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT; // í›„ë©´ ë²„í¼ì— ë Œë”ë§í•  ê²ƒ 
+	sd.BufferCount = SWAP_CHAIN_BUFFER_COUNT; // ì „ë©´+í›„ë©´ ë²„í¼
 	sd.OutputWindow = info.hwnd;
 	sd.Windowed = info.windowed;
-	sd.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD; // Àü¸é ÈÄ¸é ¹öÆÛ ±³Ã¼ ½Ã ÀÌÀü ÇÁ·¹ÀÓ Á¤º¸ ¹ö¸²
+	sd.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD; // ì „ë©´ í›„ë©´ ë²„í¼ êµì²´ ì‹œ ì´ì „ í”„ë ˆì„ ì •ë³´ ë²„ë¦¼
 	sd.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 
 	dxgi->CreateSwapChain(cmdQueue.Get(), &sd, &m_swapChain);

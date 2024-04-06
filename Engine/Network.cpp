@@ -62,13 +62,13 @@ void Host::MainLoop()
 		{
 			Packet packet;
 			if (GetState() == NETWORK_STATE::HOST) {
-				// �Խ�Ʈ�� ���� ��Ŷ�� �޾� ����
+				// 게스트가 보낸 패킷을 받아 갱신
 				for (auto& guest : m_guestInfos) {
 					while (guest.eventQue->toServer.TryPop(packet))
 						m_gameLoopEventQue.push(packet);
 				}
 			}
-			// ȣ��Ʈ Ŭ���̾�Ʈ�� Ǫ���� ��Ŷ�� �޾� ����
+			// 호스트 클라이언트가 푸시한 패킷을 받아 갱신
 			string str = "MainLoop: Queue Size - " + to_string(m_eventQue.toServer.Size()) + "\n";
 			while (m_eventQue.toServer.TryPop(packet)) {
 				m_gameLoopEventQue.push(packet);
@@ -229,11 +229,11 @@ void Host::Connection(ushort id)
 		}
 	}
 
-	// �Խ�Ʈ�� ��Ŷ �ۼ���
+	// 게스트와 패킷 송수신
 	int retval;
 	while (GetState() == NETWORK_STATE::HOST) {
 		Packet packet;
-		// �������� �Խ�Ʈ�� ������ ��Ŷ
+		// 서버에서 게스트로 보내는 패킷
 		while (eventQue->toClient.TryPop(packet)) {
 			retval = send(socket, (char*)&packet, sizeof(packet), 0);
 			if (retval == SOCKET_ERROR) {
@@ -243,7 +243,7 @@ void Host::Connection(ushort id)
 				break;
 			}
 		}
-		// �Խ�Ʈ���� ������ ������ ��Ŷ
+		// 게스트에서 서버로 보내는 패킷
 		while (true) {
 			retval = recv(socket, (char*)&packet, sizeof(packet), 0);
 			if (retval > 0) {
@@ -299,7 +299,7 @@ void Guest::Connect()
 
 void Guest::Update()
 {
-	// ��Ŷ�� �ް� ���ӿ� �����ϴ� �κ�
+	// 패킷을 받고 게임에 적용하는 부분
 	int count = 0;
 	int retval;
 	shared_ptr<Packet> packet = make_shared<Packet>();
