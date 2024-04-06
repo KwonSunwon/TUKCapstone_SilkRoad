@@ -62,9 +62,9 @@ void RigidBody::applyFriction()
 
 void RigidBody::applyDrag()
 {
-	float dragMag = m_velocity.LengthSquared() * m_drag;
-	Vec3 dragDir = m_velocity;
-	dragDir.Normalize();
+	float dragMag = m_velocity.y * m_drag;
+	Vec3 dragDir = Vec3(0, 1, 0);
+
 	dragDir *= -dragMag;
 	addForce(dragDir, FORCEMODE::IMPULSE);
 }
@@ -76,10 +76,20 @@ void RigidBody::updatePosition()
 	m_velocity += m_acceleration * DELTA_TIME;
 	m_position += m_velocity * DELTA_TIME;
 	m_acceleration = {};
+
+	if (m_velocity.Length() > m_maxVelocity) {
+		m_velocity.Normalize();
+		m_velocity *= m_maxVelocity;
+	}
+
 	float y = GET_SINGLE(SceneManager)->GetActiveScene()->m_terrain->GetTerrain()->getHeight(m_position.x, m_position.z);
 	if (m_position.y - y <= FLT_EPSILON) {
 		m_position.y = y;
 		m_velocity.y = 0;
+		m_isLanding = true;
+	}
+	else {
+		m_isLanding = false;
 	}
 	GetTransform()->SetLocalPosition(m_position);
 	
