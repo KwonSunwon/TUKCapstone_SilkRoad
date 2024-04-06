@@ -15,7 +15,7 @@ void Engine::Init(const WindowInfo& info)
 {
 	m_window = info;
 
-	// ±×·ÁÁú È­¸é Å©±â¸¦ ¼³Á¤
+	// ê·¸ë ¤ì§ˆ í™”ë©´ í¬ê¸°ë¥¼ ì„¤ì •
 	m_viewport = { 0, 0, static_cast<FLOAT>(info.width), static_cast<FLOAT>(info.height), 0.0f, 1.0f };
 	m_scissorRect = CD3DX12_RECT(0, 0, info.width, info.height);
 
@@ -42,13 +42,13 @@ void Engine::Init(const WindowInfo& info)
 	GET_SINGLE(Timer)->Init();
 	GET_SINGLE(Resources)->Init();
 
-	// ¼­¹ö »ı¼º
+	// ì„œë²„ ìƒì„±
 	GET_SINGLE(NetworkManager)->Initialize();
 }
 
 void Engine::Update()
 {
-	// ¿©±â¼­ ¼­¹ö(ÀÚ½ÅÀÇ ¾²·¹µå ¶Ç´Â ´Ù¸¥ È£½ºÆ®)ÀÇ µ¥ÀÌÅÍ·Î ¾÷µ¥ÀÌÆ®
+	// ì—¬ê¸°ì„œ ì„œë²„(ìì‹ ì˜ ì“°ë ˆë“œ ë˜ëŠ” ë‹¤ë¥¸ í˜¸ìŠ¤íŠ¸)ì˜ ë°ì´í„°ë¡œ ì—…ë°ì´íŠ¸
 	// UpdateFromServer();
 	//{
 	//	auto gameObjects = static_cast<Scene*>(GET_SINGLE(SceneManager)->GetActiveScene().get())->GetGameObjects();
@@ -83,8 +83,8 @@ void Engine::RenderBegin()
 
 void Engine::RenderEnd()
 {
-	m_graphicsCmdQueue->RenderEnd();		// UI Ãâ·ÂÀ» À§ÇØ Ä¿¸Çµå Å¥ ½ÇÇà±îÁö¸¸ ¼öÇà
-	// UI ·»´õ(d3d12¸¦ ÅëÇÑ render ¿Ï·á ÀÌÈÄ ¼öÇà)
+	m_graphicsCmdQueue->RenderEnd();		// UI ì¶œë ¥ì„ ìœ„í•´ ì»¤ë§¨ë“œ í ì‹¤í–‰ê¹Œì§€ë§Œ ìˆ˜í–‰
+	// UI ë Œë”(d3d12ë¥¼ í†µí•œ render ì™„ë£Œ ì´í›„ ìˆ˜í–‰)
 	GET_SINGLE(SceneManager)->RenderUI(m_d3d11on12Device);
 
 	m_swapChain->Present();

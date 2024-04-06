@@ -18,7 +18,7 @@ void Network::Run()
 
 void Network::Stop()
 {
-	// Host¿¡¼­ Guest ÇÃ·¹ÀÌ·Î ÀüÈ¯ÇÒ ¶§ È£Ãâ
+	// Hostì—ì„œ Guest í”Œë ˆì´ë¡œ ì „í™˜í•  ë•Œ í˜¸ì¶œ
 	if (m_isRunning) {
 		m_isRunning = false;
 		m_serverThread.join();
@@ -71,32 +71,32 @@ void Network::MainLoop()
 {
 	Packet inPacket, outPacket;
 	while (m_isRunning) {
-		// Å¬¶ó ¾²·¹µå¿¡¼­ ÆĞÅ¶À» ¹Ş¾Æ °»½Å
+		// í´ë¼ ì“°ë ˆë“œì—ì„œ íŒ¨í‚·ì„ ë°›ì•„ ê°±ì‹ 
 		while (m_packetQueue.in.TryPop(inPacket)) {
-			// ÆĞÅ¶ Ã³¸®
+			// íŒ¨í‚· ì²˜ë¦¬
 		}
 
-		// °Ô½ºÆ®°¡ º¸³½ ÆĞÅ¶À» ¹Ş¾Æ °»½Å
+		// ê²ŒìŠ¤íŠ¸ê°€ ë³´ë‚¸ íŒ¨í‚·ì„ ë°›ì•„ ê°±ì‹ 
 		for (auto& guest : m_guestInfo) {
 			while (guest.packetQueue.in.TryPop(inPacket)) {
-				// ÆĞÅ¶ Ã³¸®
+				// íŒ¨í‚· ì²˜ë¦¬
 			}
 		}
 
 		// outPacket = GameLoop();
 
-		// Å¬¶ó ¾²·¹µå·Î ÆĞÅ¶À» º¸³¿
+		// í´ë¼ ì“°ë ˆë“œë¡œ íŒ¨í‚·ì„ ë³´ëƒ„
 		m_packetQueue.out.Push(outPacket);
 
-		// °Ô½ºÆ®¿¡°Ô ÆĞÅ¶À» º¸³¿
+		// ê²ŒìŠ¤íŠ¸ì—ê²Œ íŒ¨í‚·ì„ ë³´ëƒ„
 		for (auto& guest : m_guestInfo) {
 			guest.packetQueue.out.Push(outPacket);
 		}
 
 		// Test
-		// °ÔÀÓ ³»¿ë ¿ÏÀü ÀÛ¼º Àü ÀÓ½Ã·Î »ç¿ë
-		// ¸ğµç ÇÃ·¹ÀÌ¾îÀÇ À§Ä¡¸¦ 1/60ÃÊ¸¶´Ù Àü¼Û
-		// ¸ğµç ÇÃ·¹ÀÌ¾î°¡ °¢°¢ ÇÃ·¹ÀÌ¾îÀÇ À§Ä¡¸¦ ¹Ş¾Æ¼­ ±×´ë·Î ±×·ÁÁÜ
+		// ê²Œì„ ë‚´ìš© ì™„ì „ ì‘ì„± ì „ ì„ì‹œë¡œ ì‚¬ìš©
+		// ëª¨ë“  í”Œë ˆì´ì–´ì˜ ìœ„ì¹˜ë¥¼ 1/60ì´ˆë§ˆë‹¤ ì „ì†¡
+		// ëª¨ë“  í”Œë ˆì´ì–´ê°€ ê°ê° í”Œë ˆì´ì–´ì˜ ìœ„ì¹˜ë¥¼ ë°›ì•„ì„œ ê·¸ëŒ€ë¡œ ê·¸ë ¤ì¤Œ
 	}
 }
 
@@ -115,25 +115,25 @@ void Network::Host_WaitLoop()
 		ClientInfo clientInfo{ playerCount++, tempSocket };
 		m_guestInfo.emplace_back(clientInfo);
 
-		// È£½ºÆ®¼­¹ö-°Ô½ºÆ® Åë½Å À¯Áö
+		// í˜¸ìŠ¤íŠ¸ì„œë²„-ê²ŒìŠ¤íŠ¸ í†µì‹  ìœ ì§€
 		thread guestConnectionThread;
 	}
 }
 
 void Network::Guest_Connect()
 {
-	// ±âÁ¸ ¼­¹ö ¾²·¹µå Á¾·á
+	// ê¸°ì¡´ ì„œë²„ ì“°ë ˆë“œ ì¢…ë£Œ
 	Stop();
 
 	Guest tempGuest;
 
-	// °ü·ÃµÈ ¼ÒÄÏ ÃÊ±âÈ­
+	// ê´€ë ¨ëœ ì†Œì¼“ ì´ˆê¸°í™”
 	tempGuest.socket = socket(AF_INET, SOCK_STREAM, 0);
 	if (tempGuest.socket == INVALID_SOCKET) {
 		throw runtime_error("Fail initialize socket");
 	}
 
-	// È£½ºÆ®ÀÇ IPÁÖ¼Ò¸¦ ÅëÇØ È£½ºÆ® ¼­¹ö¿¡ Á¢¼Ó
+	// í˜¸ìŠ¤íŠ¸ì˜ IPì£¼ì†Œë¥¼ í†µí•´ í˜¸ìŠ¤íŠ¸ ì„œë²„ì— ì ‘ì†
 	struct sockaddr_in serverAddr;
 	memset(&serverAddr, 0, sizeof(serverAddr));
 	serverAddr.sin_family = AF_INET;
@@ -143,23 +143,23 @@ void Network::Guest_Connect()
 		throw runtime_error("Fail connect server socket");
 	}
 
-	// È£½ºÆ®¿Í µ¥ÀÌÅÍ¸¦ ¼Û¼ö½ÅÇÒ ¼ö ÀÖ´Â ¾²·¹µå »ı¼º
+	// í˜¸ìŠ¤íŠ¸ì™€ ë°ì´í„°ë¥¼ ì†¡ìˆ˜ì‹ í•  ìˆ˜ ìˆëŠ” ì“°ë ˆë“œ ìƒì„±
 	thread guestConnectionThread{ &Network::Guest_Connection, this };
 	tempGuest.connectionThread = move(guestConnectionThread);
 
 	m_guestInfo.emplace_back(tempGuest);
 }
 
-// °¢°¢ÀÇ °Ô½ºÆ®¸¶´Ù ¾²·¹µå¸¦ °¡Áü
-// ±×·¯¸é ¾²·¹µå ¼Ó¿¡ Á¤º¸¸¦ ÀúÀåÇØ Áà¾ß ÇÏ³ª?...
-// Network Å¬·¡½º ³»ºÎ¿¡ Guest, Host(Server) Å¬·¡½º¸¦ ¸¸µé¾î¼­
-// »ç¿ë/°ü¸® ÇØ¾ß ÇÒ °Í °°À½...
+// ê°ê°ì˜ ê²ŒìŠ¤íŠ¸ë§ˆë‹¤ ì“°ë ˆë“œë¥¼ ê°€ì§
+// ê·¸ëŸ¬ë©´ ì“°ë ˆë“œ ì†ì— ì •ë³´ë¥¼ ì €ì¥í•´ ì¤˜ì•¼ í•˜ë‚˜?...
+// Network í´ë˜ìŠ¤ ë‚´ë¶€ì— Guest, Host(Server) í´ë˜ìŠ¤ë¥¼ ë§Œë“¤ì–´ì„œ
+// ì‚¬ìš©/ê´€ë¦¬ í•´ì•¼ í•  ê²ƒ ê°™ìŒ...
 void Network::Guest_Connection()
 {
 	// ushort id = id; ???
 
-	// ¼­¹ö¿Í °Ô½ºÆ® ÆĞÅ¶ ¼Û¼ö½Å
-	// È£½ºÆ®¿Í ¿¬°áÀÌ Áö¼ÓµÇ´Â µ¿¾È
+	// ì„œë²„ì™€ ê²ŒìŠ¤íŠ¸ íŒ¨í‚· ì†¡ìˆ˜ì‹ 
+	// í˜¸ìŠ¤íŠ¸ì™€ ì—°ê²°ì´ ì§€ì†ë˜ëŠ” ë™ì•ˆ
 	while (true) {
 
 	}
@@ -168,11 +168,11 @@ void Network::Guest_Connection()
 void Network::Send(Packet packet)
 {
 	if (m_networkState == NETWORK_STATE::HOST_MULTI) {
-		// È£½ºÆ® ¼­¹ö¿¡¼­ °Ô½ºÆ®·Î ÆĞÅ¶ Àü¼Û
+		// í˜¸ìŠ¤íŠ¸ ì„œë²„ì—ì„œ ê²ŒìŠ¤íŠ¸ë¡œ íŒ¨í‚· ì „ì†¡
 		PushPacket(packet);
 	}
 	else if (m_networkState == NETWORK_STATE::GUEST_CONNECTED) {
-		// °Ô½ºÆ®¿¡¼­ È£½ºÆ® ¼­¹ö·Î ÆĞÅ¶ Àü¼Û
+		// ê²ŒìŠ¤íŠ¸ì—ì„œ í˜¸ìŠ¤íŠ¸ ì„œë²„ë¡œ íŒ¨í‚· ì „ì†¡
 		SendPacket(packet);
 	}
 }
@@ -180,11 +180,11 @@ void Network::Send(Packet packet)
 Packet Network::Recv()
 {
 	if (m_networkState == NETWORK_STATE::HOST_MULTI) {
-		// È£½ºÆ® ¼­¹ö¿¡¼­ °Ô½ºÆ®·ÎºÎÅÍ ÆĞÅ¶ ¼ö½Å
+		// í˜¸ìŠ¤íŠ¸ ì„œë²„ì—ì„œ ê²ŒìŠ¤íŠ¸ë¡œë¶€í„° íŒ¨í‚· ìˆ˜ì‹ 
 		return PopPacket();
 	}
 	else if (m_networkState == NETWORK_STATE::GUEST_CONNECTED) {
-		// °Ô½ºÆ®¿¡¼­ È£½ºÆ® ¼­¹ö·ÎºÎÅÍ ÆĞÅ¶ ¼ö½Å
+		// ê²ŒìŠ¤íŠ¸ì—ì„œ í˜¸ìŠ¤íŠ¸ ì„œë²„ë¡œë¶€í„° íŒ¨í‚· ìˆ˜ì‹ 
 		return RecvPacket();
 	}
 
@@ -193,7 +193,7 @@ Packet Network::Recv()
 
 void Network::SendPacket(Packet packet)
 {
-	// °Ô½ºÆ®¿¡¼­ È£½ºÆ® ¼­¹ö·Î ÆĞÅ¶ Àü¼Û
+	// ê²ŒìŠ¤íŠ¸ì—ì„œ í˜¸ìŠ¤íŠ¸ ì„œë²„ë¡œ íŒ¨í‚· ì „ì†¡
 	Packet tempPacket;
 	for (auto& guest : m_guestInfo) {
 		while (guest.toHostEvent.TryPop()) {
@@ -206,7 +206,7 @@ void Network::SendPacket(Packet packet)
 
 Packet Network::RecvPacket()
 {
-	// °Ô½ºÆ®¿¡¼­ È£½ºÆ® ¼­¹ö·ÎºÎÅÍ ÆĞÅ¶ ¼ö½Å
+	// ê²ŒìŠ¤íŠ¸ì—ì„œ í˜¸ìŠ¤íŠ¸ ì„œë²„ë¡œë¶€í„° íŒ¨í‚· ìˆ˜ì‹ 
 	Packet tempPacket;
 	for (auto& guest : m_guestInfo) {
 		while (true) {
@@ -265,13 +265,13 @@ void Host::MainLoop()
 		{
 			Packet packet;
 			if (GetState() == NETWORK_STATE::HOST) {
-				// °Ô½ºÆ®°¡ º¸³½ ÆĞÅ¶À» ¹Ş¾Æ °»½Å
+				// ê²ŒìŠ¤íŠ¸ê°€ ë³´ë‚¸ íŒ¨í‚·ì„ ë°›ì•„ ê°±ì‹ 
 				for (auto& guest : m_guestInfos) {
 					while (guest.eventQue->toServer.TryPop(packet))
 						m_gameData[guest.id] = packet;
 				}
 			}
-			// È£½ºÆ® Å¬¶óÀÌ¾ğÆ®°¡ Çª½ÃÇÑ ÆĞÅ¶À» ¹Ş¾Æ °»½Å
+			// í˜¸ìŠ¤íŠ¸ í´ë¼ì´ì–¸íŠ¸ê°€ í‘¸ì‹œí•œ íŒ¨í‚·ì„ ë°›ì•„ ê°±ì‹ 
 			string str = "MainLoop: Queue Size - " + to_string(m_eventQue.toServer.Size()) + "\n";
 			while (m_eventQue.toServer.TryPop(packet)) {
 				m_gameData[0] = packet;
@@ -281,11 +281,11 @@ void Host::MainLoop()
 		{
 			//Packet packet;
 			//if (GetState() == NETWORK_STATE::HOST) {
-			//	// °Ô½ºÆ®¿¡°Ô º¸³¾ ÆĞÅ¶À» Å¥¿¡ Çª½Ã
+			//	// ê²ŒìŠ¤íŠ¸ì—ê²Œ ë³´ë‚¼ íŒ¨í‚·ì„ íì— í‘¸ì‹œ
 			//	for (auto& guest : m_guestInfos)
 			//		guest.eventQue.get()->toClient.Push(packet);
 			//}
-			//// È£½ºÆ® Å¬¶óÀÌ¾ğÆ®¿¡°Ô º¸³¾ ÆĞÅ¶À» Å¥¿¡ Çª½Ã	
+			//// í˜¸ìŠ¤íŠ¸ í´ë¼ì´ì–¸íŠ¸ì—ê²Œ ë³´ë‚¼ íŒ¨í‚·ì„ íì— í‘¸ì‹œ	
 			//m_eventQue.toClient.Push(packet);
 		}
 	}
@@ -311,7 +311,7 @@ void Host::Update()
 	int count = 0;
 	Packet packet;
 	while (m_eventQue.toClient.TryPop(packet)) {
-		// °ÔÀÓ¿¡ Àû¿ë
+		// ê²Œì„ì— ì ìš©
 		if (packet.id == 0) {
 			string str = "Update: Packet " + to_string(count++) + " - " + to_string(packet.pos.x) + ", " + to_string(packet.pos.y) + ", " + to_string(packet.pos.z) + "\n";
 			OutputDebugStringA(str.c_str());
@@ -399,18 +399,18 @@ void Host::Connection(ushort id)
 		}
 	}
 
-	// °Ô½ºÆ®¿Í ÆĞÅ¶ ¼Û¼ö½Å
+	// ê²ŒìŠ¤íŠ¸ì™€ íŒ¨í‚· ì†¡ìˆ˜ì‹ 
 	int retval;
 	while (GetState() == NETWORK_STATE::HOST) {
 		Packet packet;
-		// ¼­¹ö¿¡¼­ °Ô½ºÆ®·Î º¸³»´Â ÆĞÅ¶
+		// ì„œë²„ì—ì„œ ê²ŒìŠ¤íŠ¸ë¡œ ë³´ë‚´ëŠ” íŒ¨í‚·
 		while (eventQue->toClient.TryPop(packet)) {
 			retval = send(socket, (char*)&packet, sizeof(packet), 0);
 			if (retval == SOCKET_ERROR) {
 
 			}
 		}
-		// °Ô½ºÆ®¿¡¼­ ¼­¹ö·Î º¸³»´Â ÆĞÅ¶
+		// ê²ŒìŠ¤íŠ¸ì—ì„œ ì„œë²„ë¡œ ë³´ë‚´ëŠ” íŒ¨í‚·
 		while (true) {
 			retval = recv(socket, (char*)&packet, sizeof(packet), 0);
 			if (retval > 0) {
@@ -458,7 +458,7 @@ void Guest::Connect()
 
 void Guest::Update()
 {
-	// ÆĞÅ¶À» ¹Ş°í °ÔÀÓ¿¡ Àû¿ëÇÏ´Â ºÎºĞ
+	// íŒ¨í‚·ì„ ë°›ê³  ê²Œì„ì— ì ìš©í•˜ëŠ” ë¶€ë¶„
 	int count = 0;
 	int retval;
 	shared_ptr<Packet> packet = make_shared<Packet>();
@@ -534,13 +534,13 @@ void NetworkScript::LateUpdate()
 	}
 
 	if (INPUT->GetButtonDown(KEY_TYPE::KEY_2)) {
-		// È£½ºÆ®¿¡¼­ °Ô½ºÆ®·Î ÀüÈ¯
+		// í˜¸ìŠ¤íŠ¸ì—ì„œ ê²ŒìŠ¤íŠ¸ë¡œ ì „í™˜
 		GET_SINGLE(NetworkManager)->ConnectAsGuest();
 		m_id = 1;
 	}
 
 	if (INPUT->GetButtonDown(KEY_TYPE::KEY_3)) {
-		// °Ô½ºÆ®¿¡¼­ È£½ºÆ®·Î ÀüÈ¯
+		// ê²ŒìŠ¤íŠ¸ì—ì„œ í˜¸ìŠ¤íŠ¸ë¡œ ì „í™˜
 	}
 
 	Packet packet;

@@ -29,7 +29,7 @@ struct BoneWeight
 		else
 			boneWeights.push_back(Pair(index, weight));
 
-		// °¡ÁßÄ¡´Â ÃÖ´ë 4°³
+		// ê°€ì¤‘ì¹˜ëŠ” ìµœëŒ€ 4ê°œ
 		if (boneWeights.size() > 4)
 			boneWeights.pop_back();
 	}
@@ -48,7 +48,7 @@ struct FbxMeshInfo
 	vector<Vertex>						vertices;
 	vector<vector<uint32>>				indices;
 	vector<FbxMaterialInfo>				materials;
-	vector<BoneWeight>					boneWeights; // »À °¡ÁßÄ¡
+	vector<BoneWeight>					boneWeights; // ë¼ˆ ê°€ì¤‘ì¹˜
 	bool								hasAnimation;
 };
 

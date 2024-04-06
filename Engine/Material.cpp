@@ -14,10 +14,10 @@ Material::~Material()
 
 void Material::PushGraphicsData()
 {
-	// CBV ¾÷·Îµå
+	// CBV ì—…ë¡œë“œ
 	CONST_BUFFER(CONSTANT_BUFFER_TYPE::MATERIAL)->PushGraphicsData(&m_params, sizeof(m_params));
 
-	// SRV ¾÷·Îµå
+	// SRV ì—…ë¡œë“œ
 	for (size_t i = 0; i < m_textures.size(); i++)
 	{
 		if (m_textures[i] == nullptr)
@@ -27,16 +27,16 @@ void Material::PushGraphicsData()
 		GEngine->GetGraphicsDescHeap()->SetSRV(m_textures[i]->GetSRVHandle(), reg);
 	}
 
-	// ÆÄÀÌÇÁ¶óÀÎ ¼¼ÆÃ
+	// íŒŒì´í”„ë¼ì¸ ì„¸íŒ…
 	m_shader->Update();
 }
 
 void Material::PushComputeData()
 {
-	// CBV ¾÷·Îµå
+	// CBV ì—…ë¡œë“œ
 	CONST_BUFFER(CONSTANT_BUFFER_TYPE::MATERIAL)->PushComputeData(&m_params, sizeof(m_params));
 
-	// SRV ¾÷·Îµå
+	// SRV ì—…ë¡œë“œ
 	for (size_t i = 0; i < m_textures.size(); i++)
 	{
 		if (m_textures[i] == nullptr)
@@ -46,7 +46,7 @@ void Material::PushComputeData()
 		GEngine->GetComputeDescHeap()->SetSRV(m_textures[i]->GetSRVHandle(), reg);
 	}
 
-	// ÆÄÀÌÇÁ¶óÀÎ ¼¼ÆÃ
+	// íŒŒì´í”„ë¼ì¸ ì„¸íŒ…
 	m_shader->Update();
 }
 

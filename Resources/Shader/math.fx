@@ -79,7 +79,7 @@ matrix MatrixAffineTransformation(in float4 Scaling, in float4 RotationOrigin, i
     return M;
 }
 
-// Quaternion Slerp °ü·Ã
+// Quaternion Slerp ê´€ë ¨
 float4 VectorLess(float4 Q1, float4 Q2)
 {
     float4 ret =

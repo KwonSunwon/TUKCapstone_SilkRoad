@@ -3,29 +3,29 @@
 
 void Device::Init()
 {
-	// D3D12 µð¹ö±×Ãþ È°¼ºÈ­
-	// - VC++ Ãâ·ÂÃ¢¿¡ »ó¼¼ÇÑ µð¹ö±ë ¸Þ½ÃÁö Ãâ·Â
-	// - riid : µð¹ÙÀÌ½ºÀÇ COM ID
-	// - ppDevice : »ý¼ºµÈ ÀåÄ¡°¡ ¸Å°³º¯¼ö¿¡ ¼³Á¤
+	// D3D12 ë””ë²„ê·¸ì¸µ í™œì„±í™”
+	// - VC++ ì¶œë ¥ì°½ì— ìƒì„¸í•œ ë””ë²„ê¹… ë©”ì‹œì§€ ì¶œë ¥
+	// - riid : ë””ë°”ì´ìŠ¤ì˜ COM ID
+	// - ppDevice : ìƒì„±ëœ ìž¥ì¹˜ê°€ ë§¤ê°œë³€ìˆ˜ì— ì„¤ì •
 #ifdef _DEBUG
 	::D3D12GetDebugInterface(IID_PPV_ARGS(&m_debugController));
 	m_debugController->EnableDebugLayer();
 #endif
 
 	// DXGI(DirectX Graphics Infrastructure)
-	// Direct3D¿Í ÇÔ²² ¾²ÀÌ´Â API
-	// - ÀüÃ¼ È­¸é ¸ðµå ÀüÈ¯
-	// - Áö¿øµÇ´Â µð½ºÇÃ·¹ÀÌ ¸ðµå ¿­°Å µî
+	// Direct3Dì™€ í•¨ê»˜ ì“°ì´ëŠ” API
+	// - ì „ì²´ í™”ë©´ ëª¨ë“œ ì „í™˜
+	// - ì§€ì›ë˜ëŠ” ë””ìŠ¤í”Œë ˆì´ ëª¨ë“œ ì—´ê±° ë“±
 	// CreateDXGIFactory
-	// - riid : µð¹ÙÀÌ½ºÀÇ COM ID
-	// - ppDevice : »ý¼ºµÈ ÀåÄ¡°¡ ¸Å°³º¯¼ö¿¡ ¼³Á¤
+	// - riid : ë””ë°”ì´ìŠ¤ì˜ COM ID
+	// - ppDevice : ìƒì„±ëœ ìž¥ì¹˜ê°€ ë§¤ê°œë³€ìˆ˜ì— ì„¤ì •
 	::CreateDXGIFactory(IID_PPV_ARGS(&m_dxgi));
 
 	// CreateDevice
-	// - µð½ºÇÃ·¹ÀÌ ¾î´ðÅÍ(±×·¡ÇÈ Ä«µå)¸¦ ³ªÅ¸³»´Â °´Ã¼
-	// - pAdapter : nullptr ÁöÁ¤ÇÏ¸é ½Ã½ºÅÛ ±âº» µð½ºÇÃ·¹ÀÌ ¾î´ðÅÍ
-	// - MinimumFeatureLevel : ÀÀ¿ë ÇÁ·Î±×·¥ÀÌ ¿ä±¸ÇÏ´Â ÃÖ¼Ò ±â´É ¼öÁØ (±¸´Ú´Ù¸® °É·¯³½´Ù)
-	// - riid : µð¹ÙÀÌ½ºÀÇ COM ID
-	// - ppDevice : »ý¼ºµÈ ÀåÄ¡°¡ ¸Å°³º¯¼ö¿¡ ¼³Á¤
+	// - ë””ìŠ¤í”Œë ˆì´ ì–´ëŒ‘í„°(ê·¸ëž˜í”½ ì¹´ë“œ)ë¥¼ ë‚˜íƒ€ë‚´ëŠ” ê°ì²´
+	// - pAdapter : nullptr ì§€ì •í•˜ë©´ ì‹œìŠ¤í…œ ê¸°ë³¸ ë””ìŠ¤í”Œë ˆì´ ì–´ëŒ‘í„°
+	// - MinimumFeatureLevel : ì‘ìš© í”„ë¡œê·¸ëž¨ì´ ìš”êµ¬í•˜ëŠ” ìµœì†Œ ê¸°ëŠ¥ ìˆ˜ì¤€ (êµ¬ë‹¥ë‹¤ë¦¬ ê±¸ëŸ¬ë‚¸ë‹¤)
+	// - riid : ë””ë°”ì´ìŠ¤ì˜ COM ID
+	// - ppDevice : ìƒì„±ëœ ìž¥ì¹˜ê°€ ë§¤ê°œë³€ìˆ˜ì— ì„¤ì •
 	::D3D12CreateDevice(nullptr, D3D_FEATURE_LEVEL_11_0, IID_PPV_ARGS(&m_device));
 }

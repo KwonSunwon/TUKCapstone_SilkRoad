@@ -7,11 +7,11 @@ static const ushort MAX_GUEST = 2;
 static const int SERVER_PORT = 9000;
 
 // global
-// ÀÓ½Ã·Î ÀÌ·¸°Ô ¸¸µé±ä Çß´Âµ¥...
-// °ÔÀÓ¿¡¼­ ÇÊ¿ä·Î ÇÏ´Â ¸ğµç °ÍÀ»
-// ÀúÀåÇÒ ¼ö ÀÖ´Â ±¸Á¶Ã¼¿¡ ³Ö¾î¾ß ÇÏ´Â°Å ¾Æ´Ñ°¡ ÇÏ´Â...
-// ¾Æ´Ï¸é Packet¿¡ Å¸ÀÔÀ» ÅëÇØ¼­ ·çÇÁ¸¦ µ¹¸é¼­
-// ²¨³½ °ÍÀ» È®ÀÎÇÏ´Â ¹æ½ÄÀ¸·Î ÇØ¾ß ÇÏ³ª?
+// ì„ì‹œë¡œ ì´ë ‡ê²Œ ë§Œë“¤ê¸´ í–ˆëŠ”ë°...
+// ê²Œì„ì—ì„œ í•„ìš”ë¡œ í•˜ëŠ” ëª¨ë“  ê²ƒì„
+// ì €ì¥í•  ìˆ˜ ìˆëŠ” êµ¬ì¡°ì²´ì— ë„£ì–´ì•¼ í•˜ëŠ”ê±° ì•„ë‹Œê°€ í•˜ëŠ”...
+// ì•„ë‹ˆë©´ Packetì— íƒ€ì…ì„ í†µí•´ì„œ ë£¨í”„ë¥¼ ëŒë©´ì„œ
+// êº¼ë‚¸ ê²ƒì„ í™•ì¸í•˜ëŠ” ë°©ì‹ìœ¼ë¡œ í•´ì•¼ í•˜ë‚˜?
 //extern shared_ptr<LockQueue<Packet>> g_packetQueue;
 
 //class Server {
@@ -26,7 +26,7 @@ static const int SERVER_PORT = 9000;
 //	bool Change(std::string serverCode);
 //	void Update();
 //
-//	// °Ô½ºÆ®¿Í ¿¬°á ¹× ¾²·¹µå »ı¼º
+//	// ê²ŒìŠ¤íŠ¸ì™€ ì—°ê²° ë° ì“°ë ˆë“œ ìƒì„±
 //	bool ConnectGuest();
 //
 //public:
@@ -36,7 +36,7 @@ static const int SERVER_PORT = 9000;
 //	bool m_isRunning;
 //	std::string m_serverCode;
 //
-//	// °¢°¢ÀÇ °Ô½ºÆ®¿Í ¿¬°áÀ» À¯ÁöÇÏ±â À§ÇÑ º¯¼öµé
+//	// ê°ê°ì˜ ê²ŒìŠ¤íŠ¸ì™€ ì—°ê²°ì„ ìœ ì§€í•˜ê¸° ìœ„í•œ ë³€ìˆ˜ë“¤
 //	SOCKET m_guestSocket[MAX_GUEST];
 //	SOCKADDR_IN m_guestAddr[MAX_GUEST];
 //
@@ -44,7 +44,7 @@ static const int SERVER_PORT = 9000;
 //	size_t m_guestCount = 0;
 //
 //private:
-//	// IP ÁÖ¼Ò¸¦ ÄÚµå·Î ÀüÈ¯
+//	// IP ì£¼ì†Œë¥¼ ì½”ë“œë¡œ ì „í™˜
 //	char* ServerCodeToIP(std::string serverCode);
 //	std::string IPToServerCode(char* ip);
 //};
@@ -67,10 +67,10 @@ struct GuestInfo {
 };
 
 /*
-* ¾²·¹µå »ı¼º ¹× °ü¸®
-* ¾²·¹µå µ¿±âÈ­¿¡ ÇÊ¿äÇÑ Lock º¯¼ö °ü¸®
-* °Ô½ºÆ®¿Í ¿¬°á ¹× ÆĞÅ¶ ¼Û¼ö½Å
-* ¼­¹ö¿¡¼­ Ã³¸®ÇØ¾ß ÇÏ´Â °ÔÀÓ ·çÇÁ
+* ì“°ë ˆë“œ ìƒì„± ë° ê´€ë¦¬
+* ì“°ë ˆë“œ ë™ê¸°í™”ì— í•„ìš”í•œ Lock ë³€ìˆ˜ ê´€ë¦¬
+* ê²ŒìŠ¤íŠ¸ì™€ ì—°ê²° ë° íŒ¨í‚· ì†¡ìˆ˜ì‹ 
+* ì„œë²„ì—ì„œ ì²˜ë¦¬í•´ì•¼ í•˜ëŠ” ê²Œì„ ë£¨í”„
 */
 //class Network {
 //	DECLARE_SINGLE(Network);
@@ -93,7 +93,7 @@ struct GuestInfo {
 //	void Guest_Connection();
 //	void Guest_Connect();
 //
-//	// µ¥ÀÌÅÍ ¼Û¼ö½Å
+//	// ë°ì´í„° ì†¡ìˆ˜ì‹ 
 //	void Send(Packet packet);
 //	Packet Recv();
 //
@@ -175,10 +175,10 @@ private:
 	thread m_mainLoopThread;
 	thread m_waitLoopThread;
 
-	// È£½ºÆ® Å¬¶óÀÌ¾ğÆ®¿¡¼­ send(Á¤È®È÷´Â push)ÇÑ ÆĞÅ¶ Å¥
+	// í˜¸ìŠ¤íŠ¸ í´ë¼ì´ì–¸íŠ¸ì—ì„œ send(ì •í™•íˆëŠ” push)í•œ íŒ¨í‚· í
 	PacketQueue m_eventQue;
 
-	// ÀÓ½Ã
+	// ì„ì‹œ
 	array<Packet, 2> m_gameData;
 	array<Packet, 2> m_lastGameData;
 };
@@ -198,7 +198,7 @@ public:
 private:
 	SOCKET m_socket;
 
-	// ÀÓ½ÃÄÚµå
+	// ì„ì‹œì½”ë“œ
 	char* m_serverIP = (char*)"127.0.0.1";
 
 	shared_ptr<queue<Packet>> m_toClientEventQue;

@@ -53,11 +53,11 @@ LightColor CalculateLightColor(int lightIndex, float3 viewNormal, float3 viewPos
 
             float lightAngle = acos(dot(normalize(viewLightVec), viewCenterLightDir));
 
-            if (centerDist < 0.f || centerDist > g_light[lightIndex].range) // ÃÖ´ë °Å¸®¸¦ ¹ş¾î³µ´ÂÁö
+            if (centerDist < 0.f || centerDist > g_light[lightIndex].range) // ìµœëŒ€ ê±°ë¦¬ë¥¼ ë²—ì–´ë‚¬ëŠ”ì§€
                 distanceRatio = 0.f;
-            else if (lightAngle > halfAngle) // ÃÖ´ë ½Ã¾ß°¢À» ¹ş¾î³µ´ÂÁö
+            else if (lightAngle > halfAngle) // ìµœëŒ€ ì‹œì•¼ê°ì„ ë²—ì–´ë‚¬ëŠ”ì§€
                 distanceRatio = 0.f;
-            else // °Å¸®¿¡ µû¶ó ÀûÀıÈ÷ ¼¼±â¸¦ Á¶Àı
+            else // ê±°ë¦¬ì— ë”°ë¼ ì ì ˆíˆ ì„¸ê¸°ë¥¼ ì¡°ì ˆ
                 distanceRatio = saturate(1.f - pow(centerDist / g_light[lightIndex].range, 2));
         }
     }

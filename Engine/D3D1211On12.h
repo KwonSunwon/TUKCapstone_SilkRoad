@@ -33,7 +33,7 @@ private:
 	ComPtr<ID2D1Bitmap1>		m_d2dRenderTargets[FrameCount];
 	ComPtr<ID3D11Resource>		m_wrappedBackBuffers[FrameCount];
 
-	// ¸®¼Ò½º
+	// ë¦¬ì†ŒìŠ¤
 	ComPtr<ID2D1SolidColorBrush> m_textBrush;
 	ComPtr<IDWriteTextFormat> m_textFormat;
 };
