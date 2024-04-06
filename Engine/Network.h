@@ -27,7 +27,7 @@ struct PacketHeader {
 
 struct Packet {
 	PacketHeader header;
-	char data[ 1024 ];
+	char data[1024];
 
 	// TEMP
 	Vec3 pos;
@@ -58,7 +58,7 @@ struct PlayerData {
 };
 
 struct GameData {
-	PlayerData playerData[ MAX_PLAYER ];
+	PlayerData playerData[MAX_PLAYER];
 	// ... Enemy, Item, ...
 };
 
@@ -137,7 +137,7 @@ private:
 	SOCKET m_socket;
 
 	// 임시코드
-	char* m_serverIP = ( char* ) "127.0.0.1";
+	char* m_serverIP = (char*)"127.0.0.1";
 
 	shared_ptr<queue<Packet>> m_toClientEventQue;
 };
