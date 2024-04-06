@@ -18,8 +18,26 @@ Network::Network()
 void Network::Update()
 {
 	shared_ptr<Packet> packet = make_shared<Packet>();
+	auto objects = GET_SINGLE(SceneManager)->GetActiveScene()->GetGameObjects();
+	auto players = GET_SINGLE(SceneManager)->GetActiveScene()->GetPlayers();
+
 	while (Recv(packet)) {
-		GET_SINGLE(SceneManager)->GetActiveScene()->GetPlayers()[packet->id]->GetTransform()->SetLocalPosition(packet->pos);
+		switch (packet->header.type) {
+		case PACKET_TYPE::PLAYER:
+			players[packet->id]->GetTransform()->SetLocalPosition(packet->pos);
+			break;
+		case PACKET_TYPE::ENEMY:
+			// find target object by id
+			for (auto& object : objects) {
+				if (object->GetID() == packet->id) {
+					// apply packet data to object
+					break;
+				}
+			}
+			break;
+		default:
+			break;
+		}
 	}
 }
 
@@ -93,10 +111,17 @@ void Host::GameLoop()
 			break;
 		case PACKET_TYPE::ENEMY:
 			break;
+			// ...
+		case PACKET_TYPE::NET:
+			// guest disconnect
+			break;
 		default:
 			break;
 		}
 	}
+
+	// TODO: Server game logic
+	// Enemy AI, Collision, etc...
 }
 
 void Host::Update()
@@ -369,7 +394,11 @@ void NetworkScript::LateUpdate()
 	}
 
 	if (INPUT->GetButtonDown(KEY_TYPE::KEY_3)) {
-		// �Խ�Ʈ���� ȣ��Ʈ�� ��ȯ
+		// �Խ�Ʈ���� �̱۷� ��ȯ
+		Packet packet;
+		packet.header.type = PACKET_TYPE::NET;
+		packet.id = -1;
+		GET_SINGLE(NetworkManager)->Send(packet);
 	}
 
 	//Packet packet;

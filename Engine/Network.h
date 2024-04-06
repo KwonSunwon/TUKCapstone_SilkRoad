@@ -15,7 +15,8 @@ enum class PACKET_TYPE {
 	ENEMY,
 	ITEM,
 	// ...
-	END,
+	NET,
+	END
 };
 
 // Packet Struct
@@ -26,8 +27,9 @@ struct PacketHeader {
 
 struct Packet {
 	PacketHeader header;
-	//char data[1024];
+	char data[1024];
 
+	// TEMP
 	Vec3 pos;
 	ushort id;
 };
