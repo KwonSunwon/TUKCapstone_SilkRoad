@@ -5,7 +5,7 @@
 #include "RigidBody.h"
 #include "Transform.h"
 #include "GameObject.h"
-
+#include "Timer.h"
 void JumpAnimationEvent()
 {
 
@@ -14,24 +14,27 @@ void JumpAnimationEvent()
 void TestDragon::Awake()
 {
 	shared_ptr<RigidBody> rb = GetRigidBody();
-	rb->SetDrag(0.001);
-	rb->SetUseGravity(false);
-	rb->SetMass(80.0);
-	rb->SetIsKinematic(false);
+
 }
 void TestDragon::Update()
 {
+
+	float dx = 0;
+	float dy = 0;
+	float dz = 0;
+	float speed = 1000;
+
 	shared_ptr<RigidBody> rb = GetRigidBody();
 	if (INPUT->GetButtonDown(KEY_TYPE::W))
 	{
-		int32 count = GetAnimator()->GetAnimCount();
+		//int32 count = GetAnimator()->GetAnimCount();
 		//int32 currentIndex = GetAnimator()->GetCurrentClipIndex();
-		int32 currentIndex = this->GetGameObject()->m_anim;
+		//int32 currentIndex = this->GetGameObject()->m_anim;
 
-		int32 index = (currentIndex + 1) % count;
+		//int32 index = (currentIndex + 1) % count;
 		//GetAnimator()->Play(index);
 		
-		GetAnimator()->Play(index);
+		//etAnimator()->Play(index);
 	}
 
 	if (INPUT->GetButtonDown(KEY_TYPE::KEY_2))
@@ -45,43 +48,42 @@ void TestDragon::Update()
 	
 
 	if (INPUT->GetButton(KEY_TYPE::W))
-		rb->addForce(GetTransform()->GetLook() * 2000 * rb->GetMass(), FORCEMODE::IMPULSE);
+		dy++;
 
 
 	if (INPUT->GetButton(KEY_TYPE::S))
-		rb->addForce(-GetTransform()->GetLook() * 2000 * rb->GetMass(), FORCEMODE::IMPULSE);
+		dy--;
 
 	if (INPUT->GetButton(KEY_TYPE::A))
-		rb->addForce(-GetTransform()->GetRight() * 2000 * rb->GetMass(), FORCEMODE::IMPULSE);
+		dx--;
 
 
 	if (INPUT->GetButton(KEY_TYPE::D))
-		rb->addForce(GetTransform()->GetRight() * 2000 * rb->GetMass(), FORCEMODE::IMPULSE);
+		dx++;
+
+	if (INPUT->GetButton(KEY_TYPE::Q))
+		dz++;
+
+	if (INPUT->GetButton(KEY_TYPE::E))
+		dz--;
+
 
 	static float a = 0;
-
-
 	if (INPUT->GetButton(KEY_TYPE::LBUTTON))
-		rb->SetUseGravity(true);
-		// a += 0.01;
+		 a += 0.0001;
+
+	GetTransform()->SetLocalRotation(Vec3(a, 0, 0));
 
 	if (INPUT->GetButtonDown(KEY_TYPE::RBUTTON))
-		if (rb->GetIsLanding()) {
-			GetAnimator()->Play(1);
-			GetAnimator()->SetEventFunction(1, 0.5f, [this,rb](){rb->addForce(GetTransform()->GetUp() * 700, FORCEMODE::VELOCITYCHANGE); });
-		}
-			
+	{ }
 
+	Vec3 dir{ dx,dz,dy };
+	dir.Normalize();
 
-	GetTransform()->SetLocalRotation(Vec3(0, a, 0));
+	Vec3 velocity = dir * speed * DELTA_TIME;
 
-	//if (INPUT->GetButton(KEY_TYPE::A))
-	//	pos -= GetTransform()->GetRight() * m_speed * DELTA_TIME;
+	rb->Move(velocity);
 
-	//if (INPUT->GetButton(KEY_TYPE::D))
-	//	pos += GetTransform()->GetRight() * m_speed * DELTA_TIME;
-
-	
 
 }
 

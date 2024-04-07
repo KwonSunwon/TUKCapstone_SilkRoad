@@ -22,110 +22,13 @@ RigidBody::~RigidBody()
 
 void RigidBody::Awake()
 {
-
+	m_position = GetTransform()->GetLocalPosition();
 }
 
 void RigidBody::FinalUpdate()
 {
-	if (m_isKinematic)
-		return;
-
-	applyGravity();
-	applyDrag();
-	applyFriction();
-	updatePosition();
-}
-
-void RigidBody::applyGravity()
-{
-	if (!m_useGravity)
-		return;
-
-	accelerate(m_gravity);
-}
-
-void RigidBody::applyFriction()
-{
-	float normalForce = m_mass * m_gravity.y;
-	float friction = m_frictionCoef * normalForce;
-	Vec3 frictionDir = m_velocity;
-	float mag = frictionDir.Length();
-	if (mag > FLT_EPSILON) {
-		frictionDir /= mag;
-		Vec3 frictionForce = frictionDir * friction;
-		Vec3 frictionAcc = frictionForce / m_mass;
-		frictionAcc.y = 0;
-		accelerate(frictionAcc);
-	}
-	 
-}
-
-void RigidBody::applyDrag()
-{
-	float dragMag = m_velocity.y * m_drag;
-	Vec3 dragDir = Vec3(0, 1, 0);
-
-	dragDir *= -dragMag;
-	addForce(dragDir, FORCEMODE::IMPULSE);
-}
-
-void RigidBody::updatePosition()
-{
-	m_position = GetTransform()->GetLocalPosition();
-	m_priorPosition = m_position;
-	m_velocity += m_acceleration * DELTA_TIME;
-	m_position += m_velocity * DELTA_TIME;
-	m_acceleration = {};
-
-	if (m_velocity.Length() > m_maxVelocity) {
-		m_velocity.Normalize();
-		m_velocity *= m_maxVelocity;
-	}
-
-	float y = GET_SINGLE(SceneManager)->GetActiveScene()->m_terrain->GetTerrain()->getHeight(m_position.x, m_position.z);
-	if (m_position.y - y <= FLT_EPSILON) {
-		m_position.y = y;
-		m_velocity.y = 0;
-		m_isLanding = true;
-	}
-	else {
-		m_isLanding = false;
-	}
 	GetTransform()->SetLocalPosition(m_position);
-	
-	Vec3 difPos = m_position - m_priorPosition;
-	if (difPos.Length() > FLT_EPSILON)
-	{
-		GetGameObject()->GetCollider()->UpdateNodePos();
-	}
 }
 
-void RigidBody::accelerate(Vec3 acc)
-{
-	m_acceleration += acc;
-}
 
-void RigidBody::addForce(Vec3 dir, FORCEMODE fm)
-{
-	switch (fm) {
-	case FORCEMODE::FORCE:
-		break;
-
-	case FORCEMODE::ACCELERATION:
-		accelerate(dir);
-		break;
-
-	case FORCEMODE::IMPULSE:
-		accelerate(dir / m_mass);
-		break;
-
-	case FORCEMODE::VELOCITYCHANGE:
-		m_velocity += dir;
-		break;
-
-	default:
-		
-		break;
-	}
-}
 

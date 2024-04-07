@@ -207,8 +207,13 @@ shared_ptr<OcNode> OcTree::FindColliderIncludedNode(shared_ptr<BaseCollider> bs,
 
 	return IncludedNode;
 }
-float mult = 0;
-float mult2 = 100;
+array<int, 3> planeX{ 0,3,1 };
+array<int, 3> planeY{ 1,2,2 };
+array<int, 3> planeZ{ 2,6,5 };
+
+array<int, 3> lineX{ 0,1,1 };
+array<int, 3> lineY{ 1,2,5 };
+
 void OcTree::CollisionInspectionToParrent(shared_ptr<BaseCollider> bs, shared_ptr<OcNode> currentNode)
 {
 	// 최상위 노드까지 왔을 경우 리턴
@@ -218,77 +223,232 @@ void OcTree::CollisionInspectionToParrent(shared_ptr<BaseCollider> bs, shared_pt
 
 	for (int i = 0; i < currentNode->IncludedObjectAABBCount(); i++)
 	{
+		shared_ptr<BaseCollider> bsDst = currentNode->IncludedObjectAABB(i);
+
 
 		// 자기 자신에 대한 충돌검사는 수행하지 않음
-		if (bs->GetColliderId() == currentNode->IncludedObjectAABB(i)->GetColliderId())
+		if (bs->GetColliderId() >= bsDst->GetColliderId())
 			continue;
 
+		// baseColliser가 Sphere인 경우
+		if (bs->GetColliderType() == ColliderType::Sphere) {
+			shared_ptr<BoundingSphere> boundingSphereSrc = dynamic_pointer_cast<SphereCollider>(bs)->GetBoundingSphere();
 
-		if (currentNode->IncludedObjectAABB(i)->GetColliderType() == ColliderType::Sphere) {
-			shared_ptr<SphereCollider> sphereCollider = dynamic_pointer_cast<SphereCollider>(currentNode->IncludedObjectAABB(i));
-			if (bs->Intersects(sphereCollider->GetBoundingSphere())) {
-				bs->setColor(Vec4(1, 0, 0, 0), true);
+			//대상이 Sphere인 경우
+			if (bsDst->GetColliderType() == ColliderType::Sphere) {
+				shared_ptr<BoundingSphere> boundingSphereDst = dynamic_pointer_cast<SphereCollider>(bsDst)->GetBoundingSphere();
+
+				if (!boundingSphereSrc->Intersects(*boundingSphereDst)) { continue;}
+
+				/*bs->setColor(Vec4(1, 0, 0, 0), true);
+				bsDst->setColor(Vec4(1, 0, 0, 0), true);*/
+
+				Vec3 CenterSrc = boundingSphereSrc->Center;
+				Vec3 CenterDst = boundingSphereDst->Center;
+
+				float distance = SimpleMath::Vector3::Distance(CenterSrc, CenterDst);
+				float radii = boundingSphereSrc->Radius + boundingSphereDst->Radius;
+
+
+				Vec3 normal = CenterDst - CenterSrc;
+				normal.Normalize();
+				float depth = radii - distance;
 
 
 				shared_ptr<RigidBody> rb1 = bs->GetRigidBody();
-				shared_ptr<RigidBody> rb2 = sphereCollider->GetRigidBody();
+				shared_ptr<RigidBody> rb2 = bsDst->GetRigidBody();
 
-				//rb1->SetUseGravity(false);
+				rb1->Move(-normal * depth / 2);
+				rb2->Move(normal * depth / 2);
 
-				float m1 = rb1->GetMass();
-				float m2 = rb2->GetMass();
 
-				// 각각의 강체의 초기 속도를 가져옵니다.
-				Vec3 v1 = rb1->GetVelocity();
-				Vec3 v2 = rb2->GetVelocity();
-
-				// 운동량 보존을 이용하여 충돌 후의 속도를 계산합니다.
-				// 완전탄성충돌에서는 두 물체가 충돌 후에 서로의 속도가 교환됩니다.
-				Vec3 new_v1 = ((m1 - m2) / (m1 + m2)) * v1 + ((2 * m2) / (m1 + m2)) * v2;
-				rb1->addForce(new_v1* mult, FORCEMODE::IMPULSE);
-
-				Vec3 forceDir = rb1->GetPosition() - rb2->GetPosition();
-				forceDir.Normalize();
-				rb1->addForce(forceDir * rb1->GetMass() * mult2, FORCEMODE::IMPULSE);
 			}
 		}
-		else if (currentNode->IncludedObjectAABB(i)->GetColliderType() == ColliderType::Box) {
-			shared_ptr<BoxCollider> boxCollider = dynamic_pointer_cast<BoxCollider>(currentNode->IncludedObjectAABB(i));
-			if (bs->Intersects(boxCollider->GetBoundingBox())) {
-				bs->setColor(Vec4(1, 0, 0, 0), true);
-				
-			}	
-		}
-		else if (currentNode->IncludedObjectAABB(i)->GetColliderType() == ColliderType::OrientedBox) {
-			shared_ptr<OrientedBoxCollider> boxOrientedCollider = dynamic_pointer_cast<OrientedBoxCollider>(currentNode->IncludedObjectAABB(i));
-			if (bs->Intersects(boxOrientedCollider->GetBoundingOrientedBox())) {
-				bs->setColor(Vec4(1, 0, 0, 0), true);
 
-				
+		// baseColliser가 OBB인 경우
+		else if (bs->GetColliderType() == ColliderType::OrientedBox) {
+			shared_ptr<BoundingOrientedBox> boundingOrientedBoxSrc = dynamic_pointer_cast<OrientedBoxCollider>(bs)->GetBoundingOrientedBox();
 
-				std::shared_ptr<RigidBody> rb1 = bs->GetRigidBody();
-				std::shared_ptr<RigidBody> rb2 = boxOrientedCollider->GetRigidBody();
+			//대상이 OBB인 경우
+			if (bsDst->GetColliderType() == ColliderType::OrientedBox) {
+				shared_ptr<BoundingOrientedBox> boundingOrientedBoxDst = dynamic_pointer_cast<OrientedBoxCollider>(bsDst)->GetBoundingOrientedBox();
 
-				//rb1->SetUseGravity(false);
+				bool cantCol = false;
+				Vec3 normal;
+				float depth = FLT_MAX;
 
-				float m1 = rb1->GetMass();
-				float m2 = rb2->GetMass();
+				XMFLOAT3 cornersA[8];
+				XMFLOAT3 cornersB[8];
+				boundingOrientedBoxSrc->GetCorners(cornersA);
+				boundingOrientedBoxDst->GetCorners(cornersB);
 
-				// 각각의 강체의 초기 속도를 가져옵니다.
-				Vec3 v1 = rb1->GetVelocity();
-				Vec3 v2 = rb2->GetVelocity();
+				for (int k = 0; k < 3; ++k) {
+					if (cantCol)
+						break;
 
-				// 운동량 보존을 이용하여 충돌 후의 속도를 계산합니다.
-				// 완전탄성충돌에서는 두 물체가 충돌 후에 서로의 속도가 교환됩니다.
-				Vec3 new_v1 = ((m1 - m2) / (m1 + m2)) * v1 + ((2 * m2) / (m1 + m2)) * v2;
-				rb1->addForce(new_v1 * mult, FORCEMODE::IMPULSE);
+					Vec3 va = cornersA[planeX[k]];
+					Vec3 vb = cornersA[planeY[k]];
+					Vec3 vc = cornersA[planeZ[k]];
 
-				Vec3 forceDir = rb1->GetPosition() - rb2->GetPosition();
-				forceDir.Normalize();
-				rb1->addForce(forceDir * rb1->GetMass() * mult2, FORCEMODE::IMPULSE);
+					Vec3 edgeA = va - vb;
+					Vec3 edgeB = va - vc;
+					Vec3 norm = XMVector3Cross(edgeA, edgeB);
+
+
+					float minA = FLT_MAX;
+					float maxA = FLT_MIN;
+
+					float minB = FLT_MAX;
+					float maxB = FLT_MIN;
+
+					for (int j = 0; j < 8; ++j) {
+						Vec3 VA = cornersA[j];
+						float projA = VA.Dot(norm);
+						minA = min(minA, projA);
+						maxA = max(maxA, projA);
+					}
+
+					for (int j = 0; j < 8; ++j) {
+						Vec3 VB = cornersB[j];
+						float projB = VB.Dot(norm);
+						minB = min(minB, projB);
+						maxB = max(maxB, projB);
+					}
+
+					if (minA >= maxB || minB >= maxA) {
+						cantCol = true;
+						break;
+					}
+
+					float axisDepth = min(maxB - minA, maxA - minB);
+					if (axisDepth < depth) {
+						depth = axisDepth;
+						normal = norm;
+					}
+				}
+
+				for (int k = 0; k < 3; ++k) {
+					if (cantCol)
+						break;
+
+					Vec3 va = cornersB[planeX[k]];
+					Vec3 vb = cornersB[planeY[k]];
+					Vec3 vc = cornersB[planeZ[k]];
+
+					Vec3 edgeA = va - vb;
+					Vec3 edgeB = va - vc;
+					Vec3 norm = XMVector3Cross(edgeA, edgeB);
+
+
+					float minA = FLT_MAX;
+					float maxA = FLT_MIN;
+
+					float minB = FLT_MAX;
+					float maxB = FLT_MIN;
+
+					for (int j = 0; j < 8; ++j) {
+						Vec3 VA = cornersA[j];
+						float projA = VA.Dot(norm);
+						minA = min(minA, projA);
+						maxA = max(maxA, projA);
+					}
+
+					for (int j = 0; j < 8; ++j) {
+						Vec3 VB = cornersB[j];
+						float projB = VB.Dot(norm);
+						minB = min(minB, projB);
+						maxB = max(maxB, projB);
+					}
+
+					if (minA >= maxB || minB >= maxA) {
+						cantCol = true;
+						break;
+					}
+
+					float axisDepth = min((maxB - minA), (maxA - minB));
+					if (axisDepth < depth) {
+						depth = axisDepth;
+						normal = norm;
+					}
+				}
+
+				for (int q = 0; q < 3; ++q) {
+					if (cantCol)
+						break;
+
+					Vec3 va1 = cornersA[lineX[q]];
+					Vec3 va2 = cornersA[lineY[q]];
+					Vec3 edgeA = va1 - va2;
+
+					for (int w = 0; w < 3; ++w) {
+						Vec3 vb1 = cornersB[lineX[w]];
+						Vec3 vb2 = cornersB[lineY[w]];
+						Vec3 edgeB = vb1 - vb2;
+						Vec3 norm = XMVector3Cross(edgeA, edgeB);
+
+						if (norm.Length() < FLT_EPSILON)
+							continue;
+
+						float minA = FLT_MAX;
+						float maxA = FLT_MIN;
+
+						float minB = FLT_MAX;
+						float maxB = FLT_MIN;
+
+						for (int j = 0; j < 8; ++j) {
+							Vec3 VA = cornersA[j];
+							float projA = VA.Dot(norm);
+							minA = min(minA, projA);
+							maxA = max(maxA, projA);
+						}
+
+						for (int j = 0; j < 8; ++j) {
+							Vec3 VB = cornersB[j];
+							float projB = VB.Dot(norm);
+							minB = min(minB, projB);
+							maxB = max(maxB, projB);
+						}
+
+						if (minA >= maxB || minB >= maxA) {
+							cantCol = true;
+							break;
+						}
+
+						float axisDepth = min((maxB - minA), (maxA - minB));
+						if (axisDepth < depth) {
+							depth = axisDepth;
+							normal = norm;
+						}
+
+					}
+				}
+
+				if (!cantCol) {
+					depth /= normal.Length();
+					normal.Normalize();
+
+					Vec3 centerA = boundingOrientedBoxSrc->Center;
+					Vec3 centerB = boundingOrientedBoxDst->Center;
+					Vec3 dir = centerB - centerA;
+
+					if (dir.Dot(normal) < 0.f) {
+						normal = -normal;
+					}
+
+					shared_ptr<RigidBody> rb1 = bs->GetRigidBody();
+					shared_ptr<RigidBody> rb2 = bsDst->GetRigidBody();
+					bs->setColor(Vec4(1, 0, 0, 0), true);
+					bsDst->setColor(Vec4(1, 0, 0, 0), true);
+					rb1->Move(-normal * depth / 2);
+					rb2->Move(normal * depth / 2);;
+				}
+
 			}
+
+
 		}
-		
+
+
 	}
 
 	// 현재 노드의 부모에 대한 충돌 검사를 재귀적으로 수행
@@ -311,76 +471,234 @@ void OcTree::CollisionInspectionToChild(shared_ptr<BaseCollider> bs, shared_ptr<
 	{
 		shared_ptr<OcNode> childNode = currentNode->GetChildNode(i);
 
-		for (int i = 0; i < childNode->IncludedObjectAABBCount(); i++)
+		for (int m = 0; m < childNode->IncludedObjectAABBCount(); m++)
 		{
-			if (bs->GetColliderId() == childNode->IncludedObjectAABB(i)->GetColliderId())
+			shared_ptr<BaseCollider> bsDst = childNode->IncludedObjectAABB(m);
+			// 자기 자신에 대한 충돌검사는 수행하지 않음
+			if (bs->GetColliderId() >= bsDst->GetColliderId())
 				continue;
-			// 파라미터로 넘어온 aabb와 자식 노드에 속하는 오브젝트 AABB와 충돌하는지 검사
-			if (childNode->IncludedObjectAABB(i)->GetColliderType() == ColliderType::Sphere) {
-				shared_ptr<SphereCollider> sphereCollider = dynamic_pointer_cast<SphereCollider>(childNode->IncludedObjectAABB(i));
-				if (bs->Intersects(sphereCollider->GetBoundingSphere())) {
-					bs->setColor(Vec4(1, 0, 0, 0), true);
+
+			// baseColliser가 Sphere인 경우
+			if (bs->GetColliderType() == ColliderType::Sphere) {
+				shared_ptr<BoundingSphere> boundingSphereSrc = dynamic_pointer_cast<SphereCollider>(bs)->GetBoundingSphere();
+
+				//대상이 Sphere인 경우
+				if (bsDst->GetColliderType() == ColliderType::Sphere) {
+					shared_ptr<BoundingSphere> boundingSphereDst = dynamic_pointer_cast<SphereCollider>(bsDst)->GetBoundingSphere();
+
+					if (!boundingSphereSrc->Intersects(*boundingSphereDst)) { continue; }
+
+					/*bs->setColor(Vec4(1, 0, 0, 0), true);
+					bsDst->setColor(Vec4(1, 0, 0, 0), true);*/
+
+					Vec3 CenterSrc = boundingSphereSrc->Center;
+					Vec3 CenterDst = boundingSphereDst->Center;
+
+					float distance = SimpleMath::Vector3::Distance(CenterSrc, CenterDst);
+					float radii = boundingSphereSrc->Radius + boundingSphereDst->Radius;
 
 
-					std::shared_ptr<RigidBody> rb1 = bs->GetRigidBody();
-					std::shared_ptr<RigidBody> rb2 = sphereCollider->GetRigidBody();
+					Vec3 normal = CenterDst - CenterSrc;
+					normal.Normalize();
+					float depth = radii - distance;
 
-					//rb1->SetUseGravity(false);
 
-					float m1 = rb1->GetMass();
-					float m2 = rb2->GetMass();
+					shared_ptr<RigidBody> rb1 = bs->GetRigidBody();
+					shared_ptr<RigidBody> rb2 = bsDst->GetRigidBody();
 
-					// 각각의 강체의 초기 속도를 가져옵니다.
-					Vec3 v1 = rb1->GetVelocity();
-					Vec3 v2 = rb2->GetVelocity();
+					rb1->Move(-normal * depth / 2);
+					rb2->Move(normal * depth / 2);
 
-					// 운동량 보존을 이용하여 충돌 후의 속도를 계산합니다.
-					// 완전탄성충돌에서는 두 물체가 충돌 후에 서로의 속도가 교환됩니다.
-					Vec3 new_v1 = ((m1 - m2) / (m1 + m2)) * v1 + ((2 * m2) / (m1 + m2)) * v2;
-					rb1->addForce(new_v1 * mult, FORCEMODE::IMPULSE);
 
-					Vec3 forceDir = rb1->GetPosition() - rb2->GetPosition();
-					forceDir.Normalize();
-					rb1->addForce(forceDir * rb1->GetMass() * mult2, FORCEMODE::IMPULSE);
-					
 				}
+
 			}
-			else if (childNode->IncludedObjectAABB(i)->GetColliderType() == ColliderType::Box) {
-				shared_ptr<BoxCollider> boxCollider = dynamic_pointer_cast<BoxCollider>(childNode->IncludedObjectAABB(i));
-				if (bs->Intersects(boxCollider->GetBoundingBox())) {
-					bs->setColor(Vec4(1, 0, 0, 0), true);
-					
+
+			// baseColliser가 OBB인 경우
+			else if (bs->GetColliderType() == ColliderType::OrientedBox) {
+				shared_ptr<BoundingOrientedBox> boundingOrientedBoxSrc = dynamic_pointer_cast<OrientedBoxCollider>(bs)->GetBoundingOrientedBox();
+
+				//대상이 OBB인 경우
+				if (bsDst->GetColliderType() == ColliderType::OrientedBox) {
+					shared_ptr<BoundingOrientedBox> boundingOrientedBoxDst = dynamic_pointer_cast<OrientedBoxCollider>(bsDst)->GetBoundingOrientedBox();
+
+					bool cantCol = false;
+					Vec3 normal;
+					float depth = FLT_MAX;
+
+					XMFLOAT3 cornersA[8];
+					XMFLOAT3 cornersB[8];
+					boundingOrientedBoxSrc->GetCorners(cornersA);
+					boundingOrientedBoxDst->GetCorners(cornersB);
+
+					for (int k = 0; k < 3; ++k) {
+						if (cantCol)
+							break;
+
+						Vec3 va = cornersA[planeX[k]];
+						Vec3 vb = cornersA[planeY[k]];
+						Vec3 vc = cornersA[planeZ[k]];
+
+						Vec3 edgeA = va - vb;
+						Vec3 edgeB = va - vc;
+						Vec3 norm = XMVector3Cross(edgeA, edgeB);
+
+
+						float minA = FLT_MAX;
+						float maxA = FLT_MIN;
+
+						float minB = FLT_MAX;
+						float maxB = FLT_MIN;
+
+						for (int j = 0; j < 8; ++j) {
+							Vec3 VA = cornersA[j];
+							float projA = VA.Dot(norm);
+							minA = min(minA, projA);
+							maxA = max(maxA, projA);
+						}
+
+						for (int j = 0; j < 8; ++j) {
+							Vec3 VB = cornersB[j];
+							float projB = VB.Dot(norm);
+							minB = min(minB, projB);
+							maxB = max(maxB, projB);
+						}
+
+						if (minA >= maxB || minB >= maxA) {
+							cantCol = true;
+							break;
+						}
+
+						float axisDepth = min(maxB - minA, maxA - minB);
+						if (axisDepth < depth) {
+							depth = axisDepth;
+							normal = norm;
+						}
+					}
+
+					for (int k = 0; k < 3; ++k) {
+						if (cantCol)
+							break;
+
+						Vec3 va = cornersB[planeX[k]];
+						Vec3 vb = cornersB[planeY[k]];
+						Vec3 vc = cornersB[planeZ[k]];
+
+						Vec3 edgeA = va - vb;
+						Vec3 edgeB = va - vc;
+						Vec3 norm = XMVector3Cross(edgeA, edgeB);
+
+
+						float minA = FLT_MAX;
+						float maxA = FLT_MIN;
+
+						float minB = FLT_MAX;
+						float maxB = FLT_MIN;
+
+						for (int j = 0; j < 8; ++j) {
+							Vec3 VA = cornersA[j];
+							float projA = VA.Dot(norm);
+							minA = min(minA, projA);
+							maxA = max(maxA, projA);
+						}
+
+						for (int j = 0; j < 8; ++j) {
+							Vec3 VB = cornersB[j];
+							float projB = VB.Dot(norm);
+							minB = min(minB, projB);
+							maxB = max(maxB, projB);
+						}
+
+						if (minA >= maxB || minB >= maxA) {
+							cantCol = true;
+							break;
+						}
+
+						float axisDepth = min((maxB - minA), (maxA - minB));
+						if (axisDepth < depth) {
+							depth = axisDepth;
+							normal = norm;
+						}
+					}
+
+					for (int q = 0; q < 3; ++q) {
+						if (cantCol)
+							break;
+
+						Vec3 va1 = cornersA[lineX[q]];
+						Vec3 va2 = cornersA[lineY[q]];
+						Vec3 edgeA = va1 - va2;
+
+						for (int w = 0; w < 3; ++w) {
+							Vec3 vb1 = cornersB[lineX[w]];
+							Vec3 vb2 = cornersB[lineY[w]];
+							Vec3 edgeB = vb1 - vb2;
+							Vec3 norm = XMVector3Cross(edgeA, edgeB);
+
+							if (norm.Length() < FLT_EPSILON)
+								continue;
+
+							float minA = FLT_MAX;
+							float maxA = FLT_MIN;
+
+							float minB = FLT_MAX;
+							float maxB = FLT_MIN;
+
+							for (int j = 0; j < 8; ++j) {
+								Vec3 VA = cornersA[j];
+								float projA = VA.Dot(norm);
+								minA = min(minA, projA);
+								maxA = max(maxA, projA);
+							}
+
+							for (int j = 0; j < 8; ++j) {
+								Vec3 VB = cornersB[j];
+								float projB = VB.Dot(norm);
+								minB = min(minB, projB);
+								maxB = max(maxB, projB);
+							}
+
+							if (minA >= maxB || minB >= maxA) {
+								cantCol = true;
+								break;
+							}
+
+							float axisDepth = min((maxB - minA), (maxA - minB));
+							if (axisDepth < depth) {
+								depth = axisDepth;
+								normal = norm;
+							}
+
+						}
+					}
+
+					if (!cantCol) {
+						depth /= normal.Length();
+						normal.Normalize();
+
+						Vec3 centerA = boundingOrientedBoxSrc->Center;
+						Vec3 centerB = boundingOrientedBoxDst->Center;
+						Vec3 dir = centerB - centerA;
+
+						if (dir.Dot(normal) < 0.f) {
+							normal = -normal;
+						}
+
+
+						shared_ptr<RigidBody> rb1 = bs->GetRigidBody();
+						shared_ptr<RigidBody> rb2 = bsDst->GetRigidBody();
+						bs->setColor(Vec4(1, 0, 0, 0), true);
+						bsDst->setColor(Vec4(1, 0, 0, 0), true);
+						rb1->Move(-normal * depth / 2);
+						rb2->Move(normal * depth / 2);;
+					}
+
 				}
+
+
 			}
-			else if (childNode->IncludedObjectAABB(i)->GetColliderType() == ColliderType::OrientedBox) {
-				shared_ptr<OrientedBoxCollider> boxOrientedCollider = dynamic_pointer_cast<OrientedBoxCollider>(childNode->IncludedObjectAABB(i));
-				if (bs->Intersects(boxOrientedCollider->GetBoundingOrientedBox())) {
-					bs->setColor(Vec4(1, 0, 0, 0), true);
-					
 
-					std::shared_ptr<RigidBody> rb1 = bs->GetRigidBody();
-					std::shared_ptr<RigidBody> rb2 = boxOrientedCollider->GetRigidBody();
-
-					//rb1->SetUseGravity(false);
-
-					float m1 = rb1->GetMass();
-					float m2 = rb2->GetMass();
-
-					// 각각의 강체의 초기 속도를 가져옵니다.
-					Vec3 v1 = rb1->GetVelocity();
-					Vec3 v2 = rb2->GetVelocity();
-
-					// 운동량 보존을 이용하여 충돌 후의 속도를 계산합니다.
-					// 완전탄성충돌에서는 두 물체가 충돌 후에 서로의 속도가 교환됩니다.
-					Vec3 new_v1 = ((m1 - m2) / (m1 + m2)) * v1 + ((2 * m2) / (m1 + m2)) * v2;
-					rb1->addForce(new_v1 * mult, FORCEMODE::IMPULSE);
-
-
-					Vec3 forceDir = rb1->GetPosition() - rb2->GetPosition();
-					forceDir.Normalize();
-					rb1->addForce(forceDir * rb1->GetMass() * mult2, FORCEMODE::IMPULSE);
-				}
-			}
+			
 	
 		}
 
