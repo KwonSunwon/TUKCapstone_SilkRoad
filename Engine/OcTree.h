@@ -29,4 +29,13 @@ private:
 	void CollisionInspectionToParrent(shared_ptr<BaseCollider> bs, shared_ptr<OcNode> currentNode);
 	/* 현재 노드에 자식에 대한 충돌 검사를 수행 */
 	void CollisionInspectionToChild(shared_ptr<BaseCollider> bs, shared_ptr<OcNode> currentNode);
+
+	bool ProjectileFromCubePlane(shared_ptr<BoundingOrientedBox> mainCube, shared_ptr<BoundingOrientedBox> subCube,
+		shared_ptr<Vec3> normal, shared_ptr<float>depth);
+
+	bool ProjectileFromCubeEdges(shared_ptr<BoundingOrientedBox> mainCube, shared_ptr<BoundingOrientedBox> subCube,
+		shared_ptr<Vec3> normal, shared_ptr<float>depth);
+
+	bool ProjectileFromCubePlaneWithSphere(shared_ptr<BoundingOrientedBox> mainCube, shared_ptr<BoundingSphere> mainSphere,
+		shared_ptr<Vec3> normal, shared_ptr<float>depth);
 };

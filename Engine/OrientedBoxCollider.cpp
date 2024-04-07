@@ -66,9 +66,9 @@ void OrientedBoxCollider::FinalUpdate()
 	m_goTransform->SetLocalRotation(roatate);
 
 	DirectX::XMFLOAT3 eulerRadians(
-		DirectX::XMConvertToRadians(roatate.x),
-		DirectX::XMConvertToRadians(roatate.y),
-		DirectX::XMConvertToRadians(roatate.z)
+		roatate.x,
+		roatate.y,
+		roatate.z
 	);
 
 	DirectX::XMVECTOR quaternion = DirectX::XMQuaternionRotationRollPitchYawFromVector(

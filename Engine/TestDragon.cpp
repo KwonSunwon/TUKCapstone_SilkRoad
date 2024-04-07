@@ -70,7 +70,7 @@ void TestDragon::Update()
 
 	static float a = 0;
 	if (INPUT->GetButton(KEY_TYPE::LBUTTON))
-		 a += 0.0001;
+		 a -= 0.0001;
 
 	GetTransform()->SetLocalRotation(Vec3(a, 0, 0));
 

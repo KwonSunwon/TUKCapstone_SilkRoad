@@ -208,8 +208,8 @@ shared_ptr<OcNode> OcTree::FindColliderIncludedNode(shared_ptr<BaseCollider> bs,
 	return IncludedNode;
 }
 array<int, 3> planeX{ 0,3,1 };
-array<int, 3> planeY{ 1,2,2 };
-array<int, 3> planeZ{ 2,6,5 };
+array<int, 3> planeY{ 1,2,5 };
+array<int, 3> planeZ{ 2,6,6 };
 
 array<int, 3> lineX{ 0,1,1 };
 array<int, 3> lineY{ 1,2,5 };
@@ -240,8 +240,8 @@ void OcTree::CollisionInspectionToParrent(shared_ptr<BaseCollider> bs, shared_pt
 
 				if (!boundingSphereSrc->Intersects(*boundingSphereDst)) { continue;}
 
-				/*bs->setColor(Vec4(1, 0, 0, 0), true);
-				bsDst->setColor(Vec4(1, 0, 0, 0), true);*/
+				bs->setColor(Vec4(1, 0, 0, 0), true);
+				bsDst->setColor(Vec4(1, 0, 0, 0), true);
 
 				Vec3 CenterSrc = boundingSphereSrc->Center;
 				Vec3 CenterDst = boundingSphereDst->Center;
@@ -274,173 +274,31 @@ void OcTree::CollisionInspectionToParrent(shared_ptr<BaseCollider> bs, shared_pt
 				shared_ptr<BoundingOrientedBox> boundingOrientedBoxDst = dynamic_pointer_cast<OrientedBoxCollider>(bsDst)->GetBoundingOrientedBox();
 
 				bool cantCol = false;
-				Vec3 normal;
-				float depth = FLT_MAX;
+				shared_ptr<Vec3> normal = make_shared<Vec3>();
+				shared_ptr<float>depth = make_shared<float>(FLT_MAX);
+				*depth = FLT_MAX;
 
-				XMFLOAT3 cornersA[8];
-				XMFLOAT3 cornersB[8];
-				boundingOrientedBoxSrc->GetCorners(cornersA);
-				boundingOrientedBoxDst->GetCorners(cornersB);
-
-				for (int k = 0; k < 3; ++k) {
-					if (cantCol)
-						break;
-
-					Vec3 va = cornersA[planeX[k]];
-					Vec3 vb = cornersA[planeY[k]];
-					Vec3 vc = cornersA[planeZ[k]];
-
-					Vec3 edgeA = va - vb;
-					Vec3 edgeB = va - vc;
-					Vec3 norm = XMVector3Cross(edgeA, edgeB);
-
-
-					float minA = FLT_MAX;
-					float maxA = FLT_MIN;
-
-					float minB = FLT_MAX;
-					float maxB = FLT_MIN;
-
-					for (int j = 0; j < 8; ++j) {
-						Vec3 VA = cornersA[j];
-						float projA = VA.Dot(norm);
-						minA = min(minA, projA);
-						maxA = max(maxA, projA);
-					}
-
-					for (int j = 0; j < 8; ++j) {
-						Vec3 VB = cornersB[j];
-						float projB = VB.Dot(norm);
-						minB = min(minB, projB);
-						maxB = max(maxB, projB);
-					}
-
-					if (minA >= maxB || minB >= maxA) {
-						cantCol = true;
-						break;
-					}
-
-					float axisDepth = min(maxB - minA, maxA - minB);
-					if (axisDepth < depth) {
-						depth = axisDepth;
-						normal = norm;
-					}
-				}
-
-				for (int k = 0; k < 3; ++k) {
-					if (cantCol)
-						break;
-
-					Vec3 va = cornersB[planeX[k]];
-					Vec3 vb = cornersB[planeY[k]];
-					Vec3 vc = cornersB[planeZ[k]];
-
-					Vec3 edgeA = va - vb;
-					Vec3 edgeB = va - vc;
-					Vec3 norm = XMVector3Cross(edgeA, edgeB);
-
-
-					float minA = FLT_MAX;
-					float maxA = FLT_MIN;
-
-					float minB = FLT_MAX;
-					float maxB = FLT_MIN;
-
-					for (int j = 0; j < 8; ++j) {
-						Vec3 VA = cornersA[j];
-						float projA = VA.Dot(norm);
-						minA = min(minA, projA);
-						maxA = max(maxA, projA);
-					}
-
-					for (int j = 0; j < 8; ++j) {
-						Vec3 VB = cornersB[j];
-						float projB = VB.Dot(norm);
-						minB = min(minB, projB);
-						maxB = max(maxB, projB);
-					}
-
-					if (minA >= maxB || minB >= maxA) {
-						cantCol = true;
-						break;
-					}
-
-					float axisDepth = min((maxB - minA), (maxA - minB));
-					if (axisDepth < depth) {
-						depth = axisDepth;
-						normal = norm;
-					}
-				}
-
-				for (int q = 0; q < 3; ++q) {
-					if (cantCol)
-						break;
-
-					Vec3 va1 = cornersA[lineX[q]];
-					Vec3 va2 = cornersA[lineY[q]];
-					Vec3 edgeA = va1 - va2;
-
-					for (int w = 0; w < 3; ++w) {
-						Vec3 vb1 = cornersB[lineX[w]];
-						Vec3 vb2 = cornersB[lineY[w]];
-						Vec3 edgeB = vb1 - vb2;
-						Vec3 norm = XMVector3Cross(edgeA, edgeB);
-
-						if (norm.Length() < FLT_EPSILON)
-							continue;
-
-						float minA = FLT_MAX;
-						float maxA = FLT_MIN;
-
-						float minB = FLT_MAX;
-						float maxB = FLT_MIN;
-
-						for (int j = 0; j < 8; ++j) {
-							Vec3 VA = cornersA[j];
-							float projA = VA.Dot(norm);
-							minA = min(minA, projA);
-							maxA = max(maxA, projA);
-						}
-
-						for (int j = 0; j < 8; ++j) {
-							Vec3 VB = cornersB[j];
-							float projB = VB.Dot(norm);
-							minB = min(minB, projB);
-							maxB = max(maxB, projB);
-						}
-
-						if (minA >= maxB || minB >= maxA) {
-							cantCol = true;
-							break;
-						}
-
-						float axisDepth = min((maxB - minA), (maxA - minB));
-						if (axisDepth < depth) {
-							depth = axisDepth;
-							normal = norm;
-						}
-
-					}
-				}
-
+				cantCol = ProjectileFromCubePlane(boundingOrientedBoxSrc, boundingOrientedBoxDst, normal, depth);
+				if (!cantCol)	cantCol = ProjectileFromCubePlane(boundingOrientedBoxDst, boundingOrientedBoxSrc, normal, depth);
+				if (!cantCol)	cantCol = ProjectileFromCubeEdges(boundingOrientedBoxSrc, boundingOrientedBoxDst, normal, depth);
 				if (!cantCol) {
-					depth /= normal.Length();
-					normal.Normalize();
+					*depth /= (*normal).Length();
+					(*normal).Normalize();
 
 					Vec3 centerA = boundingOrientedBoxSrc->Center;
 					Vec3 centerB = boundingOrientedBoxDst->Center;
 					Vec3 dir = centerB - centerA;
 
-					if (dir.Dot(normal) < 0.f) {
-						normal = -normal;
+					if (dir.Dot(*normal) < 0.f) {
+						*normal = -(*normal);
 					}
 
 					shared_ptr<RigidBody> rb1 = bs->GetRigidBody();
 					shared_ptr<RigidBody> rb2 = bsDst->GetRigidBody();
 					bs->setColor(Vec4(1, 0, 0, 0), true);
 					bsDst->setColor(Vec4(1, 0, 0, 0), true);
-					rb1->Move(-normal * depth / 2);
-					rb2->Move(normal * depth / 2);;
+					rb1->Move(-(*normal) * (*depth) / 2);
+					rb2->Move(*normal * (*depth) / 2);
 				}
 
 			}
@@ -488,8 +346,8 @@ void OcTree::CollisionInspectionToChild(shared_ptr<BaseCollider> bs, shared_ptr<
 
 					if (!boundingSphereSrc->Intersects(*boundingSphereDst)) { continue; }
 
-					/*bs->setColor(Vec4(1, 0, 0, 0), true);
-					bsDst->setColor(Vec4(1, 0, 0, 0), true);*/
+					bs->setColor(Vec4(1, 0, 0, 0), true);
+					bsDst->setColor(Vec4(1, 0, 0, 0), true);
 
 					Vec3 CenterSrc = boundingSphereSrc->Center;
 					Vec3 CenterDst = boundingSphereDst->Center;
@@ -512,6 +370,34 @@ void OcTree::CollisionInspectionToChild(shared_ptr<BaseCollider> bs, shared_ptr<
 
 				}
 
+				//대상이 OBB인 경우
+				else if (bsDst->GetColliderType() == ColliderType::OrientedBox) {
+					shared_ptr<BoundingOrientedBox> boundingOrientedBoxDst = dynamic_pointer_cast<OrientedBoxCollider>(bsDst)->GetBoundingOrientedBox();
+					
+					bool cantCol = false;
+					shared_ptr<Vec3> normal = make_shared<Vec3>();
+					shared_ptr<float>depth = make_shared<float>(FLT_MAX);
+					*depth = FLT_MAX;
+
+					cantCol = ProjectileFromCubePlaneWithSphere(boundingOrientedBoxDst, boundingSphereSrc, normal, depth);
+					if (!cantCol) {
+						Vec3 sphereCenter = boundingSphereSrc->Center;
+						Vec3 centerB = boundingOrientedBoxDst->Center;
+						Vec3 dir = centerB - sphereCenter;
+
+						if (dir.Dot(*normal) < 0.f) {
+							*normal = -(*normal);
+						}
+
+						shared_ptr<RigidBody> rb1 = bs->GetRigidBody();
+						shared_ptr<RigidBody> rb2 = bsDst->GetRigidBody();
+						bs->setColor(Vec4(1, 0, 0, 0), true);
+						bsDst->setColor(Vec4(1, 0, 0, 0), true);
+						rb1->Move(-(*normal) * (*depth) / 2);
+						rb2->Move(*normal * (*depth) / 2);
+					}
+				}
+
 			}
 
 			// baseColliser가 OBB인 경우
@@ -522,177 +408,81 @@ void OcTree::CollisionInspectionToChild(shared_ptr<BaseCollider> bs, shared_ptr<
 				if (bsDst->GetColliderType() == ColliderType::OrientedBox) {
 					shared_ptr<BoundingOrientedBox> boundingOrientedBoxDst = dynamic_pointer_cast<OrientedBoxCollider>(bsDst)->GetBoundingOrientedBox();
 
+
+					
 					bool cantCol = false;
-					Vec3 normal;
-					float depth = FLT_MAX;
+					shared_ptr<Vec3> normal = make_shared<Vec3>();
+					shared_ptr<float>depth = make_shared<float>(FLT_MAX);
+					*depth = FLT_MAX;
 
-					XMFLOAT3 cornersA[8];
-					XMFLOAT3 cornersB[8];
-					boundingOrientedBoxSrc->GetCorners(cornersA);
-					boundingOrientedBoxDst->GetCorners(cornersB);
-
-					for (int k = 0; k < 3; ++k) {
-						if (cantCol)
-							break;
-
-						Vec3 va = cornersA[planeX[k]];
-						Vec3 vb = cornersA[planeY[k]];
-						Vec3 vc = cornersA[planeZ[k]];
-
-						Vec3 edgeA = va - vb;
-						Vec3 edgeB = va - vc;
-						Vec3 norm = XMVector3Cross(edgeA, edgeB);
-
-
-						float minA = FLT_MAX;
-						float maxA = FLT_MIN;
-
-						float minB = FLT_MAX;
-						float maxB = FLT_MIN;
-
-						for (int j = 0; j < 8; ++j) {
-							Vec3 VA = cornersA[j];
-							float projA = VA.Dot(norm);
-							minA = min(minA, projA);
-							maxA = max(maxA, projA);
-						}
-
-						for (int j = 0; j < 8; ++j) {
-							Vec3 VB = cornersB[j];
-							float projB = VB.Dot(norm);
-							minB = min(minB, projB);
-							maxB = max(maxB, projB);
-						}
-
-						if (minA >= maxB || minB >= maxA) {
-							cantCol = true;
-							break;
-						}
-
-						float axisDepth = min(maxB - minA, maxA - minB);
-						if (axisDepth < depth) {
-							depth = axisDepth;
-							normal = norm;
-						}
-					}
-
-					for (int k = 0; k < 3; ++k) {
-						if (cantCol)
-							break;
-
-						Vec3 va = cornersB[planeX[k]];
-						Vec3 vb = cornersB[planeY[k]];
-						Vec3 vc = cornersB[planeZ[k]];
-
-						Vec3 edgeA = va - vb;
-						Vec3 edgeB = va - vc;
-						Vec3 norm = XMVector3Cross(edgeA, edgeB);
-
-
-						float minA = FLT_MAX;
-						float maxA = FLT_MIN;
-
-						float minB = FLT_MAX;
-						float maxB = FLT_MIN;
-
-						for (int j = 0; j < 8; ++j) {
-							Vec3 VA = cornersA[j];
-							float projA = VA.Dot(norm);
-							minA = min(minA, projA);
-							maxA = max(maxA, projA);
-						}
-
-						for (int j = 0; j < 8; ++j) {
-							Vec3 VB = cornersB[j];
-							float projB = VB.Dot(norm);
-							minB = min(minB, projB);
-							maxB = max(maxB, projB);
-						}
-
-						if (minA >= maxB || minB >= maxA) {
-							cantCol = true;
-							break;
-						}
-
-						float axisDepth = min((maxB - minA), (maxA - minB));
-						if (axisDepth < depth) {
-							depth = axisDepth;
-							normal = norm;
-						}
-					}
-
-					for (int q = 0; q < 3; ++q) {
-						if (cantCol)
-							break;
-
-						Vec3 va1 = cornersA[lineX[q]];
-						Vec3 va2 = cornersA[lineY[q]];
-						Vec3 edgeA = va1 - va2;
-
-						for (int w = 0; w < 3; ++w) {
-							Vec3 vb1 = cornersB[lineX[w]];
-							Vec3 vb2 = cornersB[lineY[w]];
-							Vec3 edgeB = vb1 - vb2;
-							Vec3 norm = XMVector3Cross(edgeA, edgeB);
-
-							if (norm.Length() < FLT_EPSILON)
-								continue;
-
-							float minA = FLT_MAX;
-							float maxA = FLT_MIN;
-
-							float minB = FLT_MAX;
-							float maxB = FLT_MIN;
-
-							for (int j = 0; j < 8; ++j) {
-								Vec3 VA = cornersA[j];
-								float projA = VA.Dot(norm);
-								minA = min(minA, projA);
-								maxA = max(maxA, projA);
-							}
-
-							for (int j = 0; j < 8; ++j) {
-								Vec3 VB = cornersB[j];
-								float projB = VB.Dot(norm);
-								minB = min(minB, projB);
-								maxB = max(maxB, projB);
-							}
-
-							if (minA >= maxB || minB >= maxA) {
-								cantCol = true;
-								break;
-							}
-
-							float axisDepth = min((maxB - minA), (maxA - minB));
-							if (axisDepth < depth) {
-								depth = axisDepth;
-								normal = norm;
-							}
-
-						}
-					}
-
+									cantCol = ProjectileFromCubePlane(boundingOrientedBoxSrc, boundingOrientedBoxDst, normal, depth);
+					if (!cantCol)	cantCol = ProjectileFromCubePlane(boundingOrientedBoxDst, boundingOrientedBoxSrc, normal, depth);
+					if (!cantCol)	cantCol = ProjectileFromCubeEdges(boundingOrientedBoxSrc, boundingOrientedBoxDst, normal, depth);
 					if (!cantCol) {
-						depth /= normal.Length();
-						normal.Normalize();
+						*depth /= (*normal).Length();
+						(*normal).Normalize();
 
 						Vec3 centerA = boundingOrientedBoxSrc->Center;
 						Vec3 centerB = boundingOrientedBoxDst->Center;
 						Vec3 dir = centerB - centerA;
 
-						if (dir.Dot(normal) < 0.f) {
-							normal = -normal;
+						if (dir.Dot(*normal) < 0.f) {
+							*normal = -(*normal);
 						}
-
 
 						shared_ptr<RigidBody> rb1 = bs->GetRigidBody();
 						shared_ptr<RigidBody> rb2 = bsDst->GetRigidBody();
 						bs->setColor(Vec4(1, 0, 0, 0), true);
 						bsDst->setColor(Vec4(1, 0, 0, 0), true);
-						rb1->Move(-normal * depth / 2);
-						rb2->Move(normal * depth / 2);;
+						rb1->Move(-(*normal) * (*depth) / 2);
+						rb2->Move(*normal * (*depth) / 2);
 					}
 
+				}
+
+				//대상이 Sphere인 경우
+				else if (bsDst->GetColliderType() == ColliderType::Sphere) {
+					shared_ptr<BoundingSphere> boundingSphereDst = dynamic_pointer_cast<SphereCollider>(bsDst)->GetBoundingSphere();
+
+					bool cantCol = false;
+					shared_ptr<Vec3> normal = make_shared<Vec3>();
+					shared_ptr<float>depth = make_shared<float>(FLT_MAX);
+					*depth = FLT_MAX;
+
+					cantCol = ProjectileFromCubePlaneWithSphere(boundingOrientedBoxSrc, boundingSphereDst, normal, depth);
+					if (!cantCol) {
+
+						/*int result = -1;
+						float minDistance = FLT_MAX;
+						Vec3 sphereCenter = boundingSphereDst->Center;
+						XMFLOAT3 cornersA[8];
+						boundingOrientedBoxSrc->GetCorners(cornersA);
+						for (int j = 0; j < 8; ++j) {
+							Vec3 v =cornersA[j];
+							float distance = (v - sphereCenter).Length();
+							if (distance < minDistance) {
+								minDistance = distance;
+								result = j;
+							}
+						}
+						Vec3 cp = cornersA[result];
+						Vec3 axis = cp - sphereCenter;*/
+						//Vec3 centerA = boundingOrientedBoxSrc->Center;
+						Vec3 sphereCenter = boundingSphereDst->Center;
+						Vec3 centerB = boundingOrientedBoxSrc->Center;
+						Vec3 dir = sphereCenter - centerB;
+
+						if (dir.Dot(*normal) < 0.f) {
+							*normal = -(*normal);
+						}
+
+						shared_ptr<RigidBody> rb1 = bs->GetRigidBody();
+						shared_ptr<RigidBody> rb2 = bsDst->GetRigidBody();
+						bs->setColor(Vec4(1, 0, 0, 0), true);
+						bsDst->setColor(Vec4(1, 0, 0, 0), true);
+						rb1->Move(-(*normal) * (*depth) / 2);
+						rb2->Move(*normal * (*depth) / 2);
+					}
 				}
 
 
@@ -705,4 +495,168 @@ void OcTree::CollisionInspectionToChild(shared_ptr<BaseCollider> bs, shared_ptr<
 		// 자식노드의 자식노드들에 대한 충돌 검사를 재귀적으로 수행
 		CollisionInspectionToChild(bs, childNode);
 	}
+}
+
+bool OcTree::ProjectileFromCubePlane(shared_ptr<BoundingOrientedBox> mainCube, shared_ptr<BoundingOrientedBox> subCube, shared_ptr<Vec3> normal, shared_ptr<float> depth)
+{
+	XMFLOAT3 cornersA[8];
+	XMFLOAT3 cornersB[8];
+	mainCube->GetCorners(cornersA);
+	subCube->GetCorners(cornersB);
+
+	for (int k = 0; k < 3; ++k) {
+		Vec3 va = cornersA[planeX[k]];
+		Vec3 vb = cornersA[planeY[k]];
+		Vec3 vc = cornersA[planeZ[k]];
+
+		Vec3 edgeA = va - vb;
+		Vec3 edgeB = va - vc;
+		Vec3 norm = XMVector3Cross(edgeA, edgeB);
+
+
+		float minA = FLT_MAX;
+		float maxA = -FLT_MAX;
+
+		float minB = FLT_MAX;
+		float maxB = -FLT_MAX;
+
+		for (int j = 0; j < 8; ++j) {
+			Vec3 VA = cornersA[j];
+			float projA = VA.Dot(norm);
+			minA = min(minA, projA);
+			maxA = max(maxA, projA);
+		}
+
+		for (int j = 0; j < 8; ++j) {
+			Vec3 VB = cornersB[j];
+			float projB = VB.Dot(norm);
+			minB = min(minB, projB);
+			maxB = max(maxB, projB);
+		}
+
+		if (minA >= maxB || minB >= maxA) {
+			return true;
+		}
+
+		float axisDepth = min(maxB - minA, maxA - minB);
+		if (axisDepth < *depth) {
+			*depth = axisDepth;
+			*normal = norm;
+		}
+	}
+	return false;
+}
+
+bool OcTree::ProjectileFromCubeEdges(shared_ptr<BoundingOrientedBox> mainCube, shared_ptr<BoundingOrientedBox> subCube, shared_ptr<Vec3> normal, shared_ptr<float> depth)
+{
+	XMFLOAT3 cornersA[8];
+	XMFLOAT3 cornersB[8];
+	mainCube->GetCorners(cornersA);
+	subCube->GetCorners(cornersB);
+
+	for (int q = 0; q < 3; ++q) {
+		Vec3 va1 = cornersA[lineX[q]];
+		Vec3 va2 = cornersA[lineY[q]];
+		Vec3 edgeA = va1 - va2;
+
+		for (int w = 0; w < 3; ++w) {
+			Vec3 vb1 = cornersB[lineX[w]];
+			Vec3 vb2 = cornersB[lineY[w]];
+			Vec3 edgeB = vb1 - vb2;
+			Vec3 norm = XMVector3Cross(edgeA, edgeB);
+
+			if (norm.Length() < FLT_EPSILON)
+				continue;
+
+			float minA = FLT_MAX;
+			float maxA = -FLT_MAX;
+
+			float minB = FLT_MAX;
+			float maxB = -FLT_MAX;
+
+			for (int j = 0; j < 8; ++j) {
+				Vec3 VA = cornersA[j];
+				float projA = VA.Dot(norm);
+				minA = min(minA, projA);
+				maxA = max(maxA, projA);
+			}
+
+			for (int j = 0; j < 8; ++j) {
+				Vec3 VB = cornersB[j];
+				float projB = VB.Dot(norm);
+				minB = min(minB, projB);
+				maxB = max(maxB, projB);
+			}
+
+			if (minA >= maxB || minB >= maxA) {
+				return true;
+			}
+
+			float axisDepth = min((maxB - minA), (maxA - minB));
+			if (axisDepth < *depth) {
+				*depth = axisDepth;
+				*normal = norm;
+			}
+
+		}
+	}
+	return false;
+}
+
+bool OcTree::ProjectileFromCubePlaneWithSphere(shared_ptr<BoundingOrientedBox> mainCube, shared_ptr<BoundingSphere> mainSphere, shared_ptr<Vec3> normal, shared_ptr<float> depth)
+{
+	XMFLOAT3 cornersA[8];
+	mainCube->GetCorners(cornersA);
+
+	for (int k = 0; k < 3; ++k) {
+		Vec3 va = cornersA[planeX[k]];
+		Vec3 vb = cornersA[planeY[k]];
+		Vec3 vc = cornersA[planeZ[k]];
+
+		Vec3 edgeA = va - vb;
+		Vec3 edgeB = va - vc;
+		Vec3 norm = XMVector3Cross(edgeA, edgeB);
+		norm.Normalize();
+
+		float radius = mainSphere->Radius;
+		Vec3 dirAndRadius = norm * radius;
+		Vec3 p1 = mainSphere->Center + dirAndRadius;
+		Vec3 p2 = mainSphere->Center - dirAndRadius;
+
+
+		float minA = FLT_MAX;
+		float maxA = -FLT_MAX;
+
+		float minB = FLT_MAX;
+		float maxB = -FLT_MAX;
+
+		for (int j = 0; j < 8; ++j) {
+			Vec3 VA = cornersA[j];
+			float projA = VA.Dot(norm);
+
+			minA = min(minA, projA);
+			maxA = max(maxA, projA);
+		}
+
+		minB = p1.Dot(norm);
+		maxB = p2.Dot(norm);
+		if (minB > maxB) {
+			float temp = minB;
+			minB = maxB;
+			maxB = temp;
+		}
+
+
+
+		if (minA >= maxB || minB >= maxA) {
+			return true;
+		}
+
+		float axisDepth = min(maxB - minA, maxA - minB);
+		if (axisDepth < *depth) {
+			*depth = axisDepth;
+			*normal = norm;
+		}
+	}
+	return false;
 }
