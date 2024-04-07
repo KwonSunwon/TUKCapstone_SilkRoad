@@ -339,7 +339,9 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 		
 		for (int i = 0; i < 8; ++i) {
 			for (int j = 0; j < 1; ++j) {
+				//shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Env_Plant_Flower_Large_02.fbx");
 				shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Env_Plant_Flower_Large_02.fbx");
+				//shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Start_Plank.fbx");
 		
 				vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
 				gameObjects[0]->GetTransform()->SetLocalRotation(Vec3(0.f, XMConvertToRadians(180.f), 0.f));

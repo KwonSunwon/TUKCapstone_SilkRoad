@@ -38,6 +38,8 @@ void AssimpLoader::LoadFbx(const wstring& path)
 
         //aiProcess_SplitLargeMeshes |            // 거대한 하나의 매쉬를 하위매쉬들로 분활(나눔)
 
+        aiProcess_CalcTangentSpace |                // 탄젠트 공간 생성
+
         aiProcess_Triangulate |                    // 3개 이상의 모서리를 가진 다각형 면을 삼각형으로 만듬(나눔)
 
         aiProcess_ConvertToLeftHanded |            // D3D의 왼손좌표계로 변환

@@ -137,9 +137,9 @@ void FBXLoader::LoadMesh(FbxMesh* mesh, aiMesh* assimpMesh)
 		meshInfo.vertices[i].normal.y = static_cast<float>(assimpMesh->mNormals[i].y);
 		meshInfo.vertices[i].normal.z = static_cast<float>(assimpMesh->mNormals[i].z);
 
-		/*meshInfo.vertices[i].tangent.x = static_cast<float>(assimpMesh->mTangents[i].x);
+		meshInfo.vertices[i].tangent.x = static_cast<float>(assimpMesh->mTangents[i].x);
 		meshInfo.vertices[i].tangent.y = static_cast<float>(assimpMesh->mTangents[i].y);
-		meshInfo.vertices[i].tangent.z = static_cast<float>(assimpMesh->mTangents[i].z);*/
+		meshInfo.vertices[i].tangent.z = static_cast<float>(assimpMesh->mTangents[i].z);
 
 	}
 
@@ -165,7 +165,7 @@ void FBXLoader::LoadMesh(FbxMesh* mesh, aiMesh* assimpMesh)
 			arrIdx[j] = controlPointIndex;
 
 			//GetNormal(mesh, &meshInfo, controlPointIndex, vertexCounter);
-			GetTangent(mesh, &meshInfo, controlPointIndex, vertexCounter);
+			//GetTangent(mesh, &meshInfo, controlPointIndex, vertexCounter);
 			//GetUV(mesh, &meshInfo, controlPointIndex, vertexCounter/*mesh->GetTextureUVIndex(i, j)*/, assimpMesh);
 
 			vertexCounter++;
