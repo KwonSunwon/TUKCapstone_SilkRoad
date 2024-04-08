@@ -354,16 +354,21 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 				//gameObjects[0]->GetRigidBody()->m_useGravity = true;
 				if (i&1) {
 					/*gameObjects[0]->AddComponent(make_shared<OrientedBoxCollider>());
-					gameObjects[0]->GetCollider()->SetExtent(Vec3(50, 300, 50));
+					gameObjects[0]->GetCollider()->SetExtent(Vec3(300, 50, 50));
 					gameObjects[0]->GetCollider()->SetCenter(Vec3(1500.f + 400.f * i, 1500.f, 2000.f + 400.f * j));*/
+					
 					gameObjects[0]->AddComponent(make_shared<SphereCollider>());
 					gameObjects[0]->GetCollider()->SetRadius(100.f);
 					gameObjects[0]->GetCollider()->SetCenter(Vec3(500.f + 400.f * i, 500.f, 2000.f + 400.f * j));
 					
 				}
 				else {
+					/*gameObjects[0]->AddComponent(make_shared<SphereCollider>());
+					gameObjects[0]->GetCollider()->SetRadius(100.f);
+					gameObjects[0]->GetCollider()->SetCenter(Vec3(500.f + 400.f * i, 500.f, 2000.f + 400.f * j));*/
+
 					gameObjects[0]->AddComponent(make_shared<OrientedBoxCollider>());
-					gameObjects[0]->GetCollider()->SetExtent(Vec3(50, 300, 50));
+					gameObjects[0]->GetCollider()->SetExtent(Vec3(300, 50, 50));
 					gameObjects[0]->GetCollider()->SetCenter(Vec3(500.f + 400.f * i, 500.f, 2000.f + 400.f * j));
 					
 				}

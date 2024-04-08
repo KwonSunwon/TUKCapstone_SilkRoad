@@ -32,7 +32,7 @@ void TestDragon::Update()
 		//int32 currentIndex = this->GetGameObject()->m_anim;
 
 		//int32 index = (currentIndex + 1) % count;
-		//GetAnimator()->Play(index);
+		GetAnimator()->Play(0);
 		
 		//etAnimator()->Play(index);
 	}
@@ -70,19 +70,25 @@ void TestDragon::Update()
 
 	static float a = 0;
 	if (INPUT->GetButton(KEY_TYPE::LBUTTON))
-		 a -= 0.0001;
+		 a += 0.0001;
 
-	GetTransform()->SetLocalRotation(Vec3(a, 0, 0));
+	GetTransform()->SetLocalRotation(Vec3(0, a, 0));
 
 	if (INPUT->GetButtonDown(KEY_TYPE::RBUTTON))
 	{ }
 
-	Vec3 dir{ dx,dz,dy };
+	/*Vec3 dir{ dx,dz,dy };
 	dir.Normalize();
-
 	Vec3 velocity = dir * speed * DELTA_TIME;
+	rb->Move(velocity);*/
 
-	rb->Move(velocity);
+
+	float forceMag = 1000;
+	Vec3 forceDir = { dx,dz,dy };
+	forceDir.Normalize();
+	Vec3 force = forceDir * forceMag;
+	
+	rb->AddForce(force);
 
 
 }
