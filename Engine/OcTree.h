@@ -4,6 +4,8 @@ class OcNode;
 class GameObject;
 class BaseCollider;
 
+class Terrain;
+
 class OcTree
 {
 private:
@@ -18,6 +20,8 @@ public:
 	void InsertObjectCollider(shared_ptr<BaseCollider> bs);
 	/* 충돌 검사 */
 	void CollisionInspection(shared_ptr<BaseCollider> bs);
+
+	void CollisionTerrain(shared_ptr<BaseCollider> bs);
 
 	void Update();
 	void UpdateOcnode(shared_ptr<OcNode> currentNode);
@@ -51,4 +55,6 @@ private:
 
 	bool ProjectileFromCubePlaneWithSphere(shared_ptr<BoundingOrientedBox> mainCube, shared_ptr<BoundingSphere> mainSphere,
 		shared_ptr<Vec3> normal, shared_ptr<float>depth);
+
+	shared_ptr<Terrain> m_terrain;
 };

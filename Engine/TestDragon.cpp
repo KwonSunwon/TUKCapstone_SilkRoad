@@ -14,6 +14,7 @@ void JumpAnimationEvent()
 void TestDragon::Awake()
 {
 	shared_ptr<RigidBody> rb = GetRigidBody();
+	rb->SetStatic(true);
 
 }
 void TestDragon::Update()
@@ -70,9 +71,9 @@ void TestDragon::Update()
 
 	static float a = 0;
 	if (INPUT->GetButton(KEY_TYPE::LBUTTON))
-		 a += 0.0001;
+		rb->SetStatic(false);
 
-	GetTransform()->SetLocalRotation(Vec3(0, a, 0));
+	//GetTransform()->SetLocalRotation(Vec3(0, a, 0));
 
 	if (INPUT->GetButtonDown(KEY_TYPE::RBUTTON))
 	{ }
@@ -83,7 +84,7 @@ void TestDragon::Update()
 	rb->Move(velocity);*/
 
 
-	float forceMag = 1000;
+	float forceMag = 10000;
 	Vec3 forceDir = { dx,dz,dy };
 	forceDir.Normalize();
 	Vec3 force = forceDir * forceMag;

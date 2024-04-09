@@ -8,6 +8,8 @@
 #include "Scene.h"
 #include "GameObject.h"
 #include "RigidBody.h"
+#include "Terrain.h"
+#include "Transform.h"
 
 OcTree::OcTree(int maxSize, int minSize)
 {
@@ -134,7 +136,10 @@ void OcTree::CollisionInspection(shared_ptr<BaseCollider> bs)
 	// 자식 노드들에 대한 충돌 검사
 	CollisionInspectionToChild(bs, IncludedNode);
 
+	CollisionTerrain(bs);
 }
+
+
 
 void OcTree::Update()
 {
@@ -230,6 +235,11 @@ void OcTree::CollisionInspectionToParrent(shared_ptr<BaseCollider> bs, shared_pt
 		if (bs->GetColliderId() >= bsDst->GetColliderId())
 			continue;
 
+		shared_ptr<RigidBody> rb1 = bs->GetRigidBody();
+		shared_ptr<RigidBody> rb2 = bsDst->GetRigidBody();
+		if (rb1->GetIsStatic() && rb2->GetIsStatic())
+			continue;
+
 		shared_ptr<Vec3> normal = make_shared<Vec3>();
 		shared_ptr<float> depth = make_shared<float>();
 
@@ -283,21 +293,36 @@ void OcTree::CollisionInspectionToParrent(shared_ptr<BaseCollider> bs, shared_pt
 			}
 		}
 
-		shared_ptr<RigidBody> rb1 = bs->GetRigidBody();
-		shared_ptr<RigidBody> rb2 = bsDst->GetRigidBody();
+		
 		bs->setColor(Vec4(1, 0, 0, 0), true);
 		bsDst->setColor(Vec4(1, 0, 0, 0), true);
-		rb1->Move(-(*normal) * (*depth) / 2);
-		rb2->Move(*normal * (*depth) / 2);
+
+		if (rb1->GetIsStatic()) {
+			rb2->Move(*normal * (*depth));
+		}
+
+		else if (rb2->GetIsStatic()) {
+			rb1->Move(-(*normal) * (*depth));
+		}
+		else {
+			rb1->Move(-(*normal) * (*depth) / 2);
+			rb2->Move(*normal * (*depth) / 2);
+		}
+
 
 
 		Vec3 relativeVelocity = rb2->GetLinearVelocity() - rb1->GetLinearVelocity();
-		float e = min(rb1->GetRestitution(), rb2->GetRestitution());
-		float j = -(1.f - e) * relativeVelocity.Dot(*normal);
-		j /= (1.f / rb1->GetMass()) + (1.f / rb2->GetMass());
+		if (relativeVelocity.Dot(*normal) > 0.f) {
+			continue;
+		}
 
-		rb1->SetLinearVelocity(rb1->GetLinearVelocity() - j / rb1->GetMass() * (*normal));
-		rb2->SetLinearVelocity(rb2->GetLinearVelocity() + j / rb2->GetMass() * (*normal));
+		float e = min(rb1->GetRestitution(), rb2->GetRestitution());
+		float j = -(1.f + e) * relativeVelocity.Dot(*normal);
+		j /= rb1->GetInvMass() + rb2->GetInvMass();
+		Vec3 impulse = (*normal) * j;
+
+		rb1->SetLinearVelocity(rb1->GetLinearVelocity() - impulse * rb1->GetInvMass());
+		rb2->SetLinearVelocity(rb2->GetLinearVelocity() + impulse * rb2->GetInvMass());
 
 	}
 
@@ -324,6 +349,14 @@ void OcTree::CollisionInspectionToChild(shared_ptr<BaseCollider> bs, shared_ptr<
 		for (int m = 0; m < childNode->IncludedObjectAABBCount(); m++)
 		{
 			shared_ptr<BaseCollider> bsDst = childNode->IncludedObjectAABB(m);
+
+			shared_ptr<RigidBody> rb1 = bs->GetRigidBody();
+			shared_ptr<RigidBody> rb2 = bsDst->GetRigidBody();
+			if (rb1->GetIsStatic() && rb2->GetIsStatic())
+				continue;
+
+
+			
 			shared_ptr<Vec3> normal = make_shared<Vec3>();
 			shared_ptr<float> depth = make_shared<float>();
 
@@ -377,25 +410,114 @@ void OcTree::CollisionInspectionToChild(shared_ptr<BaseCollider> bs, shared_ptr<
 				}
 			}	
 
-			shared_ptr<RigidBody> rb1 = bs->GetRigidBody();
-			shared_ptr<RigidBody> rb2 = bsDst->GetRigidBody();
+			
 			bs->setColor(Vec4(1, 0, 0, 0), true);
 			bsDst->setColor(Vec4(1, 0, 0, 0), true);
-			rb1->Move(-(*normal) * (*depth) / 2);
-			rb2->Move(*normal * (*depth) / 2);
+
+			if (rb1->GetIsStatic()) {
+				rb2->Move(*normal * (*depth));
+			}
+			
+			else if (rb2->GetIsStatic()) {
+				rb1->Move(-(*normal) * (*depth));
+			}
+			else {
+				rb1->Move(-(*normal) * (*depth) / 2);
+				rb2->Move(*normal * (*depth) / 2);
+			}
+			
+
 
 			Vec3 relativeVelocity = rb2->GetLinearVelocity() - rb1->GetLinearVelocity();
+			if (relativeVelocity.Dot(*normal) > 0.f) {
+				continue;
+			}
+
 			float e = min(rb1->GetRestitution(), rb2->GetRestitution());
 			float j = -(1.f + e) * relativeVelocity.Dot(*normal);
-			j /= (1.f / rb1->GetMass()) + (1.f / rb2->GetMass());
+			j /= rb1->GetInvMass() + rb2->GetInvMass();
+			Vec3 impulse = (*normal) * j;
 
-			rb1->SetLinearVelocity(rb1->GetLinearVelocity() - j / rb1->GetMass() * (*normal));
-			rb2->SetLinearVelocity(rb2->GetLinearVelocity() + j / rb2->GetMass() * (*normal));
+			rb1->SetLinearVelocity(rb1->GetLinearVelocity() - impulse * rb1->GetInvMass());
+			rb2->SetLinearVelocity(rb2->GetLinearVelocity() + impulse * rb2->GetInvMass());
 		}
 
 		// 자식노드의 자식노드들에 대한 충돌 검사를 재귀적으로 수행
 		CollisionInspectionToChild(bs, childNode);
 	}
+}
+
+//터레인과의 충돌을 위한 함수
+void OcTree::CollisionTerrain(shared_ptr<BaseCollider> bs)
+{
+	shared_ptr<RigidBody> rb = bs->GetRigidBody();
+	if (rb->GetIsStatic())
+		return;
+
+
+	if (!m_terrain) {
+		m_terrain = GET_SINGLE(SceneManager)->GetActiveScene()->m_terrain->GetTerrain();
+	}
+
+	//터레인을 통해 현재 위치 기반 높이와 normal을 불러온다.
+	Vec3 pos = bs->GetRigidBody()->GetPosition();
+	shared_ptr<Vec3> norm = make_shared<Vec3>();
+	shared_ptr<float> h = make_shared < float >();
+	m_terrain->getHeight(pos.x, pos.z, h, norm);
+
+	//정적메시와의 충돌을 가정하기 위해 임시의 육면체 충돌체를 만든다.
+	shared_ptr<BoundingOrientedBox> OBB = make_shared<BoundingOrientedBox>();
+	OBB->Center = Vec3(pos.x, *h-100, pos.z);
+	OBB->Extents = Vec3 (100, 100, 100);
+
+
+	shared_ptr<Vec3> normal = make_shared<Vec3>();
+	shared_ptr<float> depth = make_shared<float>();
+
+	*normal = { 0,0,0 };
+	*depth = 0.f;
+
+	//충돌 검사를 통해 겹쳐진 최소 거리와 방향을 얻는다
+	if (bs->GetColliderType() == ColliderType::Sphere) {
+		shared_ptr<BoundingSphere> boundingSphereSrc = dynamic_pointer_cast<SphereCollider>(bs)->GetBoundingSphere();
+
+
+		if (!CollisionSphereBox(boundingSphereSrc, OBB, normal, depth, false)){
+			return;
+		}
+
+	}
+	// baseColliser가 OBB인 경우
+
+
+	else if (bs->GetColliderType() == ColliderType::OrientedBox) {
+		shared_ptr<BoundingOrientedBox> boundingOrientedBoxSrc = dynamic_pointer_cast<OrientedBoxCollider>(bs)->GetBoundingOrientedBox();
+
+		//대상이 OBB인 경우
+
+		if (!CollisionBox(boundingOrientedBoxSrc, OBB, normal, depth)){
+			return;
+		}
+	}
+
+	//겹쳐진 방향의 반대방향으로 움직인다.
+	bs->setColor(Vec4(1, 0, 0, 0), true);
+	rb->Move(-(*normal) * (*depth));
+
+	//이후 터레인의 법선벡터 방향으로 힘을가한다.
+	Vec3 relativeVelocity = - rb->GetLinearVelocity();
+	if (relativeVelocity.Dot(*normal) > 0.f) {
+		return;
+	}
+
+	float e = min(rb->GetRestitution(),0.5);
+	float j = -(1.f + e) * relativeVelocity.Dot(*norm);
+	j /= rb->GetInvMass() + 1.f/1000.f;
+	Vec3 impulse = (*norm) * j;
+
+	rb->SetLinearVelocity(rb->GetLinearVelocity() - impulse * rb->GetInvMass());
+	
+
 }
 
 bool OcTree::CollisionSphere(shared_ptr<BoundingSphere> mainSphere, shared_ptr<BoundingSphere> subSphere, shared_ptr<Vec3> normal, shared_ptr<float> depth)
@@ -719,7 +841,7 @@ bool OcTree::ProjectileFromCubePlane(shared_ptr<BoundingOrientedBox> mainCube, s
 		Vec3 edgeA = va - vb;
 		Vec3 edgeB = va - vc;
 		Vec3 norm = XMVector3Cross(edgeA, edgeB);
-
+		norm.Normalize();
 
 		float minA = FLT_MAX;
 		float maxA = -FLT_MAX;
@@ -771,7 +893,7 @@ bool OcTree::ProjectileFromCubeEdges(shared_ptr<BoundingOrientedBox> mainCube, s
 			Vec3 vb2 = cornersB[lineY[w]];
 			Vec3 edgeB = vb1 - vb2;
 			Vec3 norm = XMVector3Cross(edgeA, edgeB);
-
+			norm.Normalize();
 			if (norm.Length() < FLT_EPSILON)
 				continue;
 
