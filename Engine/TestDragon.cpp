@@ -26,26 +26,26 @@ void TestDragon::Update()
 	float speed = 1000;
 
 	shared_ptr<RigidBody> rb = GetRigidBody();
-	if (INPUT->GetButtonDown(KEY_TYPE::W))
-	{
-		//int32 count = GetAnimator()->GetAnimCount();
-		//int32 currentIndex = GetAnimator()->GetCurrentClipIndex();
-		//int32 currentIndex = this->GetGameObject()->m_anim;
+	//if (INPUT->GetButtonDown(KEY_TYPE::W))
+	//{
+	//	//int32 count = GetAnimator()->GetAnimCount();
+	//	//int32 currentIndex = GetAnimator()->GetCurrentClipIndex();
+	//	//int32 currentIndex = this->GetGameObject()->m_anim;
 
-		//int32 index = (currentIndex + 1) % count;
-		GetAnimator()->Play(0);
-		
-		//etAnimator()->Play(index);
-	}
+	//	//int32 index = (currentIndex + 1) % count;
+	//	GetAnimator()->Play(0);
+	//	
+	//	//etAnimator()->Play(index);
+	//}
 
-	if (INPUT->GetButtonDown(KEY_TYPE::KEY_2))
+	/*if (INPUT->GetButtonDown(KEY_TYPE::KEY_2))
 	{
 		int32 count = GetAnimator()->GetAnimCount();
 		int32 currentIndex = GetAnimator()->GetCurrentClipIndex();
 
 		int32 index = (currentIndex - 1 + count) % count;
 		GetAnimator()->Play(index);
-	}
+	}*/
 	
 
 	if (INPUT->GetButton(KEY_TYPE::W))
@@ -84,7 +84,7 @@ void TestDragon::Update()
 	rb->Move(velocity);*/
 
 
-	float forceMag = 10000;
+	float forceMag = 100000;
 	Vec3 forceDir = { dx,dz,dy };
 	forceDir.Normalize();
 	Vec3 force = forceDir * forceMag;

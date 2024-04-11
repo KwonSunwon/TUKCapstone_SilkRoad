@@ -130,13 +130,13 @@ void OcTree::CollisionInspection(shared_ptr<BaseCollider> bs)
 	shared_ptr<OcNode> IncludedNode = FindColliderIncludedNode(bs, m_rootNode);
 
 	
-
+	CollisionTerrain(bs);
 	// 부모 노드들에 대한 충돌 검사
 	CollisionInspectionToParrent(bs, IncludedNode);
 	// 자식 노드들에 대한 충돌 검사
 	CollisionInspectionToChild(bs, IncludedNode);
 
-	CollisionTerrain(bs);
+	
 }
 
 
@@ -422,8 +422,8 @@ void OcTree::CollisionInspectionToChild(shared_ptr<BaseCollider> bs, shared_ptr<
 				rb1->Move(-(*normal) * (*depth));
 			}
 			else {
-				rb1->Move(-(*normal) * (*depth) / 2);
-				rb2->Move(*normal * (*depth) / 2);
+				rb1->Move(-(*normal) * (*depth) / 2.f);
+				rb2->Move(*normal * (*depth) / 2.f);
 			}
 			
 
@@ -456,7 +456,7 @@ void OcTree::CollisionTerrain(shared_ptr<BaseCollider> bs)
 
 
 	if (!m_terrain) {
-		m_terrain = GET_SINGLE(SceneManager)->GetActiveScene()->m_terrain->GetTerrain();
+		m_terrain = GET_SINGLE(SceneManager)->GetActiveScene()->m_terrain;
 	}
 
 	//터레인을 통해 현재 위치 기반 높이와 normal을 불러온다.

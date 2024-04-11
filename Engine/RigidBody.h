@@ -40,9 +40,9 @@ public:
 	void SetMass(float mass) { m_mass = mass; m_invMass = 1 / mass; }
 	void SetLinearVelocity(Vec3 linearVelocity) { m_linearVelocity = linearVelocity; }
 	void SetStatic(bool isStatic) { m_isStatic = isStatic; }
-
+	void MovementStep(int iterations);
 private:
-	void MovementStep();
+	
 
 private:
 	Vec3 m_position = {};
@@ -56,6 +56,7 @@ private:
 	bool m_isStatic = false;
 
 	Vec3 m_gravity = { 0.f,-980.f,0.f };
+	int m_iterations;
 
 	shared_ptr< Terrain > m_gameTerrain;
 

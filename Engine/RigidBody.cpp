@@ -11,6 +11,7 @@
 #include "Terrain.h"
 
 
+
 RigidBody::RigidBody() : Component(COMPONENT_TYPE::RIGIDBODY)
 {
 	
@@ -24,23 +25,26 @@ RigidBody::~RigidBody()
 void RigidBody::Awake()
 {
 	m_position = GetTransform()->GetLocalPosition();
-	m_gameTerrain = GET_SINGLE(SceneManager)->GetActiveScene()->m_terrain->GetTerrain();
+	//m_gameTerrain = GET_SINGLE(SceneManager)->GetActiveScene()->m_terrain->GetTerrain();
 }
 
 void RigidBody::FinalUpdate()
 {
-	MovementStep();
+	//MovementStep();
 	GetTransform()->SetLocalPosition(m_position);
 }
 
-void RigidBody::MovementStep()
+void RigidBody::MovementStep(int iterations)
 {
+
+	
+
 	if (m_isStatic)
 		return;
-	//float y = m_gameTerrain->getHeight(m_position.x, m_position.z);
+
 	//test position reset
 	{
-		if (m_position.x > 25000)
+		if (m_position.x > 25000.f)
 			m_position.x = 0;
 
 		if (m_position.z > 25000.f)
@@ -62,13 +66,15 @@ void RigidBody::MovementStep()
 	}
 
 	Vec3 acc = m_force / m_mass;
-	m_linearVelocity += acc * DELTA_TIME;
+	m_linearVelocity += acc * DELTA_TIME / (float)iterations;
 
-	m_linearVelocity += m_gravity * DELTA_TIME;
+	m_linearVelocity += m_gravity * DELTA_TIME / (float)iterations;
 
-	m_position += m_linearVelocity * DELTA_TIME;
-	m_rotation += m_rotationVelocity * DELTA_TIME;
-	m_force = { 0,0,0 };
+	m_position += m_linearVelocity * DELTA_TIME / (float)iterations;
+	m_rotation += m_rotationVelocity * DELTA_TIME / (float)iterations;
+	GetGameObject()->GetCollider()->SetCenter(m_position);
+	
+	m_force = Vec3{ 0,0,0 };
 
 	
 

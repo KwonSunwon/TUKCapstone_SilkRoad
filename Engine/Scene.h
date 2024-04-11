@@ -3,6 +3,7 @@
 class GameObject;
 class BaseCollider;
 class OcTree;
+class Terrain;
 
 class Scene
 {
@@ -41,7 +42,9 @@ public:
 
 	void IntersectColliders(shared_ptr<BaseCollider> collider1, shared_ptr<BaseCollider> collider2);
 	void testCollision();
-	shared_ptr<GameObject> m_terrain;
+	void PhysicsStep(int iterations);
+	
+	shared_ptr<Terrain> m_terrain;
 private:
 	vector<shared_ptr<GameObject>>		m_gameObjects;
 	vector<shared_ptr<GameObject>>		m_collidableGameObjects;
@@ -51,6 +54,7 @@ private:
 	//test func
 private:
 	shared_ptr<OcTree> m_ocTree = make_shared<OcTree>(50000, 1000);
+
 	
 };
 
