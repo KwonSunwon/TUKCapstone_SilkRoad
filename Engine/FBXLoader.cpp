@@ -34,7 +34,7 @@ void FBXLoader::LoadFbx(const wstring& path)
 	LoadAnimationInfo();
 
 	// 로드된 데이터 파싱 (Mesh/Material/Skin)
-	ParseNode(m_scene->GetRootNode(), assimpLoader->GetScene()->mRootNode, assimpLoader->GetScene());
+	ParseNodeWithAssimp(m_scene->GetRootNode(), assimpLoader->GetScene()->mRootNode, assimpLoader->GetScene());
 
 	// 우리 구조에 맞게 Texture / Material 생성
 	CreateTextures();
@@ -72,7 +72,7 @@ void FBXLoader::Import(const wstring& path)
 	m_importer->Destroy();
 }
 
-void FBXLoader::ParseNode(FbxNode* node, aiNode* assimpNode, const aiScene* assimpScene)
+void FBXLoader::ParseNode(FbxNode* node)
 {
 	FbxNodeAttribute* attribute = node->GetNodeAttribute();
 
@@ -81,7 +81,7 @@ void FBXLoader::ParseNode(FbxNode* node, aiNode* assimpNode, const aiScene* assi
 		switch (attribute->GetAttributeType())
 		{
 		case FbxNodeAttribute::eMesh:
-			LoadMesh(node->GetMesh(), assimpScene->mMeshes[*assimpNode->mMeshes]);
+			LoadMesh(node->GetMesh());
 			break;
 		}
 	}
@@ -97,10 +97,97 @@ void FBXLoader::ParseNode(FbxNode* node, aiNode* assimpNode, const aiScene* assi
 	// Tree 구조 재귀 호출
 	const int32 childCount = node->GetChildCount();
 	for (int32 i = 0; i < childCount; ++i)
-		ParseNode(node->GetChild(i), assimpNode->mChildren[i], assimpScene);
+		ParseNode(node->GetChild(i));
 }
 
-void FBXLoader::LoadMesh(FbxMesh* mesh, aiMesh* assimpMesh)
+void FBXLoader::ParseNodeWithAssimp(FbxNode* node, aiNode* assimpNode, const aiScene* assimpScene)
+{
+	FbxNodeAttribute* attribute = node->GetNodeAttribute();
+
+	if (attribute)
+	{
+		switch (attribute->GetAttributeType())
+		{
+		case FbxNodeAttribute::eMesh:
+			LoadMeshWithAssimp(node->GetMesh(), assimpScene->mMeshes[*assimpNode->mMeshes]);
+			break;
+		}
+	}
+
+	// Material 로드
+	const uint32 materialCount = node->GetMaterialCount();
+	for (uint32 i = 0; i < materialCount; ++i)
+	{
+		FbxSurfaceMaterial* surfaceMaterial = node->GetMaterial(i);
+		LoadMaterial(surfaceMaterial);
+	}
+
+	// Tree 구조 재귀 호출
+	const int32 childCount = node->GetChildCount();
+	for (int32 i = 0; i < childCount; ++i)
+		ParseNodeWithAssimp(node->GetChild(i), assimpNode->mChildren[i], assimpScene);
+}
+
+void FBXLoader::LoadMesh(FbxMesh* mesh)
+{
+	m_meshes.push_back(FbxMeshInfo());
+	FbxMeshInfo& meshInfo = m_meshes.back();
+
+	meshInfo.name = s2ws(mesh->GetName());
+
+	const int32 vertexCount = mesh->GetControlPointsCount();
+
+	meshInfo.vertices.resize(vertexCount);
+	meshInfo.boneWeights.resize(vertexCount);
+
+
+	// Position
+	FbxVector4* controlPoints = mesh->GetControlPoints();
+	for (int32 i = 0; i < vertexCount; ++i)
+	{
+		meshInfo.vertices[i].pos.x = static_cast<float>(controlPoints[i].mData[0]);
+		meshInfo.vertices[i].pos.y = static_cast<float>(controlPoints[i].mData[1]);
+		meshInfo.vertices[i].pos.z = static_cast<float>(controlPoints[i].mData[2]);
+	}
+
+	const int32 materialCount = mesh->GetNode()->GetMaterialCount();
+	meshInfo.indices.resize(materialCount);
+
+	FbxGeometryElementMaterial* geometryElementMaterial = mesh->GetElementMaterial();
+
+	const int32 polygonSize = mesh->GetPolygonSize(0);
+	assert(polygonSize == 3);
+
+	uint32 arrIdx[3];
+	uint32 vertexCounter = 0; // 정점의 개수
+
+	const int32 triCount = mesh->GetPolygonCount(); // 메쉬의 삼각형 개수를 가져온다
+
+	for (int32 i = 0; i < triCount; i++) // 삼각형의 개수
+	{
+		for (int32 j = 0; j < 3; j++) // 삼각형은 세 개의 정점으로 구성
+		{
+			int32 controlPointIndex = mesh->GetPolygonVertex(i, j); // 제어점의 인덱스 추출
+			arrIdx[j] = controlPointIndex;
+
+			GetNormal(mesh, &meshInfo, controlPointIndex, vertexCounter);
+			GetTangent(mesh, &meshInfo, controlPointIndex, vertexCounter);
+			GetUV(mesh, &meshInfo, controlPointIndex, mesh->GetTextureUVIndex(i, j));
+
+			vertexCounter++;
+		}
+
+		const uint32 subsetIdx = geometryElementMaterial->GetIndexArray().GetAt(i);
+		meshInfo.indices[subsetIdx].push_back(arrIdx[0]);
+		meshInfo.indices[subsetIdx].push_back(arrIdx[1]);
+		meshInfo.indices[subsetIdx].push_back(arrIdx[2]);
+	}
+
+	// Animation
+	LoadAnimationData(mesh, &meshInfo);
+}
+
+void FBXLoader::LoadMeshWithAssimp(FbxMesh* mesh, aiMesh* assimpMesh)
 {
 	m_meshes.push_back(FbxMeshInfo());
 	FbxMeshInfo& meshInfo = m_meshes.back();
@@ -123,9 +210,6 @@ void FBXLoader::LoadMesh(FbxMesh* mesh, aiMesh* assimpMesh)
 	FbxVector4* controlPoints = mesh->GetControlPoints();
 	for (int32 i = 0; i < vertexCountByAssimp; ++i)
 	{
-		/*meshInfo.vertices[i].pos.x = static_cast<float>(controlPoints[i].mData[0]);
-		meshInfo.vertices[i].pos.y = static_cast<float>(controlPoints[i].mData[1]);
-		meshInfo.vertices[i].pos.z = static_cast<float>(controlPoints[i].mData[2]);*/
 		meshInfo.vertices[i].pos.x = static_cast<float>(assimpMesh->mVertices[i].x);
 		meshInfo.vertices[i].pos.y = static_cast<float>(assimpMesh->mVertices[i].y);
 		meshInfo.vertices[i].pos.z = static_cast<float>(assimpMesh->mVertices[i].z);
@@ -163,11 +247,6 @@ void FBXLoader::LoadMesh(FbxMesh* mesh, aiMesh* assimpMesh)
 		{
 			int32 controlPointIndex = mesh->GetPolygonVertex(i, j); // 제어점의 인덱스 추출
 			arrIdx[j] = controlPointIndex;
-
-			//GetNormal(mesh, &meshInfo, controlPointIndex, vertexCounter);
-			//GetTangent(mesh, &meshInfo, controlPointIndex, vertexCounter);
-			//GetUV(mesh, &meshInfo, controlPointIndex, vertexCounter/*mesh->GetTextureUVIndex(i, j)*/, assimpMesh);
-
 			vertexCounter++;
 		}
 
@@ -179,7 +258,7 @@ void FBXLoader::LoadMesh(FbxMesh* mesh, aiMesh* assimpMesh)
 	}
 
 	// Animation
-	LoadAnimationData(mesh, &meshInfo);
+	// LoadAnimationData(mesh, &meshInfo);
 }
 
 void FBXLoader::LoadMaterial(FbxSurfaceMaterial* surfaceMaterial)
