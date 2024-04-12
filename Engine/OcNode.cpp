@@ -8,6 +8,7 @@
 #include "MeshRenderer.h"
 #include "SceneManager.h"
 #include "Scene.h"
+#include "Timer.h"
 
 OcNode::OcNode(shared_ptr<BoundingBox> bb, shared_ptr<OcNode> parentNode)
 {
@@ -17,29 +18,30 @@ OcNode::OcNode(shared_ptr<BoundingBox> bb, shared_ptr<OcNode> parentNode)
 	m_includedCollidersCount = 0;
 	m_isHaveChilds = false;
 
-	m_go = make_shared<GameObject>();
-	m_go->AddComponent(make_shared<Transform>());
-	m_go->GetTransform()->SetLocalPosition(m_bb->Center);
-	Vec3 extents = m_bb->Extents;
-	m_go->GetTransform()->SetLocalScale(extents*2);
-
-	shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
+	if (DEBUG_MODE)
 	{
-		shared_ptr<Mesh> sphereMesh = GET_SINGLE(Resources)->LoadCubeMesh();
-		meshRenderer->SetMesh(sphereMesh);
-	}
-	{
-		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"WireFrame");
-		shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"Wood", L"..\\Resources\\Texture\\Wood.jpg");
-		shared_ptr<Material> material = make_shared<Material>();
-		material->SetShader(shader);
-		material->SetTexture(0, texture);
+		m_go = make_shared<GameObject>();
+		m_go->AddComponent(make_shared<Transform>());
+		m_go->GetTransform()->SetLocalPosition(m_bb->Center);
+		Vec3 extents = m_bb->Extents;
+		m_go->GetTransform()->SetLocalScale(extents * 2);
 
-		material->SetInt(3, 1);
-		material->SetVec4(3,Vec4( 1, 0, 0, 1));
-		meshRenderer->SetMaterial(material);
+		shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
+		{
+			shared_ptr<Mesh> sphereMesh = GET_SINGLE(Resources)->LoadCubeMesh();
+			meshRenderer->SetMesh(sphereMesh);
+		}
+		{
+			shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"WireFrame");
+			shared_ptr<Material> material = make_shared<Material>();
+			material->SetShader(shader);
+
+			material->SetInt(3, 1);
+			material->SetVec4(3, Vec4(1, 0, 0, 1));
+			meshRenderer->SetMaterial(material);
+		}
+		m_go->AddComponent(meshRenderer);
 	}
-	m_go->AddComponent(meshRenderer);
 	
 }
 
@@ -91,22 +93,23 @@ void OcNode::Update()
 {
 	// 현재 노드에 파라미터로 넘어온 aabb가 존재하는지 판단
 	
-
-	if (m_includedCollidersCount > 0) {
-		if (!include) {
-			include = true;
-			GET_SINGLE(SceneManager)->GetActiveScene()->AddGameObject(m_go);
+	if (DEBUG_MODE) {
+		if (m_includedCollidersCount > 0) {
+			if (!include) {
+				include = true;
+				GET_SINGLE(SceneManager)->GetActiveScene()->AddGameObject(m_go);
+			}
+			m_go->GetMeshRenderer()->GetMaterial()->SetInt(3, true);
+			m_go->GetMeshRenderer()->GetMaterial()->SetVec4(3, Vec4(0, 1, 0, 0));
 		}
-		m_go->GetMeshRenderer()->GetMaterial()->SetInt(3, true);
-		m_go->GetMeshRenderer()->GetMaterial()->SetVec4(3, Vec4(0, 1, 0, 0));
-	}
 
-	if (m_includedCollidersCount == 0) {
-		if (include) {
-			include = false;
-			GET_SINGLE(SceneManager)->GetActiveScene()->RemoveGameObject(m_go);
+		if (m_includedCollidersCount == 0) {
+			if (include) {
+				include = false;
+				GET_SINGLE(SceneManager)->GetActiveScene()->RemoveGameObject(m_go);
+			}
+			m_go->GetMeshRenderer()->GetMaterial()->SetInt(3, false);
 		}
-		m_go->GetMeshRenderer()->GetMaterial()->SetInt(3, false);
 	}
 }
 

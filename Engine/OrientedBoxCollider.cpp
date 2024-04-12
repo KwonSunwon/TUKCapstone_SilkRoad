@@ -7,35 +7,32 @@
 #include "MeshRenderer.h"
 #include "SceneManager.h"
 #include "Scene.h"
+#include "Timer.h"
 
 OrientedBoxCollider::OrientedBoxCollider() : BaseCollider(ColliderType::OrientedBox)
 {
 	m_boundingOrientedBox = make_shared<BoundingOrientedBox>();
-	m_go = make_shared<GameObject>();
-	m_go->AddComponent(make_shared<Transform>());
-	//m_go->GetTransform()->SetLocalPosition(this->GetTransform()->GetLocalPosition());
-	Vec3 extents = m_boundingOrientedBox->Extents;
-	m_go->GetTransform()->SetLocalScale(extents * 2);//100,200,100
 
-
-	//m_boundingBox->Center = GetGameObject()->GetTransform()->GetWorldPosition();
-	//Vec3 scale = m_go->GetTransform()->GetLocalScale();
-	//m_boundingBox->Extents = m_extent/2;
-
-	shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
-	{
-		shared_ptr<Mesh> sphereMesh = GET_SINGLE(Resources)->LoadCubeMesh();
-		meshRenderer->SetMesh(sphereMesh);
+	if (DEBUG_MODE) {
+		m_go = make_shared<GameObject>();
+		m_go->AddComponent(make_shared<Transform>());
+		Vec3 extents = m_boundingOrientedBox->Extents;
+		m_go->GetTransform()->SetLocalScale(extents * 2);//100,200,100
+		shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
+		{
+			shared_ptr<Mesh> sphereMesh = GET_SINGLE(Resources)->LoadCubeMesh();
+			meshRenderer->SetMesh(sphereMesh);
+		}
+		{
+			shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"WireFrame");
+			//shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"Wood", L"..\\Resources\\Texture\\Wood.jpg");
+			shared_ptr<Material> material = make_shared<Material>();
+			material->SetShader(shader);
+			//material->SetTexture(0, texture);
+			meshRenderer->SetMaterial(material);
+		}
+		m_go->AddComponent(meshRenderer);
 	}
-	{
-		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"WireFrame");
-		//shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"Wood", L"..\\Resources\\Texture\\Wood.jpg");
-		shared_ptr<Material> material = make_shared<Material>();
-		material->SetShader(shader);
-		//material->SetTexture(0, texture);
-		meshRenderer->SetMaterial(material);
-	}
-	m_go->AddComponent(meshRenderer);
 
 }
 
@@ -54,16 +51,22 @@ void OrientedBoxCollider::Awake()
 
 void OrientedBoxCollider::FinalUpdate()
 {
-	shared_ptr<Transform> m_goTransform = m_go->GetTransform();
+	
 	shared_ptr<Transform> originTransform = this->GetTransform();
-
-	Vec3 extents = m_boundingOrientedBox->Extents;
 	Vec3 roatate = originTransform->GetLocalRotation();
-	Vec3 position = originTransform->GetLocalPosition();
 
-	m_goTransform->SetLocalPosition(position);
-	m_goTransform->SetLocalScale(extents * 2);
-	m_goTransform->SetLocalRotation(roatate);
+
+	if (DEBUG_MODE) {
+		shared_ptr<Transform> m_goTransform = m_go->GetTransform();
+		Vec3 extents = m_boundingOrientedBox->Extents;
+		Vec3 position = originTransform->GetLocalPosition();
+
+		m_goTransform->SetLocalPosition(position);
+		m_goTransform->SetLocalScale(extents * 2);
+		m_goTransform->SetLocalRotation(roatate);
+	}
+
+
 
 	DirectX::XMFLOAT3 eulerRadians(
 		roatate.x,

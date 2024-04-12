@@ -22,8 +22,8 @@ public:
 	
 
 public:
-	void Move(Vec3 amount) { m_position += amount; }
-	void MoveTo(Vec3 position) { m_position = position; }
+	void Move(Vec3 amount);
+	void MoveTo(Vec3 position);
 	void AddForce(Vec3 amount) { m_force = amount; }
 
 

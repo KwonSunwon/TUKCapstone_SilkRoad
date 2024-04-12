@@ -8,6 +8,7 @@
 #include "MeshRenderer.h"
 #include "Material.h"
 #include "Texture.h"
+#include  "Timer.h"
 
 
 Terrain::Terrain() : Component(COMPONENT_TYPE::TERRAIN)
@@ -75,34 +76,36 @@ void Terrain::Init(int32 sizeX, int32 sizeZ)
 		shared_ptr<Vec3> norm = make_shared<Vec3>();
 		shared_ptr<float> h = make_shared < float >();
 
-		for (int i = 0; i < 10; ++i) {
-			for (int j = 0; j < 10; ++j) {
-				shared_ptr<GameObject> m_go = make_shared<GameObject>();
-				m_go->AddComponent(make_shared<Transform>());
+		if (DEBUG_MODE) {
+			for (int i = 0; i < 10; ++i) {
+				for (int j = 0; j < 10; ++j) {
+					shared_ptr<GameObject> m_go = make_shared<GameObject>();
+					m_go->AddComponent(make_shared<Transform>());
 
-				getHeight(50 + i * 1000, 50 + j * 1000, h, norm);
-				m_go->GetTransform()->SetLocalPosition(Vec3(50 + i * 1000, *h, 50 + j * 1000) - (*norm) * 50);
-				m_go->GetTransform()->LookAt(*norm);
-				m_go->GetTransform()->SetLocalScale(Vec3(100, 100, 100));
-				shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
-				{
-					shared_ptr<Mesh> sphereMesh = GET_SINGLE(Resources)->LoadCubeMesh();
-					meshRenderer->SetMesh(sphereMesh);
-				}
-				{
-					shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"WireFrame");
-					shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"Wood", L"..\\Resources\\Texture\\Wood.jpg");
-					shared_ptr<Material> material = make_shared<Material>();
-					material->SetShader(shader);
-					material->SetTexture(0, texture);
+					getHeight(5000 + i * 1000, 5000 + j * 1000, h, norm);
+					m_go->GetTransform()->SetLocalPosition(Vec3(5000 + i * 1000, *h, 5000 + j * 1000) - (*norm) * 150);
+					m_go->GetTransform()->LookAt(*norm);
+					m_go->GetTransform()->SetLocalScale(Vec3(300, 300, 300));
+					shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
+					{
+						shared_ptr<Mesh> sphereMesh = GET_SINGLE(Resources)->LoadCubeMesh();
+						meshRenderer->SetMesh(sphereMesh);
+					}
+					{
+						shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"WireFrame");
+						shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"Wood", L"..\\Resources\\Texture\\Wood.jpg");
+						shared_ptr<Material> material = make_shared<Material>();
+						material->SetShader(shader);
+						material->SetTexture(0, texture);
 
-					material->SetInt(3, 1);
-					material->SetVec4(3, Vec4(1, 0, 0, 1));
-					meshRenderer->SetMaterial(material);
+						material->SetInt(3, 1);
+						material->SetVec4(3, Vec4(1, 0, 0, 1));
+						meshRenderer->SetMaterial(material);
+					}
+					m_go->AddComponent(meshRenderer);
+					testCols.push_back(m_go);
+					//GET_SINGLE(SceneManager)->GetActiveScene()->AddGameObject(m_go);
 				}
-				m_go->AddComponent(meshRenderer);
-				testCols.push_back(m_go);
-				//GET_SINGLE(SceneManager)->GetActiveScene()->AddGameObject(m_go);
 			}
 		}
 

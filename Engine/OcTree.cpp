@@ -10,6 +10,7 @@
 #include "RigidBody.h"
 #include "Terrain.h"
 #include "Transform.h"
+#include "Timer.h"
 
 OcTree::OcTree(int maxSize, int minSize)
 {
@@ -143,19 +144,20 @@ void OcTree::CollisionInspection(shared_ptr<BaseCollider> bs)
 
 void OcTree::Update()
 {
-	UpdateOcnode(m_rootNode);
+	//UpdateOcnode(m_rootNode);
 
 }
 
 void OcTree::UpdateOcnode(shared_ptr<OcNode> currentNode)
 {
+	
 	currentNode->Update();
 	for (int i = 0; i < currentNode->IncludedObjectAABBCount(); ++i)
 	{
 		if (currentNode->IncludedObjectAABB(i)->updatePos) {
 			currentNode->IncludedObjectAABB(i)->updatePos = false;
 			shared_ptr<BaseCollider> tempCol = currentNode->IncludedObjectAABB(i);
-			int id =tempCol->GetColliderId();
+			int id = tempCol->GetColliderId();
 			currentNode->DeleteCol(id);
 			InsertObjectCollider(tempCol);
 		}
@@ -169,6 +171,7 @@ void OcTree::UpdateOcnode(shared_ptr<OcNode> currentNode)
 		shared_ptr<OcNode> childNode = currentNode->GetChildNode(i);
 		UpdateOcnode(childNode);
 	}
+
 }
 
 

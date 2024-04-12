@@ -11,8 +11,8 @@ enum class ColliderType
 
 class BaseCollider : public Component, public std::enable_shared_from_this<BaseCollider>
 {
-private:
-	
+protected:
+	shared_ptr<GameObject> m_go;
 public:
 	BaseCollider(ColliderType colliderType);
 	virtual ~BaseCollider();
@@ -35,6 +35,8 @@ public:
 	void setColor(Vec4 color, bool active);
 
 	int GetColliderId() { return m_id; }
+	shared_ptr<GameObject> GetDebugCollider();
+
 
 	void UpdateNodePos();
 	bool updatePos = false;
@@ -47,5 +49,5 @@ public:
 	
 	
 public:
-	shared_ptr<GameObject> m_go;
+	
 };

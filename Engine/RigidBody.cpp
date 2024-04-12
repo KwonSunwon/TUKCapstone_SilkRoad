@@ -34,6 +34,18 @@ void RigidBody::FinalUpdate()
 	GetTransform()->SetLocalPosition(m_position);
 }
 
+void RigidBody::Move(Vec3 amount)
+{
+	m_position += amount;
+	GetGameObject()->GetCollider()->UpdateNodePos();
+}
+
+void RigidBody::MoveTo(Vec3 position)
+{
+	m_position = position;
+	GetGameObject()->GetCollider()->UpdateNodePos();
+}
+
 void RigidBody::MovementStep(int iterations)
 {
 
@@ -43,18 +55,19 @@ void RigidBody::MovementStep(int iterations)
 		return;
 
 	//test position reset
+	if(DEBUG_MODE)
 	{
-		if (m_position.x > 25000.f)
+		if (m_position.x > 50000.f)
 			m_position.x = 0;
 
-		if (m_position.z > 25000.f)
+		if (m_position.z > 50000.f)
 			m_position.z = 0;
 
 		if (m_position.x < 0)
-			m_position.x = 25000;
+			m_position.x = 50000;
 
 		if (m_position.z < 0)
-			m_position.z = 25000;
+			m_position.z = 50000;
 
 		if (m_position.y < -1000)
 		{
@@ -78,7 +91,9 @@ void RigidBody::MovementStep(int iterations)
 
 	
 
-	
+	if (m_linearVelocity.LengthSquared() > 0.f) {
+		GetGameObject()->GetCollider()->UpdateNodePos();
+	}
 }
 
 

@@ -179,6 +179,7 @@ public:								\
 
 #define INPUT				GET_SINGLE(Input)
 #define DELTA_TIME			GET_SINGLE(Timer)->GetDeltaTime()
+#define DEBUG_MODE			GET_SINGLE(Timer)->GetDebugMode()
 
 #define CONST_BUFFER(type)	GEngine->GetConstantBuffer(type)
 
