@@ -198,9 +198,16 @@ void Host::Connection(ushort id)
 		}
 	}
 
+	chrono::steady_clock::time_point startTime;
+	chrono::steady_clock::time_point endTime;
+	float elapsedTime;
+	float remainTime;
+
 	// 게스트와 패킷 송수신
 	int retval;
 	while(GetState() == NETWORK_STATE::HOST) {
+		startTime = chrono::steady_clock::now();
+
 		Packet packet;
 		// 서버에서 게스트로 보내는 패킷
 		while(eventQue->toClient.TryPop(packet)) {
@@ -221,6 +228,13 @@ void Host::Connection(ushort id)
 			if(retval < 0) {
 				break;
 			}
+		}
+
+		endTime = chrono::steady_clock::now();
+		elapsedTime = chrono::duration<float>(endTime - startTime).count();
+		remainTime = SEND_PACKET_PER_SEC - elapsedTime;
+		if(remainTime > 0.f) {
+			this_thread::sleep_for(chrono::duration<float>(remainTime));
 		}
 	}
 }
