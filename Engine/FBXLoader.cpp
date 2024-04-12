@@ -263,15 +263,12 @@ void FBXLoader::GetTangent(FbxMesh* mesh, FbxMeshInfo* meshInfo, int32 idx, int3
 	meshInfo->vertices[idx].tangent.z = static_cast<float>(vec.mData[2]);
 }
 
-void FBXLoader::GetUV(FbxMesh* mesh, FbxMeshInfo* meshInfo, int32 idx, int32 uvIndex, aiMesh* assimpMesh)
+void FBXLoader::GetUV(FbxMesh* mesh, FbxMeshInfo* meshInfo, int32 idx, int32 uvIndex)
 {
-	XMFLOAT2 uv = XMFLOAT2(&assimpMesh->mTextureCoords[0][uvIndex].x);
-	//int a = mesh->GetElementUV()->;
-	//meshInfo->vertices[idx].uv.x = static_cast<float>(uv.mData[0]);
-	//meshInfo->vertices[idx].uv.y = 1.f - static_cast<float>(uv.mData[1]);
+	FbxVector2 uv = mesh->GetElementUV()->GetDirectArray().GetAt(uvIndex);
+	meshInfo->vertices[idx].uv.x = static_cast<float>(uv.mData[0]);
+	meshInfo->vertices[idx].uv.y = 1.f - static_cast<float>(uv.mData[1]);
 
-	meshInfo->vertices[idx].uv.x = static_cast<float>(uv.x);
-	meshInfo->vertices[idx].uv.y = static_cast<float>(uv.y);
 }
 
 Vec4 FBXLoader::GetMaterialData(FbxSurfaceMaterial* surface, const char* materialName, const char* factorName)
