@@ -337,10 +337,10 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 		
 		//shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Start_Plank.fbx");
 		
-		for (int i = 0; i < 8; ++i) {
-			for (int j = 0; j < 1; ++j) {
+		for (int i = 0; i < 60; ++i) {
+			for (int j = 0; j < 100; ++j) {
 				//shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Env_Plant_Flower_Large_02.fbx");
-				shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Start_Plank.fbx");
+				shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Env_Plant_Flower_Large_02.fbx");
 				//shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Start_Plank.fbx");
 		
 				vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
@@ -352,25 +352,25 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 				//if(i==0)
 					//gameObjects[0]->AddComponent(make_shared<TestDragon>());
 
-				gameObjects[0]->AddComponent(make_shared<RigidBody>());
-				gameObjects[0]->GetRigidBody()->m_useGravity = true;
-				if (i&1) {
-					
-					gameObjects[0]->AddComponent(make_shared<SphereCollider>());
-					gameObjects[0]->GetCollider()->SetRadius(90);
-					gameObjects[0]->GetCollider()->SetCenter(Vec3(-150.f + 400.f * i, 500.f, 2000.f + 400.f * j));
-					
-				}
-				else {
-					//gameObjects[0]->AddComponent(make_shared<BoxCollider>());
-					gameObjects[0]->AddComponent(make_shared<OrientedBoxCollider>());
-					gameObjects[0]->GetCollider()->SetExtent(Vec3(50, 100, 50));
-					gameObjects[0]->GetCollider()->SetCenter(Vec3(-150.f + 400.f * i, 500.f, 2000.f + 400.f * j));
-				}
+				//gameObjects[0]->AddComponent(make_shared<RigidBody>());
+				//gameObjects[0]->GetRigidBody()->m_useGravity = true;
+				//if (i&1) {
+				//	
+				//	gameObjects[0]->AddComponent(make_shared<SphereCollider>());
+				//	gameObjects[0]->GetCollider()->SetRadius(90);
+				//	gameObjects[0]->GetCollider()->SetCenter(Vec3(-150.f + 400.f * i, 500.f, 2000.f + 400.f * j));
+				//	
+				//}
+				//else {
+				//	//gameObjects[0]->AddComponent(make_shared<BoxCollider>());
+				//	gameObjects[0]->AddComponent(make_shared<OrientedBoxCollider>());
+				//	gameObjects[0]->GetCollider()->SetExtent(Vec3(50, 100, 50));
+				//	gameObjects[0]->GetCollider()->SetCenter(Vec3(-150.f + 400.f * i, 500.f, 2000.f + 400.f * j));
+				//}
 
 
 				gameObjects[0]->GetMeshRenderer()->GetMaterial()->SetInt(0, 0);
-				scene->AddGameObject(gameObjects[0]->GetCollider()->m_go);
+				//scene->AddGameObject(gameObjects[0]->GetCollider()->m_go);
 				scene->AddGameObject(gameObjects[0]);
 			}
 
