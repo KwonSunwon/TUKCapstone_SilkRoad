@@ -169,6 +169,9 @@
     <ClCompile Include="OrientedBoxCollider.cpp">
       <Filter>Object\Component\Collider</Filter>
     </ClCompile>
+    <ClCompile Include="AssimpLoader.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -312,6 +315,9 @@
     <ClInclude Include="D3D1211On12.h" />
     <ClInclude Include="OrientedBoxCollider.h">
       <Filter>Object\Component\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="AssimpLoader.h">
+      <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -343,23 +343,10 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 		
 		
 		//shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Start_Plank.fbx");
-		//{
-		//	shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Start_Plank.fbx");
-		//	vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
-		//	gameObjects[0]->GetTransform()->SetLocalPosition(Vec3(1500.f , 300.f, 2000.f));
-		//	gameObjects[0]->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
-		//	gameObjects[0]->SetCheckFrustum(false);
-		//	gameObjects[0]->AddComponent(make_shared<RigidBody>());
-		//	gameObjects[0]->GetRigidBody()->SetStatic(true);
-		//	gameObjects[0]->AddComponent(make_shared<SphereCollider>());
-		//	gameObjects[0]->GetCollider()->SetRadius(100.f);
-		//	
-		//	gameObjects[0]->GetMeshRenderer()->GetMaterial()->SetInt(0, 0);
-		//	//gameObjects[0]->GetTransform()->SetLocalRotation(Vec3(0.5, 0, 0));
-		//	scene->AddGameObject(gameObjects[0]->GetCollider()->m_go);
-		//	scene->AddGameObject(gameObjects[0]);
-		//}
-
+		
+		for (int i = 0; i < 8; ++i) {
+			for (int j = 0; j < 8; ++j) {
+				shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Start_Plank.fbx");
 		
 
 		

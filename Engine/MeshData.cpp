@@ -7,6 +7,7 @@
 #include "Transform.h"
 #include "MeshRenderer.h"
 #include "Animator.h"
+#include "AssimpLoader.h"
 
 MeshData::MeshData() : Object(OBJECT_TYPE::MESH_DATA)
 {
@@ -20,6 +21,8 @@ shared_ptr<MeshData> MeshData::LoadFromFBX(const wstring& path)
 {
 	FBXLoader loader;
 	loader.LoadFbx(path);
+
+	AssimpLoader assimpLoader;
 
 	shared_ptr<MeshData> meshData = make_shared<MeshData>();
 
