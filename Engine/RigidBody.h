@@ -10,6 +10,7 @@ enum class FORCEMODE : uint8
 	END,
 };
 class Terrain;
+class BaseCollider;
 
 class RigidBody : public Component
 {
@@ -55,10 +56,14 @@ private:
 	float m_invMass= 1/50.f;
 	bool m_isStatic = false;
 
+	float m_maxSpeed = 1000.f;
+	
+
 	Vec3 m_gravity = { 0.f,-980.f,0.f };
-	int m_iterations;
+	
 
 	shared_ptr< Terrain > m_gameTerrain;
+	shared_ptr<BaseCollider> m_baseCollider;
 
 	
 };

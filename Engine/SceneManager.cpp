@@ -343,123 +343,120 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 		
 		
 		//shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Start_Plank.fbx");
+	
 		
-		for (int i = 0; i < 8; ++i) {
-			for (int j = 0; j < 8; ++j) {
-				shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Start_Plank.fbx");
+		int a = 3;
 		
-
+		for (int i = 0; i < 3; ++i) {
+			for (int j = 0; j < 5; ++j) {
+				shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Characters.fbx");
 		
-		//for (int i = 0; i < 10; ++i) {
-		//	for (int j = 0; j < 10; ++j) {
-		//		shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Start_Plank.fbx");
-		//
-		//		vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
-		//		//gameObjects[0]->GetTransform()->SetLocalRotation(Vec3(0.f, XMConvertToRadians(180.f), 0.f));
-		//		gameObjects[0]->GetTransform()->SetLocalPosition(Vec3(1500.f, 1500.f + 400.f * (i * 4 + j), 2000.f ));
-		//		gameObjects[0]->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
-		//		gameObjects[0]->SetCheckFrustum(false);
+				vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
+				//gameObjects[0]->GetTransform()->SetLocalRotation(Vec3(0.f, XMConvertToRadians(180.f), 0.f));
+				gameObjects[i*3+j]->GetTransform()->SetLocalPosition(Vec3(1500.f + 200*j, 1500.f + 300.f*i , 2000.f ));
+				gameObjects[i * 3 + j]->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
+				gameObjects[i * 3 + j]->SetCheckFrustum(false);
 
-		//		
-		//		
-		//		gameObjects[0]->AddComponent(make_shared<TestDragon>());
+				
+				
+				gameObjects[i * 3 + j]->AddComponent(make_shared<TestDragon>());
 
-		//		gameObjects[0]->AddComponent(make_shared<RigidBody>());
-		//		if (i == 0 && j==0)
-		//			gameObjects[0]->GetRigidBody()->SetStatic(true);
-		//		//gameObjects[0]->GetRigidBody()->m_useGravity = true;
-		//		if (i&1) {
-		//			/*gameObjects[0]->AddComponent(make_shared<OrientedBoxCollider>());
-		//			gameObjects[0]->GetCollider()->SetExtent(Vec3(50, 100, 50));
-		//			gameObjects[0]->GetCollider()->SetCenter(Vec3(1500.f + 400.f * i, 1500.f, 2000.f + 400.f * j));*/
-		//			
-		//			gameObjects[0]->AddComponent(make_shared<SphereCollider>());
-		//			gameObjects[0]->GetCollider()->SetRadius(100.f);
-		//			gameObjects[0]->GetCollider()->SetCenter(Vec3(500.f + 400.f, 500.f + 300*i, 2000.f));
-		//			
-		//		}
-		//		else {
-		//			/*gameObjects[0]->AddComponent(make_shared<SphereCollider>());
-		//			gameObjects[0]->GetCollider()->SetRadius(100.f);
-		//			gameObjects[0]->GetCollider()->SetCenter(Vec3(500.f + 400.f, 500.f + 300*i, 2000.f));*/
-
-		//			gameObjects[0]->AddComponent(make_shared<OrientedBoxCollider>());
-		//			gameObjects[0]->GetCollider()->SetExtent(Vec3(50, 100, 50));
-		//			gameObjects[0]->GetCollider()->SetCenter(Vec3(500.f + 400.f * i, 500.f, 2000.f + 400.f * j));
-		//			
-		//		}
-
-
-		//		gameObjects[0]->GetMeshRenderer()->GetMaterial()->SetInt(0, 0);
-		//		if(gameObjects[0]->GetCollider()->GetDebugCollider()!=nullptr)
-		//			scene->AddGameObject(gameObjects[0]->GetCollider()->GetDebugCollider());
-
-		//		scene->AddGameObject(gameObjects[0]);
-		//	}
-		//}
-		// 
-		// 
-		for (int w = 0; w < 2; ++w) {
-			for (int q = 0; q < 2; ++q) {
-				for (int i = 0; i < 2; ++i) {
-					for (int j = 0; j < 2; ++j) {
-
-						shared_ptr<GameObject> gm = make_shared<GameObject>();
-						gm->AddComponent(make_shared<Transform>());
-						gm->GetTransform()->SetLocalScale(Vec3(100.f,100.f,100.f));
-						gm->GetTransform()->SetLocalPosition(Vec3(1500.f + 400 * w, 1500.f + 400.f * (i * 4 + j), 2000.f + 400 * q));
-						
-						shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
-						{
-							shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadCubeMesh();
-							meshRenderer->SetMesh(mesh);
-						}
-
-						{
-							shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"WireFrame");
-							shared_ptr<Material> material = make_shared<Material>();
-							material->SetShader(shader);
-
-							material->SetInt(3, 1);
-							material->SetVec4(3, Vec4(1, 1, 1, 1));
-							meshRenderer->SetMaterial(material);
-						}
-						gm->AddComponent(meshRenderer);
-						gm->AddComponent(make_shared<TestDragon>());
-						gm->AddComponent(make_shared<RigidBody>());
-						if (i == 0 && j == 0)
-							gm->GetRigidBody()->SetStatic(true);
-						//gameObjects[0]->GetRigidBody()->m_useGravity = true;
-						if (i & 1) {
-							gm->AddComponent(make_shared<OrientedBoxCollider>());
-							gm->GetCollider()->SetExtent(Vec3(50, 50, 50));
-							gm->GetCollider()->SetCenter(Vec3(1500.f + 400.f * i, 1500.f, 2000.f + 400.f * j));
-
-							/*gm->AddComponent(make_shared<SphereCollider>());
-							gm->GetCollider()->SetRadius(100.f);
-							gm->GetCollider()->SetCenter(Vec3(500.f + 400.f, 500.f + 300 * i, 2000.f));*/
-
-						}
-						else {
-							/*gm->AddComponent(make_shared<SphereCollider>());
-							gm->GetCollider()->SetRadius(100.f);
-							gm->GetCollider()->SetCenter(Vec3(500.f + 400.f, 500.f + 300*i, 2000.f));*/
-
-							gm->AddComponent(make_shared<OrientedBoxCollider>());
-							gm->GetCollider()->SetExtent(Vec3(50, 50, 50));
-							gm->GetCollider()->SetCenter(Vec3(500.f + 400.f * i, 500.f, 2000.f + 400.f * j));
-
-						}
-
-
-						//gm->GetMeshRenderer()->GetMaterial()->SetInt(0, 0);
-						if(gm->GetCollider()->GetDebugCollider()!=nullptr)
-							scene->AddGameObject(gm->GetCollider()->GetDebugCollider());
-						scene->AddGameObject(gm);
-					}
+				gameObjects[i * 3 + j]->AddComponent(make_shared<RigidBody>());
+				if (i == 0 && j==0)
+					gameObjects[j]->GetRigidBody()->SetStatic(true);
+				//gameObjects[0]->GetRigidBody()->m_useGravity = true;
+				if (i&1) {
+					/*gameObjects[0]->AddComponent(make_shared<OrientedBoxCollider>());
+					gameObjects[0]->GetCollider()->SetExtent(Vec3(50, 100, 50));
+					gameObjects[0]->GetCollider()->SetCenter(Vec3(1500.f + 400.f * i, 1500.f, 2000.f + 400.f * j));*/
+					
+					gameObjects[i * 3 + j]->AddComponent(make_shared<SphereCollider>());
+					gameObjects[i * 3 + j]->GetCollider()->SetRadius(100.f);
+					gameObjects[i * 3 + j]->GetCollider()->SetCenter(Vec3(500.f + 400.f, 500.f + 300*i, 2000.f));
+					
 				}
+				else {
+					/*gameObjects[0]->AddComponent(make_shared<SphereCollider>());
+					gameObjects[0]->GetCollider()->SetRadius(100.f);
+					gameObjects[0]->GetCollider()->SetCenter(Vec3(500.f + 400.f, 500.f + 300*i, 2000.f));*/
+
+					gameObjects[i * 3 + j]->AddComponent(make_shared<OrientedBoxCollider>());
+					gameObjects[i * 3 + j]->GetCollider()->SetExtent(Vec3(50, 100, 50));
+					gameObjects[i * 3 + j]->GetCollider()->SetCenter(Vec3(500.f + 400.f * i, 500.f, 2000.f + 400.f * j));
+					
+				}
+
+
+				gameObjects[i * 3 + j]->GetMeshRenderer()->GetMaterial()->SetInt(0, 0);
+				if(gameObjects[i * 3 + j]->GetCollider()->GetDebugCollider()!=nullptr)
+					scene->AddGameObject(gameObjects[i * 3 + j]->GetCollider()->GetDebugCollider());
+
+				scene->AddGameObject(gameObjects[i * 3 + j]);
 			}
 		}
+		// 
+		// 
+		//for (int w = 0; w < 5; ++w) {
+		//	for (int q = 0; q < 5; ++q) {
+		//		for (int i = 0; i < 5; ++i) {
+		//			for (int j = 0; j < 5; ++j) {
+
+		//				shared_ptr<GameObject> gm = make_shared<GameObject>();
+		//				gm->AddComponent(make_shared<Transform>());
+		//				gm->GetTransform()->SetLocalScale(Vec3(100.f,100.f,100.f));
+		//				gm->GetTransform()->SetLocalPosition(Vec3(1500.f + 400 * w, 1500.f + 400.f * (i * 4 + j), 2000.f + 400 * q));
+		//				
+		//				shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
+		//				{
+		//					shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadCubeMesh();
+		//					meshRenderer->SetMesh(mesh);
+		//				}
+
+		//				{
+		//					shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"WireFrame");
+		//					shared_ptr<Material> material = make_shared<Material>();
+		//					material->SetShader(shader);
+
+		//					material->SetInt(3, 1);
+		//					material->SetVec4(3, Vec4(1, 1, 1, 1));
+		//					meshRenderer->SetMaterial(material);
+		//				}
+		//				gm->AddComponent(meshRenderer);
+		//				gm->AddComponent(make_shared<TestDragon>());
+		//				gm->AddComponent(make_shared<RigidBody>());
+		//				if (i == 0 && j == 0)
+		//					gm->GetRigidBody()->SetStatic(true);
+		//				//gameObjects[0]->GetRigidBody()->m_useGravity = true;
+		//				if (i & 1) {
+		//					/*gm->AddComponent(make_shared<OrientedBoxCollider>());
+		//					gm->GetCollider()->SetExtent(Vec3(50, 50, 50));
+		//					gm->GetCollider()->SetCenter(Vec3(1500.f + 400.f * i, 1500.f, 2000.f + 400.f * j));*/
+
+		//					gm->AddComponent(make_shared<SphereCollider>());
+		//					gm->GetCollider()->SetRadius(100.f);
+		//					gm->GetCollider()->SetCenter(Vec3(500.f + 400.f, 500.f + 300 * i, 2000.f));
+
+		//				}
+		//				else {
+		//					gm->AddComponent(make_shared<SphereCollider>());
+		//					gm->GetCollider()->SetRadius(100.f);
+		//					gm->GetCollider()->SetCenter(Vec3(500.f + 400.f, 500.f + 300*i, 2000.f));
+
+		//					/*gm->AddComponent(make_shared<OrientedBoxCollider>());
+		//					gm->GetCollider()->SetExtent(Vec3(50, 50, 50));
+		//					gm->GetCollider()->SetCenter(Vec3(500.f + 400.f * i, 500.f, 2000.f + 400.f * j));*/
+
+		//				}
+
+
+		//				//gm->GetMeshRenderer()->GetMaterial()->SetInt(0, 0);
+		//				if(gm->GetCollider()->GetDebugCollider()!=nullptr)
+		//					scene->AddGameObject(gm->GetCollider()->GetDebugCollider());
+		//				scene->AddGameObject(gm);
+		//			}
+		//		}
+		//	}
+		//}
 		
 		
 	
