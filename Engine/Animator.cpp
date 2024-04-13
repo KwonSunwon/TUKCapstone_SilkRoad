@@ -30,6 +30,22 @@ void Animator::FinalUpdate()
 	m_frame = min(m_frame, animClip.frameCount - 1);
 	m_nextFrame = min(m_frame + 1, animClip.frameCount - 1);
 	m_frameRatio = static_cast<float>(m_frame - m_frame);
+
+	ExecuteEventFunctions();
+}
+
+void Animator::ExecuteEventFunctions()
+{
+	for (auto it = m_eventFunction.begin(); it != m_eventFunction.end(); ) {
+		auto& [animInfo, event] = *it;
+		if (m_clipIndex == animInfo.first && abs(m_updateTime - animInfo.second) < 0.02) {
+			event();
+			it = m_eventFunction.erase(it);
+		}
+		else {
+			++it;
+		}
+	}
 }
 
 void Animator::SetAnimClip(const vector<AnimClipInfo>* animClips)
@@ -67,4 +83,9 @@ void Animator::Play(uint32 idx)
 	assert(idx < m_animClips->size());
 	m_clipIndex = idx;
 	m_updateTime = 0.f;
+}
+
+void Animator::SetEventFunction(int32 idx, float updateTime, function<void()> func)
+{
+	m_eventFunction.push_back(make_pair(make_pair(idx, updateTime), func));
 }

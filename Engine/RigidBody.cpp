@@ -10,6 +10,8 @@
 #include "Scene.h"
 #include "Terrain.h"
 
+
+
 RigidBody::RigidBody() : Component(COMPONENT_TYPE::RIGIDBODY)
 {
 	
@@ -22,100 +24,90 @@ RigidBody::~RigidBody()
 
 void RigidBody::Awake()
 {
-
+	m_position = GetTransform()->GetLocalPosition();
+	m_baseCollider = GetGameObject()->GetCollider();
+	//m_gameTerrain = GET_SINGLE(SceneManager)->GetActiveScene()->m_terrain->GetTerrain();
 }
 
 void RigidBody::FinalUpdate()
 {
-	if (m_isKinematic)
-		return;
-
-	applyGravity();
-	applyDrag();
-	applyFriction();
-	updatePosition();
-}
-
-void RigidBody::applyGravity()
-{
-	if (!m_useGravity)
-		return;
-
-	accelerate(m_gravity);
-}
-
-void RigidBody::applyFriction()
-{
-	float normalForce = m_mass * m_gravity.y;
-	float friction = m_frictionCoef * normalForce;
-	Vec3 frictionDir = m_velocity;
-	float mag = frictionDir.Length();
-	if (mag > FLT_EPSILON) {
-		frictionDir /= mag;
-		Vec3 frictionForce = frictionDir * friction;
-		Vec3 frictionAcc = frictionForce / m_mass;
-		frictionAcc.y = 0;
-		accelerate(frictionAcc);
-	}
-	 
-}
-
-void RigidBody::applyDrag()
-{
-	float dragMag = m_velocity.LengthSquared() * m_drag;
-	Vec3 dragDir = m_velocity;
-	dragDir.Normalize();
-	dragDir *= -dragMag;
-	addForce(dragDir, FORCEMODE::IMPULSE);
-}
-
-void RigidBody::updatePosition()
-{
-	m_position = GetTransform()->GetLocalPosition();
-	m_priorPosition = m_position;
-	m_velocity += m_acceleration * DELTA_TIME;
-	m_position += m_velocity * DELTA_TIME;
-	m_acceleration = {};
-	float y = GET_SINGLE(SceneManager)->GetActiveScene()->m_terrain->GetTerrain()->getHeight(m_position.x, m_position.z);
-	if (m_position.y - y <= FLT_EPSILON) {
-		m_position.y = y;
-		m_velocity.y = 0;
-	}
+	//MovementStep();
 	GetTransform()->SetLocalPosition(m_position);
+}
+
+void RigidBody::Move(Vec3 amount)
+{
+	m_position += amount;
+	m_baseCollider->SetCenter(m_position);
+	m_baseCollider->UpdateNodePos();
+}
+
+void RigidBody::MoveTo(Vec3 position)
+{
+	m_position = position;
+	m_baseCollider->SetCenter(m_position);
+	m_baseCollider->UpdateNodePos();
+}
+
+void RigidBody::MovementStep(int iterations)
+{
+
 	
-	Vec3 difPos = m_position - m_priorPosition;
-	if (difPos.Length() > FLT_EPSILON)
-	{
-		GetGameObject()->GetCollider()->UpdateNodePos();
+
+	if (m_isStatic)
+		return;
+
+	if (m_position.x > 50000.f) {
+		m_position.x = 1000;
+		m_position.y = 2000;
 	}
-}
-
-void RigidBody::accelerate(Vec3 acc)
-{
-	m_acceleration += acc;
-}
-
-void RigidBody::addForce(Vec3 dir, FORCEMODE fm)
-{
-	switch (fm) {
-	case FORCEMODE::FORCE:
-		break;
-
-	case FORCEMODE::ACCELERATION:
-		accelerate(dir);
-		break;
-
-	case FORCEMODE::IMPULSE:
-		accelerate(dir / m_mass);
-		break;
-
-	case FORCEMODE::VELOCITYCHANGE:
-		m_velocity += dir;
-		break;
-
-	default:
 		
-		break;
+
+
+	if (m_position.z > 50000.f) {
+		m_position.z = 1000;
+		m_position.y = 2000;
+	}
+		
+
+	if (m_position.x < 0) {
+		m_position.x = 50000;
+		m_position.y = 2000;
+	}
+
+		
+
+	if (m_position.z < 0) {
+		m_position.z = 50000;
+		m_position.y = 2000;
+	}
+
+	if (m_position.y < 0) {
+		m_position.y = 2000;
+	}
+		
+	Vec3 acc = m_force / m_mass;
+	m_linearVelocity += acc * DELTA_TIME / (float)iterations;
+	m_linearVelocity += m_gravity * DELTA_TIME / (float)iterations;
+	if (m_linearVelocity.LengthSquared() > m_maxSpeed * m_maxSpeed) {
+		m_linearVelocity.Normalize();
+		m_linearVelocity*= m_maxSpeed;
+	}
+
+	m_position += m_linearVelocity * DELTA_TIME / (float)iterations;
+	m_rotation += m_rotationVelocity * DELTA_TIME / (float)iterations;
+	
+	
+	m_force = Vec3{ 0,0,0 };
+
+	
+
+
+	m_baseCollider->SetCenter(m_position);
+	if (m_linearVelocity.LengthSquared() > 0.f) {
+		m_baseCollider->UpdateNodePos();
 	}
 }
+
+
 

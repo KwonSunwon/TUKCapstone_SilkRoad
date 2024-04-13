@@ -63,10 +63,15 @@ PatchTess ConstantHS(InputPatch<VS_OUT, 3> input, int patchID : SV_PrimitiveID)
     float edge1TessLevel = CalculateTessLevel(g_vec4_0.xyz, edge1Pos, minDistance, maxDistance, 4.f);
     float edge2TessLevel = CalculateTessLevel(g_vec4_0.xyz, edge2Pos, minDistance, maxDistance, 4.f);
 
-    output.edgeTess[0] = edge0TessLevel;
-    output.edgeTess[1] = edge1TessLevel;
-    output.edgeTess[2] = edge2TessLevel;
-    output.insideTess = edge2TessLevel;
+    //output.edgeTess[0] = edge0TessLevel;
+    //output.edgeTess[1] = edge1TessLevel;
+    //output.edgeTess[2] = edge2TessLevel;
+    //output.insideTess = edge2TessLevel;
+    
+    output.edgeTess[0] = 5;
+    output.edgeTess[1] = 5;
+    output.edgeTess[2] = 5;
+    output.insideTess = 5;
 
     return output;
 }
@@ -171,7 +176,7 @@ PS_OUT PS_Main(DS_OUT input)
 
     float4 color = float4(1.f, 1.f, 1.f, 1.f);
     if (g_tex_on_0 == 1)
-        color = g_tex_0.Sample(g_sam_0, input.uv);
+        color = g_tex_0.Sample(g_sam_0, input.uv/64);
 
     float3 viewNormal = input.viewNormal;
     if (g_tex_on_1 == 1)

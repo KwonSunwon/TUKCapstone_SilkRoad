@@ -24,6 +24,7 @@ public:
 	virtual void Save(const wstring& path);
 
 	vector<shared_ptr<GameObject>> Instantiate();
+	shared_ptr<MeshData> Clone();
 
 private:
 	shared_ptr<Mesh>				m_mesh;

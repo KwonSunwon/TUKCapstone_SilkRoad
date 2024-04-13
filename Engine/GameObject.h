@@ -48,6 +48,9 @@ public:
 	void SetStatic(bool flag) { m_static = flag; }
 	bool IsStatic() { return m_static; }
 
+	int m_anim = 0;
+
+	bool m_isCheck = false;
 private:
 	array<shared_ptr<Component>, FIXED_COMPONENT_COUNT> m_components;
 	vector<shared_ptr<MonoBehaviour>> m_scripts;

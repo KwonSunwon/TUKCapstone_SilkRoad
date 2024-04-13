@@ -47,6 +47,7 @@ public:
 	void Render(shared_ptr<class InstancingBuffer>& buffer, uint32 idx = 0);
 
 	static shared_ptr<Mesh> CreateFromFBX(const struct FbxMeshInfo* meshInfo, class FBXLoader& loader);
+	static shared_ptr<Mesh> CreateFromFBXWithAssimp(const struct FbxMeshInfo* meshInfo, const struct AssimpMeshInfo* assimpMeshInfo, class FBXLoader& loader);
 
 private:
 	void CreateVertexBuffer(const vector<Vertex>& buffer);

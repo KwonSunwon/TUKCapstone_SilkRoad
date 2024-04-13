@@ -6,6 +6,8 @@ class Material;
 class StructuredBuffer;
 class Mesh;
 
+//mixamo 30프레임, with skin, uniform, fbx binary
+
 class Animator : public Component
 {
 public:
@@ -17,16 +19,25 @@ public:
 	void SetAnimClip(const vector<AnimClipInfo>* animClips);
 	void PushData();
 
+	float GetUpadteTime(){ return m_updateTime; }
+
 	int32 GetAnimCount() { return static_cast<uint32>(m_animClips->size()); }
 	int32 GetCurrentClipIndex() { return m_clipIndex; }
 	void Play(uint32 idx);
+
+	//애니메이션 인덱스, 원하는 시간, 그 때 동작하길 원하는 함수를 넘겨준다.
+	//딱 한번 실행후 해당 이벤트는 지운다.
+	void SetEventFunction(int32 idx, float updateTime, function<void()> func);
 
 public:
 	virtual void FinalUpdate() override;
 
 private:
+	void ExecuteEventFunctions();
+
 	const vector<BoneInfo>* m_bones;
 	const vector<AnimClipInfo>* m_animClips;
+	vector<pair<pair<int32, float >, function<void()>>> m_eventFunction;
 
 	float							m_updateTime = 0.f;
 	int32							m_clipIndex = 0;

@@ -48,6 +48,7 @@ constexpr std::array<KEY_TYPE, NUM_OF_KEYS> ALL_KEYS =
 	KEY_TYPE::KEY_4,
 	KEY_TYPE::LBUTTON,
 	KEY_TYPE::RBUTTON,
+
 };
 
 enum class KEY_STATE

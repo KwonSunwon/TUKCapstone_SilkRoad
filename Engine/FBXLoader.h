@@ -92,7 +92,9 @@ private:
 	void Import(const wstring& path);
 
 	void ParseNode(FbxNode* root);
+	void ParseNodeWithAssimp(FbxNode* root, aiNode* assimpNode, const aiScene* assimpScene);
 	void LoadMesh(FbxMesh* mesh);
+	void LoadMeshWithAssimp(FbxMesh* mesh, aiMesh* assimpMesh);
 	void LoadMaterial(FbxSurfaceMaterial* surfaceMaterial);
 
 	void		GetNormal(FbxMesh* mesh, FbxMeshInfo* container, int32 idx, int32 vertexCounter);

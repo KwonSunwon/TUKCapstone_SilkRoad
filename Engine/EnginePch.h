@@ -1,9 +1,9 @@
 #pragma once
 
-// std::byte �������?����
+// std::byte �������?����
 #define _HAS_STD_BYTE 0
 
-// TCP/IP ���?
+// TCP/IP ���?
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
 #define _WINSOCKAPI_
 #include <WinSock2.h> 
@@ -11,6 +11,10 @@
 #pragma comment(lib, "ws2_32")
 
 // ���� include
+#include "assimp/Importer.hpp"
+#include "assimp/cimport.h"
+#include "assimp/postprocess.h"
+#include "assimp/scene.h"		// assimp/scene.h �켱������ include ���� �� ���� ���� �߻�
 #include <windows.h>
 #include <tchar.h>
 #include <memory>
@@ -27,11 +31,14 @@
 #include <mutex>
 #include <atomic>
 
+#include <algorithm>
+#include <limits>
 using namespace std;
 
 
 #include <filesystem>
 namespace fs = std::filesystem;
+
 
 #include "d3dx12.h"
 #include "SimpleMath.h"
@@ -81,6 +88,8 @@ using namespace Microsoft::WRL;
 #pragma comment(lib, "FBX\\release\\libxml2-md.lib")
 #pragma comment(lib, "FBX\\release\\zlib-md.lib")
 #endif
+
+#pragma comment(lib, "assimp\\assimp-vc143-mt.lib")
 
 // ���� typedef
 using int8 = __int8;
@@ -151,10 +160,10 @@ enum
 
 struct WindowInfo
 {
-	HWND	hwnd; // ���?������
+	HWND	hwnd; // ���?������
 	int32	width; // �ʺ�
 	int32	height; // ����
-	bool	windowed; // â���?or ��üȭ��
+	bool	windowed; // â���?or ��üȭ��
 };
 
 struct Vertex
@@ -197,6 +206,7 @@ public:								\
 
 #define INPUT				GET_SINGLE(Input)
 #define DELTA_TIME			GET_SINGLE(Timer)->GetDeltaTime()
+#define DEBUG_MODE			GET_SINGLE(Timer)->GetDebugMode()
 
 #define CONST_BUFFER(type)	GEngine->GetConstantBuffer(type)
 

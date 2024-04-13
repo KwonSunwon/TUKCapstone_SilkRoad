@@ -9,6 +9,8 @@ enum class FORCEMODE : uint8
 	VELOCITYCHANGE,
 	END,
 };
+class Terrain;
+class BaseCollider;
 
 class RigidBody : public Component
 {
@@ -21,42 +23,48 @@ public:
 	
 
 public:
+	void Move(Vec3 amount);
+	void MoveTo(Vec3 position);
+	void AddForce(Vec3 amount) { m_force = amount; }
 
-	void addForce(Vec3, FORCEMODE);
 
 public:
-	float m_mass = 1.f;
-	float m_drag = 0.f;
-	float m_angularDrag = 0.f;
+	Vec3 GetPosition() { return m_position; }
+	Vec3 GetLinearVelocity() { return m_linearVelocity; }
+	float GetMass() { return m_mass; }
+	float GetRestitution() { return m_restitution; }
+	bool GetIsStatic() { return m_isStatic; }
+	float GetInvMass() {
+		if (m_isStatic)return 0;
+		else return m_invMass; }
 
-	bool m_useGravity = true;
-	bool m_isKinematic = false;
-
-	
-
-	float m_maxAngularVelocity = 100.f;
-	float m_maxVelocity = 100.f;
-
+	void SetMass(float mass) { m_mass = mass; m_invMass = 1 / mass; }
+	void SetLinearVelocity(Vec3 linearVelocity) { m_linearVelocity = linearVelocity; }
+	void SetStatic(bool isStatic) { m_isStatic = isStatic; }
+	void MovementStep(int iterations);
+private:
 	
 
 private:
-	Vec3 m_gravity = { 0.0,-980,0.0 };
-	float m_frictionCoef = 1.f;
-	
 	Vec3 m_position = {};
-	Vec3 m_acceleration = {};
+	Vec3 m_linearVelocity = {};
 	Vec3 m_rotation = {};
-	Vec3 m_angularVelocity = {};
-	Vec3 m_velocity = {};
-	Vec3 m_priorPosition = {};
+	Vec3 m_rotationVelocity = {};
+	Vec3 m_force = {};
+	float m_mass = 50.f;					//Áú·®
+	float m_restitution = 0.f;
+	float m_invMass= 1/50.f;
+	bool m_isStatic = false;
 
+	float m_maxSpeed = 1000.f;
+	
 
+	Vec3 m_gravity = { 0.f,-980.f,0.f };
+	
 
-	void applyGravity();
-	void applyFriction();
-	void applyDrag();
-	void updatePosition();
-	void accelerate(Vec3);
+	shared_ptr< Terrain > m_gameTerrain;
+	shared_ptr<BaseCollider> m_baseCollider;
+
 	
 };
 

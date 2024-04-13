@@ -168,6 +168,13 @@
     <ClCompile Include="OcTree.cpp">
       <Filter>Manager</Filter>
     </ClCompile>
+    <ClCompile Include="D3D1211On12.cpp" />
+    <ClCompile Include="OrientedBoxCollider.cpp">
+      <Filter>Object\Component\Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="AssimpLoader.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
     <ClCompile Include="Network.cpp">
       <Filter>Server</Filter>
     </ClCompile>
@@ -317,6 +324,13 @@
     </ClInclude>
     <ClInclude Include="OcTree.h">
       <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D1211On12.h" />
+    <ClInclude Include="OrientedBoxCollider.h">
+      <Filter>Object\Component\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="AssimpLoader.h">
+      <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="Network.h">
       <Filter>Server</Filter>

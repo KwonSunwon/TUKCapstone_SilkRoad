@@ -8,6 +8,7 @@
 #include "MeshRenderer.h"
 #include "Material.h"
 #include "Texture.h"
+#include  "Timer.h"
 
 
 Terrain::Terrain() : Component(COMPONENT_TYPE::TERRAIN)
@@ -21,6 +22,9 @@ Terrain::~Terrain()
 
 void Terrain::Init(int32 sizeX, int32 sizeZ)
 {
+	
+
+
 	m_sizeX = sizeX;
 	m_sizeZ = sizeZ;
 
@@ -60,10 +64,28 @@ void Terrain::Init(int32 sizeX, int32 sizeZ)
 	while (file.read(reinterpret_cast<char*>(&pixel), sizeof(pixel))) {
 		m_height->push_back(pixel);
 	}
+
+
+
+	{
+		Vec3 scale = GetTransform()->GetLocalScale();
+		float mapSizeX = scale.x * m_sizeX;
+		float mapSizeZ = scale.z * m_sizeZ;
+		float blockX = mapSizeX / m_texSizeX;
+		float blockZ = mapSizeZ / m_texSizeZ;
+		shared_ptr<Vec3> norm = make_shared<Vec3>();
+		shared_ptr<float> h = make_shared < float >();
+
+	}
 }
 
 void Terrain::FinalUpdate()
 {
+	
+		
+
+
+	
 	shared_ptr<Camera> mainCamera = GET_SINGLE(SceneManager)->GetActiveScene()->GetMainCamera();
 	if (mainCamera == nullptr)
 		return;
@@ -72,21 +94,49 @@ void Terrain::FinalUpdate()
 	m_material->SetVec4(0, Vec4(pos.x, pos.y, pos.z, 0));
 }
 
-float Terrain::getHeight(float fx, float fz)
+void Terrain::Awake()
 {
+	
+
+	
+	
+	
+
+}
+
+void Terrain::getHeight(float fx, float fz , shared_ptr<float> height, shared_ptr<Vec3> terrainNormal)
+{
+
+
 	Vec3 scale = GetTransform()->GetLocalScale();
-	int x = int(fx * m_texSizeX / (scale.x * m_sizeX));
-	int z = int(fz * m_texSizeZ / (scale.z * m_sizeZ));
-	fx = fx * m_texSizeX / (scale.x * m_sizeX);
-	fz = fz * m_texSizeZ / (scale.z * m_sizeZ);
 
-	if (x < 0 || x > m_texSizeX)
-		return 0;
+	//전체 터레인 크기
+	float mapSizeX = scale.x * m_sizeX;
+	float mapSizeZ = scale.z * m_sizeZ;
 
-	if (z < 0 || z > m_texSizeZ)
-		return 0;
+	//높이맵의 인덱스 접근
+	int x = int(fx * m_texSizeX / mapSizeX);
+	int z = int(fz * m_texSizeZ / mapSizeZ);
+
+	//높이맵의 인덱스에서 비율
+	fx = fx * m_texSizeX / mapSizeX;
+	fz = fz * m_texSizeZ / mapSizeZ;
+
+	//높이맵의 한 픽셀의 실제 게임 월드에서 크기
+	float blockX = mapSizeX / m_texSizeX;
+	float blockZ = mapSizeZ / m_texSizeZ;
+
+	//예외처리
 	int index = x + m_texSizeX * (m_texSizeZ - 1 - z);
+	if (x < 0 || x > m_texSizeX)
+		return;
+	if (z < 0 || z+2 > m_texSizeZ)
+		return;
+	if (index+1 >= m_height->size())
+		return;
 
+
+	//해당 위치에서의 주변 점 높이 구하기
 	float fxPercent = fx - x;
 	float fzPercent = fz - z;
 	float fBottomLeft =		(float)(*m_height)[x + m_texSizeX * (m_texSizeZ - 1 - z) + 0];
@@ -94,11 +144,34 @@ float Terrain::getHeight(float fx, float fz)
 	float fTopLeft =		(float)(*m_height)[x + m_texSizeX * (m_texSizeZ - 2 - z) + 0];
 	float fTopRight =		(float)(*m_height)[x + m_texSizeX * (m_texSizeZ - 2 - z) + 1];
 
+	//법선벡터를 찾기 위해 포함되는 삼각형 찾기
+	Vec3 edgeA, edgeB;
+	if (fxPercent + fzPercent < 1) {
+		edgeA = Vec3(blockX, (fBottomRight - fBottomLeft) / 255 * scale.y, 0.f);
+		edgeB = Vec3(0.f, (fTopLeft - fBottomLeft) / 255 * scale.y, blockZ);
+	}
+	else {
+		edgeA = Vec3(-blockX, (fTopLeft - fTopRight) / 255 * scale.y, 0.f);
+		edgeB = Vec3(0.f, (fBottomRight - fTopRight) / 255 * scale.y, -blockZ);
+	}
 
+	//법선벡터 계산
+	*terrainNormal = edgeA.Cross(edgeB);
+	if ((*terrainNormal).y < 0.f)
+		(*terrainNormal) = -(*terrainNormal);
+	(*terrainNormal).Normalize();
 
+	//높이의 선형보간을 위해 포함되는 삼각형 찾기
+	if (fxPercent + fzPercent < 1)fTopRight = fTopLeft + (fBottomRight - fBottomLeft);
+	else fBottomLeft = fTopLeft + (fBottomRight - fTopRight);
+
+	//높이 계산
 	float fTopHeight = fTopLeft * (1 - fxPercent) + fTopRight * fxPercent;
 	float fBottomHeight = fBottomLeft * (1 - fxPercent) + fBottomRight * fxPercent;
 	float fHeight = fBottomHeight * (1 - fzPercent) + fTopHeight * fzPercent;
-	return(fHeight / 256 * scale.y);
+
+	//높이를 0~1로 정규화 시켜준뒤 맵의 크기로 곱해준다.
+	*height = (fHeight / 255 * scale.y);
 
 }
+
