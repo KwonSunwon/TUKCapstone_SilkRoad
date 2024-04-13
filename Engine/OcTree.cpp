@@ -544,148 +544,22 @@ bool OcTree::CollisionSphere(shared_ptr<BoundingSphere> mainSphere, shared_ptr<B
 
 bool OcTree::CollisionSphereBox(shared_ptr<BoundingSphere> mainSphere, shared_ptr<BoundingOrientedBox> mainCube, shared_ptr<Vec3> normal, shared_ptr<float> depth, bool isBoxMain)
 {
-	bool cantCol = false;
+
 
 	*depth = FLT_MAX;
-
-	cantCol = ProjectileFromCubePlaneWithSphere(mainCube, mainSphere, normal, depth);
-	if (!cantCol) {
-
-
-		Vec3 sphereCenter = mainSphere->Center;
-		Vec3 centerB = mainCube->Center;
-		Vec3 dir = sphereCenter - centerB;
-		if (!isBoxMain)
-			dir = centerB - sphereCenter;
-		if (dir.Dot(*normal) < 0.f) {
-			*normal = -(*normal);
-		}
-	}
-	else {
-		return false;
-	}
-	return true;
-
-	//*depth = FLT_MAX;
-	//Vec3 axis;
-	//float axisDepth = 0.f;
-	//std::shared_ptr<float> minA = std::make_shared<float>();
-	//std::shared_ptr<float> maxA = std::make_shared<float>();
-	//std::shared_ptr<float> minB = std::make_shared<float>();
-	//std::shared_ptr<float> maxB = std::make_shared<float>();
-
-	//XMFLOAT3 cornersA[8];
-	//shared_ptr<array<Vec3, 8>> cornersArrayA = make_shared<array<Vec3, 8>>();
-	//mainCube->GetCorners(cornersA);
-
-	//for (int i = 0; i < 8; ++i) {
-	//	(*cornersArrayA)[i] = cornersA[i];
-	//}
-
-	//for (int k = 0; k < 3; ++k) {
-	//	Vec3 va = (*cornersArrayA)[planeX[k]];
-	//	Vec3 vb = (*cornersArrayA)[planeY[k]];
-	//	Vec3 vc = (*cornersArrayA)[planeZ[k]];
-
-	//	Vec3 edgeA = va - vb;
-	//	Vec3 edgeB = va - vc;
-	//	Vec3 axis = XMVector3Cross(edgeA, edgeB);
-	//	axis.Normalize();
-
-	//	ProjectCube(cornersArrayA, axis, minA, maxA);
-	//	ProjectSphere(mainSphere->Center, mainSphere->Radius, axis, minB, maxB);
-
-	//	if (*minA >= *maxB || *minB >= *maxA) {
-	//		return false;
-	//	}
-
-	//	axisDepth = min(*maxB - *minA, *maxA - *minB);
-	//	if (axisDepth < *depth) {
-	//		*depth = axisDepth;
-	//		*normal = axis;
-	//	}
-	//}
-
-	//int result = -1;
-	//float minDistance = FLT_MAX;
-	//Vec3 sphereCenter = mainSphere->Center;
-	//Vec3 boxCenter = mainCube->Center;
-
-	//for (int j = 0; j < 8; ++j) {
-	//	Vec3 v = cornersA[j];
-	//	float distance = (v - sphereCenter).Length();
-	//	if (distance < minDistance) {
-	//		minDistance = distance;
-	//		result = j;
-	//	}
-	//}
-	//Vec3 cp = cornersA[result];
-	//axis = cp - sphereCenter;
-	//axis.Normalize();
-	//
-	//ProjectCube(cornersArrayA, axis, minA, maxA);
-	//ProjectSphere(mainSphere->Center, mainSphere->Radius, axis, minB, maxB);
-	//if (*minA >= *maxB || *minB >= *maxA)
-	//{
-	//	return false;
-	//}
-	//axisDepth = min(*maxB - *minA, *maxA - *minB);
-	//if (axisDepth < *depth) {
-	//	*depth = axisDepth;
-	//	*normal = axis;
-	//}
-	//Vec3 dir = boxCenter - sphereCenter;
-	///*if (!isBoxMain)
-	//	dir = sphereCenter - mainCube->Center;*/
-
-
-	//if (dir.Dot(*normal) < 0.f) {
-	//	*normal = -(*normal);
-	//}
-	//return true;
-}
-
-bool OcTree::CollisionBox(shared_ptr<BoundingOrientedBox> mainCube, shared_ptr<BoundingOrientedBox> subCube, shared_ptr<Vec3> normal, shared_ptr<float> depth)
-{
-	bool cantCol = false;
-	*depth = FLT_MAX;
-
-	cantCol = ProjectileFromCubePlane(mainCube, subCube, normal, depth);
-	if (!cantCol)	cantCol = ProjectileFromCubePlane(subCube, mainCube, normal, depth);
-	else return false;
-	if (!cantCol)	cantCol = ProjectileFromCubeEdges(mainCube, subCube, normal, depth);
-	else return false;
-	if (!cantCol) {
-		*depth /= (*normal).Length();
-		(*normal).Normalize();
-
-		Vec3 centerA = mainCube->Center;
-		Vec3 centerB = subCube->Center;
-		Vec3 dir = centerB - centerA;
-
-		if (dir.Dot(*normal) < 0.f) {
-			*normal = -(*normal);
-		}
-
-		
-	}
-	return true;
-	/**depth = FLT_MAX;
+	Vec3 axis;
+	float axisDepth = 0.f;
+	std::shared_ptr<float> minA = std::make_shared<float>();
+	std::shared_ptr<float> maxA = std::make_shared<float>();
+	std::shared_ptr<float> minB = std::make_shared<float>();
+	std::shared_ptr<float> maxB = std::make_shared<float>();
 
 	XMFLOAT3 cornersA[8];
-	XMFLOAT3 cornersB[8];
-	mainCube->GetCorners(cornersA);
-	subCube->GetCorners(cornersB);
 	shared_ptr<array<Vec3, 8>> cornersArrayA = make_shared<array<Vec3, 8>>();
-	shared_ptr<array<Vec3, 8>> cornersArrayB = make_shared<array<Vec3, 8>>();
-	shared_ptr<float> minA = std::make_shared<float>();
-	shared_ptr<float> maxA = std::make_shared<float>();
-	shared_ptr<float> minB = std::make_shared<float>();
-	shared_ptr<float> maxB = std::make_shared<float>();
+	mainCube->GetCorners(cornersA);
 
 	for (int i = 0; i < 8; ++i) {
 		(*cornersArrayA)[i] = cornersA[i];
-		(*cornersArrayB)[i] = cornersB[i];
 	}
 
 	for (int k = 0; k < 3; ++k) {
@@ -696,6 +570,92 @@ bool OcTree::CollisionBox(shared_ptr<BoundingOrientedBox> mainCube, shared_ptr<B
 		Vec3 edgeA = va - vb;
 		Vec3 edgeB = va - vc;
 		Vec3 axis = XMVector3Cross(edgeA, edgeB);
+		axis.Normalize();
+
+		ProjectCube(cornersArrayA, axis, minA, maxA);
+		ProjectSphere(mainSphere->Center, mainSphere->Radius, axis, minB, maxB);
+
+		if (*minA >= *maxB || *minB >= *maxA) {
+			return false;
+		}
+
+		axisDepth = min(*maxB - *minA, *maxA - *minB);
+		if (axisDepth < *depth) {
+			*depth = axisDepth;
+			*normal = axis;
+		}
+	}
+
+	int result = -1;
+	float minDistance = FLT_MAX;
+	Vec3 sphereCenter = mainSphere->Center;
+	Vec3 boxCenter = mainCube->Center;
+
+	for (int j = 0; j < 8; ++j) {
+		Vec3 v = cornersA[j];
+		float distance = (v - sphereCenter).Length();
+		if (distance < minDistance) {
+			minDistance = distance;
+			result = j;
+		}
+	}
+	Vec3 cp = cornersA[result];
+	axis = cp - sphereCenter;
+	axis.Normalize();
+	
+	ProjectCube(cornersArrayA, axis, minA, maxA);
+	ProjectSphere(mainSphere->Center, mainSphere->Radius, axis, minB, maxB);
+	if (*minA >= *maxB || *minB >= *maxA)
+	{
+		return false;
+	}
+	axisDepth = min(*maxB - *minA, *maxA - *minB);
+	if (axisDepth < *depth) {
+		*depth = axisDepth;
+		*normal = axis;
+	}
+	Vec3 dir = boxCenter - sphereCenter;
+	if (isBoxMain)
+		dir = sphereCenter - mainCube->Center;
+
+
+	if (dir.Dot(*normal) < 0.f) {
+		*normal = -(*normal);
+	}
+	return true;
+}
+
+bool OcTree::CollisionBox(shared_ptr<BoundingOrientedBox> mainCube, shared_ptr<BoundingOrientedBox> subCube, shared_ptr<Vec3> normal, shared_ptr<float> depth)
+{
+	
+	*depth = FLT_MAX;
+	XMFLOAT3 cornersA[8];
+	XMFLOAT3 cornersB[8];
+	mainCube->GetCorners(cornersA);
+	subCube->GetCorners(cornersB);
+	shared_ptr<array<Vec3, 8>> cornersArrayA = make_shared<array<Vec3, 8>>();
+	shared_ptr<array<Vec3, 8>> cornersArrayB = make_shared<array<Vec3, 8>>();
+	shared_ptr<float> minA = make_shared<float>();
+	shared_ptr<float> maxA = make_shared<float>();
+	shared_ptr<float> minB = make_shared<float>();
+	shared_ptr<float> maxB = make_shared<float>();
+
+	for (int i = 0; i < 8; ++i) {
+		(*cornersArrayA)[i] = cornersA[i];
+		(*cornersArrayB)[i] = cornersB[i];
+	}
+
+
+
+	for (int k = 0; k < 3; ++k) {
+		Vec3 va = (*cornersArrayA)[planeX[k]];
+		Vec3 vb = (*cornersArrayA)[planeY[k]];
+		Vec3 vc = (*cornersArrayA)[planeZ[k]];
+
+		Vec3 edgeA = va - vb;
+		Vec3 edgeB = va - vc;
+		Vec3 axis = XMVector3Cross(edgeA, edgeB);
+		axis.Normalize();
 
 		ProjectCube(cornersArrayA, axis, minA, maxA);
 		ProjectCube(cornersArrayB, axis, minB, maxB);
@@ -720,6 +680,7 @@ bool OcTree::CollisionBox(shared_ptr<BoundingOrientedBox> mainCube, shared_ptr<B
 		Vec3 edgeA = va - vb;
 		Vec3 edgeB = va - vc;
 		Vec3 axis = XMVector3Cross(edgeA, edgeB);
+		axis.Normalize();
 
 		ProjectCube(cornersArrayA, axis, minA, maxA);
 		ProjectCube(cornersArrayB, axis, minB, maxB);
@@ -746,6 +707,7 @@ bool OcTree::CollisionBox(shared_ptr<BoundingOrientedBox> mainCube, shared_ptr<B
 			Vec3 vb2 = cornersB[lineY[w]];
 			Vec3 edgeB = vb1 - vb2;
 			Vec3 axis = XMVector3Cross(edgeA, edgeB);
+			axis.Normalize();
 			
 
 			if (axis.Length() < FLT_EPSILON)
@@ -771,7 +733,7 @@ bool OcTree::CollisionBox(shared_ptr<BoundingOrientedBox> mainCube, shared_ptr<B
 				*maxB = max(*maxB, projB);
 			}
 
-			if (minA >= maxB || minB >= maxA) {
+			if (*minA >= *maxB || *minB >= *maxA) {
 				return false;
 			}
 
@@ -783,8 +745,6 @@ bool OcTree::CollisionBox(shared_ptr<BoundingOrientedBox> mainCube, shared_ptr<B
 
 		}
 	}
-	*depth /= (*normal).Length();
-	(*normal).Normalize();
 
 	Vec3 centerA = mainCube->Center;
 	Vec3 centerB = subCube->Center;
@@ -794,9 +754,7 @@ bool OcTree::CollisionBox(shared_ptr<BoundingOrientedBox> mainCube, shared_ptr<B
 		*normal = -(*normal);
 	}
 
-	return true;*/
-
-	
+	return true;
 
 }
 
@@ -812,6 +770,7 @@ void OcTree::ProjectCube(shared_ptr<array<Vec3, 8>> corners, Vec3 axis, shared_p
 		*minimum = min(*minimum, projA);
 		*maximun = max(*maximun, projA);
 	}
+
 }
 
 void OcTree::ProjectSphere(Vec3 center, float radius, Vec3 axis, shared_ptr<float> min, shared_ptr<float> max)
@@ -827,168 +786,4 @@ void OcTree::ProjectSphere(Vec3 center, float radius, Vec3 axis, shared_ptr<floa
 		*min = *max;
 		*max = temp;
 	}
-}
-
-bool OcTree::ProjectileFromCubePlane(shared_ptr<BoundingOrientedBox> mainCube, shared_ptr<BoundingOrientedBox> subCube, shared_ptr<Vec3> normal, shared_ptr<float> depth)
-{
-	XMFLOAT3 cornersA[8];
-	XMFLOAT3 cornersB[8];
-	mainCube->GetCorners(cornersA);
-	subCube->GetCorners(cornersB);
-
-	for (int k = 0; k < 3; ++k) {
-		Vec3 va = cornersA[planeX[k]];
-		Vec3 vb = cornersA[planeY[k]];
-		Vec3 vc = cornersA[planeZ[k]];
-
-		Vec3 edgeA = va - vb;
-		Vec3 edgeB = va - vc;
-		Vec3 norm = XMVector3Cross(edgeA, edgeB);
-		norm.Normalize();
-
-		float minA = FLT_MAX;
-		float maxA = -FLT_MAX;
-
-		float minB = FLT_MAX;
-		float maxB = -FLT_MAX;
-
-		for (int j = 0; j < 8; ++j) {
-			Vec3 VA = cornersA[j];
-			float projA = VA.Dot(norm);
-			minA = min(minA, projA);
-			maxA = max(maxA, projA);
-		}
-
-		for (int j = 0; j < 8; ++j) {
-			Vec3 VB = cornersB[j];
-			float projB = VB.Dot(norm);
-			minB = min(minB, projB);
-			maxB = max(maxB, projB);
-		}
-
-		if (minA >= maxB || minB >= maxA) {
-			return true;
-		}
-
-		float axisDepth = min(maxB - minA, maxA - minB);
-		if (axisDepth < *depth) {
-			*depth = axisDepth;
-			*normal = norm;
-		}
-	}
-	return false;
-}
-
-bool OcTree::ProjectileFromCubeEdges(shared_ptr<BoundingOrientedBox> mainCube, shared_ptr<BoundingOrientedBox> subCube, shared_ptr<Vec3> normal, shared_ptr<float> depth)
-{
-	XMFLOAT3 cornersA[8];
-	XMFLOAT3 cornersB[8];
-	mainCube->GetCorners(cornersA);
-	subCube->GetCorners(cornersB);
-
-	for (int q = 0; q < 3; ++q) {
-		Vec3 va1 = cornersA[lineX[q]];
-		Vec3 va2 = cornersA[lineY[q]];
-		Vec3 edgeA = va1 - va2;
-
-		for (int w = 0; w < 3; ++w) {
-			Vec3 vb1 = cornersB[lineX[w]];
-			Vec3 vb2 = cornersB[lineY[w]];
-			Vec3 edgeB = vb1 - vb2;
-			Vec3 norm = XMVector3Cross(edgeA, edgeB);
-			norm.Normalize();
-			if (norm.Length() < FLT_EPSILON)
-				continue;
-
-			float minA = FLT_MAX;
-			float maxA = -FLT_MAX;
-
-			float minB = FLT_MAX;
-			float maxB = -FLT_MAX;
-
-			for (int j = 0; j < 8; ++j) {
-				Vec3 VA = cornersA[j];
-				float projA = VA.Dot(norm);
-				minA = min(minA, projA);
-				maxA = max(maxA, projA);
-			}
-
-			for (int j = 0; j < 8; ++j) {
-				Vec3 VB = cornersB[j];
-				float projB = VB.Dot(norm);
-				minB = min(minB, projB);
-				maxB = max(maxB, projB);
-			}
-
-			if (minA >= maxB || minB >= maxA) {
-				return true;
-			}
-
-			float axisDepth = min((maxB - minA), (maxA - minB));
-			if (axisDepth < *depth) {
-				*depth = axisDepth;
-				*normal = norm;
-			}
-
-		}
-	}
-	return false;
-}
-
-bool OcTree::ProjectileFromCubePlaneWithSphere(shared_ptr<BoundingOrientedBox> mainCube, shared_ptr<BoundingSphere> mainSphere, shared_ptr<Vec3> normal, shared_ptr<float> depth)
-{
-	XMFLOAT3 cornersA[8];
-	mainCube->GetCorners(cornersA);
-
-	for (int k = 0; k < 3; ++k) {
-		Vec3 va = cornersA[planeX[k]];
-		Vec3 vb = cornersA[planeY[k]];
-		Vec3 vc = cornersA[planeZ[k]];
-
-		Vec3 edgeA = va - vb;
-		Vec3 edgeB = va - vc;
-		Vec3 norm = XMVector3Cross(edgeA, edgeB);
-		norm.Normalize();
-
-		float radius = mainSphere->Radius;
-		Vec3 dirAndRadius = norm * radius;
-		Vec3 p1 = mainSphere->Center + dirAndRadius;
-		Vec3 p2 = mainSphere->Center - dirAndRadius;
-
-
-		float minA = FLT_MAX;
-		float maxA = -FLT_MAX;
-
-		float minB = FLT_MAX;
-		float maxB = -FLT_MAX;
-
-		for (int j = 0; j < 8; ++j) {
-			Vec3 VA = cornersA[j];
-			float projA = VA.Dot(norm);
-
-			minA = min(minA, projA);
-			maxA = max(maxA, projA);
-		}
-
-		minB = p1.Dot(norm);
-		maxB = p2.Dot(norm);
-		if (minB > maxB) {
-			float temp = minB;
-			minB = maxB;
-			maxB = temp;
-		}
-
-
-
-		if (minA >= maxB || minB >= maxA) {
-			return true;
-		}
-
-		float axisDepth = min(maxB - minA, maxA - minB);
-		if (axisDepth < *depth) {
-			*depth = axisDepth;
-			*normal = norm;
-		}
-	}
-	return false;
 }

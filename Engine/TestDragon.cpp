@@ -26,7 +26,7 @@ void TestDragon::Update()
 	float speed = 1000;
 
 	shared_ptr<RigidBody> rb = GetRigidBody();
-	if (INPUT->GetButtonDown(KEY_TYPE::W))
+	/*if (INPUT->GetButtonDown(KEY_TYPE::W))
 	{
 		int32 count = GetAnimator()->GetAnimCount();
 		int32 currentIndex = GetAnimator()->GetCurrentClipIndex();
@@ -34,7 +34,7 @@ void TestDragon::Update()
 		int32 index = (currentIndex + 1) % count;
 		
 		GetAnimator()->Play(index);
-	}
+	}*/
 
 	/*if (INPUT->GetButtonDown(KEY_TYPE::KEY_2))
 	{

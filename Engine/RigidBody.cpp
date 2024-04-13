@@ -39,14 +39,14 @@ void RigidBody::Move(Vec3 amount)
 {
 	m_position += amount;
 	m_baseCollider->SetCenter(m_position);
-	GetGameObject()->GetCollider()->UpdateNodePos();
+	m_baseCollider->UpdateNodePos();
 }
 
 void RigidBody::MoveTo(Vec3 position)
 {
 	m_position = position;
 	m_baseCollider->SetCenter(m_position);
-	GetGameObject()->GetCollider()->UpdateNodePos();
+	m_baseCollider->UpdateNodePos();
 }
 
 void RigidBody::MovementStep(int iterations)
@@ -79,6 +79,10 @@ void RigidBody::MovementStep(int iterations)
 
 	if (m_position.z < 0) {
 		m_position.z = 50000;
+		m_position.y = 2000;
+	}
+
+	if (m_position.y < 0) {
 		m_position.y = 2000;
 	}
 		
