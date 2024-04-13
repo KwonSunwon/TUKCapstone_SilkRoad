@@ -27,31 +27,31 @@
 
 void SceneManager::Update()
 {
-	if (m_activeScene == nullptr)
+	if(m_activeScene == nullptr)
 		return;
 
 	m_activeScene->Update();
 	m_activeScene->LateUpdate();
 	m_activeScene->FinalUpdate();
 
-	for (int i = 0; i < m_iterations; ++i) {
+	for(int i = 0; i < m_iterations; ++i) {
 		m_activeScene->PhysicsStep(m_iterations);
 		m_activeScene->testCollision();
 	}
-	
-	
+
+
 }
 
 // TEMP
 void SceneManager::Render()
 {
-	if (m_activeScene)
+	if(m_activeScene)
 		m_activeScene->Render();
 }
 void SceneManager::RenderUI(shared_ptr<D3D11On12Device> device)
 {
 	uint8 backbufferindex = GEngine->GetSwapChain()->GetBackBufferIndex();
-	if (m_activeScene)
+	if(m_activeScene)
 		m_activeScene->RenderUI();
 	D2D1_SIZE_F rtSize = device->GetD3D11On12RT(backbufferindex)->GetSize();
 	D2D1_RECT_F textRect = D2D1::RectF(0, 0, rtSize.width, rtSize.height);
@@ -107,7 +107,7 @@ void SceneManager::SetLayerName(uint8 index, const wstring& name)
 uint8 SceneManager::LayerNameToIndex(const wstring& name)
 {
 	auto findIt = m_layerIndex.find(name);
-	if (findIt == m_layerIndex.end())
+	if(findIt == m_layerIndex.end())
 		return 0;
 
 	return findIt->second;
@@ -134,9 +134,9 @@ shared_ptr<GameObject> SceneManager::Pick(int32 screenX, int32 screenY)
 	float minDistance = FLT_MAX;
 	shared_ptr<GameObject> picked;
 
-	for (auto& gameObject : gameObjects)
+	for(auto& gameObject : gameObjects)
 	{
-		if (gameObject->GetCollider() == nullptr)
+		if(gameObject->GetCollider() == nullptr)
 			continue;
 
 		// ViewSpace������ Ray ����
@@ -150,10 +150,10 @@ shared_ptr<GameObject> SceneManager::Pick(int32 screenX, int32 screenY)
 
 		// WorldSpace���� ����
 		float distance = 0.f;
-		if (gameObject->GetCollider()->Intersects(rayOrigin, rayDir, OUT distance) == false)
+		if(gameObject->GetCollider()->Intersects(rayOrigin, rayDir, OUT distance) == false)
 			continue;
 
-		if (distance < minDistance)
+		if(distance < minDistance)
 		{
 			minDistance = distance;
 			picked = gameObject;
@@ -313,14 +313,14 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 		scene->AddGameObject(obj);
 		scene->m_terrain = obj->GetTerrain();
 
-		for (auto& go : obj->GetTerrain()->testCols) {
+		for(auto& go : obj->GetTerrain()->testCols) {
 			scene->AddGameObject(go);
 		}
 	}
 #pragma endregion
 
 #pragma region UI_Test
-	for (int32 i = 0; i < 6; i++)
+	for(int32 i = 0; i < 6; i++)
 	{
 		shared_ptr<GameObject> obj = make_shared<GameObject>();
 		obj->SetLayerIndex(GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI")); // UI
@@ -336,9 +336,9 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 			shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"Texture");
 
 			shared_ptr<Texture> texture;
-			if (i < 3)
+			if(i < 3)
 				texture = GEngine->GetRTGroup(RENDER_TARGET_GROUP_TYPE::G_BUFFER)->GetRTTexture(i);
-			else if (i < 5)
+			else if(i < 5)
 				texture = GEngine->GetRTGroup(RENDER_TARGET_GROUP_TYPE::LIGHTING)->GetRTTexture(i - 3);
 			else
 				texture = GEngine->GetRTGroup(RENDER_TARGET_GROUP_TYPE::SHADOW)->GetRTTexture(0);
@@ -371,40 +371,40 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 
 #pragma region FBX
 	{
-		
-		
+
+
 		//shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Start_Plank.fbx");
-	
-		
+
+
 		int a = 3;
-		
-		for (int i = 0; i < 3; ++i) {
-			for (int j = 0; j < 5; ++j) {
+
+		for(int i = 0; i < 3; ++i) {
+			for(int j = 0; j < 5; ++j) {
 				shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Characters.fbx");
-		
+
 				vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
 				//gameObjects[0]->GetTransform()->SetLocalRotation(Vec3(0.f, XMConvertToRadians(180.f), 0.f));
-				gameObjects[i*3+j]->GetTransform()->SetLocalPosition(Vec3(1500.f + 200*j, 1500.f + 300.f*i , 2000.f ));
+				gameObjects[i * 3 + j]->GetTransform()->SetLocalPosition(Vec3(1500.f + 200 * j, 1500.f + 300.f * i, 2000.f));
 				gameObjects[i * 3 + j]->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
 				gameObjects[i * 3 + j]->SetCheckFrustum(false);
 
-				
-				
+
+
 				gameObjects[i * 3 + j]->AddComponent(make_shared<TestDragon>());
 
 				gameObjects[i * 3 + j]->AddComponent(make_shared<RigidBody>());
-				if (i == 0 && j==0)
+				if(i == 0 && j == 0)
 					gameObjects[j]->GetRigidBody()->SetStatic(true);
 				//gameObjects[0]->GetRigidBody()->m_useGravity = true;
-				if (i&1) {
+				if(i & 1) {
 					/*gameObjects[0]->AddComponent(make_shared<OrientedBoxCollider>());
 					gameObjects[0]->GetCollider()->SetExtent(Vec3(50, 100, 50));
 					gameObjects[0]->GetCollider()->SetCenter(Vec3(1500.f + 400.f * i, 1500.f, 2000.f + 400.f * j));*/
-					
+
 					gameObjects[i * 3 + j]->AddComponent(make_shared<SphereCollider>());
 					gameObjects[i * 3 + j]->GetCollider()->SetRadius(100.f);
-					gameObjects[i * 3 + j]->GetCollider()->SetCenter(Vec3(500.f + 400.f, 500.f + 300*i, 2000.f));
-					
+					gameObjects[i * 3 + j]->GetCollider()->SetCenter(Vec3(500.f + 400.f, 500.f + 300 * i, 2000.f));
+
 				}
 				else {
 					/*gameObjects[0]->AddComponent(make_shared<SphereCollider>());
@@ -414,12 +414,12 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 					gameObjects[i * 3 + j]->AddComponent(make_shared<OrientedBoxCollider>());
 					gameObjects[i * 3 + j]->GetCollider()->SetExtent(Vec3(50, 100, 50));
 					gameObjects[i * 3 + j]->GetCollider()->SetCenter(Vec3(500.f + 400.f * i, 500.f, 2000.f + 400.f * j));
-					
+
 				}
 
 
 				gameObjects[i * 3 + j]->GetMeshRenderer()->GetMaterial()->SetInt(0, 0);
-				if(gameObjects[i * 3 + j]->GetCollider()->GetDebugCollider()!=nullptr)
+				if(gameObjects[i * 3 + j]->GetCollider()->GetDebugCollider() != nullptr)
 					scene->AddGameObject(gameObjects[i * 3 + j]->GetCollider()->GetDebugCollider());
 
 				scene->AddGameObject(gameObjects[i * 3 + j]);
@@ -488,10 +488,19 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 		//		}
 		//	}
 		//}
-		
-		
-	
-			
+
+
+
+
+	}
+#pragma endregion
+
+#pragma region Network
+	{
+		shared_ptr<GameObject> network = make_shared<GameObject>();
+		network->SetName(L"Network");
+		network->AddComponent(make_shared<NetworkScript>());
+		scene->AddGameObject(network);
 	}
 #pragma endregion
 

@@ -6,6 +6,9 @@
 // TCP/IP ���?
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
 #define _WINSOCKAPI_
+
+#include "assimp/scene.h"		// assimp/scene.h �켱������ include ���� �� ���� ���� �߻�
+
 #include <WinSock2.h> 
 #include <WS2tcpip.h>
 #pragma comment(lib, "ws2_32")
@@ -14,7 +17,6 @@
 #include "assimp/Importer.hpp"
 #include "assimp/cimport.h"
 #include "assimp/postprocess.h"
-#include "assimp/scene.h"		// assimp/scene.h �켱������ include ���� �� ���� ���� �߻�
 #include <windows.h>
 #include <tchar.h>
 #include <memory>
