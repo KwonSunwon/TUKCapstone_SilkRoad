@@ -76,11 +76,15 @@ public:
 	NETWORK_STATE GetState() { return m_networkState; }
 	void SetState(NETWORK_STATE state) { m_networkState = state; }
 
+	LockQueue<Packet> m_receivedPacketQue;
+
 private:
 	WSADATA m_wsaData;
 	atomic<NETWORK_STATE> m_networkState = NETWORK_STATE::SINGLE;
 
 	atomic<bool> m_isRunning = false;
+
+	Packet m_packetBuffer;
 };
 
 class Host : public Network {
@@ -129,6 +133,7 @@ public:
 	void Update() override;
 
 	void Connect();
+	void Receiver();
 
 	void Send(Packet packet) override;
 	bool Recv(shared_ptr<Packet> packet) override;
