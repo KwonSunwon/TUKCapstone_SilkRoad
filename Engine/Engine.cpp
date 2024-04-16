@@ -32,8 +32,8 @@ void Engine::Init(const WindowInfo& info)
 	CreateConstantBuffer(CBV_REGISTER::b2, sizeof(MaterialParams), 256);
 
 	CreateRenderTargetGroups();
-	
-	vector<ComPtr<ID3D12Resource>> rtvec = { m_rtGroups[static_cast<uint8>(RENDER_TARGET_GROUP_TYPE::SWAP_CHAIN)] ->GetRTTexture(0)->GetTex2D(), m_rtGroups[static_cast<uint8>(RENDER_TARGET_GROUP_TYPE::SWAP_CHAIN)]->GetRTTexture(1)->GetTex2D() };
+
+	vector<ComPtr<ID3D12Resource>> rtvec = { m_rtGroups[static_cast<uint8>(RENDER_TARGET_GROUP_TYPE::SWAP_CHAIN)]->GetRTTexture(0)->GetTex2D(), m_rtGroups[static_cast<uint8>(RENDER_TARGET_GROUP_TYPE::SWAP_CHAIN)]->GetRTTexture(1)->GetTex2D() };
 	m_d3d11on12Device->Init(m_device->GetDevice(), m_device->GetDXGI(), rtvec, m_graphicsCmdQueue->GetCmdQueue());
 
 	ResizeWindow(info.width, info.height);
@@ -48,13 +48,6 @@ void Engine::Init(const WindowInfo& info)
 
 void Engine::Update()
 {
-	// 여기서 서버(자신의 쓰레드 또는 다른 호스트)의 데이터로 업데이트
-	// UpdateFromServer();
-	//{
-	//	auto gameObjects = static_cast<Scene*>(GET_SINGLE(SceneManager)->GetActiveScene().get())->GetGameObjects();
-	//	gameObjects[0]->GetID();
-	//}
-
 	GET_SINGLE(NetworkManager)->Update();
 
 	GET_SINGLE(Input)->Update();
