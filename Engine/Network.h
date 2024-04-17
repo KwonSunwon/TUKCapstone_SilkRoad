@@ -21,6 +21,7 @@ enum class PACKET_TYPE {
 
 // Packet Struct
 struct PacketHeader {
+	ushort clientID;
 	uint16 size;
 	PACKET_TYPE type;
 };
@@ -69,7 +70,7 @@ public:
 
 	virtual void Update();
 
-	virtual void Send(Packet packet) {};
+	virtual void Send(Packet packet, int id) {};
 	//virtual Packet Recv();
 	virtual bool Recv(shared_ptr<Packet> packet) { return false; }
 
@@ -103,7 +104,7 @@ public:
 	void GameLoop();
 	void Connection(ushort id);
 
-	void Send(Packet packet) override;
+	void Send(Packet packet, int id) override;
 	bool Recv(shared_ptr<Packet> packet) override;
 
 private:
@@ -136,7 +137,7 @@ public:
 	void Sender();
 	void Receiver();
 
-	void Send(Packet packet) override;
+	void Send(Packet packet, int id) override;
 	bool Recv(shared_ptr<Packet> packet) override;
 
 private:
@@ -161,11 +162,11 @@ public:
 
 	void ConnectAsGuest();
 
-	NETWORK_STATE GetNetworkState() { return m_network.get()->GetState(); }
-	void SetNetworkState(NETWORK_STATE state) { m_network.get()->SetState(state); }
+	NETWORK_STATE GetNetworkState() { return m_network->GetState(); }
+	void SetNetworkState(NETWORK_STATE state) { m_network->SetState(state); }
 
-	void Send(Packet packet) { m_network->Send(packet); }
-	bool Recv(shared_ptr<Packet> packet) { return m_network.get()->Recv(packet); }
+	void Send(Packet packet) { m_network->Send(packet, m_id); }
+	bool Recv(shared_ptr<Packet> packet) { return m_network->Recv(packet); }
 
 	int m_id = 0;
 

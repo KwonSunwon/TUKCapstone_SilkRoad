@@ -48,85 +48,29 @@ void Network::Update()
 #pragma region Host
 Host::Host() : Network()
 {
-	//m_mainLoopThread = thread{ &Host::MainLoop, this };
+	m_mainLoopThread = thread{ &Host::MainLoop, this };
 }
 
 void Host::MainLoop()
 {
-	// 클라이언트로 보낼 패킷들 모아서 보내기
-
-
-	//while(GetState() != NETWORK_STATE::GUEST) {
-	//	{
-	//		Packet packet;
-	//		if(GetState() == NETWORK_STATE::HOST) {
-	//			// 게스트가 보낸 패킷을 받아 갱신
-	//			for(auto& guest : m_guestInfos) {
-	//				while(guest.eventQue->toServer.TryPop(packet))
-	//					m_gameLoopEventQue.push(packet);
-	//			}
-	//		}
-	//		// 호스트 클라이언트가 푸시한 패킷을 받아 갱신
-	//		/*string str = "MainLoop: Queue Size - " + to_string(m_eventQue.toServer.Size()) + "\n";
-	//		while(m_eventQue.toServer.TryPop(packet)) {
-	//			m_gameLoopEventQue.push(packet);
-	//		}*/
-	//	}
-	//	GameLoop();
-	//	{
-	//		m_timer += DELTA_TIME;
-
-	//		if(m_timer > SEND_PACKET_PER_SEC) {
-	//			while(!m_outGameLoopEventQue.empty()) {
-	//				Packet packet = m_outGameLoopEventQue.front();
-	//				m_outGameLoopEventQue.pop();
-	//				for(int i = 0; i < MAX_PLAYER; i++) {
-	//					for(auto& guest : m_guestInfos) {
-	//						guest.eventQue->toClient.Push(packet);
-	//					}
-	//					m_eventQue.toClient.Push(packet);
-	//				}
-	//			}
-	//			m_timer = 0.0f;
-	//		}
-	//	}
-	//}
-	//OutputDebugString(L"Host MainLoop End\n");
+	Packet packet;
+	while(true) {
+		for(auto& guest : m_guestInfos) {
+			while(guest.eventQue->toServer.TryPop(packet)) {
+				m_receivedPacketQue.Push(packet);
+			}
+		}
+	}
 }
 
 void Host::GameLoop()
 {
-	while(!m_gameLoopEventQue.empty()) {
-		Packet packet = m_gameLoopEventQue.front();
-		m_gameLoopEventQue.pop();
 
-		switch(packet.header.type) {
-		case PACKET_TYPE::PLAYER:
-			m_gameData.playerData[packet.id].pos = packet.pos;
-			// ... TEMP: Game Logic
-			m_outGameLoopEventQue.push(packet);
-			break;
-		case PACKET_TYPE::ENEMY:
-			break;
-			// ...
-		case PACKET_TYPE::NET:
-			// guest disconnect
-			break;
-		default:
-			break;
-		}
-	}
-
-	// TODO: Server game logic
-	// Enemy AI, Collision, etc...
 }
 
 void Host::Update()
 {
 	Network::Update();
-	m_timer += DELTA_TIME;
-	if(m_timer > SEND_PACKET_PER_SEC) {
-	}
 }
 
 void Host::RunMulti()
@@ -244,10 +188,13 @@ void Host::Connection(ushort id)
 		}
 	}
 }
-void Host::Send(Packet packet)
+void Host::Send(Packet packet, int id)
 {
 	//m_eventQue.toServer.Push(packet);
-	m_eventQue.toClient.Push(packet);
+	packet.header.clientID = id;
+	for(auto& guest : m_guestInfos) {
+		guest.eventQue->toClient.Push(packet);
+	}
 
 }
 bool Host::Recv(shared_ptr<Packet> packet)
@@ -256,7 +203,7 @@ bool Host::Recv(shared_ptr<Packet> packet)
 		return true;
 	return false;*/
 
-	if(m_eventQue.toServer.TryPop(*packet.get()))
+	if(m_eventQue.toServer.TryPop(*packet))
 		return true;
 	return false;
 }
@@ -290,6 +237,11 @@ void Guest::Connect()
 	setsockopt(m_socket, SOL_SOCKET, SO_RCVTIMEO, (const char*)&optval, sizeof(optval));
 	optval = TRUE;
 	setsockopt(m_socket, IPPROTO_TCP, TCP_NODELAY, (const char*)&optval, sizeof(optval));
+
+	thread senderThread = thread{ &Guest::Sender, this };
+	thread receiverThread = thread{ &Guest::Receiver, this };
+	senderThread.detach();
+	receiverThread.detach();
 }
 
 void Guest::Sender()
@@ -348,18 +300,10 @@ void Guest::Update()
 	Network::Update();
 }
 
-void Guest::Send(Packet packet)
+void Guest::Send(Packet packet, int id)
 {
-	int retval = send(m_socket, (char*)&packet, sizeof(Packet), 0);
-	if(retval == SOCKET_ERROR) {
-		// disconnect
-		OutputDebugString(L"Disconnect\n");
-		closesocket(m_socket);
-	}
-	else if(retval < sizeof(packet)) {
-		retval = send(m_socket, (char*)&packet + retval, sizeof(packet) - retval, 0);
-		// TODO: 이전 넷겜프 코드 참조해서 while문으로 처리하도록 변경
-	}
+	packet.header.clientID = id;
+	m_toServerEventQue.Push(packet);
 }
 
 bool Guest::Recv(shared_ptr<Packet> packet)
@@ -395,13 +339,13 @@ void NetworkManager::RunMulti()
 void NetworkManager::ConnectAsGuest()
 {
 	if(GetNetworkState() != NETWORK_STATE::GUEST) {
-		SetNetworkState(NETWORK_STATE::GUEST);
 
 		dynamic_cast<Host*>(m_network.get())->Stop();
 
 		m_network.release();
 		m_network = make_unique<Guest>();
 
+		SetNetworkState(NETWORK_STATE::GUEST);
 		dynamic_cast<Guest*>(m_network.get())->Connect();
 	}
 }
