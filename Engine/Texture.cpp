@@ -14,7 +14,7 @@ Texture::~Texture()
 
 void Texture::Load(const wstring& path)
 {
-	// íŒŒì¼ í™•ì¥ì ì–»ê¸°
+	// ÆÄÀÏ È®ÀåÀÚ ¾ò±â
 	wstring ext = fs::path(path).extension();
 
 	if (ext == L".dds" || ext == L".DDS")
@@ -129,8 +129,8 @@ void Texture::CreateFromResource(ComPtr<ID3D12Resource> tex2D)
 
 	m_desc = tex2D->GetDesc();
 
-	// ì£¼ìš” ì¡°í•©
-	// - DSV ë‹¨ë… (ì¡°í•©X)
+	// ÁÖ¿ä Á¶ÇÕ
+	// - DSV ´Üµ¶ (Á¶ÇÕX)
 	// - SRV
 	// - RTV + SRV
 	if (m_desc.Flags & D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL)

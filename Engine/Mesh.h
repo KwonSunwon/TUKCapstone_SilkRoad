@@ -61,7 +61,7 @@ public:
 	const vector<AnimClipInfo>* GetAnimClip() { return &m_animClips; }
 
 	bool							IsAnimMesh() { return !m_animClips.empty(); }
-	shared_ptr<StructuredBuffer>	GetBoneFrameDataBuffer(int32 index = 0) { return m_frameBuffer[index]; } // ì „ì²´ ë³¸ í”„ë ˆì„ ì •ë³´
+	shared_ptr<StructuredBuffer>	GetBoneFrameDataBuffer(int32 index = 0) { return m_frameBuffer[index]; } // ÀüÃ¼ º» ÇÁ·¹ÀÓ Á¤º¸
 	shared_ptr<StructuredBuffer>	GetBoneOffsetBuffer() { return  m_offsetBuffer; }
 
 private:
@@ -75,7 +75,7 @@ private:
 	vector<AnimClipInfo>			m_animClips;
 	vector<BoneInfo>				m_bones;
 
-	shared_ptr<StructuredBuffer>	m_offsetBuffer; // ê° ë¼ˆì˜ offset í–‰ë ¬
-	vector<shared_ptr<StructuredBuffer>> m_frameBuffer; // ì „ì²´ ë³¸ í”„ë ˆì„ ì •ë³´
+	shared_ptr<StructuredBuffer>	m_offsetBuffer; // °¢ »ÀÀÇ offset Çà·Ä
+	vector<shared_ptr<StructuredBuffer>> m_frameBuffer; // ÀüÃ¼ º» ÇÁ·¹ÀÓ Á¤º¸
 };
 

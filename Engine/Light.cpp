@@ -14,7 +14,7 @@ Light::Light() : Component(COMPONENT_TYPE::LIGHT)
 	m_shadowCamera->AddComponent(make_shared<Transform>());
 	m_shadowCamera->AddComponent(make_shared<Camera>());
 	uint8 layerIndex = GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI");
-	m_shadowCamera->GetCamera()->SetCullingMaskLayerOnOff(layerIndex, true); // UIëŠ” ì•ˆ ì°ìŒ
+	m_shadowCamera->GetCamera()->SetCullingMaskLayerOnOff(layerIndex, true); // UI´Â ¾È ÂïÀ½
 }
 
 Light::~Light()

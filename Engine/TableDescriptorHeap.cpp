@@ -11,14 +11,14 @@ void GraphicsDescriptorHeap::Init(uint32 count)
 	m_groupCount = count;
 
 	D3D12_DESCRIPTOR_HEAP_DESC desc = {};
-	desc.NumDescriptors = count * (CBV_SRV_REGISTER_COUNT - 1); // b0ëŠ” ì „ì—­
+	desc.NumDescriptors = count * (CBV_SRV_REGISTER_COUNT - 1); // b0´Â Àü¿ª
 	desc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
 	desc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
 
 	DEVICE->CreateDescriptorHeap(&desc, IID_PPV_ARGS(&m_descHeap));
 
 	m_handleSize = DEVICE->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-	m_groupSize = m_handleSize * (CBV_SRV_REGISTER_COUNT - 1); // b0ëŠ” ì „ì—­
+	m_groupSize = m_handleSize * (CBV_SRV_REGISTER_COUNT - 1); // b0´Â Àü¿ª
 }
 
 void GraphicsDescriptorHeap::Clear()
@@ -114,7 +114,7 @@ void ComputeDescriptorHeap::SetUAV(D3D12_CPU_DESCRIPTOR_HANDLE srcHandle, UAV_RE
 	uint32 srcRange = 1;
 	DEVICE->CopyDescriptors(1, &destHandle, &destRange, 1, &srcHandle, &srcRange, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 
-	// TODO : ë¦¬ì†ŒìŠ¤ ìƒíƒœ ë³€ê²½
+	// TODO : ¸®¼Ò½º »óÅÂ º¯°æ
 }
 
 void ComputeDescriptorHeap::CommitTable()

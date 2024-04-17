@@ -30,7 +30,7 @@ void GraphicsCommandQueue::Init(ComPtr<ID3D12Device> device, shared_ptr<SwapChai
 	device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, m_resCmdAlloc.Get(), nullptr, IID_PPV_ARGS(&m_resCmdList));
 
 	// CreateFence
-	// - CPUì™€ GPUì˜ ë™ê¸°í™” ìˆ˜ë‹¨ìœ¼ë¡œ ì“°ì¸ë‹¤
+	// - CPU¿Í GPUÀÇ µ¿±âÈ­ ¼ö´ÜÀ¸·Î ¾²ÀÎ´Ù
 	device->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&m_fence));
 	m_fenceEvent = ::CreateEvent(nullptr, FALSE, FALSE, nullptr);
 }
@@ -65,8 +65,8 @@ void GraphicsCommandQueue::RenderBegin()
 
 	D3D12_RESOURCE_BARRIER barrier = CD3DX12_RESOURCE_BARRIER::Transition(
 		GEngine->GetRTGroup(RENDER_TARGET_GROUP_TYPE::SWAP_CHAIN)->GetRTTexture(backIndex)->GetTex2D().Get(),
-		D3D12_RESOURCE_STATE_PRESENT, // í™”ë©´ ì¶œë ¥
-		D3D12_RESOURCE_STATE_RENDER_TARGET); // ì™¸ì£¼ ê²°ê³¼ë¬¼
+		D3D12_RESOURCE_STATE_PRESENT, // È­¸é Ãâ·Â
+		D3D12_RESOURCE_STATE_RENDER_TARGET); // ¿ÜÁÖ °á°ú¹°
 
 	m_cmdList->SetGraphicsRootSignature(GRAPHICS_ROOT_SIGNATURE.Get());
 
@@ -87,13 +87,13 @@ void GraphicsCommandQueue::RenderEnd()
 
 	D3D12_RESOURCE_BARRIER barrier = CD3DX12_RESOURCE_BARRIER::Transition(
 		GEngine->GetRTGroup(RENDER_TARGET_GROUP_TYPE::SWAP_CHAIN)->GetRTTexture(backIndex)->GetTex2D().Get(),
-		D3D12_RESOURCE_STATE_RENDER_TARGET, // ì™¸ì£¼ ê²°ê³¼ë¬¼
-		D3D12_RESOURCE_STATE_PRESENT); // í™”ë©´ ì¶œë ¥
+		D3D12_RESOURCE_STATE_RENDER_TARGET, // ¿ÜÁÖ °á°ú¹°
+		D3D12_RESOURCE_STATE_PRESENT); // È­¸é Ãâ·Â
 
 	m_cmdList->ResourceBarrier(1, &barrier);
 	m_cmdList->Close();
 
-	// ì»¤ë§¨ë“œ ë¦¬ìŠ¤íŠ¸ ìˆ˜í–‰
+	// Ä¿¸Çµå ¸®½ºÆ® ¼öÇà
 	ID3D12CommandList* cmdListArr[] = { m_cmdList.Get() };
 	m_cmdQueue->ExecuteCommandLists(_countof(cmdListArr), cmdListArr);
 }
@@ -133,7 +133,7 @@ void ComputeCommandQueue::Init(ComPtr<ID3D12Device> device)
 	device->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&m_fence));
 
 	// CreateFence
-	// - CPUì™€ GPUì˜ ë™ê¸°í™” ìˆ˜ë‹¨ìœ¼ë¡œ ì“°ì¸ë‹¤
+	// - CPU¿Í GPUÀÇ µ¿±âÈ­ ¼ö´ÜÀ¸·Î ¾²ÀÎ´Ù
 	device->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&m_fence));
 	m_fenceEvent = ::CreateEvent(nullptr, FALSE, FALSE, nullptr);
 }

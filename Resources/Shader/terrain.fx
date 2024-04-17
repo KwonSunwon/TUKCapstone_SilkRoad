@@ -72,11 +72,11 @@ PatchTess ConstantHS(InputPatch<VS_OUT, 3> input, int patchID : SV_PrimitiveID)
 }
 
 // Control Point HS
-[domain("tri")] // íŒ¨ì¹˜ì˜ ì¢…ë¥˜ (tri, quad, isoline)
-[partitioning("fractional_odd")] // subdivision mode (integer ì†Œìˆ˜ì  ë¬´ì‹œ, fractional_even, fractional_odd)
+[domain("tri")] // ÆĞÄ¡ÀÇ Á¾·ù (tri, quad, isoline)
+[partitioning("fractional_odd")] // subdivision mode (integer ¼Ò¼öÁ¡ ¹«½Ã, fractional_even, fractional_odd)
 [outputtopology("triangle_cw")] // (triangle_cw, triangle_ccw, line)
-[outputcontrolpoints(3)] // í•˜ë‚˜ì˜ ì…ë ¥ íŒ¨ì¹˜ì— ëŒ€í•´, HSê°€ ì¶œë ¥í•  ì œì–´ì  ê°œìˆ˜
-[patchconstantfunc("ConstantHS")] // ConstantHS í•¨ìˆ˜ ì´ë¦„
+[outputcontrolpoints(3)] // ÇÏ³ªÀÇ ÀÔ·Â ÆĞÄ¡¿¡ ´ëÇØ, HS°¡ Ãâ·ÂÇÒ Á¦¾îÁ¡ °³¼ö
+[patchconstantfunc("ConstantHS")] // ConstantHS ÇÔ¼ö ÀÌ¸§
 HS_OUT HS_Main(InputPatch<VS_OUT, 3> input, int vertexIdx : SV_OutputControlPointID, int patchID : SV_PrimitiveID)
 {
     HS_OUT output = (HS_OUT)0.f;
@@ -128,7 +128,7 @@ DS_OUT DS_Main(const OutputPatch<HS_OUT, 3> input, float3 location : SV_DomainLo
     float2 fullUV = float2(uv.x / (float)tileCountX, uv.y / (float)tileCountZ);
     float height = g_tex_2.SampleLevel(g_sam_0, fullUV, 0).x;
 
-    // ë†’ì´ë§µ ë†’ì´ ì ìš©
+    // ³ôÀÌ¸Ê ³ôÀÌ Àû¿ë
     localPos.y = height;
 
     float2 deltaUV = float2(1.f / mapWidth, 1.f / mapHeight);
@@ -176,9 +176,9 @@ PS_OUT PS_Main(DS_OUT input)
     float3 viewNormal = input.viewNormal;
     if (g_tex_on_1 == 1)
     {
-        // [0,255] ë²”ìœ„ì—ì„œ [0,1]ë¡œ ë³€í™˜
+        // [0,255] ¹üÀ§¿¡¼­ [0,1]·Î º¯È¯
         float3 tangentSpaceNormal = g_tex_1.Sample(g_sam_0, input.uv).xyz;
-        // [0,1] ë²”ìœ„ì—ì„œ [-1,1]ë¡œ ë³€í™˜
+        // [0,1] ¹üÀ§¿¡¼­ [-1,1]·Î º¯È¯
         tangentSpaceNormal = (tangentSpaceNormal - 0.5f) * 2.f;
         float3x3 matTBN = { input.viewTangent, input.viewBinormal, input.viewNormal };
         viewNormal = normalize(mul(tangentSpaceNormal, matTBN));

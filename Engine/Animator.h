@@ -35,6 +35,6 @@ private:
 	float							m_frameRatio = 0;
 
 	shared_ptr<Material>			m_computeMaterial;
-	shared_ptr<StructuredBuffer>	m_boneFinalMatrix;  // íŠ¹ì • í”„ë ˆì„ì˜ ìµœì¢… í–‰ë ¬
+	shared_ptr<StructuredBuffer>	m_boneFinalMatrix;  // Æ¯Á¤ ÇÁ·¹ÀÓÀÇ ÃÖÁ¾ Çà·Ä
 	bool							m_boneFinalUpdated = false;
 };

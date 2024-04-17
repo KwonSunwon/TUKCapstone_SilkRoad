@@ -23,7 +23,7 @@ void ConstantBuffer::Init(CBV_REGISTER reg, uint32 size, uint32 count)
 {
 	m_reg = reg;
 
-	// ìƒìˆ˜ ë²„í¼ëŠ” 256 ë°”ì´íŠ¸ ë°°ìˆ˜ë¡œ ë§Œë“¤ì–´ì•¼ í•œë‹¤
+	// »ó¼ö ¹öÆÛ´Â 256 ¹ÙÀÌÆ® ¹è¼ö·Î ¸¸µé¾î¾ß ÇÑ´Ù
 	// 0 256 512 768
 	m_elementSize = (size + 255) & ~255;
 	m_elementCount = count;
@@ -121,6 +121,6 @@ D3D12_GPU_VIRTUAL_ADDRESS ConstantBuffer::GetGpuVirtualAddress(uint32 index)
 
 D3D12_CPU_DESCRIPTOR_HANDLE ConstantBuffer::GetCpuHandle(uint32 index)
 {
-	//issue00 8096ì„ ë„˜ê¸°ëŠ” ìˆœê°„ ë²„ê·¸ê°€ ìƒê¸°ëŠ”ë°?
+	//issue00 8096À» ³Ñ±â´Â ¼ø°£ ¹ö±×°¡ »ı±â´Âµ¥?
 	return CD3DX12_CPU_DESCRIPTOR_HANDLE(m_cpuHandleBegin, index * m_handleIncrementSize);
 }

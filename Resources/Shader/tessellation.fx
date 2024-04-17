@@ -56,11 +56,11 @@ PatchTess ConstantHS(InputPatch<VS_OUT, 3> input, int patchID : SV_PrimitiveID)
 }
 
 // Control Point HS
-[domain("tri")] // íŒ¨ì¹˜ì˜ ì¢…ë¥˜ (tri, quad, isoline)
-[partitioning("integer")] // subdivision mode (integer ì†Œìˆ˜ì  ë¬´ì‹œ, fractional_even, fractional_odd)
+[domain("tri")] // ÆĞÄ¡ÀÇ Á¾·ù (tri, quad, isoline)
+[partitioning("integer")] // subdivision mode (integer ¼Ò¼öÁ¡ ¹«½Ã, fractional_even, fractional_odd)
 [outputtopology("triangle_cw")] // (triangle_cw, triangle_ccw, line)
-[outputcontrolpoints(3)] // í•˜ë‚˜ì˜ ì…ë ¥ íŒ¨ì¹˜ì— ëŒ€í•´, HSê°€ ì¶œë ¥í•  ì œì–´ì  ê°œìˆ˜
-[patchconstantfunc("ConstantHS")] // ConstantHS í•¨ìˆ˜ ì´ë¦„
+[outputcontrolpoints(3)] // ÇÏ³ªÀÇ ÀÔ·Â ÆĞÄ¡¿¡ ´ëÇØ, HS°¡ Ãâ·ÂÇÒ Á¦¾îÁ¡ °³¼ö
+[patchconstantfunc("ConstantHS")] // ConstantHS ÇÔ¼ö ÀÌ¸§
 HS_OUT HS_Main(InputPatch<VS_OUT, 3> input, int vertexIdx : SV_OutputControlPointID, int patchID : SV_PrimitiveID)
 {
     HS_OUT output = (HS_OUT)0.f;

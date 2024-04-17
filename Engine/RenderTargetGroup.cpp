@@ -54,7 +54,7 @@ void RenderTargetGroup::OMSetRenderTargets(uint32 count, uint32 offset)
 	GRAPHICS_CMD_LIST->RSSetScissorRects(1, &rect);
 
 	D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle = CD3DX12_CPU_DESCRIPTOR_HANDLE(m_rtvHeapBegin, offset * m_rtvHeapSize);
-	GRAPHICS_CMD_LIST->OMSetRenderTargets(count, &rtvHandle, FALSE/*1Í∞ú*/, &m_dsvHeapBegin);
+	GRAPHICS_CMD_LIST->OMSetRenderTargets(count, &rtvHandle, FALSE/*1∞≥*/, &m_dsvHeapBegin);
 }
 
 void RenderTargetGroup::OMSetRenderTargets()
@@ -65,7 +65,7 @@ void RenderTargetGroup::OMSetRenderTargets()
 	GRAPHICS_CMD_LIST->RSSetViewports(1, &vp);
 	GRAPHICS_CMD_LIST->RSSetScissorRects(1, &rect);
 
-	GRAPHICS_CMD_LIST->OMSetRenderTargets(m_rtCount, &m_rtvHeapBegin, TRUE/*Îã§Ï§ë*/, &m_dsvHeapBegin);
+	GRAPHICS_CMD_LIST->OMSetRenderTargets(m_rtCount, &m_rtvHeapBegin, TRUE/*¥Ÿ¡ﬂ*/, &m_dsvHeapBegin);
 }
 
 void RenderTargetGroup::ClearRenderTargetView(uint32 index)

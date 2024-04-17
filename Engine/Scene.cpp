@@ -17,12 +17,12 @@
 
 Scene::Scene()
 {
-	
+
 }
 
 void Scene::Awake()
 {
-	for (const shared_ptr<GameObject>& gameObject : m_gameObjects)
+	for(const shared_ptr<GameObject>& gameObject : m_gameObjects)
 	{
 		gameObject->Awake();
 	}
@@ -30,7 +30,7 @@ void Scene::Awake()
 
 void Scene::Start()
 {
-	for (const shared_ptr<GameObject>& gameObject : m_gameObjects)
+	for(const shared_ptr<GameObject>& gameObject : m_gameObjects)
 	{
 		gameObject->Start();
 	}
@@ -38,8 +38,8 @@ void Scene::Start()
 
 void Scene::Update()
 {
-	
-	for (const shared_ptr<GameObject>& gameObject : m_gameObjects)
+
+	for(const shared_ptr<GameObject>& gameObject : m_gameObjects)
 	{
 		gameObject->Update();
 	}
@@ -48,7 +48,7 @@ void Scene::Update()
 
 void Scene::LateUpdate()
 {
-	for (const shared_ptr<GameObject>& gameObject : m_gameObjects)
+	for(const shared_ptr<GameObject>& gameObject : m_gameObjects)
 	{
 		gameObject->LateUpdate();
 	}
@@ -56,7 +56,7 @@ void Scene::LateUpdate()
 
 void Scene::FinalUpdate()
 {
-	for (const shared_ptr<GameObject>& gameObject : m_gameObjects)
+	for(const shared_ptr<GameObject>& gameObject : m_gameObjects)
 	{
 		gameObject->FinalUpdate();
 	}
@@ -65,7 +65,7 @@ void Scene::FinalUpdate()
 
 shared_ptr<Camera> Scene::GetMainCamera()
 {
-	if (m_cameras.empty())
+	if(m_cameras.empty())
 		return nullptr;
 
 	return m_cameras[0];
@@ -90,14 +90,10 @@ void Scene::Render()
 
 void Scene::ClearRTV()
 {
-	// SwapChain Group �ʱ�ȭ
 	int8 backIndex = GEngine->GetSwapChain()->GetBackBufferIndex();
 	GEngine->GetRTGroup(RENDER_TARGET_GROUP_TYPE::SWAP_CHAIN)->ClearRenderTargetView(backIndex);
-	// Shadow Group �ʱ�ȭ
 	GEngine->GetRTGroup(RENDER_TARGET_GROUP_TYPE::SHADOW)->ClearRenderTargetView();
-	// Deferred Group �ʱ�ȭ
 	GEngine->GetRTGroup(RENDER_TARGET_GROUP_TYPE::G_BUFFER)->ClearRenderTargetView();
-	// Lighting Group �ʱ�ȭ
 	GEngine->GetRTGroup(RENDER_TARGET_GROUP_TYPE::LIGHTING)->ClearRenderTargetView();
 }
 
@@ -105,9 +101,9 @@ void Scene::RenderShadow()
 {
 	GEngine->GetRTGroup(RENDER_TARGET_GROUP_TYPE::SHADOW)->OMSetRenderTargets();
 
-	for (auto& light : m_lights)
+	for(auto& light : m_lights)
 	{
-		if (light->GetLightType() != LIGHT_TYPE::DIRECTIONAL_LIGHT)
+		if(light->GetLightType() != LIGHT_TYPE::DIRECTIONAL_LIGHT)
 			continue;
 
 		light->RenderShadow();
@@ -118,7 +114,6 @@ void Scene::RenderShadow()
 
 void Scene::RenderDeferred()
 {
-	// Deferred OMSet
 	GEngine->GetRTGroup(RENDER_TARGET_GROUP_TYPE::G_BUFFER)->OMSetRenderTargets();
 
 	shared_ptr<Camera> mainCamera = m_cameras[0];
@@ -136,8 +131,7 @@ void Scene::RenderLights()
 
 	GEngine->GetRTGroup(RENDER_TARGET_GROUP_TYPE::LIGHTING)->OMSetRenderTargets();
 
-	// ������ �׸���.
-	for (auto& light : m_lights)
+	for(auto& light : m_lights)
 	{
 		light->Render();
 	}
@@ -147,7 +141,6 @@ void Scene::RenderLights()
 
 void Scene::RenderFinal()
 {
-	// Swapchain OMSet
 	int8 backIndex = GEngine->GetSwapChain()->GetBackBufferIndex();
 	GEngine->GetRTGroup(RENDER_TARGET_GROUP_TYPE::SWAP_CHAIN)->OMSetRenderTargets(1, backIndex);
 
@@ -160,9 +153,9 @@ void Scene::RenderForward()
 	shared_ptr<Camera> mainCamera = m_cameras[0];
 	mainCamera->Render_Forward();
 
-	for (auto& camera : m_cameras)
+	for(auto& camera : m_cameras)
 	{
-		if (camera == mainCamera)
+		if(camera == mainCamera)
 			continue;
 
 		camera->SortGameObject();
@@ -179,7 +172,7 @@ void Scene::PushLightData()
 {
 	LightParams lightParams = {};
 
-	for (auto& light : m_lights)
+	for(auto& light : m_lights)
 	{
 		const LightInfo& lightInfo = light->GetLightInfo();
 
@@ -194,18 +187,18 @@ void Scene::PushLightData()
 
 void Scene::AddGameObject(shared_ptr<GameObject> gameObject)
 {
-	if (gameObject->GetRigidBody() != nullptr)
+	if(gameObject->GetRigidBody() != nullptr)
 	{
 		m_collidableGameObjects.push_back(gameObject);
 		m_ocTree->InsertObjectCollider(gameObject->GetCollider());
 	}
 
 
-	if (gameObject->GetCamera() != nullptr)
+	if(gameObject->GetCamera() != nullptr)
 	{
 		m_cameras.push_back(gameObject->GetCamera());
 	}
-	else if (gameObject->GetLight() != nullptr)
+	else if(gameObject->GetLight() != nullptr)
 	{
 		m_lights.push_back(gameObject->GetLight());
 	}
@@ -215,28 +208,28 @@ void Scene::AddGameObject(shared_ptr<GameObject> gameObject)
 
 void Scene::RemoveGameObject(shared_ptr<GameObject> gameObject)
 {
-	if (gameObject->GetRigidBody())
+	if(gameObject->GetRigidBody())
 	{
 		auto findIt = std::find(m_collidableGameObjects.begin(), m_collidableGameObjects.end(), gameObject);
-		if (findIt != m_collidableGameObjects.end())
+		if(findIt != m_collidableGameObjects.end())
 			m_collidableGameObjects.erase(findIt);
 	}
 
-	if (gameObject->GetCamera())
+	if(gameObject->GetCamera())
 	{
 		auto findIt = std::find(m_cameras.begin(), m_cameras.end(), gameObject->GetCamera());
-		if (findIt != m_cameras.end())
+		if(findIt != m_cameras.end())
 			m_cameras.erase(findIt);
 	}
-	else if (gameObject->GetLight())
+	else if(gameObject->GetLight())
 	{
 		auto findIt = std::find(m_lights.begin(), m_lights.end(), gameObject->GetLight());
-		if (findIt != m_lights.end())
+		if(findIt != m_lights.end())
 			m_lights.erase(findIt);
 	}
 
 	auto findIt = std::find(m_gameObjects.begin(), m_gameObjects.end(), gameObject);
-	if (findIt != m_gameObjects.end())
+	if(findIt != m_gameObjects.end())
 		m_gameObjects.erase(findIt);
 
 }
@@ -244,14 +237,14 @@ void Scene::RemoveGameObject(shared_ptr<GameObject> gameObject)
 
 void Scene::IntersectColliders(shared_ptr<BaseCollider> collider1, shared_ptr<BaseCollider> collider2)
 {
-	if (!collider1 || !collider2)
+	if(!collider1 || !collider2)
 		return;
 
-	switch (collider2->GetColliderType()) {
+	switch(collider2->GetColliderType()) {
 	case ColliderType::Sphere: {
 		auto sphereCollider = dynamic_pointer_cast<SphereCollider>(collider2);
 
-		if (collider1->Intersects(sphereCollider->GetBoundingSphere())) {
+		if(collider1->Intersects(sphereCollider->GetBoundingSphere())) {
 			collider1->setColor(Vec4(1, 0, 0, 0), true);
 			collider2->setColor(Vec4(1, 0, 0, 0), true);
 		}
@@ -259,7 +252,7 @@ void Scene::IntersectColliders(shared_ptr<BaseCollider> collider1, shared_ptr<Ba
 	}
 	case ColliderType::Box: {
 		auto boxCollider = dynamic_pointer_cast<BoxCollider>(collider2);
-		if (collider1->Intersects(boxCollider->GetBoundingBox())) {
+		if(collider1->Intersects(boxCollider->GetBoundingBox())) {
 			collider1->setColor(Vec4(1, 0, 0, 0), true);
 			collider2->setColor(Vec4(1, 0, 0, 0), true);
 		}
@@ -273,11 +266,11 @@ void Scene::IntersectColliders(shared_ptr<BaseCollider> collider1, shared_ptr<Ba
 
 void Scene::testCollision()
 {
-	for (auto& cgo : m_collidableGameObjects)
+	for(auto& cgo : m_collidableGameObjects)
 	{
-		cgo->GetCollider()->setColor(Vec4(0,0,0,0),false);
+		cgo->GetCollider()->setColor(Vec4(0, 0, 0, 0), false);
 	}
-	for (auto& cgo : m_collidableGameObjects)
+	for(auto& cgo : m_collidableGameObjects)
 	{
 		m_ocTree->CollisionInspection(cgo->GetCollider());
 	}

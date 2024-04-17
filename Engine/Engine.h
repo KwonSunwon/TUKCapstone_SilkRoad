@@ -44,7 +44,7 @@ private:
 	void CreateRenderTargetGroups();
 
 private:
-	// ê·¸ë ¤ì§ˆ í™”ë©´ í¬ê¸° ê´€ë ¨
+	// ±×·ÁÁú È­¸é Å©±â °ü·Ã
 	WindowInfo		m_window;
 	D3D12_VIEWPORT	m_viewport = {};
 	D3D12_RECT		m_scissorRect = {};

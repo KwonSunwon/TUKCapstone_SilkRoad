@@ -15,7 +15,7 @@ void Engine::Init(const WindowInfo& info)
 {
 	m_window = info;
 
-	// ê·¸ë ¤ì§ˆ í™”ë©´ í¬ê¸°ë¥¼ ì„¤ì •
+	// ±×·ÁÁú È­¸é Å©±â¸¦ ¼³Á¤
 	m_viewport = { 0, 0, static_cast<FLOAT>(info.width), static_cast<FLOAT>(info.height), 0.0f, 1.0f };
 	m_scissorRect = CD3DX12_RECT(0, 0, info.width, info.height);
 
@@ -42,7 +42,7 @@ void Engine::Init(const WindowInfo& info)
 	GET_SINGLE(Timer)->Init();
 	GET_SINGLE(Resources)->Init();
 
-	// ì„œë²„ ìƒì„±
+	// ¼­¹ö »ı¼º
 	GET_SINGLE(NetworkManager)->Initialize();
 }
 
@@ -76,8 +76,8 @@ void Engine::RenderBegin()
 
 void Engine::RenderEnd()
 {
-	m_graphicsCmdQueue->RenderEnd();		// UI ì¶œë ¥ì„ ìœ„í•´ ì»¤ë§¨ë“œ í ì‹¤í–‰ê¹Œì§€ë§Œ ìˆ˜í–‰
-	// UI ë Œë”(d3d12ë¥¼ í†µí•œ render ì™„ë£Œ ì´í›„ ìˆ˜í–‰)
+	m_graphicsCmdQueue->RenderEnd();		// UI Ãâ·ÂÀ» À§ÇØ Ä¿¸Çµå Å¥ ½ÇÇà±îÁö¸¸ ¼öÇà
+	// UI ·»´õ(d3d12¸¦ ÅëÇÑ render ¿Ï·á ÀÌÈÄ ¼öÇà)
 	GET_SINGLE(SceneManager)->RenderUI(m_d3d11on12Device);
 
 	m_swapChain->Present();
