@@ -292,6 +292,24 @@ void Guest::Connect()
 	setsockopt(m_socket, IPPROTO_TCP, TCP_NODELAY, (const char*)&optval, sizeof(optval));
 }
 
+void Guest::Sender()
+{
+	int retval;
+	Packet packet;
+
+	while(GetState() == NETWORK_STATE::GUEST) {
+		while(m_toServerEventQue.TryPop(packet)) {
+			retval = send(m_socket, (char*)&packet, sizeof(Packet), 0);
+			if(retval == SOCKET_ERROR) {
+				// disconnect
+				OutputDebugString(L"Disconnect\n");
+				closesocket(m_socket);
+			}
+		}
+		this_thread::yield();
+	}
+}
+
 void Guest::Receiver()
 {
 	// 1/60초마다 호스트에게서 패킷을 받아와 m_receivedPacketQue에 저장
@@ -303,7 +321,7 @@ void Guest::Receiver()
 	float elapsedTime;
 	float remainTime;
 
-	while(true) {
+	while(GetState() == NETWORK_STATE::GUEST) {
 		startTime = chrono::steady_clock::now();
 
 		while(true) {

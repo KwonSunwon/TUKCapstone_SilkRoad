@@ -133,6 +133,7 @@ public:
 	void Update() override;
 
 	void Connect();
+	void Sender();
 	void Receiver();
 
 	void Send(Packet packet) override;
@@ -145,6 +146,8 @@ private:
 	char* m_serverIP = (char*)"127.0.0.1";
 
 	shared_ptr<queue<Packet>> m_toClientEventQue;
+
+	LockQueue<Packet> m_toServerEventQue;
 };
 
 class NetworkManager {
