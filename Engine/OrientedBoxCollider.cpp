@@ -17,7 +17,7 @@ OrientedBoxCollider::OrientedBoxCollider() : BaseCollider(ColliderType::Oriented
 		m_go = make_shared<GameObject>();
 		m_go->AddComponent(make_shared<Transform>());
 		Vec3 extents = m_boundingOrientedBox->Extents;
-		m_go->GetTransform()->SetLocalScale(extents * 2);//100,200,100
+		m_go->GetTransform()->SetLocalScale(extents * 2);
 		shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
 		{
 			shared_ptr<Mesh> sphereMesh = GET_SINGLE(Resources)->LoadCubeMesh();
@@ -25,15 +25,12 @@ OrientedBoxCollider::OrientedBoxCollider() : BaseCollider(ColliderType::Oriented
 		}
 		{
 			shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"WireFrame");
-			//shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"Wood", L"..\\Resources\\Texture\\Wood.jpg");
 			shared_ptr<Material> material = make_shared<Material>();
 			material->SetShader(shader);
-			//material->SetTexture(0, texture);
 			meshRenderer->SetMaterial(material);
 		}
 		m_go->AddComponent(meshRenderer);
 	}
-
 }
 
 OrientedBoxCollider::~OrientedBoxCollider()
@@ -43,7 +40,7 @@ OrientedBoxCollider::~OrientedBoxCollider()
 
 void OrientedBoxCollider::Awake()
 {
-
+	SetCenter(GetGameObject()->GetTransform()->GetLocalPosition());
 
 
 
@@ -57,32 +54,30 @@ void OrientedBoxCollider::FinalUpdate()
 
 
 	if (DEBUG_MODE) {
-		shared_ptr<Transform> m_goTransform = m_go->GetTransform();
+		shared_ptr<Transform> goTransform = m_go->GetTransform();
 		Vec3 extents = m_boundingOrientedBox->Extents;
-		Vec3 position = originTransform->GetLocalPosition();
-
-		m_goTransform->SetLocalPosition(position);
-		m_goTransform->SetLocalScale(extents * 2);
-		m_goTransform->SetLocalRotation(roatate);
+		goTransform->SetLocalPosition(m_boundingOrientedBox->Center);
+		goTransform->SetLocalScale(extents * 2);
+		goTransform->SetLocalRotation(roatate);
 	}
 
 
+	{
+		DirectX::XMFLOAT3 eulerRadians(
+			roatate.x,
+			roatate.y,
+			roatate.z
+		);
 
-	DirectX::XMFLOAT3 eulerRadians(
-		roatate.x,
-		roatate.y,
-		roatate.z
-	);
+		DirectX::XMVECTOR quaternion = DirectX::XMQuaternionRotationRollPitchYawFromVector(
+			DirectX::XMLoadFloat3(&eulerRadians)
+		);
 
-	DirectX::XMVECTOR quaternion = DirectX::XMQuaternionRotationRollPitchYawFromVector(
-		DirectX::XMLoadFloat3(&eulerRadians)
-	);
+		DirectX::XMFLOAT4 quatValues;
+		DirectX::XMStoreFloat4(&quatValues, quaternion);
 
-	DirectX::XMFLOAT4 quatValues;
-	DirectX::XMStoreFloat4(&quatValues, quaternion);
-
-	m_boundingOrientedBox->Center = GetGameObject()->GetTransform()->GetWorldPosition();
-	m_boundingOrientedBox->Orientation = quatValues;
+		m_boundingOrientedBox->Orientation = quatValues;
+	}
 }
 
 bool OrientedBoxCollider::Intersects(Vec4 rayOrigin, Vec4 rayDir, OUT float& distance)
@@ -111,7 +106,7 @@ void OrientedBoxCollider::SetRadius(float radius)
 
 void OrientedBoxCollider::SetCenter(Vec3 center)
 {
-	m_boundingOrientedBox->Center = center;
+	m_boundingOrientedBox->Center = center + m_offset;
 }
 
 void OrientedBoxCollider::SetExtent(Vec3 extent)

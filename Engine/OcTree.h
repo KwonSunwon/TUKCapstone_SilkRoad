@@ -26,27 +26,8 @@ public:
 	void Update();
 	void UpdateOcnode(shared_ptr<OcNode> currentNode);
 
-	bool CollisionSphere(shared_ptr<BoundingSphere> mainSphere, shared_ptr<BoundingSphere> subSphere,
-		shared_ptr<Vec3> normal, shared_ptr<float>depth);
+	
 
-	bool CollisionSphereBox(shared_ptr<BoundingSphere> mainSphere, shared_ptr<BoundingOrientedBox> mainCube,
-		shared_ptr<Vec3> normal, shared_ptr<float>depth, bool isBoxMain);
-
-	bool CollisionBox(shared_ptr<BoundingOrientedBox> mainCube, shared_ptr<BoundingOrientedBox> subCube,
-		shared_ptr<Vec3> normal, shared_ptr<float>depth);
-
-	void ProjectCube(shared_ptr < array<Vec3, 8>>, Vec3 axis, shared_ptr<float> min, shared_ptr<float> max);
-
-	void ProjectSphere(Vec3 center, float radius, Vec3 axis, shared_ptr<float> min, shared_ptr<float> max);
-
-	bool ProjectileFromCubePlane(shared_ptr<BoundingOrientedBox> mainCube, shared_ptr<BoundingOrientedBox> subCube,
-		shared_ptr<Vec3> normal, shared_ptr<float>depth);
-
-	bool ProjectileFromCubeEdges(shared_ptr<BoundingOrientedBox> mainCube, shared_ptr<BoundingOrientedBox> subCube,
-		shared_ptr<Vec3> normal, shared_ptr<float>depth);
-
-	bool ProjectileFromCubePlaneWithSphere(shared_ptr<BoundingOrientedBox> mainCube, shared_ptr<BoundingSphere> mainSphere,
-		shared_ptr<Vec3> normal, shared_ptr<float>depth);
 
 private:
 	/* 오브젝트의 AABB가 속하는 노드를 찾아 반환 */

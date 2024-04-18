@@ -185,6 +185,9 @@
     <ClCompile Include="TestPlayer.cpp">
       <Filter>Object\Test</Filter>
     </ClCompile>
+    <ClCompile Include="Collision.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -341,6 +344,9 @@
     <ClInclude Include="D3D1211On12.h" />
     <ClInclude Include="TestPlayer.h">
       <Filter>Object\Test</Filter>
+    </ClInclude>
+    <ClInclude Include="Collision.h">
+      <Filter>Manager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

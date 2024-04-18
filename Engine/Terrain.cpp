@@ -81,11 +81,7 @@ void Terrain::Init(int32 sizeX, int32 sizeZ)
 
 void Terrain::FinalUpdate()
 {
-	
-		
 
-
-	
 	shared_ptr<Camera> mainCamera = GET_SINGLE(SceneManager)->GetActiveScene()->GetMainCamera();
 	if (mainCamera == nullptr)
 		return;

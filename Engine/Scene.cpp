@@ -15,6 +15,7 @@
 #include "OcNode.h"
 #include "OcTree.h"
 #include "Network.h"
+#include "Collision.h"
 
 #include "RigidBody.h"
 #include "SceneManager.h"
@@ -250,7 +251,7 @@ void Scene::IntersectColliders(shared_ptr<BaseCollider> bs, shared_ptr<BaseColli
 {
 	shared_ptr<RigidBody> rb1 = bs->GetRigidBody();
 	shared_ptr<RigidBody> rb2 = bsDst->GetRigidBody();
-	if (rb1->GetIsStatic() && rb2->GetIsStatic())
+	if (rb1->GetStatic() && rb2->GetStatic())
 		return;
 
 
@@ -263,49 +264,49 @@ void Scene::IntersectColliders(shared_ptr<BaseCollider> bs, shared_ptr<BaseColli
 	if (bs->GetColliderId() == bsDst->GetColliderId())
 		m_ocTree->CollisionTerrain(bs);
 
-	// �ڱ� �ڽſ� ���� �浹�˻�� �������� ����
+
 	if (bs->GetColliderId() > bsDst->GetColliderId())
 		return;
 
-	// baseColliser�� Sphere�� ���
+
 	if (bs->GetColliderType() == ColliderType::Sphere) {
 		shared_ptr<BoundingSphere> boundingSphereSrc = dynamic_pointer_cast<SphereCollider>(bs)->GetBoundingSphere();
 
-		//����� Sphere�� ���
+
 		if (bsDst->GetColliderType() == ColliderType::Sphere) {
 			shared_ptr<BoundingSphere> boundingSphereDst = dynamic_pointer_cast<SphereCollider>(bsDst)->GetBoundingSphere();
 
-			if (!m_ocTree->CollisionSphere(boundingSphereSrc, boundingSphereDst, normal, depth))
+			if (!CollisionSphere(boundingSphereSrc, boundingSphereDst, normal, depth))
 				return;
 		}
 
-		//����� OBB�� ���
+
 		else if (bsDst->GetColliderType() == ColliderType::OrientedBox) {
 			shared_ptr<BoundingOrientedBox> boundingOrientedBoxDst = dynamic_pointer_cast<OrientedBoxCollider>(bsDst)->GetBoundingOrientedBox();
 
-			if (!m_ocTree->CollisionSphereBox(boundingSphereSrc, boundingOrientedBoxDst, normal, depth, false))
+			if (!CollisionSphereBox(boundingSphereSrc, boundingOrientedBoxDst, normal, depth, false))
 				return;
 		}
 
 	}
 
-	// baseColliser�� OBB�� ���
+
 	else if (bs->GetColliderType() == ColliderType::OrientedBox) {
 		shared_ptr<BoundingOrientedBox> boundingOrientedBoxSrc = dynamic_pointer_cast<OrientedBoxCollider>(bs)->GetBoundingOrientedBox();
 
-		//����� OBB�� ���
+
 		if (bsDst->GetColliderType() == ColliderType::OrientedBox) {
 			shared_ptr<BoundingOrientedBox> boundingOrientedBoxDst = dynamic_pointer_cast<OrientedBoxCollider>(bsDst)->GetBoundingOrientedBox();
 
-			if (!m_ocTree -> CollisionBox(boundingOrientedBoxSrc, boundingOrientedBoxDst, normal, depth))
+			if (!CollisionBox(boundingOrientedBoxSrc, boundingOrientedBoxDst, normal, depth))
 				return;
 		}
 
-		//����� Sphere�� ���
+
 		else if (bsDst->GetColliderType() == ColliderType::Sphere) {
 			shared_ptr<BoundingSphere> boundingSphereDst = dynamic_pointer_cast<SphereCollider>(bsDst)->GetBoundingSphere();
 
-			if (!m_ocTree->CollisionSphereBox(boundingSphereDst, boundingOrientedBoxSrc, normal, depth, true))
+			if (!CollisionSphereBox(boundingSphereDst, boundingOrientedBoxSrc, normal, depth, true))
 				return;
 		}
 	}
@@ -314,11 +315,11 @@ void Scene::IntersectColliders(shared_ptr<BaseCollider> bs, shared_ptr<BaseColli
 	bs->setColor(Vec4(1, 0, 0, 0), true);
 	bsDst->setColor(Vec4(1, 0, 0, 0), true);
 
-	if (rb1->GetIsStatic()) {
+	if (rb1->GetStatic()) {
 		rb2->Move(*normal * (*depth));
 	}
 
-	else if (rb2->GetIsStatic()) {
+	else if (rb2->GetStatic()) {
 		rb1->Move(-(*normal) * (*depth));
 	}
 	else {
