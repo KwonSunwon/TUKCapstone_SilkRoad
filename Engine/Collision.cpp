@@ -29,7 +29,7 @@ bool CollisionSphereBox(shared_ptr<BoundingSphere> mainSphere, shared_ptr<Boundi
 {
 	shared_ptr<BoundingSphere> tempBS = make_shared<BoundingSphere>();
 	tempBS->Center = mainCube->Center;
-	tempBS->Radius = max(max(mainCube->Extents.x, mainCube->Extents.y), mainCube->Extents.z);
+	tempBS->Radius = Vec3(mainCube->Extents).Length();
 	if (!CollisionSphere(mainSphere, tempBS, normal, depth))
 		return false;
 
@@ -116,11 +116,11 @@ bool CollisionBox(shared_ptr<BoundingOrientedBox> mainCube, shared_ptr<BoundingO
 {
 	shared_ptr<BoundingSphere> tempBS1 = make_shared<BoundingSphere>();
 	tempBS1->Center = mainCube->Center;
-	tempBS1->Radius = max(max(mainCube->Extents.x, mainCube->Extents.y), mainCube->Extents.z);
+	tempBS1->Radius = Vec3(mainCube->Extents).Length();
 
 	shared_ptr<BoundingSphere> tempBS2 = make_shared<BoundingSphere>();
 	tempBS2->Center = subCube->Center;
-	tempBS2->Radius = max(max(subCube->Extents.x, subCube->Extents.y), subCube->Extents.z);
+	tempBS2->Radius = Vec3(subCube->Extents).Length();
 
 	if (!CollisionSphere(tempBS1, tempBS2, normal, depth))
 		return false;
