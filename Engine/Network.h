@@ -158,6 +158,8 @@ public:
 	void Initialize();
 	void Update();
 
+	void MakeCorrectPacket();
+
 	void RunMulti();
 
 	void ConnectAsGuest();
@@ -165,8 +167,8 @@ public:
 	NETWORK_STATE GetNetworkState() { return m_network->GetState(); }
 	void SetNetworkState(NETWORK_STATE state) { m_network->SetState(state); }
 
-	void Send(Packet packet) { m_network->Send(packet, m_id); }
-	bool Recv(shared_ptr<Packet> packet) { return m_network->Recv(packet); }
+	void Send(Packet packet);
+	bool Recv(shared_ptr<Packet> packet);
 
 	int m_id = 0;
 

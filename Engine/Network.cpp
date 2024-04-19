@@ -98,10 +98,6 @@ void Host::RunMulti()
 	m_waitLoopThread = thread{ &Host::WaitLoop, this };
 }
 
-void Host::Stop()
-{
-}
-
 void Host::WaitLoop()
 {
 	struct sockaddr_in clientAddr;
@@ -319,19 +315,37 @@ bool Guest::Recv(shared_ptr<Packet> packet)
 #pragma region Network
 void NetworkManager::Initialize()
 {
-	m_network = make_unique<Host>();
+	m_network = make_unique<Network>();
 }
 
 void NetworkManager::Update()
 {
-	m_network->Update();
+	if(GetNetworkState() != NETWORK_STATE::SINGLE)
+		m_network->Update();
+}
+
+void NetworkManager::MakeCorrectPacket()
+{
+	if(GetNetworkState() == NETWORK_STATE::SINGLE)
+		return;
+
+	// Make correct position, health, etc packet of all objects
+	// It called by 1sec timer
+	// Send packet to all clients
+	auto objects = GET_SINGLE(SceneManager)->GetActiveScene()->GetGameObjects();
+
+	for(auto& object : objects) {
+
+	}
 }
 
 void NetworkManager::RunMulti()
 {
 	if(GetNetworkState() == NETWORK_STATE::SINGLE) {
-		SetNetworkState(NETWORK_STATE::HOST);
+		m_network.release();
+		m_network = make_unique<Host>();
 
+		SetNetworkState(NETWORK_STATE::HOST);
 		dynamic_cast<Host*>(m_network.get())->RunMulti();
 	}
 }
@@ -339,15 +353,25 @@ void NetworkManager::RunMulti()
 void NetworkManager::ConnectAsGuest()
 {
 	if(GetNetworkState() != NETWORK_STATE::GUEST) {
-
-		dynamic_cast<Host*>(m_network.get())->Stop();
-
 		m_network.release();
 		m_network = make_unique<Guest>();
 
 		SetNetworkState(NETWORK_STATE::GUEST);
 		dynamic_cast<Guest*>(m_network.get())->Connect();
 	}
+}
+
+void NetworkManager::Send(Packet packet)
+{
+	if(GetNetworkState() != NETWORK_STATE::SINGLE)
+		m_network->Send(packet, m_id);
+}
+
+bool NetworkManager::Recv(shared_ptr<Packet> packet)
+{
+	if(GetNetworkState() == NETWORK_STATE::SINGLE)
+		return false;
+	return m_network->Recv(packet);
 }
 
 void NetworkScript::LateUpdate()
