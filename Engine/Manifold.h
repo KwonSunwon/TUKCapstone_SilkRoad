@@ -5,7 +5,7 @@ class Manifold
 {
 public:
 	Manifold(shared_ptr<RigidBody> rb1, shared_ptr<RigidBody> rb2, 
-		shared_ptr<Vec3> normal, float depth, shared_ptr<array<Vec3, 4>> contacts, 
+		shared_ptr<Vec3> normal, float depth, shared_ptr<vector<Vec3>> contacts, 
 		shared_ptr<int> contectCount)
 	{
 		m_rb1 = rb1;
@@ -21,7 +21,7 @@ public:
 	shared_ptr<RigidBody> m_rb2;
 	shared_ptr<Vec3> m_normal;
 	float m_depth;
-	shared_ptr<array<Vec3, 4>> m_contacts;
+	shared_ptr<vector<Vec3>> m_contacts;
 	shared_ptr<int> m_contectCount;
 
 };

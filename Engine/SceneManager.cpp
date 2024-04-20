@@ -441,12 +441,12 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 			gm->AddComponent(make_shared<TestDragon>());
 
 			if (i & 1) {
-				/*gm->AddComponent(make_shared<OrientedBoxCollider>());
-				gm->GetCollider()->SetExtent(Vec3(50, 50, 50));*/
+				gm->AddComponent(make_shared<OrientedBoxCollider>());
+				gm->GetCollider()->SetExtent(Vec3(50, 50, 50));
 				
 
-				gm->AddComponent(make_shared<SphereCollider>());
-				gm->GetCollider()->SetRadius(100.f);
+				/*gm->AddComponent(make_shared<SphereCollider>());
+				gm->GetCollider()->SetRadius(100.f);*/
 
 
 			}

@@ -205,7 +205,9 @@ bool CollisionBox(shared_ptr<BoundingOrientedBox> mainCube, shared_ptr<BoundingO
 			if (axis.Length() < FLT_EPSILON)
 				continue;
 
-			*minA = FLT_MAX;
+			ProjectCube(cornersArrayA, axis, minA, maxA);
+			ProjectCube(cornersArrayB, axis, minB, maxB);
+			/**minA = FLT_MAX;
 			*maxA = -FLT_MAX;
 
 			*minB = FLT_MAX;
@@ -223,7 +225,7 @@ bool CollisionBox(shared_ptr<BoundingOrientedBox> mainCube, shared_ptr<BoundingO
 				float projB = VB.Dot(axis);
 				*minB = min(*minB, projB);
 				*maxB = max(*maxB, projB);
-			}
+			}*/
 
 			if (*minA >= *maxB || *minB >= *maxA) {
 				return false;
@@ -280,26 +282,32 @@ void ProjectSphere(Vec3 center, float radius, Vec3 axis, shared_ptr<float> minim
 	}
 }
 
-void FindContactPoint(shared_ptr<BoundingSphere> mainSphere, shared_ptr<BoundingSphere> subSphere, shared_ptr<array<Vec3, 4>> cp)
+void FindContactPoint(shared_ptr<BoundingSphere> mainSphere, shared_ptr<BoundingSphere> subSphere, shared_ptr<vector<Vec3>> cp)
 {
 	Vec3 mainToSub = Vec3(subSphere->Center) - Vec3(mainSphere->Center);
 	mainToSub.Normalize();
-	(*cp)[0] = mainSphere->Center + mainToSub * mainSphere->Radius;
+	(*cp).push_back(mainSphere->Center + mainToSub * mainSphere->Radius);
 }
 
-void FindContactPoint(shared_ptr<BoundingSphere> mainSphere, shared_ptr<BoundingOrientedBox> mainCube, shared_ptr<array<Vec3, 4>> cp, shared_ptr<Vec3> normal)
+void FindContactPoint(shared_ptr<BoundingSphere> mainSphere, shared_ptr<BoundingOrientedBox> mainCube, shared_ptr<vector<Vec3>> cp, shared_ptr<Vec3> normal)
 {
-	(*cp)[0] = mainSphere->Center + *normal * mainSphere->Radius;
+	(*cp).push_back(mainSphere->Center + *normal * mainSphere->Radius);
 }
 
-void FindContactPoint(shared_ptr<BoundingOrientedBox> mainCube, shared_ptr<BoundingSphere> mainSphere, shared_ptr<array<Vec3, 4>> cp, shared_ptr<Vec3> normal)
+void FindContactPoint(shared_ptr<BoundingOrientedBox> mainCube, shared_ptr<BoundingSphere> mainSphere, shared_ptr<vector<Vec3>> cp, shared_ptr<Vec3> normal)
 {
 
-	(*cp)[0] = mainSphere->Center - *normal * mainSphere->Radius;
+	(*cp).push_back(mainSphere->Center - *normal * mainSphere->Radius);
+}
+
+void FindContactPoint(shared_ptr<BoundingOrientedBox> mainCube, shared_ptr<BoundingOrientedBox> subCube, shared_ptr<vector<Vec3>> cp, shared_ptr<Vec3> normal)
+{
+
+	
 }
 
 
-void FindContactPoints(shared_ptr<BaseCollider> bs, shared_ptr<BaseCollider> bsDst, shared_ptr<array<Vec3, 4>> contacts, shared_ptr<int> contactCount, shared_ptr<Vec3> normal)
+void FindContactPoints(shared_ptr<BaseCollider> bs, shared_ptr<BaseCollider> bsDst, shared_ptr<vector<Vec3>> contacts, shared_ptr<int> contactCount, shared_ptr<Vec3> normal)
 {
 	for (Vec3 cp : *contacts) {
 		cp = { 0,0,0 };
@@ -323,6 +331,7 @@ void FindContactPoints(shared_ptr<BaseCollider> bs, shared_ptr<BaseCollider> bsD
 		else if (bsDst->GetColliderType() == ColliderType::OrientedBox) {
 			shared_ptr<BoundingOrientedBox> boundingOrientedBoxDst = dynamic_pointer_cast<OrientedBoxCollider>(bsDst)->GetBoundingOrientedBox();
 			FindContactPoint(boundingSphereSrc, boundingOrientedBoxDst, contacts, normal);
+			*contactCount = 1;
 		}
 
 	}
@@ -334,7 +343,7 @@ void FindContactPoints(shared_ptr<BaseCollider> bs, shared_ptr<BaseCollider> bsD
 
 		if (bsDst->GetColliderType() == ColliderType::OrientedBox) {
 			shared_ptr<BoundingOrientedBox> boundingOrientedBoxDst = dynamic_pointer_cast<OrientedBoxCollider>(bsDst)->GetBoundingOrientedBox();
-
+			FindContactPoint(boundingOrientedBoxSrc, boundingOrientedBoxDst, contacts, normal);
 			
 		}
 
@@ -342,6 +351,7 @@ void FindContactPoints(shared_ptr<BaseCollider> bs, shared_ptr<BaseCollider> bsD
 		else if (bsDst->GetColliderType() == ColliderType::Sphere) {
 			shared_ptr<BoundingSphere> boundingSphereDst = dynamic_pointer_cast<SphereCollider>(bsDst)->GetBoundingSphere();
 			FindContactPoint(boundingOrientedBoxSrc, boundingSphereDst, contacts, normal);
+			*contactCount = 1;
 			
 		}
 	}
