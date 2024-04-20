@@ -16,6 +16,7 @@
 #include "OcTree.h"
 #include "Network.h"
 #include "Collision.h"
+#include "Manifold.h"
 
 #include "RigidBody.h"
 #include "SceneManager.h"
@@ -265,11 +266,11 @@ void Scene::IntersectColliders(shared_ptr<BaseCollider> bs, shared_ptr<BaseColli
 		m_ocTree->CollisionTerrain(bs);
 
 
-	if (bs->GetColliderId() > bsDst->GetColliderId())
+	else if (bs->GetColliderId() > bsDst->GetColliderId())
 		return;
 
 
-	if (bs->GetColliderType() == ColliderType::Sphere) {
+	else if (bs->GetColliderType() == ColliderType::Sphere) {
 		shared_ptr<BoundingSphere> boundingSphereSrc = dynamic_pointer_cast<SphereCollider>(bs)->GetBoundingSphere();
 
 
@@ -326,26 +327,18 @@ void Scene::IntersectColliders(shared_ptr<BaseCollider> bs, shared_ptr<BaseColli
 		rb1->Move(-(*normal) * (*depth) / 2.f);
 		rb2->Move(*normal * (*depth) / 2.f);
 	}
+	shared_ptr<Manifold> contact = make_shared<Manifold>(rb1, rb2, normal, *depth, make_shared<array<Vec3, 4>>(), make_shared<int>());
+	FindContactPoints(bs, bsDst, contact->m_contacts, contact->m_contectCount, contact->m_normal);
+	
+	m_contacts.push_back(contact);
 
-
-
-	Vec3 relativeVelocity = rb2->GetLinearVelocity() - rb1->GetLinearVelocity();
-	if (relativeVelocity.Dot(*normal) > 0.f) {
-		return;
-	}
-
-	float e = min(rb1->GetRestitution(), rb2->GetRestitution());
-	float j = -(1.f + e) * relativeVelocity.Dot(*normal);
-	j /= rb1->GetInvMass() + rb2->GetInvMass();
-	Vec3 impulse = (*normal) * j;
-
-	rb1->SetLinearVelocity(rb1->GetLinearVelocity() - impulse * rb1->GetInvMass());
-	rb2->SetLinearVelocity(rb2->GetLinearVelocity() + impulse * rb2->GetInvMass());
+	
 
 }
 
 void Scene::testCollision()
 {
+	m_contacts.clear();
 	for (auto& cgo : m_collidableGameObjects)
 	{
 		cgo->GetCollider()->setColor(Vec4(0,0,0,0),false);
@@ -360,6 +353,28 @@ void Scene::testCollision()
 			IntersectColliders(m_collidableGameObjects[i]->GetCollider(), m_collidableGameObjects[j]->GetCollider());
 		}
 	}
+
+	for (shared_ptr<Manifold> contact : m_contacts) {
+		shared_ptr<RigidBody> rb1 = contact->m_rb1;
+		shared_ptr<RigidBody> rb2 = contact->m_rb2;
+		Vec3 normal = *contact->m_normal;
+
+
+		Vec3 relativeVelocity = rb2->GetLinearVelocity() - rb1->GetLinearVelocity();
+		if (relativeVelocity.Dot(normal) > 0.f) {
+			return;
+		}
+
+		float e = min(rb1->GetRestitution(), rb2->GetRestitution());
+		float j = -(1.f + e) * relativeVelocity.Dot(normal);
+		j /= rb1->GetInvMass() + rb2->GetInvMass();
+		Vec3 impulse = (normal) * j;
+
+		rb1->SetLinearVelocity(rb1->GetLinearVelocity() - impulse * rb1->GetInvMass());
+		rb2->SetLinearVelocity(rb2->GetLinearVelocity() + impulse * rb2->GetInvMass());
+	}
+	
+
 }
 
 void Scene::PhysicsStep(int iterations)

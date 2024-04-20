@@ -1,11 +1,17 @@
 #include "pch.h"
 #include "Collision.h"
-array<int, 3> planeX{ 0,3,1 };
-array<int, 3> planeY{ 1,2,5 };
-array<int, 3> planeZ{ 2,6,6 };
+#include "BaseCollider.h"
+#include "SphereCollider.h"
+#include "OrientedBoxCollider.h"
+#include "Transform.h"
+array<int, 6> planeX{ 0,3,1,4,0,4 };
+array<int, 6> planeY{ 1,2,5,5,4,0 };
+array<int, 6> planeZ{ 2,6,6,6,5,3 };
 
 array<int, 3> lineX{ 0,1,1 };
 array<int, 3> lineY{ 1,2,5 };
+
+
 bool CollisionSphere(shared_ptr<BoundingSphere> mainSphere, shared_ptr<BoundingSphere> subSphere, shared_ptr<Vec3> normal, shared_ptr<float> depth)
 {
 
@@ -49,58 +55,47 @@ bool CollisionSphereBox(shared_ptr<BoundingSphere> mainSphere, shared_ptr<Boundi
 		(*cornersArrayA)[i] = cornersA[i];
 	}
 
-	for (int k = 0; k < 3; ++k) {
-		Vec3 va = (*cornersArrayA)[planeX[k]];
-		Vec3 vb = (*cornersArrayA)[planeY[k]];
-		Vec3 vc = (*cornersArrayA)[planeZ[k]];
+	float minDistance = FLT_MAX;
+	float sphereRadius = mainSphere->Radius;
+	Vec3 sphereCenter = mainSphere->Center;
+	Vec3 boxCenter = mainCube->Center;
+	Vec4 cubeOrientation = mainCube->Orientation;
+	shared_ptr<XMVECTOR> axisRad = make_shared<XMVECTOR>();
+	shared_ptr<float> angle = make_shared<float>();
+	XMVECTOR ori { cubeOrientation.x, cubeOrientation.y, cubeOrientation.z, cubeOrientation.w };
 
-		Vec3 edgeA = va - vb;
-		Vec3 edgeB = va - vc;
-		Vec3 axis = XMVector3Cross(edgeA, edgeB);
+	XMQuaternionToAxisAngle(axisRad.get(), angle.get(), ori);
+	shared_ptr<Transform> transform = make_shared<Transform>();
+	transform->SetLocalPosition(boxCenter);
+	transform->SetLocalRotation(Vec3(*axisRad));
+	transform->FinalUpdate();
+
+	Matrix InvMat = transform->GetLocalToWorldMatrix().Invert();
+	XMVECTOR transformSphereCenter = XMVector3TransformCoord(XMVECTOR{ sphereCenter.x, sphereCenter.y, sphereCenter.z }, InvMat);
+	Vec3 inCubeSpaceSphereCenter = Vec3(XMVectorGetX(transformSphereCenter), XMVectorGetY(transformSphereCenter), XMVectorGetZ(transformSphereCenter));
+	Vec3 closest;
+	closest.x = max(-mainCube->Extents.x, min(inCubeSpaceSphereCenter.x, mainCube->Extents.x));
+	closest.y = max(-mainCube->Extents.y, min(inCubeSpaceSphereCenter.y, mainCube->Extents.y));
+	closest.z = max(-mainCube->Extents.z, min(inCubeSpaceSphereCenter.z, mainCube->Extents.z));
+
+	if ((closest - inCubeSpaceSphereCenter).LengthSquared() < mainSphere->Radius * mainSphere->Radius) {
+		Vec3 contactPoint = XMVector3TransformCoord(closest, transform->GetLocalToWorldMatrix());
+		axis = sphereCenter - contactPoint;
 		axis.Normalize();
-
 		ProjectCube(cornersArrayA, axis, minA, maxA);
 		ProjectSphere(mainSphere->Center, mainSphere->Radius, axis, minB, maxB);
-
-		if (*minA >= *maxB || *minB >= *maxA) {
-			return false;
-		}
-
 		axisDepth = min(*maxB - *minA, *maxA - *minB);
+
 		if (axisDepth < *depth) {
 			*depth = axisDepth;
 			*normal = axis;
 		}
 	}
-
-	int result = -1;
-	float minDistance = FLT_MAX;
-	Vec3 sphereCenter = mainSphere->Center;
-	Vec3 boxCenter = mainCube->Center;
-
-	for (int j = 0; j < 8; ++j) {
-		Vec3 v = cornersA[j];
-		float distance = (v - sphereCenter).Length();
-		if (distance < minDistance) {
-			minDistance = distance;
-			result = j;
-		}
-	}
-	Vec3 cp = cornersA[result];
-	axis = cp - sphereCenter;
-	axis.Normalize();
-
-	ProjectCube(cornersArrayA, axis, minA, maxA);
-	ProjectSphere(mainSphere->Center, mainSphere->Radius, axis, minB, maxB);
-	if (*minA >= *maxB || *minB >= *maxA)
-	{
+	else {
 		return false;
 	}
-	axisDepth = min(*maxB - *minA, *maxA - *minB);
-	if (axisDepth < *depth) {
-		*depth = axisDepth;
-		*normal = axis;
-	}
+
+
 	Vec3 dir = boxCenter - sphereCenter;
 	if (isBoxMain)
 		dir = sphereCenter - mainCube->Center;
@@ -270,17 +265,84 @@ void ProjectCube(shared_ptr<array<Vec3, 8>> corners, Vec3 axis, shared_ptr<float
 
 }
 
-void ProjectSphere(Vec3 center, float radius, Vec3 axis, shared_ptr<float> min, shared_ptr<float> max)
-{
+void ProjectSphere(Vec3 center, float radius, Vec3 axis, shared_ptr<float> minimum, shared_ptr<float> maximun)
+{	
 	Vec3 dirAndRadius = axis * radius;
 	Vec3 p1 = center + dirAndRadius;
 	Vec3 p2 = center - dirAndRadius;
 
-	*min = p1.Dot(axis);
-	*max = p2.Dot(axis);
-	if (*min > *max) {
-		float temp = *min;
-		*min = *max;
-		*max = temp;
+	*minimum = p1.Dot(axis);
+	*maximun = p2.Dot(axis);
+	if (*minimum > *maximun) {
+		float temp = *minimum;
+		*minimum = *maximun;
+		*maximun = temp;
+	}
+}
+
+void FindContactPoint(shared_ptr<BoundingSphere> mainSphere, shared_ptr<BoundingSphere> subSphere, shared_ptr<array<Vec3, 4>> cp)
+{
+	Vec3 mainToSub = Vec3(subSphere->Center) - Vec3(mainSphere->Center);
+	mainToSub.Normalize();
+	(*cp)[0] = mainSphere->Center + mainToSub * mainSphere->Radius;
+}
+
+void FindContactPoint(shared_ptr<BoundingSphere> mainSphere, shared_ptr<BoundingOrientedBox> mainCube, shared_ptr<array<Vec3, 4>> cp, shared_ptr<Vec3> normal)
+{
+	(*cp)[0] = mainSphere->Center + *normal * mainSphere->Radius;
+}
+
+void FindContactPoint(shared_ptr<BoundingOrientedBox> mainCube, shared_ptr<BoundingSphere> mainSphere, shared_ptr<array<Vec3, 4>> cp, shared_ptr<Vec3> normal)
+{
+
+	(*cp)[0] = mainSphere->Center - *normal * mainSphere->Radius;
+}
+
+
+void FindContactPoints(shared_ptr<BaseCollider> bs, shared_ptr<BaseCollider> bsDst, shared_ptr<array<Vec3, 4>> contacts, shared_ptr<int> contactCount, shared_ptr<Vec3> normal)
+{
+	for (Vec3 cp : *contacts) {
+		cp = { 0,0,0 };
+	}
+	*contactCount = 0;
+
+
+
+	if (bs->GetColliderType() == ColliderType::Sphere) {
+		shared_ptr<BoundingSphere> boundingSphereSrc = dynamic_pointer_cast<SphereCollider>(bs)->GetBoundingSphere();
+
+
+		if (bsDst->GetColliderType() == ColliderType::Sphere) {
+			shared_ptr<BoundingSphere> boundingSphereDst = dynamic_pointer_cast<SphereCollider>(bsDst)->GetBoundingSphere();
+			FindContactPoint(boundingSphereSrc, boundingSphereDst, contacts);
+			*contactCount = 1;
+			
+		}
+
+
+		else if (bsDst->GetColliderType() == ColliderType::OrientedBox) {
+			shared_ptr<BoundingOrientedBox> boundingOrientedBoxDst = dynamic_pointer_cast<OrientedBoxCollider>(bsDst)->GetBoundingOrientedBox();
+			FindContactPoint(boundingSphereSrc, boundingOrientedBoxDst, contacts, normal);
+		}
+
+	}
+
+
+	else if (bs->GetColliderType() == ColliderType::OrientedBox) {
+		shared_ptr<BoundingOrientedBox> boundingOrientedBoxSrc = dynamic_pointer_cast<OrientedBoxCollider>(bs)->GetBoundingOrientedBox();
+
+
+		if (bsDst->GetColliderType() == ColliderType::OrientedBox) {
+			shared_ptr<BoundingOrientedBox> boundingOrientedBoxDst = dynamic_pointer_cast<OrientedBoxCollider>(bsDst)->GetBoundingOrientedBox();
+
+			
+		}
+
+
+		else if (bsDst->GetColliderType() == ColliderType::Sphere) {
+			shared_ptr<BoundingSphere> boundingSphereDst = dynamic_pointer_cast<SphereCollider>(bsDst)->GetBoundingSphere();
+			FindContactPoint(boundingOrientedBoxSrc, boundingSphereDst, contacts, normal);
+			
+		}
 	}
 }
