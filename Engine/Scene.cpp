@@ -262,15 +262,24 @@ void Scene::IntersectColliders(shared_ptr<BaseCollider> bs, shared_ptr<BaseColli
 
 	*normal = { 0,0,0 };
 	*depth = 0.f;
-	if (bs->GetColliderId() == bsDst->GetColliderId())
-		m_ocTree->CollisionTerrain(bs);
+	
 
-
-	else if (bs->GetColliderId() > bsDst->GetColliderId())
+	if (bs->GetColliderId() > bsDst->GetColliderId())
 		return;
 
+	shared_ptr<Vec3> norm = make_shared<Vec3>();
+	if (bs->GetGameObject()->GetTerrain())
+	{
+		Vec3 pos = bsDst->GetRigidBody()->GetPosition();
+		
+		shared_ptr<float> h = make_shared < float >();
+		m_terrain->getHeight(pos.x, pos.z, h, norm);
+		
 
-	else if (bs->GetColliderType() == ColliderType::Sphere) {
+		bs->SetCenter(Vec3(pos.x, *h - 100, pos.z));
+	}
+
+	if (bs->GetColliderType() == ColliderType::Sphere) {
 		shared_ptr<BoundingSphere> boundingSphereSrc = dynamic_pointer_cast<SphereCollider>(bs)->GetBoundingSphere();
 
 
@@ -315,6 +324,16 @@ void Scene::IntersectColliders(shared_ptr<BaseCollider> bs, shared_ptr<BaseColli
 
 	bs->setColor(Vec4(1, 0, 0, 0), true);
 	bsDst->setColor(Vec4(1, 0, 0, 0), true);
+	if (bs->GetGameObject()->GetTerrain())
+	{
+		rb2->Move(*norm * (*depth));
+		shared_ptr<Manifold> contact = make_shared<Manifold>(rb1, rb2, norm, *depth, make_shared<vector<Vec3>>(), make_shared<int>());
+		FindContactPoints(bs, bsDst, contact->m_contacts, contact->m_contectCount, contact->m_normal);
+
+		m_contacts.push_back(contact);
+		return;
+	}
+
 
 	if (rb1->GetStatic()) {
 		rb2->Move(*normal * (*depth));
@@ -349,7 +368,7 @@ void Scene::testCollision()
 	}*/
 
 	for (int i = 0; i < m_collidableGameObjects.size(); ++i) {
-		for (int j = i; j < m_collidableGameObjects.size(); ++j) {
+		for (int j = i + 1; j < m_collidableGameObjects.size(); ++j) {
 			IntersectColliders(m_collidableGameObjects[i]->GetCollider(), m_collidableGameObjects[j]->GetCollider());
 		}
 	}

@@ -21,7 +21,7 @@ public:
 	/* 충돌 검사 */
 	void CollisionInspection(shared_ptr<BaseCollider> bs);
 
-	void CollisionTerrain(shared_ptr<BaseCollider> bs);
+	void CollisionTerrain(shared_ptr<BaseCollider> bs, shared_ptr<BaseCollider> bsTerrain);
 
 	void Update();
 	void UpdateOcnode(shared_ptr<OcNode> currentNode);

@@ -77,6 +77,11 @@ void Terrain::Init(int32 sizeX, int32 sizeZ)
 		shared_ptr<float> h = make_shared < float >();
 
 	}
+
+
+
+
+
 }
 
 void Terrain::FinalUpdate()

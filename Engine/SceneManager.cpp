@@ -310,12 +310,41 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 		obj->GetTerrain()->Init(64, 64);
 		obj->SetCheckFrustum(false);
 
+		{
+			shared_ptr<RigidBody> rb = make_shared<RigidBody>();
+
+			rb->SetStatic(true);
+			rb->SetMass(1000.f);
+			rb->SetRestitution(0.5f);
+			obj->SetCheckFrustum(false);
+			obj->AddComponent(rb);
+		}
+
+		//콜라이더 설정 
+		//콜라이더의 위치,회전은 Gameobject의 Transform을 사용
+		{
+			//OBB를 사용할 경우 이곳의 주석을 풀어서 사용
+			shared_ptr<OrientedBoxCollider> collider = make_shared<OrientedBoxCollider>();
+			collider->SetExtent(Vec3(100, 100, 100));
+
+			//Sphere를 사용할경우 이곳의 주석을 풀어서 사용
+			//shared_ptr<SphereCollider> collider = make_shared<SphereCollider>();
+			//collider->SetRadius(100.f);
+
+
+
+			//collider->SetOffset(Vec3(0, 80, 0));
+			obj->AddComponent(collider);
+		}
+		//디버그용 콜라이더 매쉬 설정
+		if (DEBUG_MODE)
+		{
+			scene->AddGameObject(obj->GetCollider()->GetDebugCollider());
+		}
+
 		scene->AddGameObject(obj);
 		scene->m_terrain = obj->GetTerrain();
 
-		for(auto& go : obj->GetTerrain()->testCols) {
-			scene->AddGameObject(go);
-		}
 	}
 #pragma endregion
 
@@ -520,60 +549,60 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 
 		//scene->AddGameObject(gameObjects[idx]);
 
-		//for (int i = 0; i < 10; ++i) {
+		for (int i = 0; i < 10; ++i) {
 
 
-		//	shared_ptr<GameObject> gm = make_shared<GameObject>();
-		//	gm->AddComponent(make_shared<Transform>());
-		//	gm->GetTransform()->SetLocalScale(Vec3(150.f, 100.f, 100.f));
-		//	gm->GetTransform()->SetLocalPosition(Vec3(1500.f+ 76.f*i, 1500.f + 400.f *i, 2000.f + 0*i ));
+			shared_ptr<GameObject> gm = make_shared<GameObject>();
+			gm->AddComponent(make_shared<Transform>());
+			gm->GetTransform()->SetLocalScale(Vec3(150.f, 100.f, 100.f));
+			gm->GetTransform()->SetLocalPosition(Vec3(1500.f+ 76.f*i, 1500.f + 400.f *i, 2000.f + 0*i ));
 
-		//	shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
-		//	{
-		//		shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadCubeMesh();
-		//		meshRenderer->SetMesh(mesh);
-		//	}
+			shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
+			{
+				shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadCubeMesh();
+				meshRenderer->SetMesh(mesh);
+			}
 
-		//	{
-		//		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"WireFrame");
-		//		shared_ptr<Material> material = make_shared<Material>();
-		//		material->SetShader(shader);
+			{
+				shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"WireFrame");
+				shared_ptr<Material> material = make_shared<Material>();
+				material->SetShader(shader);
 
-		//		material->SetInt(3, 1);
-		//		material->SetVec4(3, Vec4(1, 1, 1, 1));
-		//		meshRenderer->SetMaterial(material);
-		//	}
-		//	gm->AddComponent(meshRenderer);
-		//	
-		//	gm->AddComponent(make_shared<RigidBody>());
-		//	gm->AddComponent(make_shared<TestDragon>());
+				material->SetInt(3, 1);
+				material->SetVec4(3, Vec4(1, 1, 1, 1));
+				meshRenderer->SetMaterial(material);
+			}
+			gm->AddComponent(meshRenderer);
+			
+			gm->AddComponent(make_shared<RigidBody>());
+			//gm->AddComponent(make_shared<TestDragon>());
 
-		//	if (i & 1) {
-		//		gm->AddComponent(make_shared<OrientedBoxCollider>());
-		//		gm->GetCollider()->SetExtent(Vec3(50, 50, 50));
-		//		
+			if (i & 1) {
+				gm->AddComponent(make_shared<OrientedBoxCollider>());
+				gm->GetCollider()->SetExtent(Vec3(50, 50, 50));
+				
 
-		//		/*gm->AddComponent(make_shared<SphereCollider>());
-		//		gm->GetCollider()->SetRadius(100.f);*/
-
-
-		//	}
-		//	else {
-		//		/*gm->AddComponent(make_shared<SphereCollider>());
-		//		gm->GetCollider()->SetRadius(100.f);*/
-
-		//		gm->AddComponent(make_shared<OrientedBoxCollider>());
-		//		gm->GetCollider()->SetExtent(Vec3(75, 50, 50));
+				/*gm->AddComponent(make_shared<SphereCollider>());
+				gm->GetCollider()->SetRadius(100.f);*/
 
 
-		//	}
+			}
+			else {
+				/*gm->AddComponent(make_shared<SphereCollider>());
+				gm->GetCollider()->SetRadius(100.f);*/
+
+				gm->AddComponent(make_shared<OrientedBoxCollider>());
+				gm->GetCollider()->SetExtent(Vec3(75, 50, 50));
+
+
+			}
 
 
 
-		//	if (gm->GetCollider()->GetDebugCollider() != nullptr)
-		//		scene->AddGameObject(gm->GetCollider()->GetDebugCollider());
-		//	scene->AddGameObject(gm);
-		//}
+			if (gm->GetCollider()->GetDebugCollider() != nullptr)
+				scene->AddGameObject(gm->GetCollider()->GetDebugCollider());
+			scene->AddGameObject(gm);
+		}
 
 #pragma endregion 
 

@@ -207,25 +207,7 @@ bool CollisionBox(shared_ptr<BoundingOrientedBox> mainCube, shared_ptr<BoundingO
 
 			ProjectCube(cornersArrayA, axis, minA, maxA);
 			ProjectCube(cornersArrayB, axis, minB, maxB);
-			/**minA = FLT_MAX;
-			*maxA = -FLT_MAX;
 
-			*minB = FLT_MAX;
-			*maxB = -FLT_MAX;
-
-			for (int j = 0; j < 8; ++j) {
-				Vec3 VA = cornersA[j];
-				float projA = VA.Dot(axis);
-				*minA = min(*minA, projA);
-				*maxA = max(*maxA, projA);
-			}
-
-			for (int j = 0; j < 8; ++j) {
-				Vec3 VB = cornersB[j];
-				float projB = VB.Dot(axis);
-				*minB = min(*minB, projB);
-				*maxB = max(*maxB, projB);
-			}*/
 
 			if (*minA >= *maxB || *minB >= *maxA) {
 				return false;
@@ -302,8 +284,39 @@ void FindContactPoint(shared_ptr<BoundingOrientedBox> mainCube, shared_ptr<Bound
 
 void FindContactPoint(shared_ptr<BoundingOrientedBox> mainCube, shared_ptr<BoundingOrientedBox> subCube, shared_ptr<vector<Vec3>> cp, shared_ptr<Vec3> normal)
 {
-
+	//*depth = FLT_MAX;
+	XMFLOAT3 cornersA[8];
+	XMFLOAT3 cornersB[8];
+	mainCube->GetCorners(cornersA);
+	subCube->GetCorners(cornersB);
+	shared_ptr<array<Vec3, 8>> cornersArrayA = make_shared<array<Vec3, 8>>();
+	shared_ptr<array<Vec3, 8>> cornersArrayB = make_shared<array<Vec3, 8>>();
 	
+	for (int i = 0; i < 8; ++i) {
+		(*cornersArrayA)[i] = cornersA[i];
+		(*cornersArrayB)[i] = cornersB[i];
+	}
+
+
+
+	for (int k = 0; k < 8; ++k) {
+		Vec3 pt = cornersA[k];
+		Vec3 axis = *normal;
+		pt += axis * FLT_EPSILON;
+		if (subCube->Contains(pt)) {
+			(*cp).push_back(cornersA[k]);
+		}
+	
+	}
+
+	for (int k = 0; k < 8; ++k) {
+		Vec3 pt = cornersB[k];
+		Vec3 axis = -(*normal);
+		pt += axis * FLT_EPSILON;
+		if (mainCube->Contains(pt)) {
+			(*cp).push_back(cornersA[k]);
+		}
+	}
 }
 
 
@@ -344,7 +357,7 @@ void FindContactPoints(shared_ptr<BaseCollider> bs, shared_ptr<BaseCollider> bsD
 		if (bsDst->GetColliderType() == ColliderType::OrientedBox) {
 			shared_ptr<BoundingOrientedBox> boundingOrientedBoxDst = dynamic_pointer_cast<OrientedBoxCollider>(bsDst)->GetBoundingOrientedBox();
 			FindContactPoint(boundingOrientedBoxSrc, boundingOrientedBoxDst, contacts, normal);
-			
+			*contactCount = contacts.get()->size();
 		}
 
 

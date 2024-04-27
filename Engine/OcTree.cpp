@@ -132,7 +132,7 @@ void OcTree::CollisionInspection(shared_ptr<BaseCollider> bs)
 	shared_ptr<OcNode> IncludedNode = FindColliderIncludedNode(bs, m_rootNode);
 
 	
-	CollisionTerrain(bs);
+	CollisionTerrain(bs, bs);
 	// 부모 노드들에 대한 충돌 검사
 	CollisionInspectionToParrent(bs, IncludedNode);
 	// 자식 노드들에 대한 충돌 검사
@@ -447,7 +447,7 @@ void OcTree::CollisionInspectionToChild(shared_ptr<BaseCollider> bs, shared_ptr<
 }
 
 //터레인과의 충돌을 위한 함수
-void OcTree::CollisionTerrain(shared_ptr<BaseCollider> bs)
+void OcTree::CollisionTerrain(shared_ptr<BaseCollider> bs, shared_ptr<BaseCollider> bsTerrain)
 {
 	shared_ptr<RigidBody> rb = bs->GetRigidBody();
 	if (rb->GetStatic())
