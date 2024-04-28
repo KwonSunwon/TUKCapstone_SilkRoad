@@ -58,42 +58,42 @@ Host::Host() : Network()
 
 void Host::MainLoop()
 {
-	while (GetState() != NETWORK_STATE::GUEST) {
-		{
-			Packet packet;
-			if (GetState() == NETWORK_STATE::HOST) {
-				// �Խ�Ʈ�� ���� ��Ŷ�� �޾� ����
-				for (auto& guest : m_guestInfos) {
-					while (guest.eventQue->toServer.TryPop(packet))
-						m_gameLoopEventQue.push(packet);
-				}
-			}
-			// ȣ��Ʈ Ŭ���̾�Ʈ�� Ǫ���� ��Ŷ�� �޾� ����
-			string str = "MainLoop: Queue Size - " + to_string(m_eventQue.toServer.Size()) + "\n";
-			while (m_eventQue.toServer.TryPop(packet)) {
-				m_gameLoopEventQue.push(packet);
-			}
-		}
-		GameLoop();
-		{
-			m_timer += DELTA_TIME;
+	//while (GetState() != NETWORK_STATE::GUEST) {
+	//	{
+	//		Packet packet;
+	//		if (GetState() == NETWORK_STATE::HOST) {
+	//			// �Խ�Ʈ�� ���� ��Ŷ�� �޾� ����
+	//			for (auto& guest : m_guestInfos) {
+	//				while (guest.eventQue->toServer.TryPop(packet))
+	//					m_gameLoopEventQue.push(packet);
+	//			}
+	//		}
+	//		// ȣ��Ʈ Ŭ���̾�Ʈ�� Ǫ���� ��Ŷ�� �޾� ����
+	//		string str = "MainLoop: Queue Size - " + to_string(m_eventQue.toServer.Size()) + "\n";
+	//		while (m_eventQue.toServer.TryPop(packet)) {
+	//			m_gameLoopEventQue.push(packet);
+	//		}
+	//	}
+	//	GameLoop();
+	//	{
+	//		m_timer += DELTA_TIME;
 
-			if (m_timer > SEND_PACKET_PER_SEC) {
-				while (!m_outGameLoopEventQue.empty()) {
-					Packet packet = m_outGameLoopEventQue.front();
-					m_outGameLoopEventQue.pop();
-					for (int i = 0; i < MAX_PLAYER; i++) {
-						for (auto& guest : m_guestInfos) {
-							guest.eventQue->toClient.Push(packet);
-						}
-						m_eventQue.toClient.Push(packet);
-					}
-				}
-				m_timer = 0.0f;
-			}
-		}
-	}
-	OutputDebugString(L"Host MainLoop End\n");
+	//		if (m_timer > SEND_PACKET_PER_SEC) {
+	//			while (!m_outGameLoopEventQue.empty()) {
+	//				Packet packet = m_outGameLoopEventQue.front();
+	//				m_outGameLoopEventQue.pop();
+	//				for (int i = 0; i < MAX_PLAYER; i++) {
+	//					for (auto& guest : m_guestInfos) {
+	//						guest.eventQue->toClient.Push(packet);
+	//					}
+	//					m_eventQue.toClient.Push(packet);
+	//				}
+	//			}
+	//			m_timer = 0.0f;
+	//		}
+	//	}
+	//}
+	//OutputDebugString(L"Host MainLoop End\n");
 }
 
 void Host::GameLoop()

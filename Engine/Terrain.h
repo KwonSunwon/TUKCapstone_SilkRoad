@@ -25,6 +25,7 @@ private:
 
 	shared_ptr<class Material> m_material;
 	shared_ptr<vector<int>> m_height;
+	shared_ptr<vector<int>> m_normal;
 
 	
 };

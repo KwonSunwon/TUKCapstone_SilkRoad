@@ -6,6 +6,7 @@ void Input::Init(HWND hwnd)
 {
 	m_hwnd = hwnd;
 	m_states.resize(KEY_TYPE_COUNT, KEY_STATE::NONE);
+	ShowCursor(FALSE);
 }
 
 void Input::Update()
@@ -16,6 +17,9 @@ void Input::Update()
 			m_states[static_cast<int32>(key)] = KEY_STATE::NONE;
 		return;
 	}
+
+	if (GetButton(KEY_TYPE::ESC))
+		PostQuitMessage(0);
 
 	for (const KEY_TYPE key : ALL_KEYS) {
 		// 키가 눌려 있으면 true
@@ -38,7 +42,11 @@ void Input::Update()
 				state = KEY_STATE::NONE;
 		}
 	}
+	SetCursor(NULL);
+	POINT ptCursorPos;
+	GetCursorPos(&ptCursorPos);
 
-	::GetCursorPos(&m_mousePos);
-	::ScreenToClient(GEngine->GetWindow().hwnd, &m_mousePos);
+	m_mouseDelta.x = (double)(ptCursorPos.x - 300);
+	m_mouseDelta.y = (double)(ptCursorPos.y - 300);
+	SetCursorPos(300, 300);
 }

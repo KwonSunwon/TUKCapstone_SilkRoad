@@ -13,6 +13,7 @@ class BaseCollider : public Component, public std::enable_shared_from_this<BaseC
 {
 protected:
 	shared_ptr<GameObject> m_go;
+	Vec3 m_offset = { 0,0,0 };
 public:
 	BaseCollider(ColliderType colliderType);
 	virtual ~BaseCollider();
@@ -31,6 +32,7 @@ public:
 	virtual void SetCenter(Vec3 center) = 0;
 	virtual void SetExtent(Vec3 extent) = 0;
 	virtual void SetRotation(Vec3 rotation) = 0;
+	void SetOffset(Vec3 offset) { m_offset = offset; }
 
 	void setColor(Vec4 color, bool active);
 
@@ -46,6 +48,7 @@ public:
 	
 
 	int m_id;
+	
 	
 	
 public:

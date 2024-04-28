@@ -31,6 +31,9 @@
     <Filter Include="Server">
       <UniqueIdentifier>{5a638558-91e5-4352-b1f4-acca415aa0b5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Physics">
+      <UniqueIdentifier>{69fe4dfc-772f-4fa4-9a4d-1e3a1d5e35ca}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -162,12 +165,6 @@
     <ClCompile Include="BoxCollider.cpp">
       <Filter>Object\Component\Collider</Filter>
     </ClCompile>
-    <ClCompile Include="OcNode.cpp">
-      <Filter>Manager</Filter>
-    </ClCompile>
-    <ClCompile Include="OcTree.cpp">
-      <Filter>Manager</Filter>
-    </ClCompile>
     <ClCompile Include="D3D1211On12.cpp" />
     <ClCompile Include="OrientedBoxCollider.cpp">
       <Filter>Object\Component\Collider</Filter>
@@ -184,6 +181,18 @@
     <ClCompile Include="D3D1211On12.cpp" />
     <ClCompile Include="TestPlayer.cpp">
       <Filter>Object\Test</Filter>
+    </ClCompile>
+    <ClCompile Include="Collision.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="OcNode.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="OcTree.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Manifold.cpp">
+      <Filter>Physics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -319,12 +328,6 @@
     <ClInclude Include="BoxCollider.h">
       <Filter>Object\Component\Collider</Filter>
     </ClInclude>
-    <ClInclude Include="OcNode.h">
-      <Filter>Manager</Filter>
-    </ClInclude>
-    <ClInclude Include="OcTree.h">
-      <Filter>Manager</Filter>
-    </ClInclude>
     <ClInclude Include="D3D1211On12.h" />
     <ClInclude Include="OrientedBoxCollider.h">
       <Filter>Object\Component\Collider</Filter>
@@ -341,6 +344,18 @@
     <ClInclude Include="D3D1211On12.h" />
     <ClInclude Include="TestPlayer.h">
       <Filter>Object\Test</Filter>
+    </ClInclude>
+    <ClInclude Include="Collision.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="OcNode.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="OcTree.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Manifold.h">
+      <Filter>Physics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

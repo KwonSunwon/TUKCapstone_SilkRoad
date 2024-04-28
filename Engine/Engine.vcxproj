@@ -180,6 +180,7 @@
     <ClInclude Include="BaseCollider.h" />
     <ClInclude Include="BoxCollider.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Collision.h" />
     <ClInclude Include="CommandQueue.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="ConstantBuffer.h" />
@@ -196,6 +197,7 @@
     <ClInclude Include="InstancingManager.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="LockQueue.h" />
+    <ClInclude Include="Manifold.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="MeshData.h" />
@@ -234,6 +236,7 @@
     <ClCompile Include="BaseCollider.cpp" />
     <ClCompile Include="BoxCollider.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Collision.cpp" />
     <ClCompile Include="CommandQueue.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="ConstantBuffer.cpp" />
@@ -249,6 +252,7 @@
     <ClCompile Include="InstancingManager.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="LockQueue.cpp" />
+    <ClCompile Include="Manifold.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="MeshData.cpp" />

@@ -20,70 +20,85 @@ void TestDragon::Awake()
 void TestDragon::Update()
 {
 
+
 	float dx = 0;
 	float dy = 0;
 	float dz = 0;
 	float speed = 1000;
 
+	shared_ptr<Transform> transform = GetTransform();
 	shared_ptr<RigidBody> rb = GetRigidBody();
-	/*if (INPUT->GetButtonDown(KEY_TYPE::W))
-	{
-		int32 count = GetAnimator()->GetAnimCount();
-		int32 currentIndex = GetAnimator()->GetCurrentClipIndex();
-
-		int32 index = (currentIndex + 1) % count;
-		
-		GetAnimator()->Play(index);
-	}*/
-
-	/*if (INPUT->GetButtonDown(KEY_TYPE::KEY_2))
-	{
-		int32 count = GetAnimator()->GetAnimCount();
-		int32 currentIndex = GetAnimator()->GetCurrentClipIndex();
-
-		int32 index = (currentIndex - 1 + count) % count;
-		GetAnimator()->Play(index);
-	}*/
 	
 
-	if (INPUT->GetButton(KEY_TYPE::W))
-		dy++;
+	Vec3 rot = GetTransform()->GetLocalRotation();
+	const POINT& mouseDelta = INPUT->GetMouseDelta();
+
+	// Rotate according to mouse movement
+
+	rot.y += mouseDelta.x * (double)0.001;
+
+	if (rot.x + mouseDelta.y * 0.001f < XMConvertToRadians(40.f) && rot.x + mouseDelta.y * 0.001f > XMConvertToRadians(-40.f))
+		rot.x += mouseDelta.y * 0.001f;
+
+	GetTransform()->SetLocalRotation(rot);
 
 
-	if (INPUT->GetButton(KEY_TYPE::S))
-		dy--;
 
-	if (INPUT->GetButton(KEY_TYPE::A))
-		dx--;
-
-
-	if (INPUT->GetButton(KEY_TYPE::D))
-		dx++;
-
-	if (INPUT->GetButton(KEY_TYPE::Q))
-		dz++;
-
-	if (INPUT->GetButton(KEY_TYPE::E))
-		dz--;
+	if (INPUT->GetButton(KEY_TYPE::KEY_1))
+	{
+		GetAnimator()->Play(0);
+	}
+	if (INPUT->GetButton(KEY_TYPE::KEY_2))
+	{
+		GetAnimator()->Play(1);
+	}
+	if (INPUT->GetButton(KEY_TYPE::KEY_3))
+	{
+		GetAnimator()->Play(2);
+	}
 
 
-	static float a = 0;
+	Vec3 forceDir = {0,0,0};
+
+	if (INPUT->GetButton(KEY_TYPE::W)) {
+		forceDir+= transform->GetLook();
+	}
+		
+	if (INPUT->GetButton(KEY_TYPE::S)) {
+		forceDir -= transform->GetLook();
+	}
+		
+
+	if (INPUT->GetButton(KEY_TYPE::A)) {
+		forceDir -= transform->GetRight();
+	}
+
+	if (INPUT->GetButton(KEY_TYPE::D)) {
+		forceDir += transform->GetRight();
+	}
+
 	if (INPUT->GetButton(KEY_TYPE::LBUTTON))
 		rb->SetStatic(false);
 
-	//GetTransform()->SetLocalRotation(Vec3(0, a, 0));
 
 	if (INPUT->GetButtonDown(KEY_TYPE::RBUTTON))
 	{ }
 
-	/*Vec3 dir{ dx,dz,dy };
-	dir.Normalize();
-	Vec3 velocity = dir * speed * DELTA_TIME;
-	rb->Move(velocity);*/
-
+	if (rb->GetLinearVelocity().LengthSquared() > pow(speed * 0.6, 2)){
+		if(GetAnimator()->GetCurrentClipIndex()!=2)
+			GetAnimator()->Play(2);
+	}
+	else if (rb->GetLinearVelocity().LengthSquared() > pow(speed * 0.01, 2)) {
+		if (GetAnimator()->GetCurrentClipIndex() != 1)
+			GetAnimator()->Play(1);
+	}
+	else {
+		if (GetAnimator()->GetCurrentClipIndex() != 0)
+			GetAnimator()->Play(0);
+	}
 
 	float forceMag = 100000;
-	Vec3 forceDir = { dx,dz,dy };
+
 	forceDir.Normalize();
 	Vec3 force = forceDir * forceMag;
 	
