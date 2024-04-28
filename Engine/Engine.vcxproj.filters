@@ -357,6 +357,9 @@
     <ClInclude Include="Manifold.h">
       <Filter>Physics</Filter>
     </ClInclude>
+    <ClInclude Include="json.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath.inl">
