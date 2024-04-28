@@ -244,6 +244,23 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 	}
 #pragma endregion
 
+#pragma region MapObjects
+	{
+		/*std::ifstream jsonFile("..\\Resources\\MapData\\ExportedObjects.json");
+		nlohmann::json j;
+		jsonFile >> j;
+		std::map<std::string, std::string> obj_map;
+
+		for (const auto& obj : j["objects"])
+			obj_map[obj["name"].get<std::string>()] = obj["meshName"].get<std::string>();*/
+
+		shared_ptr<MapObjectsLoader> loader = make_shared<MapObjectsLoader>();
+		loader->Create(scene);
+
+		loader->Load(L"..\\Resources\\MapData\\ExportedObjects.json");
+	}
+#pragma endregion
+
 #pragma region Object
 	{
 		{
