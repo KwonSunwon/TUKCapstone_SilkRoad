@@ -29,9 +29,9 @@ void MapObjectsLoader::Load(const wstring& path)
 	{
 		objInfo->name = jsonObj["name"].get<std::string>();
 		objInfo->meshName = jsonObj["meshName"].get<std::string>();
-		objInfo->position = XMFLOAT3(jsonObj["position"]["x"].get<float>() + 35000.f,
+		objInfo->position = XMFLOAT3(jsonObj["position"]["x"].get<float>() + 25000.f,
 			jsonObj["position"]["y"].get<float>(),
-			jsonObj["position"]["z"].get<float>() + 35000.f);
+			jsonObj["position"]["z"].get<float>() + 25000.f);
 		objInfo->rotation = XMFLOAT3(jsonObj["rotation"]["x"].get<float>(),
 			jsonObj["rotation"]["y"].get<float>(),
 			jsonObj["rotation"]["z"].get<float>());
