@@ -10,6 +10,7 @@
 #include "Camera.h"
 #include "Light.h"
 #include "RigidBody.h"
+#include "MapObjectsLoader.h"
 
 #include "TestCameraScript.h"
 #include "Resources.h"
@@ -55,8 +56,16 @@ void SceneManager::RenderUI(shared_ptr<D3D11On12Device> device)
 		m_activeScene->RenderUI();
 	D2D1_SIZE_F rtSize = device->GetD3D11On12RT(backbufferindex)->GetSize();
 	D2D1_RECT_F textRect = D2D1::RectF(0, 0, rtSize.width, rtSize.height);
+	
+	shared_ptr<GameObject> player = GET_SINGLE(SceneManager)->GetActiveScene()->GetPlayers()[0];
+	Vec3 playerPos = player->GetTransform()->GetLocalPosition();
 	static const WCHAR text[] = L"";
 	//static const WCHAR text[] = L"11On12";
+
+	// 디버깅용 플레이어 좌표 텍스트 변환
+	std::wostringstream ss;
+	ss << L"X:" << playerPos.x << L", Y:" << playerPos.y << L", Z:" << playerPos.z;
+	std::wstring playerPosText = ss.str();
 
 	// Acquire our wrapped render target resource for the current back buffer.
 	device->GetD3D11on12Device()->AcquireWrappedResources(device->GetWrappedBackBuffer(backbufferindex).GetAddressOf(), 1);
@@ -66,8 +75,8 @@ void SceneManager::RenderUI(shared_ptr<D3D11On12Device> device)
 	device->GetD2DDeviceContext()->BeginDraw();
 	device->GetD2DDeviceContext()->SetTransform(D2D1::Matrix3x2F::Identity());
 	device->GetD2DDeviceContext()->DrawText(
-		text,
-		_countof(text) - 1,
+		playerPosText.c_str(),
+		static_cast<UINT32>(playerPosText.length()),
 		device->GetTextFormat().Get(),
 		&textRect,
 		device->GetSolidColorBrush().Get()
@@ -481,6 +490,7 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 			camera->GetTransform()->SetLocalRotation(Vec3(XMConvertToRadians(10.f), XMConvertToRadians(0.f), XMConvertToRadians(0.f)));
 		}
 		
+		scene->SetPlayer(go, MAIN_PLAYER);
 		scene->AddGameObject(go);
 		
 	}
