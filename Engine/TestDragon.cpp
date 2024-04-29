@@ -84,7 +84,8 @@ void TestDragon::Update()
 	if (INPUT->GetButtonDown(KEY_TYPE::RBUTTON))
 	{ }
 
-	if (rb->GetLinearVelocity().LengthSquared() > pow(speed * 0.6, 2)){
+	
+	if (rb->GetXZVelocity().LengthSquared() > pow(speed * 0.6, 2)) {
 		if(GetAnimator()->GetCurrentClipIndex()!=2)
 			GetAnimator()->Play(2);
 	}
@@ -97,7 +98,7 @@ void TestDragon::Update()
 			GetAnimator()->Play(0);
 	}
 
-	float forceMag = 100000;
+	float forceMag = 300000;
 
 	forceDir.Normalize();
 	Vec3 force = forceDir * forceMag;

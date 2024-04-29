@@ -16,9 +16,6 @@
     <Filter Include="Object">
       <UniqueIdentifier>{dd23f47d-3ac2-4f96-9bfe-4a6fac248639}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Object\Test">
-      <UniqueIdentifier>{1cfe4b64-4ca1-4958-b16f-73f8ae1985c3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Object\Component">
       <UniqueIdentifier>{915d1c10-9db1-4fdb-887a-d0160f593ea1}</UniqueIdentifier>
     </Filter>
@@ -33,6 +30,12 @@
     </Filter>
     <Filter Include="Physics">
       <UniqueIdentifier>{69fe4dfc-772f-4fa4-9a4d-1e3a1d5e35ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Player">
+      <UniqueIdentifier>{1cfe4b64-4ca1-4958-b16f-73f8ae1985c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Bomb">
+      <UniqueIdentifier>{e419b66e-f17f-416b-aff0-4677d628f19b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -94,7 +97,7 @@
       <Filter>Utils</Filter>
     </ClCompile>
     <ClCompile Include="TestCameraScript.cpp">
-      <Filter>Object\Test</Filter>
+      <Filter>Object\Player</Filter>
     </ClCompile>
     <ClCompile Include="Resources.cpp">
       <Filter>Manager</Filter>
@@ -157,7 +160,7 @@
       <Filter>Object\Component</Filter>
     </ClCompile>
     <ClCompile Include="TestDragon.cpp">
-      <Filter>Object\Test</Filter>
+      <Filter>Object\Player</Filter>
     </ClCompile>
     <ClCompile Include="RigidBody.cpp">
       <Filter>Object\Component</Filter>
@@ -180,7 +183,7 @@
     </ClCompile>
     <ClCompile Include="D3D1211On12.cpp" />
     <ClCompile Include="TestPlayer.cpp">
-      <Filter>Object\Test</Filter>
+      <Filter>Object\Player</Filter>
     </ClCompile>
     <ClCompile Include="Collision.cpp">
       <Filter>Physics</Filter>
@@ -193,6 +196,15 @@
     </ClCompile>
     <ClCompile Include="Manifold.cpp">
       <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Object\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerAnimation.cpp">
+      <Filter>Object\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Bomb.cpp">
+      <Filter>Object\Bomb</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -257,7 +269,7 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="TestCameraScript.h">
-      <Filter>Object\Test</Filter>
+      <Filter>Object\Player</Filter>
     </ClInclude>
     <ClInclude Include="Resources.h">
       <Filter>Manager</Filter>
@@ -320,7 +332,7 @@
       <Filter>Object\Component</Filter>
     </ClInclude>
     <ClInclude Include="TestDragon.h">
-      <Filter>Object\Test</Filter>
+      <Filter>Object\Player</Filter>
     </ClInclude>
     <ClInclude Include="RigidBody.h">
       <Filter>Object\Component</Filter>
@@ -343,7 +355,7 @@
     </ClInclude>
     <ClInclude Include="D3D1211On12.h" />
     <ClInclude Include="TestPlayer.h">
-      <Filter>Object\Test</Filter>
+      <Filter>Object\Player</Filter>
     </ClInclude>
     <ClInclude Include="Collision.h">
       <Filter>Physics</Filter>
@@ -356,6 +368,15 @@
     </ClInclude>
     <ClInclude Include="Manifold.h">
       <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Object\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerAnimation.h">
+      <Filter>Object\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Bomb.h">
+      <Filter>Object\Bomb</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

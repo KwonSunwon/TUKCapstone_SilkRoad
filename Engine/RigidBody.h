@@ -22,7 +22,7 @@ public:
 	void	MoveTo(Vec3 position);
 
 	//힘에 방향으로 힘을 가한다. 질량이 클수록 적은 영향을 받음
-	void	AddForce(Vec3 amount) { m_force = amount; }
+	void	AddForce(Vec3 amount) { m_force += amount; }
 
 	//프레임 워크에서 사용하는 함수이므로 임의사용X
 	void	MovementStep(int iterations);
@@ -39,6 +39,7 @@ public:
 		if (m_isStatic)return 0;
 		else return m_invMass; }
 	float	GetMaxSpeed() { return m_maxSpeed; }
+	Vec3	GetXZVelocity() { return Vec3(m_linearVelocity.x, 0, m_linearVelocity.z); }
 
 	//mass, restitution, static, maxSpeed는 설정해주지 않으면 디폴트 값으로 적용됨
 	void	SetLinearVelocity(Vec3 linearVelocity) { m_linearVelocity = linearVelocity; }
@@ -60,6 +61,7 @@ private:
 	float m_mass = 50.f;			//kg단위				
 	float m_restitution = 0.5f;		//탄성 0~1 0에 가까울수록 탄성이 줄어들음
 	float m_invMass= 1/50.f;
+	float m_inertia = 0.f;
 	bool m_isStatic = false;
 
 	float m_maxSpeed = 1000.f;		//최고속도 cm/s단위 
