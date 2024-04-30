@@ -64,7 +64,7 @@ private:
 	vector<shared_ptr<class Manifold>>	m_contacts;
 	//test func
 private:
-	shared_ptr<OcTree> m_ocTree = make_shared<OcTree>(50000, 1000);
+	shared_ptr<OcTree> m_ocTree = make_shared<OcTree>(100000, 1000);
 
 	
 };
