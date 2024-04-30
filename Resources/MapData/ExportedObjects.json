@@ -1,36 +1,6 @@
 {
     "objects": [
         {
-            "name": "SM_Env_Ground_04 (16)",
-            "meshName": "SM_Env_Ground_04.fbx",
-            "position": {
-                "x": -11000.0,
-                "y": -20.000076293945314,
-                "z": 32600.0
-            },
-            "rotation": {
-                "x": 0.0,
-                "y": 156.77149963378907,
-                "z": 0.0
-            },
-            "scale": {
-                "x": 9.915781021118164,
-                "y": 38.90795135498047,
-                "z": 4.040383338928223
-            },
-            "objectType": 1,
-            "boxColliderCenter": {
-                "x": 0.7639163136482239,
-                "y": 1.1753593683242798,
-                "z": -6.3739914894104
-            },
-            "boxColliderSize": {
-                "x": 64.38400268554688,
-                "y": 8.300000190734864,
-                "z": 31.899999618530275
-            }
-        },
-        {
             "name": "SM_Veh_Apc_02 (1)",
             "meshName": "SM_Veh_Apc_02.fbx",
             "position": {
@@ -107,6 +77,756 @@
                 "x": 1.0,
                 "y": 1.0,
                 "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Ground_Junk_01 (13)",
+            "meshName": "SM_Env_Ground_Junk_01.fbx",
+            "position": {
+                "x": -29470.001953125,
+                "y": -419.9999694824219,
+                "z": 1070.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 90.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 3.8588485717773439,
+                "y": 19.429256439208986,
+                "z": 3.418081283569336
+            },
+            "objectType": 1,
+            "boxColliderCenter": {
+                "x": -0.0000019073486328125,
+                "y": 4.369999885559082,
+                "z": 4.070000171661377
+            },
+            "boxColliderSize": {
+                "x": 142.0,
+                "y": 9.5,
+                "z": 33.400001525878909
+            }
+        },
+        {
+            "name": "SM_Env_Ground_Junk_01 (15)",
+            "meshName": "SM_Env_Ground_Junk_01.fbx",
+            "position": {
+                "x": 0.0,
+                "y": -700.0,
+                "z": -27550.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 3.8588485717773439,
+                "y": 14.411256790161133,
+                "z": 2.487560272216797
+            },
+            "objectType": 1,
+            "boxColliderCenter": {
+                "x": -0.0000019073486328125,
+                "y": 4.369999885559082,
+                "z": 4.070000171661377
+            },
+            "boxColliderSize": {
+                "x": 142.0,
+                "y": 9.5,
+                "z": 30.700000762939454
+            }
+        },
+        {
+            "name": "SM_Env_Ground_Junk_01 (17)",
+            "meshName": "SM_Env_Ground_Junk_01.fbx",
+            "position": {
+                "x": 10070.0,
+                "y": -1840.0,
+                "z": -28990.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 5.132268905639648,
+                "y": 19.16697120666504,
+                "z": 3.308455228805542
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Ground_Junk_01 (18)",
+            "meshName": "SM_Env_Ground_Junk_01.fbx",
+            "position": {
+                "x": 29470.001953125,
+                "y": -700.0,
+                "z": -3350.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 86.50862884521485,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 5.132268905639648,
+                "y": 19.16697120666504,
+                "z": 3.308455228805542
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Ground_Junk_01 (19)",
+            "meshName": "SM_Env_Ground_Junk_01.fbx",
+            "position": {
+                "x": 28190.0,
+                "y": -700.0,
+                "z": -16250.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 6.805635452270508,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.7400188446044922,
+                "y": 19.16697120666504,
+                "z": 6.566621780395508
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Ground_Junk_01 (20)",
+            "meshName": "SM_Env_Ground_Junk_01.fbx",
+            "position": {
+                "x": 27670.001953125,
+                "y": -700.0,
+                "z": -30520.001953125
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 5.11405086517334,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 2.313354969024658,
+                "y": 19.16697120666504,
+                "z": 3.4288928508758547
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Ground_Junk_01 (21)",
+            "meshName": "SM_Env_Ground_Junk_01.fbx",
+            "position": {
+                "x": 30370.001953125,
+                "y": -700.0,
+                "z": -25620.001953125
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 5.11405086517334,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 2.313354969024658,
+                "y": 19.16697120666504,
+                "z": 4.321434020996094
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Ground_Junk_01 (16)",
+            "meshName": "SM_Env_Ground_Junk_01.fbx",
+            "position": {
+                "x": -2390.0,
+                "y": -2320.0,
+                "z": 27790.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 180.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 6.462799549102783,
+                "y": 21.388587951660158,
+                "z": 3.461688995361328
+            },
+            "objectType": 1,
+            "boxColliderCenter": {
+                "x": -0.0000019073486328125,
+                "y": 4.369999885559082,
+                "z": 4.070000171661377
+            },
+            "boxColliderSize": {
+                "x": 142.0,
+                "y": 9.5,
+                "z": 29.5
+            }
+        },
+        {
+            "name": "SM_Env_Ground_Junk_01 (14)",
+            "meshName": "SM_Env_Ground_Junk_01.fbx",
+            "position": {
+                "x": 29360.0,
+                "y": -700.0,
+                "z": 1900.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 270.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 3.8588485717773439,
+                "y": 14.411256790161133,
+                "z": 2.487560272216797
+            },
+            "objectType": 1,
+            "boxColliderCenter": {
+                "x": -0.0000019073486328125,
+                "y": 4.369999885559082,
+                "z": 8.0
+            },
+            "boxColliderSize": {
+                "x": 142.0,
+                "y": 9.239999771118164,
+                "z": 42.70000076293945
+            }
+        },
+        {
+            "name": "SM_Env_Ground_Junk_01 (29)",
+            "meshName": "SM_Env_Ground_Junk_01.fbx",
+            "position": {
+                "x": 25760.0,
+                "y": -400.0,
+                "z": 3930.000244140625
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 88.46875762939453,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 3.1268808841705324,
+                "y": 8.038872718811036,
+                "z": 1.112040638923645
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Ground_Junk_01 (38)",
+            "meshName": "SM_Env_Ground_Junk_01.fbx",
+            "position": {
+                "x": 22700.0,
+                "y": -830.0,
+                "z": 25740.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 312.116943359375,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.6671286821365357,
+                "y": 12.064838409423829,
+                "z": 2.2147841453552248
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Ground_Junk_01 (40)",
+            "meshName": "SM_Env_Ground_Junk_01.fbx",
+            "position": {
+                "x": 11690.0,
+                "y": -989.9999389648438,
+                "z": 25460.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 179.77096557617188,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 3.5133655071258547,
+                "y": 15.74991226196289,
+                "z": 1.508811354637146
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Ground_Junk_01 (41)",
+            "meshName": "SM_Env_Ground_Junk_01.fbx",
+            "position": {
+                "x": -19500.0,
+                "y": -460.0,
+                "z": 28879.998046875
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 331.8799743652344,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 3.7398521900177,
+                "y": 18.744544982910158,
+                "z": 3.5313057899475099
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Ground_Junk_01 (43)",
+            "meshName": "SM_Env_Ground_Junk_01.fbx",
+            "position": {
+                "x": -30690.0,
+                "y": -800.0,
+                "z": 16720.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 182.21688842773438,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 2.687938690185547,
+                "y": 18.744544982910158,
+                "z": 6.8079047203063969
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Ground_Junk_01 (45)",
+            "meshName": "SM_Env_Ground_Junk_01.fbx",
+            "position": {
+                "x": -29929.998046875,
+                "y": -800.0,
+                "z": -10460.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 187.43777465820313,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 2.687938690185547,
+                "y": 18.744544982910158,
+                "z": 13.557461738586426
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Ground_Junk_01 (49)",
+            "meshName": "SM_Env_Ground_Junk_01.fbx",
+            "position": {
+                "x": -26160.0,
+                "y": -1000.0,
+                "z": -1950.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 187.43777465820313,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.083929181098938,
+                "y": 10.018771171569825,
+                "z": 5.99712610244751
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Ground_Junk_01 (50)",
+            "meshName": "SM_Env_Ground_Junk_01.fbx",
+            "position": {
+                "x": -25440.0,
+                "y": -1000.0,
+                "z": -8110.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 187.43777465820313,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 0.8396510481834412,
+                "y": 10.018771171569825,
+                "z": 5.99712610244751
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Ground_Junk_01 (46)",
+            "meshName": "SM_Env_Ground_Junk_01.fbx",
+            "position": {
+                "x": -11480.0,
+                "y": -800.0,
+                "z": -26890.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 177.2338409423828,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 3.855041742324829,
+                "y": 22.763376235961915,
+                "z": 1.9438591003417969
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Ground_Junk_01 (47)",
+            "meshName": "SM_Env_Ground_Junk_01.fbx",
+            "position": {
+                "x": -29529.998046875,
+                "y": -800.0,
+                "z": -27320.001953125
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 179.77096557617188,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 2.687938690185547,
+                "y": 18.744544982910158,
+                "z": 6.8079047203063969
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Ground_Junk_01 (48)",
+            "meshName": "SM_Env_Ground_Junk_01.fbx",
+            "position": {
+                "x": -18550.0,
+                "y": -800.0,
+                "z": -29000.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 181.39402770996095,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 5.263800144195557,
+                "y": 15.000884056091309,
+                "z": 3.5369138717651369
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Ground_Junk_01 (44)",
+            "meshName": "SM_Env_Ground_Junk_01.fbx",
+            "position": {
+                "x": -29940.0,
+                "y": -800.0,
+                "z": 22700.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 197.2186737060547,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 2.687938690185547,
+                "y": 23.25823211669922,
+                "z": 5.208675384521484
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Ground_Junk_01 (42)",
+            "meshName": "SM_Env_Ground_Junk_01.fbx",
+            "position": {
+                "x": -3590.000244140625,
+                "y": -800.0,
+                "z": 35050.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 2.4191019535064699,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 4.0498785972595219,
+                "y": 18.744544982910158,
+                "z": 5.412678241729736
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Ground_Junk_01 (39)",
+            "meshName": "SM_Env_Ground_Junk_01.fbx",
+            "position": {
+                "x": 28420.001953125,
+                "y": -400.0,
+                "z": 24130.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 263.7572021484375,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 2.0131490230560304,
+                "y": 9.146868705749512,
+                "z": 2.7802047729492189
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Ground_Junk_01 (36)",
+            "meshName": "SM_Env_Ground_Junk_01.fbx",
+            "position": {
+                "x": 27529.998046875,
+                "y": -400.0,
+                "z": 12060.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 88.25617218017578,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 3.489286184310913,
+                "y": 10.452141761779786,
+                "z": 2.4041285514831545
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Ground_Junk_01 (37)",
+            "meshName": "SM_Env_Ground_Junk_01.fbx",
+            "position": {
+                "x": 27890.0,
+                "y": -400.0,
+                "z": 19350.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 93.7999038696289,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 3.126880168914795,
+                "y": 12.590482711791993,
+                "z": 2.2486133575439455
             },
             "objectType": 2,
             "boxColliderCenter": {
