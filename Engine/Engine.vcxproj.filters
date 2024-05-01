@@ -209,6 +209,9 @@
     <ClCompile Include="MapObjectsLoader.cpp">
       <Filter>Object\Resource</Filter>
     </ClCompile>
+    <ClCompile Include="PlayerState.cpp">
+      <Filter>Object\Player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -386,6 +389,9 @@
     <ClInclude Include="D3D1211On12.h" />
     <ClInclude Include="MapObjectsLoader.h">
       <Filter>Object\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerState.h">
+      <Filter>Object\Player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
