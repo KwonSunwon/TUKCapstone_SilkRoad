@@ -5,10 +5,13 @@
 #include "Transform.h"
 #include "GameObject.h"
 #include "Timer.h"
+#include "PlayerState.h"
+
 void Player::Awake()
 {
 	shared_ptr<RigidBody> rb = GetRigidBody();
 	rb->SetStatic(true);
+	m_curState = make_shared<PlayerIdleState>(shared_from_this());
 
 }
 void Player::Update()
@@ -31,9 +34,15 @@ void Player::Update()
 	GetTransform()->SetLocalRotation(rot);
 
 
+	shared_ptr<PlayerState> nextState = m_curState->OnUpdateState();
+	if (nextState)
+	{
+		m_curState->OnExit();
+		m_curState = nextState;
+		m_curState->OnEnter();
+	}
 
-
-	Vec3 forceDir = { 0,0,0 };
+	/*Vec3 forceDir = { 0,0,0 };
 
 	if (INPUT->GetButton(KEY_TYPE::W)) {
 		forceDir += transform->GetLook();
@@ -68,7 +77,18 @@ void Player::Update()
 	forceDir.Normalize();
 	Vec3 force = forceDir * forceMag;
 
-	rb->AddForce(force);
+	rb->AddForce(force);*/
 
 
+}
+
+void Player::LateUpdate()
+{
+	shared_ptr<PlayerState> nextState = m_curState->OnLateUpdateState();
+	if (nextState)
+	{
+		m_curState->OnExit();
+		m_curState = nextState;
+		m_curState->OnEnter();
+	}
 }

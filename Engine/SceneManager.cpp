@@ -483,7 +483,7 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 		//추가적인 컴포넌트 부착
 		{
 			go->AddComponent(make_shared<Player>());
-			go->AddComponent(make_shared<PlayerAnimation>());
+			//go->AddComponent(make_shared<PlayerAnimation>());
 		}
 
 		//카메라 세팅
