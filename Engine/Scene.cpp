@@ -362,16 +362,16 @@ void Scene::testCollision()
 	{
 		cgo->GetCollider()->setColor(Vec4(0,0,0,0),false);
 	}
-	/*for (auto& cgo : m_collidableGameObjects)
+	for (auto& cgo : m_collidableGameObjects)
 	{
 		m_ocTree->CollisionInspection(cgo->GetCollider());
-	}*/
+	}
 
-	for (int i = 0; i < m_collidableGameObjects.size(); ++i) {
+	/*for (int i = 0; i < m_collidableGameObjects.size(); ++i) {
 		for (int j = i + 1; j < m_collidableGameObjects.size(); ++j) {
 			IntersectColliders(m_collidableGameObjects[i]->GetCollider(), m_collidableGameObjects[j]->GetCollider());
 		}
-	}
+	}*/
 
 	for (shared_ptr<Manifold> contact : m_contacts) {
 		shared_ptr<RigidBody> rb1 = contact->m_rb1;

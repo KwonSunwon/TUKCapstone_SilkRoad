@@ -10,6 +10,7 @@
 #include "Camera.h"
 #include "Light.h"
 #include "RigidBody.h"
+#include "MapObjectsLoader.h"
 
 #include "TestCameraScript.h"
 #include "Resources.h"
@@ -58,8 +59,16 @@ void SceneManager::RenderUI(shared_ptr<D3D11On12Device> device)
 		m_activeScene->RenderUI();
 	D2D1_SIZE_F rtSize = device->GetD3D11On12RT(backbufferindex)->GetSize();
 	D2D1_RECT_F textRect = D2D1::RectF(0, 0, rtSize.width, rtSize.height);
+	
+	shared_ptr<GameObject> player = GET_SINGLE(SceneManager)->GetActiveScene()->GetPlayers()[0];
+	Vec3 playerPos = player->GetTransform()->GetLocalPosition();
 	static const WCHAR text[] = L"";
 	//static const WCHAR text[] = L"11On12";
+
+	// 디버깅용 플레이어 좌표 텍스트 변환
+	std::wostringstream ss;
+	ss << L"X:" << playerPos.x << L", Y:" << playerPos.y << L", Z:" << playerPos.z;
+	std::wstring playerPosText = ss.str();
 
 	// Acquire our wrapped render target resource for the current back buffer.
 	device->GetD3D11on12Device()->AcquireWrappedResources(device->GetWrappedBackBuffer(backbufferindex).GetAddressOf(), 1);
@@ -69,8 +78,8 @@ void SceneManager::RenderUI(shared_ptr<D3D11On12Device> device)
 	device->GetD2DDeviceContext()->BeginDraw();
 	device->GetD2DDeviceContext()->SetTransform(D2D1::Matrix3x2F::Identity());
 	device->GetD2DDeviceContext()->DrawText(
-		text,
-		_countof(text) - 1,
+		playerPosText.c_str(),
+		static_cast<UINT32>(playerPosText.length()),
 		device->GetTextFormat().Get(),
 		&textRect,
 		device->GetSolidColorBrush().Get()
@@ -247,6 +256,23 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 	}
 #pragma endregion
 
+#pragma region MapObjects
+	{
+		/*std::ifstream jsonFile("..\\Resources\\MapData\\ExportedObjects.json");
+		nlohmann::json j;
+		jsonFile >> j;
+		std::map<std::string, std::string> obj_map;
+
+		for (const auto& obj : j["objects"])
+			obj_map[obj["name"].get<std::string>()] = obj["meshName"].get<std::string>();*/
+
+		shared_ptr<MapObjectsLoader> loader = make_shared<MapObjectsLoader>();
+		loader->Create(scene);
+
+		loader->Load(L"..\\Resources\\MapData\\ExportedObjects.json");
+	}
+#pragma endregion
+
 #pragma region Object
 	{
 		{
@@ -307,7 +333,7 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 		obj->AddComponent(make_shared<Terrain>());
 		obj->AddComponent(make_shared<MeshRenderer>());
 
-		obj->GetTransform()->SetLocalScale(Vec3(1500.f, 5000.f, 1500.f));
+		obj->GetTransform()->SetLocalScale(Vec3(781.25f, 1580.f, 781.25f));
 		obj->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 0.f));
 		obj->SetStatic(true);
 		obj->GetTerrain()->Init(64, 64);
@@ -468,6 +494,7 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 			camera->GetTransform()->SetLocalRotation(Vec3(XMConvertToRadians(10.f), XMConvertToRadians(0.f), XMConvertToRadians(0.f)));
 		}
 		
+		scene->SetPlayer(go, MAIN_PLAYER);
 		scene->AddGameObject(go);
 		
 	}

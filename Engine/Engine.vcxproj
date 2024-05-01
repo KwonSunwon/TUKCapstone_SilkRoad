@@ -196,9 +196,11 @@
     <ClInclude Include="Input.h" />
     <ClInclude Include="InstancingBuffer.h" />
     <ClInclude Include="InstancingManager.h" />
+    <ClInclude Include="json.hpp" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="LockQueue.h" />
     <ClInclude Include="Manifold.h" />
+    <ClInclude Include="MapObjectsLoader.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="MeshData.h" />
@@ -257,6 +259,7 @@
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="LockQueue.cpp" />
     <ClCompile Include="Manifold.cpp" />
+    <ClCompile Include="MapObjectsLoader.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="MeshData.cpp" />

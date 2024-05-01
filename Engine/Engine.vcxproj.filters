@@ -168,7 +168,6 @@
     <ClCompile Include="BoxCollider.cpp">
       <Filter>Object\Component\Collider</Filter>
     </ClCompile>
-    <ClCompile Include="D3D1211On12.cpp" />
     <ClCompile Include="OrientedBoxCollider.cpp">
       <Filter>Object\Component\Collider</Filter>
     </ClCompile>
@@ -205,6 +204,10 @@
     </ClCompile>
     <ClCompile Include="Bomb.cpp">
       <Filter>Object\Bomb</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D1211On12.cpp" />
+    <ClCompile Include="MapObjectsLoader.cpp">
+      <Filter>Object\Resource</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -340,7 +343,6 @@
     <ClInclude Include="BoxCollider.h">
       <Filter>Object\Component\Collider</Filter>
     </ClInclude>
-    <ClInclude Include="D3D1211On12.h" />
     <ClInclude Include="OrientedBoxCollider.h">
       <Filter>Object\Component\Collider</Filter>
     </ClInclude>
@@ -377,6 +379,13 @@
     </ClInclude>
     <ClInclude Include="Bomb.h">
       <Filter>Object\Bomb</Filter>
+    </ClInclude>
+    <ClInclude Include="json.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D1211On12.h" />
+    <ClInclude Include="MapObjectsLoader.h">
+      <Filter>Object\Resource</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

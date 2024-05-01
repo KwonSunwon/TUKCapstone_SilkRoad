@@ -54,6 +54,7 @@ namespace fs = std::filesystem;
 #include <d2d1_3.h>
 #include <dwrite.h>
 #include <d3d11on12.h>
+#include "json.hpp"
 
 using namespace DirectX;
 using namespace DirectX::PackedVector;
