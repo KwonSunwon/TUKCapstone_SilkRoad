@@ -464,7 +464,7 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 		{
 			shared_ptr<Camera> camera = scene->GetMainCamera();
 			camera->GetTransform()->SetParent(go->GetTransform());
-			camera->GetTransform()->SetLocalPosition(Vec3(0.f, 250.f, -500.f));
+			camera->GetTransform()->SetLocalPosition(Vec3(0.f, 140.f, 40.f));
 			camera->GetTransform()->SetLocalRotation(Vec3(XMConvertToRadians(10.f), XMConvertToRadians(0.f), XMConvertToRadians(0.f)));
 		}
 		

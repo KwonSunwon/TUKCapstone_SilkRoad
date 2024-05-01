@@ -20,7 +20,7 @@ TestCameraScript::~TestCameraScript()
 
 void TestCameraScript::LateUpdate()
 {
-	/*Vec3 pos = GetTransform()->GetLocalPosition();
+	Vec3 pos = GetTransform()->GetLocalPosition();
 
 	if (INPUT->GetButton(KEY_TYPE::UP))
 		pos += GetTransform()->GetLook() * m_speed * DELTA_TIME;
@@ -66,7 +66,7 @@ void TestCameraScript::LateUpdate()
 	{
 		const POINT& pos = INPUT->GetMousePos();
 		GET_SINGLE(SceneManager)->Pick(pos.x, pos.y);
-	}*/
+	}
 	//pos.y = GET_SINGLE(SceneManager)->GetActiveScene()->m_terrain->GetTerrain()->getHeight(pos.x, pos.z);
-	//GetTransform()->SetLocalPosition(pos);
+	GetTransform()->SetLocalPosition(pos);
 }
