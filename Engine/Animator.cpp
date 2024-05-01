@@ -23,7 +23,10 @@ void Animator::FinalUpdate()
 
 	const AnimClipInfo& animClip = m_animClips->at(m_clipIndex);
 	if (m_updateTime >= animClip.duration)
+	{
+		m_firstLapCompleted = true;
 		m_updateTime = 0.f;
+	}
 
 	const int32 ratio = static_cast<int32>(animClip.frameCount / animClip.duration);
 	m_frame = static_cast<int32>(m_updateTime * ratio);
@@ -82,6 +85,7 @@ void Animator::Play(uint32 idx)
 {
 	assert(idx < m_animClips->size());
 	m_clipIndex = idx;
+	m_firstLapCompleted = false;
 	m_updateTime = 0.f;
 }
 

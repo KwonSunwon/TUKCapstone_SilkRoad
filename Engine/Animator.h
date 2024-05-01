@@ -23,6 +23,8 @@ public:
 
 	int32 GetAnimCount() { return static_cast<uint32>(m_animClips->size()); }
 	int32 GetCurrentClipIndex() { return m_clipIndex; }
+
+	bool IsFirstLapCompleted() { return m_firstLapCompleted; }
 	void Play(uint32 idx);
 
 	//애니메이션 인덱스, 원하는 시간, 그 때 동작하길 원하는 함수를 넘겨준다.
@@ -44,6 +46,7 @@ private:
 	int32							m_frame = 0;
 	int32							m_nextFrame = 0;
 	float							m_frameRatio = 0;
+	bool							m_firstLapCompleted = false;
 
 	shared_ptr<Material>			m_computeMaterial;
 	shared_ptr<StructuredBuffer>	m_boneFinalMatrix;  // 특정 프레임의 최종 행렬

@@ -39,7 +39,11 @@ shared_ptr<PlayerState> PlayerOnGroundState::OnUpdateState()
 	}
 	if (INPUT->GetButtonDown(KEY_TYPE::RBUTTON))
 	{
-
+		return make_shared<PlayerIdleToAimState>(m_player);
+	}
+	if (INPUT->GetButtonUp(KEY_TYPE::RBUTTON))
+	{
+		return make_shared<PlayerAimToIdleState>(m_player);
 	}
 
 	float forceMag = 300000;
@@ -122,4 +126,37 @@ shared_ptr<PlayerState> PlayerWalkState::OnLateUpdateState()
 	{
 		return nullptr;
 	}
+}
+
+void PlayerAimState::OnEnter()
+{
+	m_player->GetAnimator()->Play(static_cast<uint32>(PLAYER_STATE::AIM));
+}
+
+void PlayerIdleToAimState::OnEnter()
+{
+	m_player->GetAnimator()->Play(static_cast<uint32>(PLAYER_STATE::IDLE_TO_AIM));
+}
+
+shared_ptr<PlayerState> PlayerIdleToAimState::OnLateUpdateState()
+{
+	if (m_player->GetAnimator()->IsFirstLapCompleted())
+	{
+		return make_shared<PlayerAimState>(m_player);
+	}
+	return nullptr;
+}
+
+void PlayerAimToIdleState::OnEnter()
+{
+	m_player->GetAnimator()->Play(static_cast<uint32>(PLAYER_STATE::AIM_TO_IDLE));
+}
+
+shared_ptr<PlayerState> PlayerAimToIdleState::OnLateUpdateState()
+{
+	if (m_player->GetAnimator()->IsFirstLapCompleted())
+	{
+		return make_shared<PlayerIdleState>(m_player);
+	}
+	return nullptr;
 }

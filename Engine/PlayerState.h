@@ -67,3 +67,30 @@ public:
 	virtual void OnEnter() override;
 	virtual shared_ptr<PlayerState> OnLateUpdateState() override;
 };
+
+class PlayerIdleToAimState : public PlayerOnGroundState
+{
+public:
+	PlayerIdleToAimState(shared_ptr<Player> player) : PlayerOnGroundState(player) {}
+
+	virtual void OnEnter() override;
+	virtual shared_ptr<PlayerState> OnLateUpdateState() override;
+};
+
+class PlayerAimToIdleState : public PlayerOnGroundState
+{
+public:
+	PlayerAimToIdleState(shared_ptr<Player> player) : PlayerOnGroundState(player) {}
+
+	virtual void OnEnter() override;
+	virtual shared_ptr<PlayerState> OnLateUpdateState() override;
+
+};
+
+class PlayerAimState : public PlayerOnGroundState
+{
+public:
+	PlayerAimState(shared_ptr<Player> player) : PlayerOnGroundState(player) {}
+
+	virtual void OnEnter() override;
+};
