@@ -25,9 +25,6 @@ void Player::Update()
 
 	rot.y += mouseDelta.x * (double)0.001;
 
-	if (rot.x + mouseDelta.y * 0.001f < XMConvertToRadians(40.f) && rot.x + mouseDelta.y * 0.001f > XMConvertToRadians(-40.f))
-		rot.x += mouseDelta.y * 0.001f;
-
 	GetTransform()->SetLocalRotation(rot);
 
 
