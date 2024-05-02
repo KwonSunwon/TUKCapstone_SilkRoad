@@ -39,10 +39,6 @@ shared_ptr<PlayerState> PlayerOnGroundMoveState::OnUpdateState()
 	{
 		rb->SetStatic(false);
 	}
-	if (INPUT->GetButton(KEY_TYPE::RBUTTON))
-	{
-		return make_shared<PlayerIdleToAimState>(m_player);
-	}
 
 	float forceMag = 300000;
 
@@ -57,71 +53,112 @@ shared_ptr<PlayerState> PlayerOnGroundMoveState::OnUpdateState()
 
 }
 
-void PlayerIdleState::OnEnter()
-{
-	m_player->GetAnimator()->Play(static_cast<uint32>(PLAYER_STATE::IDLE));
-}
-
-shared_ptr<PlayerState> PlayerIdleState::OnLateUpdateState()
+void PlayerWalkState::OnEnter()
 {
 	float maxSpeed = m_player->GetRigidBody()->GetMaxSpeed();
 	float speed = m_player->GetRigidBody()->GetXZVelocity().LengthSquared();
 	if (speed > pow(maxSpeed * 0.6, 2))
 	{
-		return make_shared<PlayerRunState>(m_player);
+		if (m_player->GetAnimator()->GetCurrentClipIndex() != static_cast<uint32>(PLAYER_STATE::RUN))
+			m_player->GetAnimator()->Play(static_cast<uint32>(PLAYER_STATE::RUN));
 	}
 	else if (speed > pow(maxSpeed * 0.01, 2))
 	{
-		return make_shared<PlayerWalkState>(m_player);
+		if (m_player->GetAnimator()->GetCurrentClipIndex() != static_cast<uint32>(PLAYER_STATE::WALK))
+			m_player->GetAnimator()->Play(static_cast<uint32>(PLAYER_STATE::WALK));
 	}
 	else
 	{
-		return nullptr;
+		if (m_player->GetAnimator()->GetCurrentClipIndex() != static_cast<uint32>(PLAYER_STATE::IDLE))
+			m_player->GetAnimator()->Play(static_cast<uint32>(PLAYER_STATE::IDLE));
 	}
 }
 
-void PlayerRunState::OnEnter()
+shared_ptr<PlayerState> PlayerWalkState::OnUpdateState()
 {
-	m_player->GetAnimator()->Play(static_cast<uint32>(PLAYER_STATE::RUN));
-}
-
-shared_ptr<PlayerState> PlayerRunState::OnLateUpdateState()
-{
-	float maxSpeed = m_player->GetRigidBody()->GetMaxSpeed();
-	float speed = m_player->GetRigidBody()->GetXZVelocity().LengthSquared();
-	if (speed < pow(maxSpeed * 0.01, 2))
+	PlayerOnGroundMoveState::OnUpdateState();
+	if (INPUT->GetButton(KEY_TYPE::RBUTTON))
 	{
-		return make_shared<PlayerIdleState>(m_player);
+		return make_shared<PlayerIdleToAimState>(m_player);
 	}
-	else if (speed < pow(maxSpeed * 0.6, 2))
+	if (INPUT->GetButton(KEY_TYPE::LBUTTON))
 	{
-		return make_shared<PlayerWalkState>(m_player);
+		if (m_player->GetFireReady())
+		{
+			return make_shared<PlayerFireOnGroundMoveState>(m_player);
+		}
 	}
-	else
-	{
-		return nullptr;
-	}
-}
-
-void PlayerWalkState::OnEnter()
-{
-	m_player->GetAnimator()->Play(static_cast<uint32>(PLAYER_STATE::WALK));
+	return nullptr;
 }
 
 shared_ptr<PlayerState> PlayerWalkState::OnLateUpdateState()
 {
 	float maxSpeed = m_player->GetRigidBody()->GetMaxSpeed();
 	float speed = m_player->GetRigidBody()->GetXZVelocity().LengthSquared();
-	if (speed < pow(maxSpeed * 0.01, 2))
+	if (speed > pow(maxSpeed * 0.6, 2))
 	{
-		return make_shared<PlayerIdleState>(m_player);
+		if (m_player->GetAnimator()->GetCurrentClipIndex() != static_cast<uint32>(PLAYER_STATE::RUN))
+			m_player->GetAnimator()->Play(static_cast<uint32>(PLAYER_STATE::RUN));
 	}
-	else if (speed > pow(maxSpeed * 0.6, 2))
+	else if (speed > pow(maxSpeed * 0.01, 2))
 	{
-		return make_shared<PlayerRunState>(m_player);
+		if (m_player->GetAnimator()->GetCurrentClipIndex() != static_cast<uint32>(PLAYER_STATE::WALK))
+			m_player->GetAnimator()->Play(static_cast<uint32>(PLAYER_STATE::WALK));
 	}
 	else
 	{
-		return nullptr;
+		if (m_player->GetAnimator()->GetCurrentClipIndex() != static_cast<uint32>(PLAYER_STATE::IDLE))
+			m_player->GetAnimator()->Play(static_cast<uint32>(PLAYER_STATE::IDLE));
 	}
+
+	return nullptr;
+}
+
+void PlayerFireOnGroundMoveState::OnEnter()
+{
+	m_player->GetAnimator()->Play(static_cast<uint32>(PLAYER_STATE::FIRE));
+	m_player->Fire();
+}
+
+shared_ptr<PlayerState> PlayerFireOnGroundMoveState::OnUpdateState()
+{
+	PlayerOnGroundMoveState::OnUpdateState();
+	if (INPUT->GetButton(KEY_TYPE::LBUTTON) && m_player->GetFireReady())
+	{
+		m_isFireAnimationAgain = true;
+	}
+	return nullptr;
+}
+
+shared_ptr<PlayerState> PlayerFireOnGroundMoveState::OnLateUpdateState()
+{
+	if (m_player->GetAnimator()->IsAnimationEndOnThisFrame() || m_isFireAnimationAgain)
+	{
+		return make_shared<PlayerWaitFireOnGroundMoveState>(m_player);
+	}
+	return nullptr;
+}
+
+void PlayerWaitFireOnGroundMoveState::OnEnter()
+{
+	m_player->GetAnimator()->Play(static_cast<uint32>(PLAYER_STATE::AIM));
+}
+
+shared_ptr<PlayerState> PlayerWaitFireOnGroundMoveState::OnUpdateState()
+{
+	PlayerOnGroundMoveState::OnUpdateState();
+	if (!INPUT->GetButton(KEY_TYPE::LBUTTON))
+	{
+		return make_shared<PlayerWalkState>(m_player);
+	}
+	if (INPUT->GetButton(KEY_TYPE::LBUTTON) && m_player->GetFireReady())
+	{
+		return make_shared<PlayerFireOnGroundMoveState>(m_player);
+	}
+	return nullptr;
+}
+
+shared_ptr<PlayerState> PlayerWaitFireOnGroundMoveState::OnLateUpdateState()
+{
+	return shared_ptr<PlayerState>();
 }

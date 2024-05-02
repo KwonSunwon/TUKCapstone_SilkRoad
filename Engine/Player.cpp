@@ -13,7 +13,7 @@ void Player::Awake()
 {
 	shared_ptr<RigidBody> rb = GetRigidBody();
 	rb->SetStatic(true);
-	m_curState = make_shared<PlayerIdleState>(shared_from_this());
+	m_curState = make_shared<PlayerWalkState>(shared_from_this());
 
 }
 void Player::Update()

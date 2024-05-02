@@ -9,30 +9,13 @@ public:
 	virtual shared_ptr<PlayerState> OnUpdateState() override;
 };
 
-class PlayerIdleState : public PlayerOnGroundMoveState
-{
-public:
-	PlayerIdleState(shared_ptr<Player> player) : PlayerOnGroundMoveState(player) {}
-
-	virtual void OnEnter() override;
-	virtual shared_ptr<PlayerState> OnLateUpdateState() override;
-};
-
-class PlayerRunState : public PlayerOnGroundMoveState
-{
-public:
-	PlayerRunState(shared_ptr<Player> player) : PlayerOnGroundMoveState(player) {}
-
-	virtual void OnEnter() override;
-	virtual shared_ptr<PlayerState> OnLateUpdateState() override;
-};
-
 class PlayerWalkState : public PlayerOnGroundMoveState
 {
 public:
 	PlayerWalkState(shared_ptr<Player> player) : PlayerOnGroundMoveState(player) {}
 
 	virtual void OnEnter() override;
+	virtual shared_ptr<PlayerState> OnUpdateState() override;
 	virtual shared_ptr<PlayerState> OnLateUpdateState() override;
 };
 
@@ -42,5 +25,24 @@ public:
 	PlayerFireOnGroundMoveState(shared_ptr<Player> player) : PlayerOnGroundMoveState(player) {}
 
 	virtual void OnEnter() override;
+	virtual shared_ptr<PlayerState> OnUpdateState() override;
 	virtual shared_ptr<PlayerState> OnLateUpdateState() override;
+
+private:
+	bool m_isFireAnimationAgain = false;	// 공속이 애니메이션 속도보다 빠르면 스테이트 조기 종료 후 idle로 돌아가 다시 발사 준비
+
+};
+
+class PlayerWaitFireOnGroundMoveState : public PlayerOnGroundMoveState
+{
+public:
+	PlayerWaitFireOnGroundMoveState(shared_ptr<Player> player) : PlayerOnGroundMoveState(player) {}
+
+	virtual void OnEnter() override;
+	virtual shared_ptr<PlayerState> OnUpdateState() override;
+	virtual shared_ptr<PlayerState> OnLateUpdateState() override;
+
+private:
+	bool m_isFireAnimationAgain = false;	// 공속이 애니메이션 속도보다 빠르면 스테이트 조기 종료 후 idle로 돌아가 다시 발사 준비
+
 };

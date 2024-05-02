@@ -59,7 +59,6 @@ shared_ptr<PlayerState> PlayerAimState::OnUpdateState()
 	PlayerOnGroundAimState::OnUpdateState();
 	if (INPUT->GetButton(KEY_TYPE::LBUTTON) && m_player->GetFireReady())
 	{
-		m_player->Fire();
 		return make_shared<PlayerFireOnAimState>(m_player);
 	}	
 	if (!INPUT->GetButton(KEY_TYPE::RBUTTON))
@@ -75,7 +74,7 @@ void PlayerIdleToAimState::OnEnter()
 
 shared_ptr<PlayerState> PlayerIdleToAimState::OnLateUpdateState()
 {
-	if (m_player->GetAnimator()->IsFirstLapCompleted())
+	if (m_player->GetAnimator()->IsAnimationEndOnThisFrame())
 	{
 		return make_shared<PlayerAimState>(m_player);
 	}
@@ -89,9 +88,9 @@ void PlayerAimToIdleState::OnEnter()
 
 shared_ptr<PlayerState> PlayerAimToIdleState::OnLateUpdateState()
 {
-	if (m_player->GetAnimator()->IsFirstLapCompleted())
+	if (m_player->GetAnimator()->IsAnimationEndOnThisFrame())
 	{
-		return make_shared<PlayerIdleState>(m_player);
+		return make_shared<PlayerWalkState>(m_player);
 	}
 	return nullptr;
 }
@@ -99,6 +98,7 @@ shared_ptr<PlayerState> PlayerAimToIdleState::OnLateUpdateState()
 void PlayerFireOnAimState::OnEnter()
 {
 	m_player->GetAnimator()->Play(static_cast<uint32>(PLAYER_STATE::FIRE));
+	m_player->Fire();
 }
 
 shared_ptr<PlayerState> PlayerFireOnAimState::OnUpdateState()
@@ -113,7 +113,7 @@ shared_ptr<PlayerState> PlayerFireOnAimState::OnUpdateState()
 
 shared_ptr<PlayerState> PlayerFireOnAimState::OnLateUpdateState()
 {
-	if (m_player->GetAnimator()->IsFirstLapCompleted() || m_isFireAnimationAgain)
+	if (m_player->GetAnimator()->IsAnimationEndOnThisFrame() || m_isFireAnimationAgain)
 	{
 		return make_shared<PlayerAimState>(m_player);
 	}
