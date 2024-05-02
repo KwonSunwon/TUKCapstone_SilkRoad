@@ -1,6 +1,7 @@
 #pragma once
 #include "Component.h"
 #include "Mesh.h"
+#include "Timer.h"
 
 class Material;
 class StructuredBuffer;
@@ -25,6 +26,7 @@ public:
 	int32 GetCurrentClipIndex() { return m_clipIndex; }
 
 	bool IsFirstLapCompleted() { return m_firstLapCompleted; }
+	bool IsAnimationEndOnThisFrame() { return m_updateTime + DELTA_TIME >= m_animClips->at(m_clipIndex).duration; }
 	void Play(uint32 idx);
 
 	//애니메이션 인덱스, 원하는 시간, 그 때 동작하길 원하는 함수를 넘겨준다.
