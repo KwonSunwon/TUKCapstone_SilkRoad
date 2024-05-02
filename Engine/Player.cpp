@@ -5,7 +5,9 @@
 #include "Transform.h"
 #include "GameObject.h"
 #include "Timer.h"
-#include "PlayerState.h"
+#include "PlayerOnGroundMoveState.h"
+#include "PlayerOnGroundAImState.h"
+#include "PlayerOnAirState.h"
 
 void Player::Awake()
 {
@@ -20,6 +22,8 @@ void Player::Update()
 	shared_ptr<Transform> transform = GetTransform();
 	shared_ptr<RigidBody> rb = GetRigidBody();
 
+	if (m_fireElapsedTime > 0)
+		m_fireElapsedTime -= DELTA_TIME;
 
 	Vec3 rot = GetTransform()->GetLocalRotation();
 	const POINT& mouseDelta = INPUT->GetMouseDelta();
@@ -41,45 +45,6 @@ void Player::Update()
 		m_curState = nextState;
 		m_curState->OnEnter();
 	}
-
-	/*Vec3 forceDir = { 0,0,0 };
-
-	if (INPUT->GetButton(KEY_TYPE::W)) {
-		forceDir += transform->GetLook();
-	}
-
-	if (INPUT->GetButton(KEY_TYPE::S)) {
-		forceDir -= transform->GetLook();
-	}
-
-
-	if (INPUT->GetButton(KEY_TYPE::A)) {
-		forceDir -= transform->GetRight();
-	}
-
-	if (INPUT->GetButton(KEY_TYPE::D)) {
-		forceDir += transform->GetRight();
-	}
-
-	if (INPUT->GetButton(KEY_TYPE::LBUTTON))
-		rb->SetStatic(false);
-
-
-	if (INPUT->GetButtonDown(KEY_TYPE::RBUTTON))
-	{
-	}
-
-
-	
-
-	float forceMag = 300000;
-
-	forceDir.Normalize();
-	Vec3 force = forceDir * forceMag;
-
-	rb->AddForce(force);*/
-
-
 }
 
 void Player::LateUpdate()

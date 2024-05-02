@@ -37,6 +37,9 @@
     <Filter Include="Object\Bomb">
       <UniqueIdentifier>{e419b66e-f17f-416b-aff0-4677d628f19b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Object\Player\PlayerStates">
+      <UniqueIdentifier>{c0ad6aea-c8b8-4cfe-ae0a-1ec885a9b706}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -210,7 +213,16 @@
       <Filter>Object\Resource</Filter>
     </ClCompile>
     <ClCompile Include="PlayerState.cpp">
-      <Filter>Object\Player</Filter>
+      <Filter>Object\Player\PlayerStates</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerOnGroundMoveState.cpp">
+      <Filter>Object\Player\PlayerStates</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerOnGroundAimState.cpp">
+      <Filter>Object\Player\PlayerStates</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerOnAirState.cpp">
+      <Filter>Object\Player\PlayerStates</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -391,7 +403,16 @@
       <Filter>Object\Resource</Filter>
     </ClInclude>
     <ClInclude Include="PlayerState.h">
-      <Filter>Object\Player</Filter>
+      <Filter>Object\Player\PlayerStates</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerOnGroundMoveState.h">
+      <Filter>Object\Player\PlayerStates</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerOnGroundAimState.h">
+      <Filter>Object\Player\PlayerStates</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerOnAirState.h">
+      <Filter>Object\Player\PlayerStates</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
