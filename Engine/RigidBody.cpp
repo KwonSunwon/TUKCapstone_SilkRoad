@@ -9,6 +9,7 @@
 #include "SceneManager.h"
 #include "Scene.h"
 #include "Terrain.h"
+#include "Manifold.h"
 
 
 
@@ -25,6 +26,8 @@ RigidBody::~RigidBody()
 void RigidBody::Awake()
 {
 	//m_inertia
+	m_manifolds = make_shared<vector<shared_ptr<Manifold>>>();
+	m_manifolds->reserve(100);
 	m_position = GetTransform()->GetLocalPosition();
 	m_baseCollider = GetGameObject()->GetCollider();
 	//m_gameTerrain = GET_SINGLE(SceneManager)->GetActiveScene()->m_terrain->GetTerrain();
@@ -91,8 +94,8 @@ void RigidBody::MovementStep(int iterations)
 
 
 	float normalForce = m_mass * -m_gravity.y;
-	float frictionCoef = 2.f; //¸¶Âû°è¼ö
-	float friction = frictionCoef * normalForce;
+	float friction = m_frictionCoef * normalForce;
+
 
 	Vec3 frictionDir = -m_linearVelocity;
 	float mag = frictionDir.Length();
@@ -156,6 +159,11 @@ void RigidBody::MovementStep(int iterations)
 	if (m_linearVelocity.LengthSquared() > 0.f) {
 		m_baseCollider->UpdateNodePos();
 	}
+}
+
+void RigidBody::AddCollideEvent(shared_ptr<Manifold> event)
+{
+	m_manifolds->push_back(event);
 }
 
 

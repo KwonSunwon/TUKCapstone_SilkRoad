@@ -348,7 +348,11 @@ void Scene::IntersectColliders(shared_ptr<BaseCollider> bs, shared_ptr<BaseColli
 	}
 	shared_ptr<Manifold> contact = make_shared<Manifold>(rb1, rb2, normal, *depth, make_shared<vector<Vec3>>(), make_shared<int>());
 	FindContactPoints(bs, bsDst, contact->m_contacts, contact->m_contectCount, contact->m_normal);
-	
+	shared_ptr<Vec3> normal2 = make_shared<Vec3>();
+	*normal2 = -*normal;
+	shared_ptr<Manifold> contact2 = make_shared<Manifold>(rb2, rb1, normal2, *depth, make_shared<vector<Vec3>>(), make_shared<int>());
+	rb1->AddCollideEvent(contact);
+	rb2->AddCollideEvent(contact2);
 	m_contacts.push_back(contact);
 
 	
@@ -361,21 +365,26 @@ void Scene::testCollision()
 	for (auto& cgo : m_collidableGameObjects)
 	{
 		cgo->GetCollider()->setColor(Vec4(0,0,0,0),false);
-	}
-	for (auto& cgo : m_collidableGameObjects)
-	{
-		m_ocTree->CollisionInspection(cgo->GetCollider());
+		cgo->GetRigidBody()->GetCollideEvent()->clear();
 	}
 
-	/*for (int i = 0; i < m_collidableGameObjects.size(); ++i) {
+	/*for (auto& cgo : m_collidableGameObjects)
+	{
+		m_ocTree->CollisionInspection(cgo->GetCollider());
+	}*/
+
+	for (int i = 0; i < m_collidableGameObjects.size(); ++i) {
 		for (int j = i + 1; j < m_collidableGameObjects.size(); ++j) {
 			IntersectColliders(m_collidableGameObjects[i]->GetCollider(), m_collidableGameObjects[j]->GetCollider());
 		}
-	}*/
+	}
 
 	for (shared_ptr<Manifold> contact : m_contacts) {
 		shared_ptr<RigidBody> rb1 = contact->m_rb1;
 		shared_ptr<RigidBody> rb2 = contact->m_rb2;
+		
+
+
 		Vec3 normal = *contact->m_normal;
 
 
