@@ -3,6 +3,7 @@
 
 class Terrain;
 class BaseCollider;
+class Manifold;
 
 class RigidBody : public Component
 {
@@ -47,7 +48,10 @@ public:
 	void	SetRestitution(float restitution) { m_restitution = restitution; }
 	void	SetStatic(bool isStatic) { m_isStatic = isStatic; }
 	void	SetMaxSpeed(float maxSpeed) { m_maxSpeed = maxSpeed; }
+	void	SetfrictionCoef(float firctionCoef) { m_frictionCoef = firctionCoef; }
 
+	shared_ptr<vector<shared_ptr<Manifold>>> GetCollideEvent() { return m_manifolds; }
+	void	AddCollideEvent(shared_ptr<Manifold> event);
 	
 private:
 	
@@ -63,13 +67,14 @@ private:
 	float m_invMass= 1/50.f;
 	float m_inertia = 0.f;
 	bool m_isStatic = false;
+	float m_frictionCoef = 2.f;
 
 	float m_maxSpeed = 1000.f;		//최고속도 cm/s단위 
 	
 
 	Vec3 m_gravity = { 0.f,-980.f,0.f };
 	
-
+	shared_ptr<vector<shared_ptr<Manifold>>> m_manifolds;
 	shared_ptr< Terrain > m_gameTerrain;
 	shared_ptr<BaseCollider> m_baseCollider;
 

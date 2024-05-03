@@ -40,8 +40,19 @@ VS_OUT VS_DirLight(VS_IN input)
     return output;
 }
 
+
+
+
+
+
 PS_OUT PS_DirLight(VS_OUT input)
 {
+    // 안개 파라미터
+    float fogStart = 5000.0f; // 안개가 시작되는 거리
+    float fogEnd = 10000.0f; // 안개가 완전히 덮치는 거리
+    float fogDensity = 0.0f; // 선형 안개 밀도
+    float4 fogColor = float4(0.0, 0.0, 0.0, 1.0); // 안개의 색상
+    
     PS_OUT output = (PS_OUT)0;
 
     float3 viewPos = g_tex_0.Sample(g_sam_0, input.uv).xyz;
@@ -77,9 +88,16 @@ PS_OUT PS_DirLight(VS_OUT input)
             }
         }
     }
+    if (viewPos.z > fogEnd)
+        clip(-1);
+   
+    float fogFactor = (fogEnd - viewPos.z) / (fogEnd - fogStart);
+    fogFactor = clamp(fogFactor, 0.0, 1.0);
+        
+    output.diffuse = lerp(color.diffuse + color.ambient, fogColor, 1 - fogFactor);
+    output.specular = lerp(color.specular, fogColor, 1 - fogFactor);
 
-    output.diffuse = color.diffuse + color.ambient;
-    output.specular = color.specular;
+    
 
     return output;
 }

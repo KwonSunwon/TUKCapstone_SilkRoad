@@ -343,8 +343,8 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 			shared_ptr<RigidBody> rb = make_shared<RigidBody>();
 
 			rb->SetStatic(true);
-			rb->SetMass(10000.f);
-			rb->SetRestitution(0.5f);
+			rb->SetMass(1000.f);
+			rb->SetRestitution(0.f);
 			obj->SetCheckFrustum(false);
 			obj->AddComponent(rb);
 		}
