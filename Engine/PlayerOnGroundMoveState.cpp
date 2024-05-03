@@ -43,12 +43,26 @@ shared_ptr<PlayerState> PlayerOnGroundMoveState::OnUpdateState()
 
 	float forceMag = 300000;
 
+	rb->SetMaxSpeed(1300.f);
 
 	forceDir.Normalize();
 	Vec3 force = forceDir * forceMag;
 
 	rb->AddForce(force);
 
+	m_onAirTime += DELTA_TIME;
+
+	for (auto col : *(rb->GetCollideEvent())) {
+		Vec3 axis = *col->m_normal;
+		if (axis.Dot(transform->GetUp()) < -0.5f) {
+			m_onAirTime = 0.f;
+		}
+	}
+
+	if (m_onAirTime >= m_onAirCheckTime)
+	{
+		return make_shared<PlayerJumpLoopState>(m_player);
+	}
 
 	return nullptr;
 
@@ -77,7 +91,6 @@ void PlayerWalkState::OnEnter()
 
 shared_ptr<PlayerState> PlayerWalkState::OnUpdateState()
 {
-	PlayerOnGroundMoveState::OnUpdateState();
 	if (INPUT->GetButton(KEY_TYPE::SPACE))
 	{
 		return make_shared<PlayerJumpUpState>(m_player);
@@ -93,7 +106,7 @@ shared_ptr<PlayerState> PlayerWalkState::OnUpdateState()
 			return make_shared<PlayerFireOnGroundMoveState>(m_player);
 		}
 	}
-	return nullptr;
+	return PlayerOnGroundMoveState::OnUpdateState();;
 }
 
 shared_ptr<PlayerState> PlayerWalkState::OnLateUpdateState()
@@ -127,12 +140,11 @@ void PlayerFireOnGroundMoveState::OnEnter()
 
 shared_ptr<PlayerState> PlayerFireOnGroundMoveState::OnUpdateState()
 {
-	PlayerOnGroundMoveState::OnUpdateState();
 	if (INPUT->GetButton(KEY_TYPE::LBUTTON) && m_player->GetFireReady())
 	{
 		m_isFireAnimationAgain = true;
 	}
-	return nullptr;
+	return PlayerOnGroundMoveState::OnUpdateState();
 }
 
 shared_ptr<PlayerState> PlayerFireOnGroundMoveState::OnLateUpdateState()
@@ -151,7 +163,12 @@ void PlayerWaitFireOnGroundMoveState::OnEnter()
 
 shared_ptr<PlayerState> PlayerWaitFireOnGroundMoveState::OnUpdateState()
 {
-	PlayerOnGroundMoveState::OnUpdateState();
+	shared_ptr<PlayerState> res = PlayerOnGroundMoveState::OnUpdateState();
+	if (res)
+	{
+		return res;
+	}
+
 	if (!INPUT->GetButton(KEY_TYPE::LBUTTON))
 	{
 		return make_shared<PlayerWalkState>(m_player);
@@ -160,12 +177,8 @@ shared_ptr<PlayerState> PlayerWaitFireOnGroundMoveState::OnUpdateState()
 	{
 		return make_shared<PlayerFireOnGroundMoveState>(m_player);
 	}
-	return nullptr;
-}
 
-shared_ptr<PlayerState> PlayerWaitFireOnGroundMoveState::OnLateUpdateState()
-{
-	return shared_ptr<PlayerState>();
+	return nullptr;
 }
 
 void PlayerJumpDownState::OnEnter()

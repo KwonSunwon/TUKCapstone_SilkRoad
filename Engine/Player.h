@@ -14,7 +14,7 @@ public:
 
 private:
 	shared_ptr<class PlayerState> m_curState;
-	float m_fireRate = 2.f;		// 초당 공격 횟수
+	float m_fireRate = 1.f;		// 초당 공격 횟수
 	float m_fireElapsedTime = 0.f;
 };
 

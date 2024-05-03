@@ -42,6 +42,7 @@ shared_ptr<PlayerState> PlayerOnAirState::OnUpdateState()
 	}
 
 	float forceMag = 300000;
+	rb->SetMaxSpeed(1000.f);
 
 
 	forceDir.Normalize();
@@ -92,7 +93,7 @@ shared_ptr<PlayerState> PlayerJumpLoopState::OnUpdateState()
 
 	for (auto col : *(rb->GetCollideEvent())) {
 		Vec3 axis = *col->m_normal;
-		if (axis.Dot(transform->GetUp()) > -0.5f) {
+		if (axis.Dot(transform->GetUp()) < -0.5f) {
 			return make_shared<PlayerJumpDownState>(m_player);
 		}
 	}

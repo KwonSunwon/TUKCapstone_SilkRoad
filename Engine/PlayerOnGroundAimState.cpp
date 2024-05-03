@@ -38,12 +38,27 @@ shared_ptr<PlayerState> PlayerOnGroundAimState::OnUpdateState()
 	}
 
 	float forceMag = 300000;
+	rb->SetMaxSpeed(500.f);
 
 
 	forceDir.Normalize();
 	Vec3 force = forceDir * forceMag;
 
 	rb->AddForce(force);
+
+	m_onAirTime += DELTA_TIME;
+
+	for (auto col : *(rb->GetCollideEvent())) {
+		Vec3 axis = *col->m_normal;
+		if (axis.Dot(transform->GetUp()) < -0.5f) {
+			m_onAirTime = 0.f;
+		}
+	}
+
+	if (m_onAirTime >= m_onAirCheckTime)
+	{
+		return make_shared<PlayerJumpLoopState>(m_player);
+	}
 
 
 	return nullptr;
@@ -57,7 +72,6 @@ void PlayerAimState::OnEnter()
 
 shared_ptr<PlayerState> PlayerAimState::OnUpdateState()
 {
-	PlayerOnGroundAimState::OnUpdateState();
 	if (INPUT->GetButton(KEY_TYPE::LBUTTON) && m_player->GetFireReady())
 	{
 		return make_shared<PlayerFireOnAimState>(m_player);
@@ -66,6 +80,8 @@ shared_ptr<PlayerState> PlayerAimState::OnUpdateState()
 	{
 		return make_shared<PlayerAimToIdleState>(m_player);
 	}
+
+	return PlayerOnGroundAimState::OnUpdateState();
 }
 
 void PlayerIdleToAimState::OnEnter()
@@ -104,12 +120,11 @@ void PlayerFireOnAimState::OnEnter()
 
 shared_ptr<PlayerState> PlayerFireOnAimState::OnUpdateState()
 {
-	PlayerOnGroundAimState::OnUpdateState();
 	if (INPUT->GetButton(KEY_TYPE::LBUTTON) && INPUT->GetButton(KEY_TYPE::RBUTTON) && m_player->GetFireReady())
 	{
 		m_isFireAnimationAgain = true;
 	}
-	return nullptr;
+	return PlayerOnGroundAimState::OnUpdateState();
 }
 
 shared_ptr<PlayerState> PlayerFireOnAimState::OnLateUpdateState()

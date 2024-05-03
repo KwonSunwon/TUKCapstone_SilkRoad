@@ -329,7 +329,11 @@ void Scene::IntersectColliders(shared_ptr<BaseCollider> bs, shared_ptr<BaseColli
 		rb2->Move(*norm * (*depth));
 		shared_ptr<Manifold> contact = make_shared<Manifold>(rb1, rb2, norm, *depth, make_shared<vector<Vec3>>(), make_shared<int>());
 		FindContactPoints(bs, bsDst, contact->m_contacts, contact->m_contectCount, contact->m_normal);
-
+		shared_ptr<Vec3> normal2 = make_shared<Vec3>();
+		*normal2 = -*normal;
+		shared_ptr<Manifold> contact2 = make_shared<Manifold>(rb2, rb1, normal2, *depth, make_shared<vector<Vec3>>(), make_shared<int>());
+		rb1->AddCollideEvent(contact);
+		rb2->AddCollideEvent(contact2);
 		m_contacts.push_back(contact);
 		return;
 	}

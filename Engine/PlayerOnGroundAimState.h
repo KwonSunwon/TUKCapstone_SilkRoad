@@ -6,6 +6,9 @@ class PlayerOnGroundAimState : public PlayerState
 public:
 	PlayerOnGroundAimState(shared_ptr<Player> player) : PlayerState(player) {}
 	virtual shared_ptr<PlayerState> OnUpdateState() override;
+private:
+	float m_onAirCheckTime = 0.5f;
+	float m_onAirTime = 0.f;
 };
 
 
