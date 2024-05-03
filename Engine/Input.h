@@ -30,7 +30,7 @@ enum class KEY_TYPE
 	ESC = VK_ESCAPE,
 };
 
-static constexpr int NUM_OF_KEYS = 19;
+static constexpr int NUM_OF_KEYS = 20;
 
 constexpr std::array<KEY_TYPE, NUM_OF_KEYS> ALL_KEYS =
 {
@@ -52,6 +52,7 @@ constexpr std::array<KEY_TYPE, NUM_OF_KEYS> ALL_KEYS =
 	KEY_TYPE::KEY_4,
 	KEY_TYPE::LBUTTON,
 	KEY_TYPE::RBUTTON,
+	KEY_TYPE::SPACE,
 	KEY_TYPE::ESC
 
 };

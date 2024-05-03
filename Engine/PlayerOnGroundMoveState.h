@@ -46,3 +46,12 @@ private:
 	bool m_isFireAnimationAgain = false;	// 공속이 애니메이션 속도보다 빠르면 스테이트 조기 종료 후 idle로 돌아가 다시 발사 준비
 
 };
+
+class PlayerJumpDownState : public PlayerOnGroundMoveState
+{
+public:
+	PlayerJumpDownState(shared_ptr<Player> player) : PlayerOnGroundMoveState(player) {}
+
+	virtual void OnEnter() override;
+	virtual shared_ptr<PlayerState> OnLateUpdateState() override;
+};

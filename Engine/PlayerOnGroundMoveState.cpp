@@ -9,6 +9,7 @@
 #include "GameObject.h"
 #include "Timer.h"
 #include "Input.h"
+#include "Manifold.h"
 
 shared_ptr<PlayerState> PlayerOnGroundMoveState::OnUpdateState()
 {
@@ -77,6 +78,10 @@ void PlayerWalkState::OnEnter()
 shared_ptr<PlayerState> PlayerWalkState::OnUpdateState()
 {
 	PlayerOnGroundMoveState::OnUpdateState();
+	if (INPUT->GetButton(KEY_TYPE::SPACE))
+	{
+		return make_shared<PlayerJumpUpState>(m_player);
+	}
 	if (INPUT->GetButton(KEY_TYPE::RBUTTON))
 	{
 		return make_shared<PlayerIdleToAimState>(m_player);
@@ -161,4 +166,18 @@ shared_ptr<PlayerState> PlayerWaitFireOnGroundMoveState::OnUpdateState()
 shared_ptr<PlayerState> PlayerWaitFireOnGroundMoveState::OnLateUpdateState()
 {
 	return shared_ptr<PlayerState>();
+}
+
+void PlayerJumpDownState::OnEnter()
+{
+	m_player->GetAnimator()->Play(static_cast<uint32>(PLAYER_STATE::JUMP_DOWN));
+}
+
+shared_ptr<PlayerState> PlayerJumpDownState::OnLateUpdateState()
+{
+	if (m_player->GetAnimator()->IsAnimationEndOnThisFrame())
+	{
+		return make_shared<PlayerWalkState>(m_player);
+	}
+	return nullptr;
 }
