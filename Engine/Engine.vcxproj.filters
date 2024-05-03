@@ -40,6 +40,15 @@
     <Filter Include="Object\Player\PlayerStates">
       <UniqueIdentifier>{c0ad6aea-c8b8-4cfe-ae0a-1ec885a9b706}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Object\Enemy">
+      <UniqueIdentifier>{b7d422f7-7def-441f-b87d-c629e129ff8f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Player\Projectile">
+      <UniqueIdentifier>{4343e8bf-79a5-4962-adab-511a196d7b61}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Player\Projectile\Bullet">
+      <UniqueIdentifier>{46270b2d-2eff-4b70-8f5b-5ab9a441fb86}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -223,6 +232,9 @@
     </ClCompile>
     <ClCompile Include="PlayerOnAirState.cpp">
       <Filter>Object\Player\PlayerStates</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerBullet.cpp">
+      <Filter>Object\Player\Projectile\Bullet</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -413,6 +425,9 @@
     </ClInclude>
     <ClInclude Include="PlayerOnAirState.h">
       <Filter>Object\Player\PlayerStates</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerBullet.h">
+      <Filter>Object\Player\Projectile\Bullet</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

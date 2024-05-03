@@ -214,6 +214,7 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerAnimation.h" />
+    <ClInclude Include="PlayerBullet.h" />
     <ClInclude Include="PlayerOnAirState.h" />
     <ClInclude Include="PlayerOnGroundAimState.h" />
     <ClInclude Include="PlayerOnGroundMoveState.h" />
@@ -282,6 +283,7 @@
     </ClCompile>
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerAnimation.cpp" />
+    <ClCompile Include="PlayerBullet.cpp" />
     <ClCompile Include="PlayerOnAirState.cpp" />
     <ClCompile Include="PlayerOnGroundAimState.cpp" />
     <ClCompile Include="PlayerOnGroundMoveState.cpp" />

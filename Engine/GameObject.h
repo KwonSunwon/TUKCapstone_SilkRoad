@@ -48,9 +48,14 @@ public:
 	void SetStatic(bool flag) { m_static = flag; }
 	bool IsStatic() { return m_static; }
 
+	void SetActive(bool flag) { m_isActive = flag; }
+	bool IsActive() { return m_isActive; }
+
 	int m_anim = 0;
 
 	bool m_isCheck = false;
+	bool m_isActive = true;
+
 private:
 	array<shared_ptr<Component>, FIXED_COMPONENT_COUNT> m_components;
 	vector<shared_ptr<MonoBehaviour>> m_scripts;
