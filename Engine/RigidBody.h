@@ -42,6 +42,7 @@ public:
 	float	GetMaxSpeed() { return m_maxSpeed; }
 	float	GetMaxAirSpeed() { return m_maxAirSpeed; }
 	Vec3	GetXZVelocity() { return Vec3(m_linearVelocity.x, 0, m_linearVelocity.z); }
+	Vec3	GetRotation() { return m_rotation; }
 
 	//mass, restitution, static, maxSpeed는 설정해주지 않으면 디폴트 값으로 적용됨
 	void	SetLinearVelocity(Vec3 linearVelocity) { m_linearVelocity = linearVelocity; }
@@ -52,6 +53,7 @@ public:
 	void	SetfrictionCoef(float firctionCoef) { m_frictionCoef = firctionCoef; }
 	void	SetUseGravity(bool useGravity) { m_useGravity = useGravity; }
 	void	SetMaxAirSpeed(float maxAirSpeed) { m_maxAirSpeed = maxAirSpeed; }
+	void	SetRotation(Vec3 rotation) { m_rotation = rotation; }
 
 	shared_ptr<vector<shared_ptr<Manifold>>> GetCollideEvent() { return m_manifolds; }
 	void	AddCollideEvent(shared_ptr<Manifold> event);

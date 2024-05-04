@@ -39,10 +39,10 @@ void PlayerBullet::Fire(shared_ptr<Player> shooter)
 	shared_ptr<RigidBody> rb = GetRigidBody();
 
 	rb->SetStatic(false);
-	rb->SetMass(100.f);
+	rb->SetMass(0.003f);
 	rb->SetfrictionCoef(0.f);
 	rb->MoveTo(shooter->GetPlayerCamera()->GetTransform()->GetWorldPosition() +
-		cameraLook * 300.f);
+		cameraLook * 100.f);
 	rb->SetMaxSpeed(8000.f);
 	rb->SetMaxAirSpeed(8000.f);
 

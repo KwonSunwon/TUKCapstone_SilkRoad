@@ -52,6 +52,9 @@
     <Filter Include="Object\Item">
       <UniqueIdentifier>{9ccdd75e-2166-480a-b2de-89402c2fac78}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Object\Enemy\EnemyState">
+      <UniqueIdentifier>{537641c0-1380-49b3-a5ff-e0588bd78b83}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -241,6 +244,12 @@
     </ClCompile>
     <ClCompile Include="PlayerBullet.cpp">
       <Filter>Object\Player\Projectile\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>Object\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyState.cpp">
+      <Filter>Object\Enemy\EnemyState</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -437,6 +446,12 @@
     </ClInclude>
     <ClInclude Include="PlayerBullet.h">
       <Filter>Object\Player\Projectile\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>Object\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyState.h">
+      <Filter>Object\Enemy\EnemyState</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

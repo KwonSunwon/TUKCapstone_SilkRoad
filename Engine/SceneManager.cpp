@@ -28,6 +28,7 @@
 #include "Bomb.h"
 #include "Item.h"
 #include "PlayerBullet.h"
+#include "Enemy.h"
 
 #include "Network.h"
 
@@ -473,9 +474,9 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 			collider->SetOffset(Vec3(0, 80, 0));
 			go->AddComponent(collider);
 		}
-		
+
 		//디버그용 콜라이더 매쉬 설정
-		if(DEBUG_MODE)
+		if (DEBUG_MODE)
 		{
 			scene->AddGameObject(go->GetCollider()->GetDebugCollider());
 		}
@@ -498,11 +499,12 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 			camera->GetTransform()->SetLocalPosition(Vec3(0.f, 140.f, 40.f));
 			camera->GetTransform()->SetLocalRotation(Vec3(XMConvertToRadians(10.f), XMConvertToRadians(0.f), XMConvertToRadians(0.f)));
 		}
-		
+
 		//플레이어 컴포넌트 부착
 		{
 			shared_ptr<Player> playerScript = make_shared<Player>();
-			for (int i = 0; i < 0; ++i)
+			// 총알 오브젝트 풀 생성
+			for (int i = 0; i < 20; ++i)
 			{
 				shared_ptr<GameObject> bullet = make_shared<GameObject>();
 				bullet->SetName(L"Bullet");
@@ -510,7 +512,7 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 				{
 					bullet->AddComponent(make_shared<Transform>());
 					bullet->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 0.f));
-					bullet->GetTransform()->SetLocalScale(Vec3(50.f, 50.f, 50.f));
+					bullet->GetTransform()->SetLocalScale(Vec3(5.f, 5.f, 5.f));
 				}
 
 				shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
@@ -545,17 +547,17 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 					bullet->AddComponent(collider);
 				}
 				{
-					bullet->GetMeshRenderer()->GetMaterial()->SetInt(0, 0);
+					//bullet->GetMeshRenderer()->GetMaterial()->SetInt(0, 0);
 				}
-				//bullet->SetActive(false);
+				bullet->SetActive(true);
 
 				shared_ptr<PlayerBullet> bulletScript = make_shared<PlayerBullet>();
 				playerScript->AddBullet(bulletScript);
-				
+
 				bullet->AddComponent(bulletScript);
 
 				scene->AddGameObject(bullet);
-				
+
 			}
 			playerScript->SetPlayerCamera(scene->GetMainCamera());
 			go->AddComponent(playerScript);
@@ -563,12 +565,81 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 
 		scene->SetPlayer(go, MAIN_PLAYER);
 		scene->AddGameObject(go);
-		
+
 	}
 
 
 
 #pragma endregion
+
+#pragma region Enemy
+	{
+		for (int i = 0; i < 1; ++i)
+		{
+			int idx = 0;
+			shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\BR_Characters.fbx");
+			vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
+			shared_ptr<GameObject> go = gameObjects[idx];
+			//Transform 설정
+			{
+				shared_ptr<Transform> transform = go->GetTransform();
+				transform->SetLocalPosition(Vec3(5000.f + (i / 5) * 1000.f, 1500.f, 5000.f + i % 5 * 1000.f));
+				transform->SetLocalScale(Vec3(1.2f, 1.2f, 1.2f));
+				//transform->SetLocalRotation(Vec3(XMConvertToRadians(0.f), XMConvertToRadians(0.f), XMConvertToRadians(0.f)));
+			}
+
+			//강체 설정
+			{
+				shared_ptr<RigidBody> rb = make_shared<RigidBody>();
+
+				rb->SetStatic(true);
+				rb->SetMass(150.f);
+				rb->SetRestitution(0.f);
+				go->SetCheckFrustum(false);
+				go->AddComponent(rb);
+			}
+
+			//콜라이더 설정 
+			//콜라이더의 위치,회전은 Gameobject의 Transform을 사용
+			{
+				//OBB를 사용할 경우 이곳의 주석을 풀어서 사용
+				shared_ptr<OrientedBoxCollider> collider = make_shared<OrientedBoxCollider>();
+				collider->SetExtent(Vec3(50, 100, 50));
+
+				//Sphere를 사용할경우 이곳의 주석을 풀어서 사용
+				/*shared_ptr<SphereCollider> collider = make_shared<SphereCollider>();
+				collider->SetRadius(100.f);*/
+
+
+
+				collider->SetOffset(Vec3(0, 100, 0));
+				go->AddComponent(collider);
+			}
+
+			//디버그용 콜라이더 매쉬 설정
+			if (DEBUG_MODE)
+			{
+				scene->AddGameObject(go->GetCollider()->GetDebugCollider());
+			}
+
+			//Instancing 유무 설정(사용:0,0  미사용:0,1)
+			{
+				go->GetMeshRenderer()->GetMaterial()->SetInt(0, 0);
+			}
+
+			//추가적인 컴포넌트 부착
+			{
+				shared_ptr<Enemy> enemyScript = make_shared<Enemy>();
+				enemyScript->AddPlayer(scene->GetPlayers()[0]);
+				go->AddComponent(enemyScript);
+				//go->AddComponent(make_shared<PlayerAnimation>());
+			}
+
+			scene->AddGameObject(go);
+		}
+	}
+#pragma endregion
+
 
 #pragma region Item
 	{
