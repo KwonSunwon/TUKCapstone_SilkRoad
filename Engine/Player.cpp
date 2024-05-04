@@ -8,6 +8,7 @@
 #include "PlayerOnGroundMoveState.h"
 #include "PlayerOnGroundAImState.h"
 #include "PlayerOnAirState.h"
+#include "PlayerBullet.h"
 
 void Player::Awake()
 {
@@ -53,4 +54,17 @@ void Player::LateUpdate()
 		m_curState = nextState;
 		m_curState->OnEnter();
 	}
+}
+
+void Player::Fire()
+{
+	m_fireElapsedTime = 1.f / m_fireRate;
+	m_bullets[m_bulletPivot++]->Fire(shared_from_this());
+	if (m_bulletPivot >= m_bullets.size())
+		m_bulletPivot = 0;
+}
+
+void Player::AddBullet(shared_ptr<class PlayerBullet> bullet)
+{
+	m_bullets.push_back(bullet);
 }

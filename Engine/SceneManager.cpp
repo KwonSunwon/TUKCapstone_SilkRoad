@@ -27,6 +27,7 @@
 #include "PlayerAnimation.h"
 #include "Bomb.h"
 #include "Item.h"
+#include "PlayerBullet.h"
 
 #include "Network.h"
 
@@ -70,7 +71,8 @@ void SceneManager::RenderUI(shared_ptr<D3D11On12Device> device)
 
 	// 디버깅용 플레이어 좌표 텍스트 변환
 	std::wostringstream ss;
-	ss << L"X:" << playerPos.x << L", Y:" << playerPos.y << L", Z:" << playerPos.z;
+	//ss << L"X:" << playerPos.x << L", Y:" << playerPos.y << L", Z:" << playerPos.z;
+	ss << "+";
 	std::wstring playerPosText = ss.str();
 
 	// Acquire our wrapped render target resource for the current back buffer.
@@ -439,7 +441,7 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 		//Transform 설정
 		{
 			shared_ptr<Transform> transform = go->GetTransform();
-			transform->SetLocalPosition(Vec3(1500.f, 1500.f, 2000.f));
+			transform->SetLocalPosition(Vec3(2500.f, 1500.f, 2500.f));
 			//transform->SetLocalScale(Vec3(1.f, 1.f, 1.f));
 			//transform->SetLocalRotation(Vec3(XMConvertToRadians(0.f), XMConvertToRadians(0.f), XMConvertToRadians(0.f)));
 		}
@@ -485,7 +487,7 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 
 		//추가적인 컴포넌트 부착
 		{
-			go->AddComponent(make_shared<Player>());
+			//go->AddComponent(make_shared<Player>());
 			//go->AddComponent(make_shared<PlayerAnimation>());
 		}
 
@@ -497,6 +499,68 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 			camera->GetTransform()->SetLocalRotation(Vec3(XMConvertToRadians(10.f), XMConvertToRadians(0.f), XMConvertToRadians(0.f)));
 		}
 		
+		//플레이어 컴포넌트 부착
+		{
+			shared_ptr<Player> playerScript = make_shared<Player>();
+			for (int i = 0; i < 0; ++i)
+			{
+				shared_ptr<GameObject> bullet = make_shared<GameObject>();
+				bullet->SetName(L"Bullet");
+
+				{
+					bullet->AddComponent(make_shared<Transform>());
+					bullet->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 0.f));
+					bullet->GetTransform()->SetLocalScale(Vec3(50.f, 50.f, 50.f));
+				}
+
+				shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
+				{
+					shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadSphereMesh();
+					meshRenderer->SetMesh(mesh);
+				}
+
+				{
+					shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"WireFrame");
+					shared_ptr<Material> material = make_shared<Material>();
+					material->SetShader(shader);
+
+					material->SetInt(3, 1);
+					material->SetVec4(3, Vec4(1, 1, 1, 1));
+					meshRenderer->SetMaterial(material);
+				}
+				bullet->AddComponent(meshRenderer);
+
+				{
+					shared_ptr<RigidBody> rb = make_shared<RigidBody>();
+					rb->SetStatic(true);
+					rb->SetRestitution(0.f);
+					bullet->SetCheckFrustum(false);
+					bullet->AddComponent(rb);
+				}
+				{
+					//shared_ptr<SphereCollider> collider = make_shared<SphereCollider>();
+					//collider->SetRadius(10.f);
+					shared_ptr<OrientedBoxCollider> collider = make_shared<OrientedBoxCollider>();
+					collider->SetExtent(Vec3(10, 10, 10));
+					bullet->AddComponent(collider);
+				}
+				{
+					bullet->GetMeshRenderer()->GetMaterial()->SetInt(0, 0);
+				}
+				//bullet->SetActive(false);
+
+				shared_ptr<PlayerBullet> bulletScript = make_shared<PlayerBullet>();
+				playerScript->AddBullet(bulletScript);
+				
+				bullet->AddComponent(bulletScript);
+
+				scene->AddGameObject(bullet);
+				
+			}
+			playerScript->SetPlayerCamera(scene->GetMainCamera());
+			go->AddComponent(playerScript);
+		}
+
 		scene->SetPlayer(go, MAIN_PLAYER);
 		scene->AddGameObject(go);
 		

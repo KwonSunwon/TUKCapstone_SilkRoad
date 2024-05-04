@@ -145,7 +145,7 @@ void OcTree::CollisionInspection(shared_ptr<BaseCollider> bs)
 
 void OcTree::Update()
 {
-	UpdateOcnode(m_rootNode);
+	//UpdateOcnode(m_rootNode);
 
 }
 

@@ -236,11 +236,11 @@
     <ClCompile Include="PlayerOnAirState.cpp">
       <Filter>Object\Player\PlayerStates</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerBullet.cpp">
-      <Filter>Object\Player\Projectile\Bullet</Filter>
-    </ClCompile>
     <ClCompile Include="Item.cpp">
       <Filter>Object\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerBullet.cpp">
+      <Filter>Object\Player\Projectile\Bullet</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -432,11 +432,11 @@
     <ClInclude Include="PlayerOnAirState.h">
       <Filter>Object\Player\PlayerStates</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerBullet.h">
-      <Filter>Object\Player\Projectile\Bullet</Filter>
-    </ClInclude>
     <ClInclude Include="Item.h">
       <Filter>Object\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerBullet.h">
+      <Filter>Object\Player\Projectile\Bullet</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

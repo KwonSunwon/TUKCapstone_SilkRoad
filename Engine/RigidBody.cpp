@@ -124,8 +124,8 @@ void RigidBody::ApplyAccVel(int iterations)
 {
 
 	Vec3 acc = m_force / m_mass;
-	m_linearVelocity += acc * DELTA_TIME / (float)iterations;
-	if(m_useGravity)
+	m_linearVelocity += acc * DELTA_TIME;
+	if (m_useGravity)
 		m_linearVelocity += m_gravity * DELTA_TIME / (float)iterations;
 
 	Vec3 XZVel = GetXZVelocity();
