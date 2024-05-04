@@ -26,6 +26,7 @@
 #include "Player.h"
 #include "PlayerAnimation.h"
 #include "Bomb.h"
+#include "Item.h"
 
 #include "Network.h"
 
@@ -503,71 +504,72 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 
 #pragma endregion
 
-//#pragma region Item
-//	{
-//		int idx = 0;
-//		shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Item_Cylinder.fbx");
-//		vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
-//		shared_ptr<GameObject> go = gameObjects[idx];
-//
-//		//Transform 설정
-//		{
-//			shared_ptr<Transform> transform = go->GetTransform();
-//			transform->SetLocalPosition(Vec3(15000.f, 1500.f, 2000.f));
-//			//transform->SetLocalScale(Vec3(1.f, 1.f, 1.f));
-//			//transform->SetLocalRotation(Vec3(XMConvertToRadians(0.f), XMConvertToRadians(0.f), XMConvertToRadians(0.f)));
-//		}
-//
-//		//강체 설정
-//		{
-//			shared_ptr<RigidBody> rb = make_shared<RigidBody>();
-//
-//			rb->SetStatic(false);
-//			rb->
-//			go->SetCheckFrustum(false);
-//			go->AddComponent(rb);
-//		}
-//
-//		//콜라이더 설정 
-//		//콜라이더의 위치,회전은 Gameobject의 Transform을 사용
-//		{
-//			//OBB를 사용할 경우 이곳의 주석을 풀어서 사용
-//			/*shared_ptr<OrientedBoxCollider> collider = make_shared<OrientedBoxCollider>();
-//			collider->SetExtent(Vec3(50, 100, 50));*/
-//
-//			//Sphere를 사용할경우 이곳의 주석을 풀어서 사용
-//			shared_ptr<SphereCollider> collider = make_shared<SphereCollider>();
-//			collider->SetRadius(100.f);
-//
-//
-//
-//			//collider->SetOffset(Vec3(0, 80, 0));
-//			go->AddComponent(collider);
-//		}
-//
-//		//디버그용 콜라이더 매쉬 설정
-//		if (DEBUG_MODE)
-//		{
-//			scene->AddGameObject(go->GetCollider()->GetDebugCollider());
-//		}
-//
-//		//Instancing 유무 설정(사용:0,0  미사용:0,1)
-//		{
-//			go->GetMeshRenderer()->GetMaterial()->SetInt(0, 0);
-//		}
-//
-//		//추가적인 컴포넌트 부착
-//		{
-//			go->AddComponent(make_shared<Bomb>());
-//		}
-//
-//		scene->AddGameObject(go);
-//
-//	}
-//
-//
-//
-//#pragma endregion
+#pragma region Item
+	{
+		int idx = 0;
+		shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Item_Cylinder.fbx");
+		vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
+		shared_ptr<GameObject> go = gameObjects[idx];
+
+		//Transform 설정
+		{
+			shared_ptr<Transform> transform = go->GetTransform();
+			transform->SetLocalPosition(Vec3(3000.f, 300.f, 5000.f));
+			//transform->SetLocalScale(Vec3(1.f, 1.f, 1.f));
+			//transform->SetLocalRotation(Vec3(XMConvertToRadians(0.f), XMConvertToRadians(0.f), XMConvertToRadians(0.f)));
+		}
+
+		//강체 설정
+		{
+			shared_ptr<RigidBody> rb = make_shared<RigidBody>();
+
+			rb->SetStatic(true);
+			rb->SetUseGravity(false);
+			rb->SetMass(10000000);
+			go->SetCheckFrustum(false);
+			go->AddComponent(rb);
+		}
+
+		//콜라이더 설정 
+		//콜라이더의 위치,회전은 Gameobject의 Transform을 사용
+		{
+			//OBB를 사용할 경우 이곳의 주석을 풀어서 사용
+			/*shared_ptr<OrientedBoxCollider> collider = make_shared<OrientedBoxCollider>();
+			collider->SetExtent(Vec3(50, 100, 50));*/
+
+			//Sphere를 사용할경우 이곳의 주석을 풀어서 사용
+			shared_ptr<SphereCollider> collider = make_shared<SphereCollider>();
+			collider->SetRadius(30.f);
+
+
+
+			collider->SetOffset(Vec3(0, 15, 0));
+			go->AddComponent(collider);
+		}
+
+		//디버그용 콜라이더 매쉬 설정
+		if (DEBUG_MODE)
+		{
+			scene->AddGameObject(go->GetCollider()->GetDebugCollider());
+		}
+
+		//Instancing 유무 설정(사용:0,0  미사용:0,1)
+		{
+			go->GetMeshRenderer()->GetMaterial()->SetInt(0, 0);
+		}
+
+		//추가적인 컴포넌트 부착
+		{
+			go->AddComponent(make_shared<Item>());
+		}
+
+		scene->AddGameObject(go);
+
+	}
+
+
+
+#pragma endregion
 
 #pragma region Bomb
 	{
