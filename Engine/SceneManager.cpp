@@ -38,7 +38,9 @@ void SceneManager::Update()
 	m_activeScene->Update();
 	m_activeScene->LateUpdate();
 	m_activeScene->FinalUpdate();
-
+	m_activeScene->GetMainCamera()->GetTransform()->FinalUpdate();
+	m_activeScene->GetMainCamera()->FinalUpdate();
+	
 	for(int i = 0; i < m_iterations; ++i) {
 		m_activeScene->PhysicsStep(m_iterations);
 		m_activeScene->testCollision();
