@@ -2,6 +2,7 @@
 
 #include "LockQueue.h"
 #include "MonoBehaviour.h"
+#include "Packet.h"
 
 static const int MAX_PLAYER = 2;
 static const int SERVER_PORT = 9000;
@@ -10,30 +11,30 @@ static const int TIMEOUT = 5;
 #define SEND_PACKET_PER_SEC 1.f / 60.f
 
 // Packet Type
-enum class PACKET_TYPE {
-	PLAYER,
-	ENEMY,
-	ITEM,
-	// ...
-	NET,
-	END
-};
+//enum class PACKET_TYPE {
+//	PLAYER,
+//	ENEMY,
+//	ITEM,
+//	// ...
+//	NET,
+//	END
+//};
 
 // Packet Struct
-struct PacketHeader {
-	ushort clientID;
-	uint16 size;
-	PACKET_TYPE type;
-};
+//struct PacketHeader {
+//	ushort clientID;
+//	uint16 size;
+//	PACKET_TYPE type;
+//};
 
-struct Packet {
-	PacketHeader header;
-	char data[1024];
-
-	// TEMP
-	Vec3 pos;
-	ushort id;
-};
+//struct Packet {
+//	PacketHeader header;
+//	char data[1024];
+//
+//	// TEMP
+//	Vec3 pos;
+//	ushort id;
+//};
 
 enum class NETWORK_STATE {
 	SINGLE,
@@ -52,16 +53,16 @@ struct GuestInfo {
 	shared_ptr<PacketQueue> eventQue = make_shared<PacketQueue>();
 };
 
-struct PlayerData {
-	Vec3 pos;
-	ushort id;
-	// ... Class, Hp, Item, ...
-};
-
-struct GameData {
-	PlayerData playerData[MAX_PLAYER];
-	// ... Enemy, Item, ...
-};
+//struct PlayerData {
+//	Vec3 pos;
+//	ushort id;
+//	// ... Class, Hp, Item, ...
+//};
+//
+//struct GameData {
+//	PlayerData playerData[MAX_PLAYER];
+//	// ... Enemy, Item, ...
+//};
 
 class Network {
 public:
@@ -77,7 +78,7 @@ public:
 	NETWORK_STATE GetState() { return m_networkState; }
 	void SetState(NETWORK_STATE state) { m_networkState = state; }
 
-	LockQueue<Packet> m_receivedPacketQue;
+	LockQueue<shared_ptr<Packet>> m_receivedPacketQue;
 
 private:
 	WSADATA m_wsaData;
@@ -86,6 +87,12 @@ private:
 	atomic<bool> m_isRunning = false;
 
 	Packet m_packetBuffer;
+
+protected:
+	Buffer m_buffer;
+
+public:
+	SOCKET m_socket;
 };
 
 class Host : public Network {
@@ -120,8 +127,6 @@ private:
 
 	array<Packet, 2> m_lastGameData;
 
-	GameData m_gameData;
-
 	queue<Packet> m_gameLoopEventQue;
 	queue<Packet> m_outGameLoopEventQue;
 };
@@ -139,9 +144,7 @@ public:
 
 	void Send(Packet packet, int id) override;
 	bool Recv(shared_ptr<Packet> packet) override;
-
 private:
-	SOCKET m_socket;
 
 	// 임시코드
 	char* m_serverIP = (char*)"127.0.0.1";
@@ -172,8 +175,8 @@ public:
 
 	int m_id = 0;
 
-private:
 	unique_ptr<Network> m_network;
+private:
 };
 
 class NetworkScript : public MonoBehaviour {

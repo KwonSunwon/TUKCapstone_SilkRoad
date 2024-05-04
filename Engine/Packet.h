@@ -1,6 +1,8 @@
 #pragma once
 
-static const size_t BUFFER_SIZE = 2048;
+static constexpr size_t BUFFER_SIZE = 1024;
+
+class Packet;
 
 class Buffer {
 public:
@@ -8,11 +10,19 @@ public:
 	~Buffer() {}
 
 	void Clear();
-	void Write(const vector<char> data);
-	void Read(char& data);
-	void Read(vector<char>& data, size_t size);
+	void Write(const vector<char>& data);
+	void Write(const char* data, size_t size);
+
+	char Peek() const;
+	char Peek(int index) const;
+
+	char Read();
+	void Read(char* data, size_t size);
+	void Read(shared_ptr<Packet>& packet);
 
 	bool Empty() const;
+
+	size_t Size() const { return m_size; }
 
 private:
 	void Init();
@@ -21,11 +31,8 @@ private:
 	array<char, BUFFER_SIZE> m_buffer;
 	size_t m_size;
 
-	int m_readIndex;
-	int m_writeIndex;
-
-public:
-	int m_remainData;
+	size_t m_readIndex;
+	size_t m_writeIndex;
 };
 
 enum class PacketType : BYTE {
@@ -34,8 +41,22 @@ enum class PacketType : BYTE {
 	PT_MAX
 };
 
-struct MovePacket {
-	ushort size;
-	BYTE type;
+class Packet {
+public:
+	Packet();
+	~Packet() {}
 
+public:
+	short m_size;
+	PacketType m_type;
+	int m_targetId;
+};
+
+class MovePacket : public Packet {
+public:
+	MovePacket();
+	~MovePacket() {}
+
+public:
+	Vec3 m_position;
 };

@@ -9,6 +9,7 @@
 #include "Scene.h"
 #include "Terrain.h"
 #include "Network.h"
+#include "Packet.h"
 
 TestPlayer::TestPlayer(int id) : m_id(id)
 {
@@ -37,10 +38,10 @@ void TestPlayer::LateUpdate()
 	//if(prev != pos && GET_SINGLE(NetworkManager)->GetNetworkState() != NETWORK_STATE::SINGLE) {
 	if(prev != pos)
 		if(GET_SINGLE(NetworkManager)->GetNetworkState() != NETWORK_STATE::SINGLE) {
-			Packet packet;
-			packet.header.type = PACKET_TYPE::PLAYER;
-			packet.pos = pos;
-			packet.id = m_id;
-			GET_SINGLE(NetworkManager)->Send(packet);
+			MovePacket packet;
+			packet.m_targetId = m_id;
+			packet.m_position = pos;
+			SOCKET socket = GET_SINGLE(NetworkManager)->m_network->m_socket;
+			send(socket, (char*)&packet, sizeof(MovePacket), 0);
 		}
 }

@@ -20,7 +20,7 @@ void Buffer::Init()
 	m_writeIndex = 0;
 }
 
-void Buffer::Write(const vector<char> data)
+void Buffer::Write(const vector<char>& data)
 {
 	for(size_t i = 0; i < data.size(); i++) {
 		m_buffer[m_writeIndex] = data[i];
@@ -30,17 +30,43 @@ void Buffer::Write(const vector<char> data)
 	m_size += data.size();
 }
 
-void Buffer::Read(char& data)
+void Buffer::Write(const char* data, size_t size)
 {
-	if(Empty())
-		return;
+	for(size_t i = 0; i < size; i++) {
+		m_buffer[m_writeIndex] = data[i];
+		m_writeIndex = (m_writeIndex + 1) % BUFFER_SIZE;
+	}
 
-	data = m_buffer[m_readIndex];
-	m_readIndex = (m_readIndex + 1) % BUFFER_SIZE;
-	m_size--;
+	m_size += size;
 }
 
-void Buffer::Read(vector<char>& data, size_t size)
+char Buffer::Peek() const
+{
+	if(Empty())
+		return -1;
+	return m_buffer[m_readIndex];
+}
+
+char Buffer::Peek(int index) const
+{
+	if(Empty())
+		return -1;
+	return m_buffer[(m_readIndex + index) % BUFFER_SIZE];
+}
+
+char Buffer::Read()
+{
+	if(Empty())
+		return -1;
+
+	char data = m_buffer[m_readIndex];
+	m_readIndex = (m_readIndex + 1) % BUFFER_SIZE;
+	m_size--;
+
+	return data;
+}
+
+void Buffer::Read(char* data, size_t size)
 {
 	if(Empty())
 		return;
@@ -56,7 +82,44 @@ void Buffer::Read(vector<char>& data, size_t size)
 	m_size -= size;
 }
 
+void Buffer::Read(shared_ptr<Packet>& packet)
+{
+	if(Empty())
+		return;
+	if(!packet)
+		return;
+
+	if(packet->m_size == sizeof(packet)) {
+		return;
+	}
+
+	if(packet->m_size > BUFFER_SIZE - m_readIndex) {
+		memcpy(packet.get(), m_buffer.data() + m_readIndex, BUFFER_SIZE - m_readIndex);
+		memcpy(packet.get() + BUFFER_SIZE - m_readIndex, m_buffer.data(), packet->m_size - (BUFFER_SIZE - m_readIndex));
+	}
+	else {
+		memcpy(packet.get(), m_buffer.data() + m_readIndex, packet->m_size);
+	}
+
+	m_size -= packet->m_size;
+	m_readIndex = (m_readIndex + packet->m_size) % BUFFER_SIZE;
+}
+
 bool Buffer::Empty() const
 {
 	return m_size == 0;
+}
+
+Packet::Packet()
+{
+	m_size = 0;
+	m_type = PacketType::PT_NONE;
+	m_targetId = -1;
+}
+
+MovePacket::MovePacket()
+{
+	m_size = sizeof(MovePacket);
+	m_type = PacketType::PT_MOVE;
+	m_targetId = -1;
 }

@@ -24,20 +24,19 @@ void Network::Update()
 	auto objects = GET_SINGLE(SceneManager)->GetActiveScene()->GetGameObjects();
 	auto players = GET_SINGLE(SceneManager)->GetActiveScene()->GetPlayers();
 
+	shared_ptr<Packet> packet;
 	//while(Recv(m_packetBuffer)) {
-	while(m_receivedPacketQue.TryPop(m_packetBuffer)) {
-		switch(m_packetBuffer.header.type) {
-		case PACKET_TYPE::PLAYER:
-			players[m_packetBuffer.id]->GetTransform()->SetLocalPosition(m_packetBuffer.pos);
-			break;
-		case PACKET_TYPE::ENEMY:
-			// find target object by id
-			for(auto& object : objects) {
-				if(object->GetID() == m_packetBuffer.id) {
-					// apply packet data to object
-					break;
+	while(m_receivedPacketQue.TryPop(packet)) {
+		switch(packet->m_type) {
+		case PacketType::PT_MOVE:
+			/*for(auto& player : players) {
+				if(!player)
+					continue;
+				if(player->GetID() == packet->m_targetId) {
+					player->GetTransform()->SetLocalPosition(reinterpret_pointer_cast<MovePacket>(packet)->m_position);
 				}
-			}
+			}*/
+			players[packet->m_targetId]->GetTransform()->SetLocalPosition(reinterpret_pointer_cast<MovePacket>(packet)->m_position);
 			break;
 		default:
 			break;
@@ -54,10 +53,13 @@ Host::Host() : Network()
 void Host::MainLoop()
 {
 	Packet packet;
-	while(true) {
+	while(GetState() == NETWORK_STATE::HOST) {
+		if(m_guestInfos.empty()) {
+			continue;
+		}
 		for(auto& guest : m_guestInfos) {
 			while(guest.eventQue->toServer.TryPop(packet)) {
-				m_receivedPacketQue.Push(packet);
+				m_receivedPacketQue.Push(make_shared<Packet>(packet));
 			}
 		}
 	}
@@ -125,7 +127,7 @@ void Host::WaitLoop()
 		thread connectionThread = thread{ &Host::Connection, this, guest.id };
 		connectionThread.detach();
 
-		//GET_SINGLE(SceneManager)->AddPlayer(playerCount);
+		OutputDebugString(L"Connect New Guest\n");
 	}
 	closesocket(m_listenSocket);
 	OutputDebugString(L"Host WaitLoop End\n");
@@ -154,28 +156,53 @@ void Host::Connection(ushort id)
 	while(GetState() == NETWORK_STATE::HOST) {
 		startTime = chrono::steady_clock::now();
 
-		Packet packet;
-		// 서버에서 게스트로 보내는 패킷
-		while(eventQue->toClient.TryPop(packet)) {
-			retval = send(socket, (char*)&packet, sizeof(packet), 0);
-			if(retval == SOCKET_ERROR) {
-				// disconnect
-				OutputDebugString(L"Disconnect\n");
-				closesocket(socket);
-				break;
-			}
-		}
-		// 게스트에서 서버로 보내는 패킷
-		while(true) {
-			retval = recv(socket, (char*)&packet, sizeof(packet), 0);
-			if(retval > 0) {
-				eventQue->toServer.Push(packet);
-			}
-			if(retval < 0) {
-				break;
+		{
+			Packet packet;
+			// 서버에서 게스트로 보내는 패킷
+			while(eventQue->toClient.TryPop(packet)) {
+				retval = send(socket, (char*)&packet, packet.m_size, 0);
+				if(retval == SOCKET_ERROR) {
+					// disconnect
+					OutputDebugString(L"Disconnect in Connection send\n");
+					closesocket(socket);
+					break;
+				}
 			}
 		}
 
+		// 게스트에서 서버로 보내는 패킷
+		shared_ptr<Packet> packet = nullptr;
+		shared_ptr<char[]> buffer = make_shared<char[]>(BUFFER_SIZE);
+
+		// Write received data to buffer
+		retval = recv(socket, reinterpret_cast<char*>(buffer.get()), BUFFER_SIZE - m_buffer.Size(), 0);
+		if(retval > 0) {
+			m_buffer.Write(buffer.get(), retval);
+
+			ushort packetSize = m_buffer.Peek();
+			while(packetSize <= m_buffer.Size()) {
+				// Save packet to m_receivedPacketQue for apply to game
+				PacketType packetType = static_cast<PacketType>(m_buffer.Peek(2));
+				switch(packetType) {
+				case PacketType::PT_NONE:
+					break;
+				case PacketType::PT_MOVE:
+					packet = make_shared<MovePacket>();
+					break;
+				}
+				m_buffer.Read(reinterpret_cast<char*>(packet.get()), packet->m_size);
+
+				m_receivedPacketQue.Push(packet);
+
+				packetSize = 0;
+				packet.reset();
+
+				if(m_buffer.Empty())
+					break;
+
+				packetSize = m_buffer.Peek();
+			}
+		}
 		endTime = chrono::steady_clock::now();
 		elapsedTime = chrono::duration<float>(endTime - startTime).count();
 		remainTime = SEND_PACKET_PER_SEC - elapsedTime;
@@ -187,7 +214,7 @@ void Host::Connection(ushort id)
 void Host::Send(Packet packet, int id)
 {
 	//m_eventQue.toServer.Push(packet);
-	packet.header.clientID = id;
+	//packet.header.clientID = id;
 	for(auto& guest : m_guestInfos) {
 		guest.eventQue->toClient.Push(packet);
 	}
@@ -238,6 +265,8 @@ void Guest::Connect()
 	thread receiverThread = thread{ &Guest::Receiver, this };
 	senderThread.detach();
 	receiverThread.detach();
+
+	OutputDebugString(L"Connect Host\n");
 }
 
 void Guest::Sender()
@@ -247,10 +276,10 @@ void Guest::Sender()
 
 	while(GetState() == NETWORK_STATE::GUEST) {
 		while(m_toServerEventQue.TryPop(packet)) {
-			retval = send(m_socket, (char*)&packet, sizeof(Packet), 0);
+			retval = send(m_socket, (char*)&packet, packet.m_size, 0);
 			if(retval == SOCKET_ERROR) {
 				// disconnect
-				OutputDebugString(L"Disconnect\n");
+				OutputDebugString(L"Disconnect in Sender()\n");
 				closesocket(m_socket);
 			}
 		}
@@ -272,16 +301,38 @@ void Guest::Receiver()
 	while(GetState() == NETWORK_STATE::GUEST) {
 		startTime = chrono::steady_clock::now();
 
-		while(true) {
-			retval = recv(m_socket, (char*)&packet, sizeof(Packet), 0);
-			if(retval > 0) {
+		shared_ptr<Packet> packet = nullptr;
+		shared_ptr<char[]> buffer = make_shared<char[]>(BUFFER_SIZE);
+
+		// Write received data to buffer
+		retval = recv(m_socket, reinterpret_cast<char*>(buffer.get()), BUFFER_SIZE - m_buffer.Size(), 0);
+		if(retval > 0) {
+			m_buffer.Write(buffer.get(), retval);
+
+			ushort packetSize = m_buffer.Peek();
+			while(packetSize <= m_buffer.Size()) {
+				// Save packet to m_receivedPacketQue for apply to game
+				PacketType packetType = static_cast<PacketType>(m_buffer.Peek(2));
+				switch(packetType) {
+				case PacketType::PT_NONE:
+					break;
+				case PacketType::PT_MOVE:
+					packet = make_shared<MovePacket>();
+					break;
+				}
+				m_buffer.Read(reinterpret_cast<char*>(packet.get()), packet->m_size);
+
 				m_receivedPacketQue.Push(packet);
-			}
-			if(retval < 0) {
-				break;
+
+				packetSize = 0;
+				packet.reset();
+
+				if(m_buffer.Empty())
+					break;
+
+				packetSize = m_buffer.Peek();
 			}
 		}
-
 		endTime = chrono::steady_clock::now();
 		elapsedTime = chrono::duration<float>(endTime - startTime).count();
 		remainTime = SEND_PACKET_PER_SEC - elapsedTime;
@@ -298,7 +349,6 @@ void Guest::Update()
 
 void Guest::Send(Packet packet, int id)
 {
-	packet.header.clientID = id;
 	m_toServerEventQue.Push(packet);
 }
 
@@ -388,10 +438,10 @@ void NetworkScript::LateUpdate()
 	}
 
 	if(INPUT->GetButtonDown(KEY_TYPE::KEY_3)) {
-		Packet packet;
+		/*Packet packet;
 		packet.header.type = PACKET_TYPE::NET;
 		packet.id = -1;
-		GET_SINGLE(NetworkManager)->Send(packet);
+		GET_SINGLE(NetworkManager)->Send(packet);*/
 	}
 }
 #pragma endregion
