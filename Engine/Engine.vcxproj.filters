@@ -49,6 +49,9 @@
     <Filter Include="Object\Player\Projectile\Bullet">
       <UniqueIdentifier>{46270b2d-2eff-4b70-8f5b-5ab9a441fb86}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Object\Item">
+      <UniqueIdentifier>{9ccdd75e-2166-480a-b2de-89402c2fac78}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -235,6 +238,9 @@
     </ClCompile>
     <ClCompile Include="PlayerBullet.cpp">
       <Filter>Object\Player\Projectile\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Item.cpp">
+      <Filter>Object\Item</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -428,6 +434,9 @@
     </ClInclude>
     <ClInclude Include="PlayerBullet.h">
       <Filter>Object\Player\Projectile\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Item.h">
+      <Filter>Object\Item</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

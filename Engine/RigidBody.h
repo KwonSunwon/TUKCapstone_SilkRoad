@@ -40,6 +40,7 @@ public:
 		if (m_isStatic)return 0;
 		else return m_invMass; }
 	float	GetMaxSpeed() { return m_maxSpeed; }
+	float	GetMaxAirSpeed() { return m_maxAirSpeed; }
 	Vec3	GetXZVelocity() { return Vec3(m_linearVelocity.x, 0, m_linearVelocity.z); }
 
 	//mass, restitution, static, maxSpeed는 설정해주지 않으면 디폴트 값으로 적용됨
@@ -49,12 +50,15 @@ public:
 	void	SetStatic(bool isStatic) { m_isStatic = isStatic; }
 	void	SetMaxSpeed(float maxSpeed) { m_maxSpeed = maxSpeed; }
 	void	SetfrictionCoef(float firctionCoef) { m_frictionCoef = firctionCoef; }
+	void	SetUseGravity(bool useGravity) { m_useGravity = useGravity; }
+	void	SetMaxAirSpeed(float maxAirSpeed) { m_maxAirSpeed = maxAirSpeed; }
 
 	shared_ptr<vector<shared_ptr<Manifold>>> GetCollideEvent() { return m_manifolds; }
 	void	AddCollideEvent(shared_ptr<Manifold> event);
 	
 private:
-	
+	void ApplyFriction(int iterations);
+	void ApplyAccVel(int iterations);
 
 private:
 	Vec3 m_position = {};					
@@ -70,9 +74,11 @@ private:
 	float m_frictionCoef = 2.f;
 
 	float m_maxSpeed = 1000.f;		//최고속도 cm/s단위 
+	float m_maxAirSpeed = 1000.f;
 	
 
 	Vec3 m_gravity = { 0.f,-980.f,0.f };
+	bool m_useGravity = true;
 	
 	shared_ptr<vector<shared_ptr<Manifold>>> m_manifolds;
 	shared_ptr< Terrain > m_gameTerrain;
