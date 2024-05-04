@@ -178,6 +178,7 @@
     <ClCompile Include="TestPlayer.cpp">
       <Filter>Object\Test</Filter>
     </ClCompile>
+    <ClCompile Include="Packet.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -328,6 +329,7 @@
     <ClInclude Include="TestPlayer.h">
       <Filter>Object\Test</Filter>
     </ClInclude>
+    <ClInclude Include="Packet.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath.inl">
