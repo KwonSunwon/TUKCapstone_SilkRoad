@@ -40,6 +40,9 @@
     <Filter Include="Object\Player\PlayerStates">
       <UniqueIdentifier>{c0ad6aea-c8b8-4cfe-ae0a-1ec885a9b706}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Object\Item">
+      <UniqueIdentifier>{9ccdd75e-2166-480a-b2de-89402c2fac78}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -223,6 +226,9 @@
     </ClCompile>
     <ClCompile Include="PlayerOnAirState.cpp">
       <Filter>Object\Player\PlayerStates</Filter>
+    </ClCompile>
+    <ClCompile Include="Item.cpp">
+      <Filter>Object\Item</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -413,6 +419,9 @@
     </ClInclude>
     <ClInclude Include="PlayerOnAirState.h">
       <Filter>Object\Player\PlayerStates</Filter>
+    </ClInclude>
+    <ClInclude Include="Item.h">
+      <Filter>Object\Item</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
