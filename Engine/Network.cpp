@@ -28,7 +28,7 @@ void Network::Update()
 	//while(Recv(m_packetBuffer)) {
 	while(m_receivedPacketQue.TryPop(packet)) {
 		switch(packet->m_type) {
-		case PacketType::PT_MOVE:
+		case PACKET_TYPE::PT_MOVE:
 			/*for(auto& player : players) {
 				if(!player)
 					continue;
@@ -114,15 +114,19 @@ void Host::WaitLoop()
 			throw runtime_error("Fail accept client socket");
 		}
 
-		DWORD optval = TIMEOUT;
-		setsockopt(tempSocket, SOL_SOCKET, SO_RCVTIMEO, (const char*)&optval, sizeof(optval));
-		optval = TRUE;
-		setsockopt(tempSocket, IPPROTO_TCP, TCP_NODELAY, (const char*)&optval, sizeof(optval));
-
 		GuestInfo guest;
 		guest.id = ++playerCount;
 		guest.socket = move(tempSocket);
 		m_guestInfos.emplace_back(guest);
+
+		InitPacket initPacket;
+		initPacket.m_networkId = guest.id;
+		send(guest.socket, (char*)&initPacket, sizeof(InitPacket), 0);
+
+		DWORD optval = TIMEOUT;
+		setsockopt(tempSocket, SOL_SOCKET, SO_RCVTIMEO, (const char*)&optval, sizeof(optval));
+		optval = TRUE;
+		setsockopt(tempSocket, IPPROTO_TCP, TCP_NODELAY, (const char*)&optval, sizeof(optval));
 
 		thread connectionThread = thread{ &Host::Connection, this, guest.id };
 		connectionThread.detach();
@@ -182,11 +186,14 @@ void Host::Connection(ushort id)
 			ushort packetSize = m_buffer.Peek();
 			while(packetSize <= m_buffer.Size()) {
 				// Save packet to m_receivedPacketQue for apply to game
-				PacketType packetType = static_cast<PacketType>(m_buffer.Peek(2));
+				PACKET_TYPE packetType = static_cast<PACKET_TYPE>(m_buffer.Peek(2));
 				switch(packetType) {
-				case PacketType::PT_NONE:
+				case PACKET_TYPE::PT_NONE:
 					break;
-				case PacketType::PT_MOVE:
+				case PACKET_TYPE::PT_INIT:
+					packet = make_shared<InitPacket>();
+					break;
+				case PACKET_TYPE::PT_MOVE:
 					packet = make_shared<MovePacket>();
 					break;
 				}
@@ -256,6 +263,10 @@ void Guest::Connect()
 		throw runtime_error("Fail connect server");
 	}
 
+	InitPacket initPacket;
+	recv(m_socket, (char*)&initPacket, sizeof(InitPacket), 0);
+	GET_SINGLE(NetworkManager)->m_networkId = initPacket.m_networkId;
+
 	DWORD optval = TIMEOUT;
 	setsockopt(m_socket, SOL_SOCKET, SO_RCVTIMEO, (const char*)&optval, sizeof(optval));
 	optval = TRUE;
@@ -312,11 +323,14 @@ void Guest::Receiver()
 			ushort packetSize = m_buffer.Peek();
 			while(packetSize <= m_buffer.Size()) {
 				// Save packet to m_receivedPacketQue for apply to game
-				PacketType packetType = static_cast<PacketType>(m_buffer.Peek(2));
+				PACKET_TYPE packetType = static_cast<PACKET_TYPE>(m_buffer.Peek(2));
 				switch(packetType) {
-				case PacketType::PT_NONE:
+				case PACKET_TYPE::PT_NONE:
 					break;
-				case PacketType::PT_MOVE:
+				case PACKET_TYPE::PT_INIT:
+					packet = make_shared<InitPacket>();
+					break;
+				case PACKET_TYPE::PT_MOVE:
 					packet = make_shared<MovePacket>();
 					break;
 				}
@@ -414,7 +428,7 @@ void NetworkManager::ConnectAsGuest()
 void NetworkManager::Send(Packet packet)
 {
 	if(GetNetworkState() != NETWORK_STATE::SINGLE)
-		m_network->Send(packet, m_id);
+		m_network->Send(packet, m_networkId);
 }
 
 bool NetworkManager::Recv(shared_ptr<Packet> packet)
@@ -427,14 +441,12 @@ bool NetworkManager::Recv(shared_ptr<Packet> packet)
 void NetworkScript::LateUpdate()
 {
 	if(INPUT->GetButtonDown(KEY_TYPE::KEY_1)) {
+		GET_SINGLE(NetworkManager)->m_networkId = 0;
 		GET_SINGLE(NetworkManager)->RunMulti();
-		m_id = 0;
 	}
 
 	if(INPUT->GetButtonDown(KEY_TYPE::KEY_2)) {
-		GET_SINGLE(NetworkManager)->m_id = 1;
 		GET_SINGLE(NetworkManager)->ConnectAsGuest();
-		m_id = 1;
 	}
 
 	if(INPUT->GetButtonDown(KEY_TYPE::KEY_3)) {

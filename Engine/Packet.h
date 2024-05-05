@@ -1,6 +1,6 @@
 #pragma once
 
-static constexpr size_t BUFFER_SIZE = 1024;
+static constexpr size_t BUFFER_SIZE = 2048;
 
 class Packet;
 
@@ -35,21 +35,32 @@ private:
 	size_t m_writeIndex;
 };
 
-enum class PacketType : BYTE {
+enum class PACKET_TYPE : BYTE {
 	PT_NONE = 0,
-	PT_MOVE = 1,
+	PT_INIT = 1,
+	PT_MOVE,
 	PT_MAX
 };
 
+#pragma pack(push, 1)
 class Packet {
 public:
 	Packet();
 	~Packet() {}
 
 public:
-	short m_size;
-	PacketType m_type;
-	int m_targetId;
+	ushort m_size;
+	PACKET_TYPE m_type;
+	uint32 m_targetId;
+};
+
+class InitPacket : public Packet {
+public:
+	InitPacket();
+	~InitPacket() {}
+
+public:
+	BYTE m_networkId;
 };
 
 class MovePacket : public Packet {
@@ -60,3 +71,4 @@ public:
 public:
 	Vec3 m_position;
 };
+#pragma pack(pop)

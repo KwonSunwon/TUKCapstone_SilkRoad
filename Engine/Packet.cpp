@@ -113,13 +113,20 @@ bool Buffer::Empty() const
 Packet::Packet()
 {
 	m_size = 0;
-	m_type = PacketType::PT_NONE;
+	m_type = PACKET_TYPE::PT_NONE;
+	m_targetId = -1;
+}
+
+InitPacket::InitPacket()
+{
+	m_size = sizeof(InitPacket);
+	m_type = PACKET_TYPE::PT_INIT;
 	m_targetId = -1;
 }
 
 MovePacket::MovePacket()
 {
 	m_size = sizeof(MovePacket);
-	m_type = PacketType::PT_MOVE;
+	m_type = PACKET_TYPE::PT_MOVE;
 	m_targetId = -1;
 }

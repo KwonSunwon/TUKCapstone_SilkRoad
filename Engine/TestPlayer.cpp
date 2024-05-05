@@ -17,7 +17,7 @@ TestPlayer::TestPlayer(int id) : m_id(id)
 
 void TestPlayer::LateUpdate()
 {
-	if(m_id != GET_SINGLE(NetworkManager)->m_id)
+	if(m_id != GET_SINGLE(NetworkManager)->m_networkId)
 		return;
 
 	Vec3 pos = GetTransform()->GetLocalPosition();

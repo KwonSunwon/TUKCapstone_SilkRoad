@@ -173,7 +173,7 @@ public:
 	void Send(Packet packet);
 	bool Recv(shared_ptr<Packet> packet);
 
-	int m_id = 0;
+	ushort m_networkId = 0;
 
 	unique_ptr<Network> m_network;
 private:
@@ -185,7 +185,4 @@ public:
 	virtual ~NetworkScript() {}
 
 	virtual void LateUpdate() override;
-
-private:
-	ushort m_id = 0;
 };
