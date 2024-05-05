@@ -72,6 +72,8 @@ public:
 	virtual void Update();
 
 	virtual void Send(Packet packet, int id) {};
+	virtual void Send(char* data, int size) {};
+	virtual void Send(shared_ptr<char[]> data, int size) {};
 	//virtual Packet Recv();
 	virtual bool Recv(shared_ptr<Packet> packet) { return false; }
 
@@ -112,6 +114,7 @@ public:
 	void Connection(ushort id);
 
 	void Send(Packet packet, int id) override;
+	//void Send(char* data, int size) override;
 	bool Recv(shared_ptr<Packet> packet) override;
 
 private:
@@ -124,8 +127,6 @@ private:
 	float m_timer = 0.f;
 
 	PacketQueue m_eventQue;
-
-	array<Packet, 2> m_lastGameData;
 
 	queue<Packet> m_gameLoopEventQue;
 	queue<Packet> m_outGameLoopEventQue;
@@ -143,15 +144,16 @@ public:
 	void Receiver();
 
 	void Send(Packet packet, int id) override;
+	void Send(char* data, int size) override;
+	void Send(shared_ptr<char[]> data, int size) override;
 	bool Recv(shared_ptr<Packet> packet) override;
 private:
 
 	// 임시코드
 	char* m_serverIP = (char*)"127.0.0.1";
 
-	shared_ptr<queue<Packet>> m_toClientEventQue;
-
 	LockQueue<Packet> m_toServerEventQue;
+	LockQueue<pair<shared_ptr<char[]>, ushort>> m_toServerDataQue;
 };
 
 class NetworkManager {
@@ -171,6 +173,8 @@ public:
 	void SetNetworkState(NETWORK_STATE state) { m_network->SetState(state); }
 
 	void Send(Packet packet);
+	void Send(char* data, int size);
+	void Send(shared_ptr<char[]> data, int size);
 	bool Recv(shared_ptr<Packet> packet);
 
 	ushort m_networkId = 0;

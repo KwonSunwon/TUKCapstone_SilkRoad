@@ -286,8 +286,17 @@ void Guest::Sender()
 	Packet packet;
 
 	while(GetState() == NETWORK_STATE::GUEST) {
-		while(m_toServerEventQue.TryPop(packet)) {
-			retval = send(m_socket, (char*)&packet, packet.m_size, 0);
+		//while(m_toServerEventQue.TryPop(packet)) {
+		//	retval = send(m_socket, (char*)&packet, packet.m_size, 0);
+		//	if(retval == SOCKET_ERROR) {
+		//		// disconnect
+		//		OutputDebugString(L"Disconnect in Sender()\n");
+		//		closesocket(m_socket);
+		//	}
+		//}
+		pair<shared_ptr<char[]>, ushort> data;
+		while(m_toServerDataQue.TryPop(data)) {
+			retval = send(m_socket, data.first.get(), data.second, 0);
 			if(retval == SOCKET_ERROR) {
 				// disconnect
 				OutputDebugString(L"Disconnect in Sender()\n");
@@ -366,6 +375,21 @@ void Guest::Send(Packet packet, int id)
 	m_toServerEventQue.Push(packet);
 }
 
+void Guest::Send(char* data, int size)
+{
+	int retval = send(m_socket, data, size, 0);
+	if(retval == SOCKET_ERROR) {
+		// disconnect
+		OutputDebugString(L"Disconnect in Send()\n");
+		closesocket(m_socket);
+	}
+}
+
+void Guest::Send(shared_ptr<char[]> data, int size)
+{
+	m_toServerDataQue.Push(make_pair(data, size));
+}
+
 bool Guest::Recv(shared_ptr<Packet> packet)
 {
 	int retval = recv(m_socket, (char*)packet.get(), sizeof(Packet), 0);
@@ -429,6 +453,18 @@ void NetworkManager::Send(Packet packet)
 {
 	if(GetNetworkState() != NETWORK_STATE::SINGLE)
 		m_network->Send(packet, m_networkId);
+}
+
+void NetworkManager::Send(char* data, int size)
+{
+	if(GetNetworkState() != NETWORK_STATE::SINGLE)
+		m_network->Send(data, size);
+}
+
+void NetworkManager::Send(shared_ptr<char[]> data, int size)
+{
+	if(GetNetworkState() != NETWORK_STATE::SINGLE)
+		m_network->Send(data, size);
 }
 
 bool NetworkManager::Recv(shared_ptr<Packet> packet)

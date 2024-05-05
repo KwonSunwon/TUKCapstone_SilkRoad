@@ -35,13 +35,17 @@ void TestPlayer::LateUpdate()
 
 	GetTransform()->SetLocalPosition(pos);
 
+	if(GET_SINGLE(NetworkManager)->m_networkId == 0)
+		return;
 	//if(prev != pos && GET_SINGLE(NetworkManager)->GetNetworkState() != NETWORK_STATE::SINGLE) {
 	if(prev != pos)
 		if(GET_SINGLE(NetworkManager)->GetNetworkState() != NETWORK_STATE::SINGLE) {
-			MovePacket packet;
-			packet.m_targetId = m_id;
-			packet.m_position = pos;
-			SOCKET socket = GET_SINGLE(NetworkManager)->m_network->m_socket;
-			send(socket, (char*)&packet, sizeof(MovePacket), 0);
+			shared_ptr<MovePacket> packet = make_shared<MovePacket>();
+			packet->m_targetId = m_id;
+			packet->m_position = pos;
+			//SOCKET socket = GET_SINGLE(NetworkManager)->m_network->m_socket;
+			//send(socket, (char*)&packet, sizeof(MovePacket), 0);
+
+			GET_SINGLE(NetworkManager)->Send(reinterpret_pointer_cast<char[]>(packet), sizeof(MovePacket));
 		}
 }
