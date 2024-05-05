@@ -35,8 +35,6 @@ void TestPlayer::LateUpdate()
 
 	GetTransform()->SetLocalPosition(pos);
 
-	if(GET_SINGLE(NetworkManager)->m_networkId == 0)
-		return;
 	//if(prev != pos && GET_SINGLE(NetworkManager)->GetNetworkState() != NETWORK_STATE::SINGLE) {
 	if(prev != pos)
 		if(GET_SINGLE(NetworkManager)->GetNetworkState() != NETWORK_STATE::SINGLE) {

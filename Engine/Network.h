@@ -115,6 +115,7 @@ public:
 
 	void Send(Packet packet, int id) override;
 	//void Send(char* data, int size) override;
+	void Send(shared_ptr<char[]> data, int size) override;
 	bool Recv(shared_ptr<Packet> packet) override;
 
 private:
@@ -127,9 +128,6 @@ private:
 	float m_timer = 0.f;
 
 	PacketQueue m_eventQue;
-
-	queue<Packet> m_gameLoopEventQue;
-	queue<Packet> m_outGameLoopEventQue;
 };
 
 class Guest : public Network {

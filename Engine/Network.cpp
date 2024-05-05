@@ -227,6 +227,16 @@ void Host::Send(Packet packet, int id)
 	}
 
 }
+
+void Host::Send(shared_ptr<char[]> data, int size)
+{
+	if(m_guestInfos.empty())
+		return;
+	for(auto& guest : m_guestInfos) {
+		send(guest.socket, data.get(), size, 0);
+	}
+}
+
 bool Host::Recv(shared_ptr<Packet> packet)
 {
 	/*if(m_eventQue.toClient.TryPop(*packet.get()))
