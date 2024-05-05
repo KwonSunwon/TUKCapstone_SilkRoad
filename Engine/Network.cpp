@@ -175,7 +175,7 @@ void Host::Connection(ushort id)
 		shared_ptr<char[]> buffer = make_shared<char[]>(BUFFER_SIZE);
 
 		// Write received data to buffer
-		retval = recv(socket, reinterpret_cast<char*>(buffer.get()), BUFFER_SIZE - m_buffer.Size(), 0);
+		retval = recv(socket, buffer.get(), BUFFER_SIZE - m_buffer.Size(), 0);
 		if(retval > 0) {
 			m_buffer.Write(buffer.get(), retval);
 
@@ -305,7 +305,7 @@ void Guest::Receiver()
 		shared_ptr<char[]> buffer = make_shared<char[]>(BUFFER_SIZE);
 
 		// Write received data to buffer
-		retval = recv(m_socket, reinterpret_cast<char*>(buffer.get()), BUFFER_SIZE - m_buffer.Size(), 0);
+		retval = recv(m_socket, buffer.get(), BUFFER_SIZE - m_buffer.Size(), 0);
 		if(retval > 0) {
 			m_buffer.Write(buffer.get(), retval);
 
