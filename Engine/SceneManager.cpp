@@ -10,6 +10,7 @@
 #include "Camera.h"
 #include "Light.h"
 #include "RigidBody.h"
+#include "MapObjectsLoader.h"
 
 #include "TestCameraScript.h"
 #include "Resources.h"
@@ -17,41 +18,63 @@
 #include "Terrain.h"
 #include "SphereCollider.h"
 #include "BoxCollider.h"
+#include "OrientedBoxCollider.h"
 #include "MeshData.h"
 #include "TestDragon.h"
-
+#include "Timer.h"
 #include "TestPlayer.h"
+#include "Player.h"
+#include "PlayerAnimation.h"
+#include "Bomb.h"
+#include "Item.h"
+#include "PlayerBullet.h"
+#include "Enemy.h"
 
 #include "Network.h"
 
 void SceneManager::Update()
 {
-	if (m_activeScene == nullptr)
+	if(m_activeScene == nullptr)
 		return;
 
 	m_activeScene->Update();
 	m_activeScene->LateUpdate();
-	//collision????
-	m_activeScene->testCollision();
-
-
 	m_activeScene->FinalUpdate();
+	m_activeScene->GetMainCamera()->GetTransform()->FinalUpdate();
+	m_activeScene->GetMainCamera()->FinalUpdate();
+	
+	for(int i = 0; i < m_iterations; ++i) {
+		m_activeScene->PhysicsStep(m_iterations);
+		m_activeScene->testCollision();
+	}
+
+
 }
 
 // TEMP
 void SceneManager::Render()
 {
-	if (m_activeScene)
+	if(m_activeScene)
 		m_activeScene->Render();
 }
 void SceneManager::RenderUI(shared_ptr<D3D11On12Device> device)
 {
 	uint8 backbufferindex = GEngine->GetSwapChain()->GetBackBufferIndex();
-	if (m_activeScene)
+	if(m_activeScene)
 		m_activeScene->RenderUI();
 	D2D1_SIZE_F rtSize = device->GetD3D11On12RT(backbufferindex)->GetSize();
 	D2D1_RECT_F textRect = D2D1::RectF(0, 0, rtSize.width, rtSize.height);
-	static const WCHAR text[] = L"11On12";
+	
+	shared_ptr<GameObject> player = GET_SINGLE(SceneManager)->GetActiveScene()->GetPlayers()[0];
+	Vec3 playerPos = player->GetTransform()->GetLocalPosition();
+	static const WCHAR text[] = L"";
+	//static const WCHAR text[] = L"11On12";
+
+	// 디버깅용 플레이어 좌표 텍스트 변환
+	std::wostringstream ss;
+	//ss << L"X:" << playerPos.x << L", Y:" << playerPos.y << L", Z:" << playerPos.z;
+	ss << "+";
+	std::wstring playerPosText = ss.str();
 
 	// Acquire our wrapped render target resource for the current back buffer.
 	device->GetD3D11on12Device()->AcquireWrappedResources(device->GetWrappedBackBuffer(backbufferindex).GetAddressOf(), 1);
@@ -61,8 +84,8 @@ void SceneManager::RenderUI(shared_ptr<D3D11On12Device> device)
 	device->GetD2DDeviceContext()->BeginDraw();
 	device->GetD2DDeviceContext()->SetTransform(D2D1::Matrix3x2F::Identity());
 	device->GetD2DDeviceContext()->DrawText(
-		text,
-		_countof(text) - 1,
+		playerPosText.c_str(),
+		static_cast<UINT32>(playerPosText.length()),
 		device->GetTextFormat().Get(),
 		&textRect,
 		device->GetSolidColorBrush().Get()
@@ -81,7 +104,7 @@ void SceneManager::RenderUI(shared_ptr<D3D11On12Device> device)
 void SceneManager::LoadScene(wstring sceneName)
 {
 	// TODO : ???? Scene ????
-	// TODO : ??????? Scene ???? ?��?
+	// TODO : ??????? Scene ???? ?��?
 
 	m_activeScene = LoadTestScene();
 
@@ -102,7 +125,7 @@ void SceneManager::SetLayerName(uint8 index, const wstring& name)
 uint8 SceneManager::LayerNameToIndex(const wstring& name)
 {
 	auto findIt = m_layerIndex.find(name);
-	if (findIt == m_layerIndex.end())
+	if(findIt == m_layerIndex.end())
 		return 0;
 
 	return findIt->second;
@@ -129,9 +152,9 @@ shared_ptr<GameObject> SceneManager::Pick(int32 screenX, int32 screenY)
 	float minDistance = FLT_MAX;
 	shared_ptr<GameObject> picked;
 
-	for (auto& gameObject : gameObjects)
+	for(auto& gameObject : gameObjects)
 	{
-		if (gameObject->GetCollider() == nullptr)
+		if(gameObject->GetCollider() == nullptr)
 			continue;
 
 		// ViewSpace?????? Ray ????
@@ -145,10 +168,10 @@ shared_ptr<GameObject> SceneManager::Pick(int32 screenX, int32 screenY)
 
 		// WorldSpace???? ????
 		float distance = 0.f;
-		if (gameObject->GetCollider()->Intersects(rayOrigin, rayDir, OUT distance) == false)
+		if(gameObject->GetCollider()->Intersects(rayOrigin, rayDir, OUT distance) == false)
 			continue;
 
-		if (distance < minDistance)
+		if(distance < minDistance)
 		{
 			minDistance = distance;
 			picked = gameObject;
@@ -193,7 +216,7 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 		camera->AddComponent(make_shared<Transform>());
 		camera->AddComponent(make_shared<Camera>()); // Near=1, Far=1000, FOV=45??
 		camera->AddComponent(make_shared<TestCameraScript>());
-		camera->GetCamera()->SetFar(10000.f);
+		camera->GetCamera()->SetFar(100000.f);
 		camera->GetTransform()->SetLocalPosition(Vec3(0.f, 900.f, 0.f));
 		uint8 layerIndex = GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI");
 		camera->GetCamera()->SetCullingMaskLayerOnOff(layerIndex, true); // UI?? ?? ????
@@ -236,6 +259,23 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 		}
 		skybox->AddComponent(meshRenderer);
 		scene->AddGameObject(skybox);
+	}
+#pragma endregion
+
+#pragma region MapObjects
+	{
+		/*std::ifstream jsonFile("..\\Resources\\MapData\\ExportedObjects.json");
+		nlohmann::json j;
+		jsonFile >> j;
+		std::map<std::string, std::string> obj_map;
+
+		for (const auto& obj : j["objects"])
+			obj_map[obj["name"].get<std::string>()] = obj["meshName"].get<std::string>();*/
+
+		shared_ptr<MapObjectsLoader> loader = make_shared<MapObjectsLoader>();
+		loader->Create(scene);
+
+		loader->Load(L"..\\Resources\\MapData\\ExportedObjects.json");
 	}
 #pragma endregion
 
@@ -299,19 +339,52 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 		obj->AddComponent(make_shared<Terrain>());
 		obj->AddComponent(make_shared<MeshRenderer>());
 
-		obj->GetTransform()->SetLocalScale(Vec3(500.f, 2500.f, 500.f));
+		obj->GetTransform()->SetLocalScale(Vec3(781.25f, 1580.f, 781.25f));
 		obj->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 0.f));
 		obj->SetStatic(true);
 		obj->GetTerrain()->Init(64, 64);
 		obj->SetCheckFrustum(false);
 
+		{
+			shared_ptr<RigidBody> rb = make_shared<RigidBody>();
+
+			rb->SetStatic(true);
+			rb->SetMass(1000.f);
+			rb->SetRestitution(0.f);
+			obj->SetCheckFrustum(false);
+			obj->AddComponent(rb);
+		}
+
+		//콜라이더 설정 
+		//콜라이더의 위치,회전은 Gameobject의 Transform을 사용
+		{
+			//OBB를 사용할 경우 이곳의 주석을 풀어서 사용
+			shared_ptr<OrientedBoxCollider> collider = make_shared<OrientedBoxCollider>();
+			collider->SetExtent(Vec3(100, 100, 100));
+
+			//Sphere를 사용할경우 이곳의 주석을 풀어서 사용
+			//shared_ptr<SphereCollider> collider = make_shared<SphereCollider>();
+			//collider->SetRadius(100.f);
+
+
+
+			//collider->SetOffset(Vec3(0, 80, 0));
+			obj->AddComponent(collider);
+		}
+		//디버그용 콜라이더 매쉬 설정
+		if (DEBUG_MODE)
+		{
+			scene->AddGameObject(obj->GetCollider()->GetDebugCollider());
+		}
+
 		scene->AddGameObject(obj);
-		scene->m_terrain = obj;
+		scene->m_terrain = obj->GetTerrain();
+
 	}
 #pragma endregion
 
 #pragma region UI_Test
-	for (int32 i = 0; i < 6; i++)
+	for(int32 i = 0; i < 6; i++)
 	{
 		shared_ptr<GameObject> obj = make_shared<GameObject>();
 		obj->SetLayerIndex(GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI")); // UI
@@ -327,9 +400,9 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 			shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"Texture");
 
 			shared_ptr<Texture> texture;
-			if (i < 3)
+			if(i < 3)
 				texture = GEngine->GetRTGroup(RENDER_TARGET_GROUP_TYPE::G_BUFFER)->GetRTTexture(i);
-			else if (i < 5)
+			else if(i < 5)
 				texture = GEngine->GetRTGroup(RENDER_TARGET_GROUP_TYPE::LIGHTING)->GetRTTexture(i - 3);
 			else
 				texture = GEngine->GetRTGroup(RENDER_TARGET_GROUP_TYPE::SHADOW)->GetRTTexture(0);
@@ -360,82 +433,437 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 	}
 #pragma endregion
 
-#pragma region FBX
+#pragma region Characters Setting Example
 	{
-		//shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Chr_ScifiWorlds_AlienArmor_04.fbx");
-		////shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\tank_trexhwm.fbx");
+		int idx = 0;
+		shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Characters.fbx");
+		vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
+		shared_ptr<GameObject> go = gameObjects[idx];
+		//Transform 설정
+		{
+			shared_ptr<Transform> transform = go->GetTransform();
+			transform->SetLocalPosition(Vec3(2500.f, 1500.f, 2500.f));
+			//transform->SetLocalScale(Vec3(1.f, 1.f, 1.f));
+			//transform->SetLocalRotation(Vec3(XMConvertToRadians(0.f), XMConvertToRadians(0.f), XMConvertToRadians(0.f)));
+		}
+		
+		//강체 설정
+		{
+			shared_ptr<RigidBody> rb = make_shared<RigidBody>();
+			
+			rb->SetStatic(true);
+			rb->SetMass(80.f);
+			rb->SetRestitution(0.f);
+			go->SetCheckFrustum(false);
+			go->AddComponent(rb);
+		}
+		
+		//콜라이더 설정 
+		//콜라이더의 위치,회전은 Gameobject의 Transform을 사용
+		{
+			//OBB를 사용할 경우 이곳의 주석을 풀어서 사용
+			shared_ptr<OrientedBoxCollider> collider = make_shared<OrientedBoxCollider>();
+			collider->SetExtent(Vec3(50, 100, 50));
 
-		//for (int i = 0; i < 10; ++i) {
-		//	for (int j = 0; j < 10; ++j) {
-		//		vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
-		//		gameObjects[0]->GetTransform()->SetLocalRotation(Vec3(0.f, XMConvertToRadians(180.f), 0.f));
-		//		gameObjects[0]->GetTransform()->SetLocalPosition(Vec3(-150.f + 400.f * i, 500.f, 2000.f + 400.f * j));
-		//		gameObjects[0]->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
-		//		gameObjects[0]->SetCheckFrustum(false);
+			//Sphere를 사용할경우 이곳의 주석을 풀어서 사용
+			/*shared_ptr<SphereCollider> collider = make_shared<SphereCollider>();
+			collider->SetRadius(100.f);*/
 
-		//		gameObjects[0]->AddComponent(make_shared<TestDragon>());
 
-		//		gameObjects[0]->AddComponent(make_shared<RigidBody>());
-		//		gameObjects[0]->GetRigidBody()->m_useGravity = true;
-		//		if (i & 1) {
-		//			gameObjects[0]->AddComponent(make_shared<BoxCollider>());
-		//			gameObjects[0]->GetCollider()->SetExtent(Vec3(50, 100, 50));
-		//			gameObjects[0]->GetCollider()->SetCenter(Vec3(-150.f + 400.f * i, 500.f, 2000.f + 400.f * j));
-		//		}
-		//		else {
-		//			gameObjects[0]->AddComponent(make_shared<SphereCollider>());
-		//			gameObjects[0]->GetCollider()->SetRadius(90);
-		//			gameObjects[0]->GetCollider()->SetCenter(Vec3(-150.f + 400.f * i, 500.f, 2000.f + 400.f * j));
-		//		}
-		//		scene->AddGameObject(gameObjects[0]->GetCollider()->m_go);
-		//		scene->AddGameObject(gameObjects[0]);
-		//	}
-		//}
-		//{
-		//	vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
-		//	gameObjects[0]->GetTransform()->SetLocalRotation(Vec3(0.f, XMConvertToRadians(180.f), 0.f));
-		//	gameObjects[0]->GetTransform()->SetLocalPosition(Vec3(-100, -200, 300));
-		//	gameObjects[0]->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
-		//	gameObjects[0]->SetCheckFrustum(false);
-		//	gameObjects[0]->AddComponent(make_shared<TestDragon>());
-		//	gameObjects[0]->AddComponent(make_shared<RigidBody>());
-		//	gameObjects[0]->GetRigidBody()->m_useGravity = true;
-		//	gameObjects[0]->AddComponent(make_shared<BoxCollider>());
-		//	gameObjects[0]->GetCollider()->SetExtent(Vec3(50, 100, 50));
-		//	gameObjects[0]->GetCollider()->SetCenter(Vec3(-100, -200, 300));
 
-		//	//gameObjects[0]->GetMeshRenderer()->GetMaterial()->SetInt(0, 0);
-		//	scene->AddGameObject(gameObjects[0]->GetCollider()->m_go);
-		//	scene->AddGameObject(gameObjects[0]);
-		//}
-		//{
-		//	vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
-		//	gameObjects[0]->GetTransform()->SetLocalRotation(Vec3(0.f, XMConvertToRadians(180.f), 0.f));
-		//	gameObjects[0]->GetTransform()->SetLocalPosition(Vec3(-100+500*64, -200, 300));
-		//	gameObjects[0]->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
-		//	gameObjects[0]->SetCheckFrustum(false);
+			collider->SetOffset(Vec3(0, 80, 0));
+			go->AddComponent(collider);
+		}
 
-		//	gameObjects[0]->AddComponent(make_shared<RigidBody>());
-		//	gameObjects[0]->GetRigidBody()->m_useGravity = true;
-		//	gameObjects[0]->AddComponent(make_shared<BoxCollider>());
-		//	gameObjects[0]->GetCollider()->SetExtent(Vec3(50, 100, 50));
-		//	gameObjects[0]->GetCollider()->SetCenter(Vec3(-100+500*64, -200, 300));
+		//디버그용 콜라이더 매쉬 설정
+		if (DEBUG_MODE)
+		{
+			scene->AddGameObject(go->GetCollider()->GetDebugCollider());
+		}
 
-		//	//gameObjects[0]->GetMeshRenderer()->GetMaterial()->SetInt(0, 0);
-		//	scene->AddGameObject(gameObjects[0]->GetCollider()->m_go);
-		//	scene->AddGameObject(gameObjects[0]);
-		//}	
+		//Instancing 유무 설정(사용:0,0  미사용:0,1)
+		{
+			go->GetMeshRenderer()->GetMaterial()->SetInt(0, 0);
+		}
+
+		//추가적인 컴포넌트 부착
+		{
+			//go->AddComponent(make_shared<Player>());
+			//go->AddComponent(make_shared<PlayerAnimation>());
+		}
+
+		//카메라 세팅
+		{
+			shared_ptr<Camera> camera = scene->GetMainCamera();
+			camera->GetTransform()->SetParent(go->GetTransform());
+			camera->GetTransform()->SetLocalPosition(Vec3(0.f, 140.f, 40.f));
+			camera->GetTransform()->SetLocalRotation(Vec3(XMConvertToRadians(10.f), XMConvertToRadians(0.f), XMConvertToRadians(0.f)));
+		}
+
+		//플레이어 컴포넌트 부착
+		{
+			shared_ptr<Player> playerScript = make_shared<Player>();
+			// 총알 오브젝트 풀 생성
+			for (int i = 0; i < 20; ++i)
+			{
+				shared_ptr<GameObject> bullet = make_shared<GameObject>();
+				bullet->SetName(L"Bullet");
+
+				{
+					bullet->AddComponent(make_shared<Transform>());
+					bullet->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 0.f));
+					bullet->GetTransform()->SetLocalScale(Vec3(5.f, 5.f, 5.f));
+				}
+
+				shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
+				{
+					shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadSphereMesh();
+					meshRenderer->SetMesh(mesh);
+				}
+
+				{
+					shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"WireFrame");
+					shared_ptr<Material> material = make_shared<Material>();
+					material->SetShader(shader);
+
+					material->SetInt(3, 1);
+					material->SetVec4(3, Vec4(1, 1, 1, 1));
+					meshRenderer->SetMaterial(material);
+				}
+				bullet->AddComponent(meshRenderer);
+
+				{
+					shared_ptr<RigidBody> rb = make_shared<RigidBody>();
+					rb->SetStatic(true);
+					rb->SetRestitution(0.f);
+					bullet->SetCheckFrustum(false);
+					bullet->AddComponent(rb);
+				}
+				{
+					//shared_ptr<SphereCollider> collider = make_shared<SphereCollider>();
+					//collider->SetRadius(10.f);
+					shared_ptr<OrientedBoxCollider> collider = make_shared<OrientedBoxCollider>();
+					collider->SetExtent(Vec3(10, 10, 10));
+					bullet->AddComponent(collider);
+				}
+				{
+					//bullet->GetMeshRenderer()->GetMaterial()->SetInt(0, 0);
+				}
+				bullet->SetActive(true);
+
+				shared_ptr<PlayerBullet> bulletScript = make_shared<PlayerBullet>();
+				playerScript->AddBullet(bulletScript);
+
+				bullet->AddComponent(bulletScript);
+
+				scene->AddGameObject(bullet);
+
+			}
+			playerScript->SetPlayerCamera(scene->GetMainCamera());
+			go->AddComponent(playerScript);
+		}
+
+		scene->SetPlayer(go, MAIN_PLAYER);
+		scene->AddGameObject(go);
+
+	}
+
+
+
+#pragma endregion
+
+#pragma region Enemy
+	{
+		for (int i = 0; i < 1; ++i)
+		{
+			int idx = 0;
+			shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\BR_Characters.fbx");
+			vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
+			shared_ptr<GameObject> go = gameObjects[idx];
+			//Transform 설정
+			{
+				shared_ptr<Transform> transform = go->GetTransform();
+				transform->SetLocalPosition(Vec3(5000.f + (i / 5) * 1000.f, 1500.f, 5000.f + i % 5 * 1000.f));
+				transform->SetLocalScale(Vec3(1.2f, 1.2f, 1.2f));
+				//transform->SetLocalRotation(Vec3(XMConvertToRadians(0.f), XMConvertToRadians(0.f), XMConvertToRadians(0.f)));
+			}
+
+			//강체 설정
+			{
+				shared_ptr<RigidBody> rb = make_shared<RigidBody>();
+
+				rb->SetStatic(true);
+				rb->SetMass(150.f);
+				rb->SetRestitution(0.f);
+				go->SetCheckFrustum(false);
+				go->AddComponent(rb);
+			}
+
+			//콜라이더 설정 
+			//콜라이더의 위치,회전은 Gameobject의 Transform을 사용
+			{
+				//OBB를 사용할 경우 이곳의 주석을 풀어서 사용
+				shared_ptr<OrientedBoxCollider> collider = make_shared<OrientedBoxCollider>();
+				collider->SetExtent(Vec3(50, 100, 50));
+
+				//Sphere를 사용할경우 이곳의 주석을 풀어서 사용
+				/*shared_ptr<SphereCollider> collider = make_shared<SphereCollider>();
+				collider->SetRadius(100.f);*/
+
+
+
+				collider->SetOffset(Vec3(0, 100, 0));
+				go->AddComponent(collider);
+			}
+
+			//디버그용 콜라이더 매쉬 설정
+			if (DEBUG_MODE)
+			{
+				scene->AddGameObject(go->GetCollider()->GetDebugCollider());
+			}
+
+			//Instancing 유무 설정(사용:0,0  미사용:0,1)
+			{
+				go->GetMeshRenderer()->GetMaterial()->SetInt(0, 0);
+			}
+
+			//추가적인 컴포넌트 부착
+			{
+				shared_ptr<Enemy> enemyScript = make_shared<Enemy>();
+				enemyScript->AddPlayer(scene->GetPlayers()[0]);
+				go->AddComponent(enemyScript);
+				//go->AddComponent(make_shared<PlayerAnimation>());
+			}
+
+			scene->AddGameObject(go);
+		}
 	}
 #pragma endregion
 
-#pragma region Network
+
+#pragma region Item
 	{
-		shared_ptr<GameObject> network = make_shared<GameObject>();
-		network->SetName(L"Network");
-		network->AddComponent(make_shared<NetworkScript>());
-		scene->AddGameObject(network);
+		int idx = 0;
+		shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Item_Cylinder.fbx");
+		vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
+		shared_ptr<GameObject> go = gameObjects[idx];
+
+		//Transform 설정
+		{
+			shared_ptr<Transform> transform = go->GetTransform();
+			transform->SetLocalPosition(Vec3(3000.f, 300.f, 5000.f));
+			//transform->SetLocalScale(Vec3(1.f, 1.f, 1.f));
+			//transform->SetLocalRotation(Vec3(XMConvertToRadians(0.f), XMConvertToRadians(0.f), XMConvertToRadians(0.f)));
+		}
+
+		//강체 설정
+		{
+			shared_ptr<RigidBody> rb = make_shared<RigidBody>();
+
+			rb->SetStatic(true);
+			rb->SetUseGravity(false);
+			rb->SetMass(10000000);
+			go->SetCheckFrustum(false);
+			go->AddComponent(rb);
+		}
+
+		//콜라이더 설정 
+		//콜라이더의 위치,회전은 Gameobject의 Transform을 사용
+		{
+			//OBB를 사용할 경우 이곳의 주석을 풀어서 사용
+			/*shared_ptr<OrientedBoxCollider> collider = make_shared<OrientedBoxCollider>();
+			collider->SetExtent(Vec3(50, 100, 50));*/
+
+			//Sphere를 사용할경우 이곳의 주석을 풀어서 사용
+			shared_ptr<SphereCollider> collider = make_shared<SphereCollider>();
+			collider->SetRadius(30.f);
+
+
+
+			collider->SetOffset(Vec3(0, 15, 0));
+			go->AddComponent(collider);
+		}
+
+		//디버그용 콜라이더 매쉬 설정
+		if (DEBUG_MODE)
+		{
+			scene->AddGameObject(go->GetCollider()->GetDebugCollider());
+		}
+
+		//Instancing 유무 설정(사용:0,0  미사용:0,1)
+		{
+			go->GetMeshRenderer()->GetMaterial()->SetInt(0, 0);
+		}
+
+		//추가적인 컴포넌트 부착
+		{
+			go->AddComponent(make_shared<Item>());
+		}
+
+		scene->AddGameObject(go);
+
 	}
+
+
+
 #pragma endregion
+
+#pragma region Bomb
+	{
+		shared_ptr<GameObject> go = make_shared<GameObject>();
+		//Resource에서 메쉬 로드용
+		{
+			
+			go->AddComponent(make_shared<Transform>());
+			shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
+			{
+				shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadSphereMesh();
+				meshRenderer->SetMesh(mesh);
+			}
+
+			{
+				shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"WireFrame");
+				shared_ptr<Material> material = make_shared<Material>();
+				material->SetShader(shader);
+
+				material->SetInt(3, 1);
+				material->SetVec4(3, Vec4(1, 1, 1, 1));
+				meshRenderer->SetMaterial(material);
+			}
+			go->AddComponent(meshRenderer);
+		}
+
+		//Transform 설정
+		{
+			shared_ptr<Transform> transform = go->GetTransform();
+			transform->SetLocalPosition(Vec3(15000.f, 1500.f, 2000.f));
+			//transform->SetLocalScale(Vec3(1.f, 1.f, 1.f));
+			//transform->SetLocalRotation(Vec3(XMConvertToRadians(0.f), XMConvertToRadians(0.f), XMConvertToRadians(0.f)));
+		}
+
+		//강체 설정
+		{
+			shared_ptr<RigidBody> rb = make_shared<RigidBody>();
+
+			rb->SetStatic(true);
+			rb->SetMass(100000.f);
+			rb->SetRestitution(0.f);
+			go->SetCheckFrustum(false);
+			go->AddComponent(rb);
+		}
+
+		//콜라이더 설정 
+		//콜라이더의 위치,회전은 Gameobject의 Transform을 사용
+		{
+			//OBB를 사용할 경우 이곳의 주석을 풀어서 사용
+			/*shared_ptr<OrientedBoxCollider> collider = make_shared<OrientedBoxCollider>();
+			collider->SetExtent(Vec3(50, 100, 50));*/
+
+			//Sphere를 사용할경우 이곳의 주석을 풀어서 사용
+			shared_ptr<SphereCollider> collider = make_shared<SphereCollider>();
+			collider->SetRadius(100.f);
+
+
+
+			//collider->SetOffset(Vec3(0, 80, 0));
+			go->AddComponent(collider);
+		}
+
+		//디버그용 콜라이더 매쉬 설정
+		if (DEBUG_MODE)
+		{
+			scene->AddGameObject(go->GetCollider()->GetDebugCollider());
+		}
+
+		//Instancing 유무 설정(사용:0,0  미사용:0,1)
+		{
+			go->GetMeshRenderer()->GetMaterial()->SetInt(0, 0);
+		}
+
+		//추가적인 컴포넌트 부착
+		{
+			go->AddComponent(make_shared<Bomb>());
+		}
+
+		scene->AddGameObject(go);
+
+	}
+
+
+
+#pragma endregion
+
+#pragma region test
+	
+
+	
+
+		for (int i = 0; i < 10; ++i) {
+
+
+			shared_ptr<GameObject> gm = make_shared<GameObject>();
+			gm->AddComponent(make_shared<Transform>());
+			gm->GetTransform()->SetLocalScale(Vec3(150.f, 100.f, 100.f));
+			gm->GetTransform()->SetLocalPosition(Vec3(1500.f+ 50.f*i, 1500.f + 400.f *i, 2000.f + 0*i ));
+
+			shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
+			{
+				shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadCubeMesh();
+				meshRenderer->SetMesh(mesh);
+			}
+
+			{
+				shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"WireFrame");
+				shared_ptr<Material> material = make_shared<Material>();
+				material->SetShader(shader);
+
+				material->SetInt(3, 1);
+				material->SetVec4(3, Vec4(1, 1, 1, 1));
+				meshRenderer->SetMaterial(material);
+			}
+			gm->AddComponent(meshRenderer);
+			
+			gm->AddComponent(make_shared<RigidBody>());
+			//gm->AddComponent(make_shared<TestDragon>());
+
+			if (i & 1) {
+				gm->AddComponent(make_shared<OrientedBoxCollider>());
+				gm->GetCollider()->SetExtent(Vec3(75, 50, 50));
+				
+
+				/*gm->AddComponent(make_shared<SphereCollider>());
+				gm->GetCollider()->SetRadius(100.f);*/
+
+
+			}
+			else {
+				/*gm->AddComponent(make_shared<SphereCollider>());
+				gm->GetCollider()->SetRadius(100.f);*/
+
+				gm->AddComponent(make_shared<OrientedBoxCollider>());
+				gm->GetCollider()->SetExtent(Vec3(75, 50, 50));
+
+
+			}
+
+
+
+			if (gm->GetCollider()->GetDebugCollider() != nullptr)
+				scene->AddGameObject(gm->GetCollider()->GetDebugCollider());
+			scene->AddGameObject(gm);
+		}
+
+#pragma endregion 
+
+
+//#pragma region Network
+//	{
+//		shared_ptr<GameObject> network = make_shared<GameObject>();
+//		network->SetName(L"Network");
+//		network->AddComponent(make_shared<NetworkScript>());
+//		scene->AddGameObject(network);
+//	}
+//#pragma endregion
 
 	return scene;
 }

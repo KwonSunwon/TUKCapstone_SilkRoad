@@ -10,11 +10,17 @@
 #include "BaseCollider.h"
 #include "SphereCollider.h"
 #include "BoxCollider.h"
+#include "OrientedBoxCollider.h"
 #include "MeshRenderer.h"
 #include "OcNode.h"
 #include "OcTree.h"
 #include "Network.h"
+#include "Collision.h"
+#include "Manifold.h"
 
+#include "RigidBody.h"
+#include "SceneManager.h"
+#include "Terrain.h"
 Scene::Scene()
 {
 
@@ -235,49 +241,205 @@ void Scene::RemoveGameObject(shared_ptr<GameObject> gameObject)
 }
 
 
-void Scene::IntersectColliders(shared_ptr<BaseCollider> collider1, shared_ptr<BaseCollider> collider2)
+void Scene::IntersectColliders(shared_ptr<BaseCollider> bs, shared_ptr<BaseCollider> bsDst)
 {
-	if(!collider1 || !collider2)
+	shared_ptr<RigidBody> rb1 = bs->GetRigidBody();
+	shared_ptr<RigidBody> rb2 = bsDst->GetRigidBody();
+	if (rb1->GetStatic() && rb2->GetStatic())
 		return;
 
-	switch(collider2->GetColliderType()) {
-	case ColliderType::Sphere: {
-		auto sphereCollider = dynamic_pointer_cast<SphereCollider>(collider2);
 
-		if(collider1->Intersects(sphereCollider->GetBoundingSphere())) {
-			collider1->setColor(Vec4(1, 0, 0, 0), true);
-			collider2->setColor(Vec4(1, 0, 0, 0), true);
+
+	shared_ptr<Vec3> normal = make_shared<Vec3>();
+	shared_ptr<float> depth = make_shared<float>();
+
+	*normal = { 0,0,0 };
+	*depth = 0.f;
+	
+
+	if (bs->GetColliderId() > bsDst->GetColliderId())
+		return;
+
+	shared_ptr<Vec3> norm = make_shared<Vec3>();
+	if (bs->GetGameObject()->GetTerrain())
+	{
+		Vec3 pos = bsDst->GetRigidBody()->GetPosition();
+		
+		shared_ptr<float> h = make_shared < float >();
+		m_terrain->getHeight(pos.x, pos.z, h, norm);
+		
+
+		bs->SetCenter(Vec3(pos.x, *h - 100, pos.z));
+	}
+
+	if (bs->GetColliderType() == ColliderType::Sphere) {
+		shared_ptr<BoundingSphere> boundingSphereSrc = dynamic_pointer_cast<SphereCollider>(bs)->GetBoundingSphere();
+
+
+		if (bsDst->GetColliderType() == ColliderType::Sphere) {
+			shared_ptr<BoundingSphere> boundingSphereDst = dynamic_pointer_cast<SphereCollider>(bsDst)->GetBoundingSphere();
+
+			if (!CollisionSphere(boundingSphereSrc, boundingSphereDst, normal, depth))
+				return;
 		}
-		break;
-	}
-	case ColliderType::Box: {
-		auto boxCollider = dynamic_pointer_cast<BoxCollider>(collider2);
-		if(collider1->Intersects(boxCollider->GetBoundingBox())) {
-			collider1->setColor(Vec4(1, 0, 0, 0), true);
-			collider2->setColor(Vec4(1, 0, 0, 0), true);
+
+
+		else if (bsDst->GetColliderType() == ColliderType::OrientedBox) {
+			shared_ptr<BoundingOrientedBox> boundingOrientedBoxDst = dynamic_pointer_cast<OrientedBoxCollider>(bsDst)->GetBoundingOrientedBox();
+
+			if (!CollisionSphereBox(boundingSphereSrc, boundingOrientedBoxDst, normal, depth, false))
+				return;
 		}
-		break;
+
 	}
-	default:
-		// Handle other collider types if necessary
-		break;
+
+
+	else if (bs->GetColliderType() == ColliderType::OrientedBox) {
+		shared_ptr<BoundingOrientedBox> boundingOrientedBoxSrc = dynamic_pointer_cast<OrientedBoxCollider>(bs)->GetBoundingOrientedBox();
+
+
+		if (bsDst->GetColliderType() == ColliderType::OrientedBox) {
+			shared_ptr<BoundingOrientedBox> boundingOrientedBoxDst = dynamic_pointer_cast<OrientedBoxCollider>(bsDst)->GetBoundingOrientedBox();
+
+			if (!CollisionBox(boundingOrientedBoxSrc, boundingOrientedBoxDst, normal, depth))
+				return;
+		}
+
+
+		else if (bsDst->GetColliderType() == ColliderType::Sphere) {
+			shared_ptr<BoundingSphere> boundingSphereDst = dynamic_pointer_cast<SphereCollider>(bsDst)->GetBoundingSphere();
+
+			if (!CollisionSphereBox(boundingSphereDst, boundingOrientedBoxSrc, normal, depth, true))
+				return;
+		}
 	}
+
+
+	bs->setColor(Vec4(1, 0, 0, 0), true);
+	bsDst->setColor(Vec4(1, 0, 0, 0), true);
+	if (bs->GetGameObject()->GetTerrain())
+	{
+		rb2->Move(*norm * (*depth));
+		shared_ptr<Manifold> contact = make_shared<Manifold>(rb1, rb2, norm, *depth, make_shared<vector<Vec3>>(), make_shared<int>());
+		FindContactPoints(bs, bsDst, contact->m_contacts, contact->m_contectCount, contact->m_normal);
+		shared_ptr<Vec3> normal2 = make_shared<Vec3>();
+		*normal2 = -*normal;
+		shared_ptr<Manifold> contact2 = make_shared<Manifold>(rb2, rb1, normal2, *depth, make_shared<vector<Vec3>>(), make_shared<int>());
+		rb1->AddCollideEvent(contact);
+		rb2->AddCollideEvent(contact2);
+		m_contacts.push_back(contact);
+		return;
+	}
+
+
+	if (rb1->GetStatic()) {
+		rb2->Move(*normal * (*depth));
+	}
+
+	else if (rb2->GetStatic()) {
+		rb1->Move(-(*normal) * (*depth));
+	}
+	else {
+		rb1->Move(-(*normal) * (*depth) / 2.f);
+		rb2->Move(*normal * (*depth) / 2.f);
+	}
+	shared_ptr<Manifold> contact = make_shared<Manifold>(rb1, rb2, normal, *depth, make_shared<vector<Vec3>>(), make_shared<int>());
+	FindContactPoints(bs, bsDst, contact->m_contacts, contact->m_contectCount, contact->m_normal);
+	shared_ptr<Vec3> normal2 = make_shared<Vec3>();
+	*normal2 = -*normal;
+	shared_ptr<Manifold> contact2 = make_shared<Manifold>(rb2, rb1, normal2, *depth, make_shared<vector<Vec3>>(), make_shared<int>());
+	rb1->AddCollideEvent(contact);
+	rb2->AddCollideEvent(contact2);
+	m_contacts.push_back(contact);
+
+	
+
 }
 
 void Scene::testCollision()
 {
-	for(auto& cgo : m_collidableGameObjects)
+	m_contacts.clear();
+	for (auto& cgo : m_collidableGameObjects)
 	{
-		cgo->GetCollider()->setColor(Vec4(0, 0, 0, 0), false);
-	}
-	for(auto& cgo : m_collidableGameObjects)
-	{
-		m_ocTree->CollisionInspection(cgo->GetCollider());
+		cgo->GetCollider()->setColor(Vec4(0,0,0,0),false);
+		cgo->GetRigidBody()->GetCollideEvent()->clear();
 	}
 
-	/*for (int i = 0; i < m_collidableGameObjects.size(); ++i) {
+	/*for (auto& cgo : m_collidableGameObjects)
+	{
+		m_ocTree->CollisionInspection(cgo->GetCollider());
+	}*/
+
+	for (int i = 0; i < m_collidableGameObjects.size(); ++i) {
 		for (int j = i + 1; j < m_collidableGameObjects.size(); ++j) {
 			IntersectColliders(m_collidableGameObjects[i]->GetCollider(), m_collidableGameObjects[j]->GetCollider());
 		}
+	}
+
+	for (shared_ptr<Manifold> contact : m_contacts) {
+		shared_ptr<RigidBody> rb1 = contact->m_rb1;
+		shared_ptr<RigidBody> rb2 = contact->m_rb2;
+		
+
+
+		Vec3 normal = *contact->m_normal;
+
+
+		Vec3 relativeVelocity = rb2->GetLinearVelocity() - rb1->GetLinearVelocity();
+		if (relativeVelocity.Dot(normal) > 0.f) {
+			return;
+		}
+
+		float e = min(rb1->GetRestitution(), rb2->GetRestitution());
+		float j = -(1.f + e) * relativeVelocity.Dot(normal);
+		j /= rb1->GetInvMass() + rb2->GetInvMass();
+		Vec3 impulse = (normal) * j;
+
+		rb1->SetLinearVelocity(rb1->GetLinearVelocity() - impulse * rb1->GetInvMass());
+		rb2->SetLinearVelocity(rb2->GetLinearVelocity() + impulse * rb2->GetInvMass());
+	}
+
+
+	/*for (shared_ptr<Manifold> contact : m_contacts) {
+		shared_ptr<RigidBody> rb1 = contact->m_rb1;
+		shared_ptr<RigidBody> rb2 = contact->m_rb2;
+		Vec3 normal = *contact->m_normal;
+		int contactCounts = *contact->m_contectCount;
+		vector<Vec3> constactPoints = *contact->m_contacts;
+
+		
+
+		float e = min(rb1->GetRestitution(), rb2->GetRestitution());
+
+		for (int i = 0; i < contactCounts; ++i) {
+			Vec3 ra = constactPoints[i] - rb1->GetPosition();
+			Vec3 rb = constactPoints[i] - rb2->GetPosition()
+			
+
+			Vec3 relativeVelocity = rb2->GetLinearVelocity() - rb1->GetLinearVelocity();
+			if (relativeVelocity.Dot(normal) > 0.f) {
+				return;
+			}
+		}
+		
+
+
+		float j = -(1.f + e) * relativeVelocity.Dot(normal);
+		j /= rb1->GetInvMass() + rb2->GetInvMass();
+		Vec3 impulse = (normal)*j;
+
+		rb1->SetLinearVelocity(rb1->GetLinearVelocity() - impulse * rb1->GetInvMass());
+		rb2->SetLinearVelocity(rb2->GetLinearVelocity() + impulse * rb2->GetInvMass());
 	}*/
+	
+
+}
+
+void Scene::PhysicsStep(int iterations)
+{
+	for (const shared_ptr<GameObject>& gameObject : m_gameObjects)
+	{
+		if (gameObject->GetRigidBody())
+			gameObject->GetRigidBody()->MovementStep(iterations);
+	}
 }

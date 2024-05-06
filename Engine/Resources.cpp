@@ -325,7 +325,8 @@ shared_ptr<MeshData> Resources::LoadFBX(const wstring& path)
 
 	shared_ptr<MeshData> meshData = Get<MeshData>(key);
 	if (meshData)
-		return meshData;
+		return meshData->Clone();
+		//return meshData;
 
 	meshData = MeshData::LoadFromFBX(path);
 	meshData->SetName(key);
@@ -565,6 +566,7 @@ void Resources::CreateDefaultShader()
 		{
 			SHADER_TYPE::DEFERRED,
 			RASTERIZER_TYPE::CULL_BACK,
+			//RASTERIZER_TYPE::WIREFRAME,
 			DEPTH_STENCIL_TYPE::LESS,
 			BLEND_TYPE::DEFAULT,
 			D3D_PRIMITIVE_TOPOLOGY_3_CONTROL_POINT_PATCHLIST

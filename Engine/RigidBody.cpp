@@ -9,6 +9,9 @@
 #include "SceneManager.h"
 #include "Scene.h"
 #include "Terrain.h"
+#include "Manifold.h"
+
+
 
 RigidBody::RigidBody() : Component(COMPONENT_TYPE::RIGIDBODY)
 {
@@ -22,100 +25,127 @@ RigidBody::~RigidBody()
 
 void RigidBody::Awake()
 {
-
+	//m_inertia
+	m_manifolds = make_shared<vector<shared_ptr<Manifold>>>();
+	m_manifolds->reserve(100);
+	m_position = GetTransform()->GetLocalPosition();
+	m_baseCollider = GetGameObject()->GetCollider();
+	//m_gameTerrain = GET_SINGLE(SceneManager)->GetActiveScene()->m_terrain->GetTerrain();
 }
 
 void RigidBody::FinalUpdate()
 {
-	if (m_isKinematic)
-		return;
-
-	applyGravity();
-	applyDrag();
-	applyFriction();
-	updatePosition();
-}
-
-void RigidBody::applyGravity()
-{
-	if (!m_useGravity)
-		return;
-
-	accelerate(m_gravity);
-}
-
-void RigidBody::applyFriction()
-{
-	float normalForce = m_mass * m_gravity.y;
-	float friction = m_frictionCoef * normalForce;
-	Vec3 frictionDir = m_velocity;
-	float mag = frictionDir.Length();
-	if (mag > FLT_EPSILON) {
-		frictionDir /= mag;
-		Vec3 frictionForce = frictionDir * friction;
-		Vec3 frictionAcc = frictionForce / m_mass;
-		frictionAcc.y = 0;
-		accelerate(frictionAcc);
-	}
-	 
-}
-
-void RigidBody::applyDrag()
-{
-	float dragMag = m_velocity.LengthSquared() * m_drag;
-	Vec3 dragDir = m_velocity;
-	dragDir.Normalize();
-	dragDir *= -dragMag;
-	addForce(dragDir, FORCEMODE::IMPULSE);
-}
-
-void RigidBody::updatePosition()
-{
-	m_position = GetTransform()->GetLocalPosition();
-	m_priorPosition = m_position;
-	m_velocity += m_acceleration * DELTA_TIME;
-	m_position += m_velocity * DELTA_TIME;
-	m_acceleration = {};
-	float y = GET_SINGLE(SceneManager)->GetActiveScene()->m_terrain->GetTerrain()->getHeight(m_position.x, m_position.z);
-	if (m_position.y - y <= FLT_EPSILON) {
-		m_position.y = y;
-		m_velocity.y = 0;
-	}
 	GetTransform()->SetLocalPosition(m_position);
+}
+
+void RigidBody::Move(Vec3 amount)
+{
+	m_position += amount;
+	m_baseCollider->SetCenter(m_position);
+	m_baseCollider->UpdateNodePos();
+}
+
+void RigidBody::MoveTo(Vec3 position)
+{
+	m_position = position;
+	m_baseCollider->SetCenter(m_position);
+	m_baseCollider->UpdateNodePos();
+}
+
+void RigidBody::MovementStep(int iterations)
+{
+
+	if (m_isStatic)
+		return;
+
+
+	if (m_position.y < -10) {
+		m_position.y = 2000;
+	}
 	
-	Vec3 difPos = m_position - m_priorPosition;
-	if (difPos.Length() > FLT_EPSILON)
-	{
-		GetGameObject()->GetCollider()->UpdateNodePos();
+	ApplyFriction(iterations);
+	ApplyAccVel(iterations);
+
+	
+
+	m_baseCollider->SetCenter(m_position);
+	if (m_linearVelocity.LengthSquared() > 0.f) {
+		m_baseCollider->UpdateNodePos();
 	}
 }
 
-void RigidBody::accelerate(Vec3 acc)
+void RigidBody::AddCollideEvent(shared_ptr<Manifold> event)
 {
-	m_acceleration += acc;
+	m_manifolds->push_back(event);
 }
 
-void RigidBody::addForce(Vec3 dir, FORCEMODE fm)
+void RigidBody::ApplyFriction(int iterations)
 {
-	switch (fm) {
-	case FORCEMODE::FORCE:
-		break;
+	if (m_frictionCoef < FLT_EPSILON)
+		return;
 
-	case FORCEMODE::ACCELERATION:
-		accelerate(dir);
-		break;
 
-	case FORCEMODE::IMPULSE:
-		accelerate(dir / m_mass);
-		break;
 
-	case FORCEMODE::VELOCITYCHANGE:
-		m_velocity += dir;
-		break;
+	float normalForce = m_mass * -m_gravity.y;
+	float friction = m_frictionCoef * normalForce;
 
-	default:
-		
-		break;
+	Vec3 frictionDir = -m_linearVelocity;
+	float mag = frictionDir.Length();
+
+	if (mag < FLT_EPSILON)
+		return;
+
+
+
+
+	frictionDir /= mag;
+
+	Vec3 frictionForce = frictionDir * friction;
+	Vec3 frictionAcc = frictionForce / m_mass;
+	Vec3 resultVel = m_linearVelocity + frictionAcc * DELTA_TIME / (float)iterations;
+
+	if (resultVel.x * m_linearVelocity.x < 0.f) {
+		m_linearVelocity.x = 0;
+	}
+	else {
+		m_linearVelocity.x = resultVel.x;
+	}
+
+
+	if (resultVel.z * m_linearVelocity.z < 0.f) {
+		m_linearVelocity.z = 0;
+	}
+	else {
+		m_linearVelocity.z = resultVel.z;
 	}
 }
+
+void RigidBody::ApplyAccVel(int iterations)
+{
+
+	Vec3 acc = m_force / m_mass;
+	m_linearVelocity += acc * DELTA_TIME;
+	if (m_useGravity)
+		m_linearVelocity += m_gravity * DELTA_TIME / (float)iterations;
+
+	Vec3 XZVel = GetXZVelocity();
+	if (XZVel.LengthSquared() > m_maxSpeed * m_maxSpeed) {
+		XZVel.Normalize();
+		XZVel *= m_maxSpeed;
+		m_linearVelocity.x = XZVel.x;
+		m_linearVelocity.z = XZVel.z;
+	}
+	if (m_linearVelocity.y > m_maxAirSpeed) {
+		m_linearVelocity.y = m_maxAirSpeed;
+	}
+
+	m_position += m_linearVelocity * DELTA_TIME / (float)iterations;
+	m_rotation += m_rotationVelocity * DELTA_TIME / (float)iterations;
+
+
+	m_force = Vec3{ 0,0,0 };
+}
+
+
+
 

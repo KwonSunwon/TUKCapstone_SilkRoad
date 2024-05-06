@@ -4,6 +4,8 @@ class OcNode;
 class GameObject;
 class BaseCollider;
 
+class Terrain;
+
 class OcTree
 {
 private:
@@ -19,8 +21,13 @@ public:
 	/* 충돌 검사 */
 	void CollisionInspection(shared_ptr<BaseCollider> bs);
 
+	void CollisionTerrain(shared_ptr<BaseCollider> bs, shared_ptr<BaseCollider> bsTerrain);
+
 	void Update();
 	void UpdateOcnode(shared_ptr<OcNode> currentNode);
+
+	
+
 
 private:
 	/* 오브젝트의 AABB가 속하는 노드를 찾아 반환 */
@@ -29,4 +36,8 @@ private:
 	void CollisionInspectionToParrent(shared_ptr<BaseCollider> bs, shared_ptr<OcNode> currentNode);
 	/* 현재 노드에 자식에 대한 충돌 검사를 수행 */
 	void CollisionInspectionToChild(shared_ptr<BaseCollider> bs, shared_ptr<OcNode> currentNode);
+
+	
+
+	shared_ptr<Terrain> m_terrain;
 };

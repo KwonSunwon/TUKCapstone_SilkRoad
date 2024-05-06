@@ -16,9 +16,6 @@
     <Filter Include="Object">
       <UniqueIdentifier>{dd23f47d-3ac2-4f96-9bfe-4a6fac248639}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Object\Test">
-      <UniqueIdentifier>{1cfe4b64-4ca1-4958-b16f-73f8ae1985c3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Object\Component">
       <UniqueIdentifier>{915d1c10-9db1-4fdb-887a-d0160f593ea1}</UniqueIdentifier>
     </Filter>
@@ -30,6 +27,33 @@
     </Filter>
     <Filter Include="Server">
       <UniqueIdentifier>{5a638558-91e5-4352-b1f4-acca415aa0b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Physics">
+      <UniqueIdentifier>{69fe4dfc-772f-4fa4-9a4d-1e3a1d5e35ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Player">
+      <UniqueIdentifier>{1cfe4b64-4ca1-4958-b16f-73f8ae1985c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Bomb">
+      <UniqueIdentifier>{e419b66e-f17f-416b-aff0-4677d628f19b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Player\PlayerStates">
+      <UniqueIdentifier>{c0ad6aea-c8b8-4cfe-ae0a-1ec885a9b706}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Enemy">
+      <UniqueIdentifier>{b7d422f7-7def-441f-b87d-c629e129ff8f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Player\Projectile">
+      <UniqueIdentifier>{4343e8bf-79a5-4962-adab-511a196d7b61}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Player\Projectile\Bullet">
+      <UniqueIdentifier>{46270b2d-2eff-4b70-8f5b-5ab9a441fb86}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Item">
+      <UniqueIdentifier>{9ccdd75e-2166-480a-b2de-89402c2fac78}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Enemy\EnemyState">
+      <UniqueIdentifier>{537641c0-1380-49b3-a5ff-e0588bd78b83}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -91,7 +115,7 @@
       <Filter>Utils</Filter>
     </ClCompile>
     <ClCompile Include="TestCameraScript.cpp">
-      <Filter>Object\Test</Filter>
+      <Filter>Object\Player</Filter>
     </ClCompile>
     <ClCompile Include="Resources.cpp">
       <Filter>Manager</Filter>
@@ -154,7 +178,7 @@
       <Filter>Object\Component</Filter>
     </ClCompile>
     <ClCompile Include="TestDragon.cpp">
-      <Filter>Object\Test</Filter>
+      <Filter>Object\Player</Filter>
     </ClCompile>
     <ClCompile Include="RigidBody.cpp">
       <Filter>Object\Component</Filter>
@@ -162,11 +186,11 @@
     <ClCompile Include="BoxCollider.cpp">
       <Filter>Object\Component\Collider</Filter>
     </ClCompile>
-    <ClCompile Include="OcNode.cpp">
-      <Filter>Manager</Filter>
+    <ClCompile Include="OrientedBoxCollider.cpp">
+      <Filter>Object\Component\Collider</Filter>
     </ClCompile>
-    <ClCompile Include="OcTree.cpp">
-      <Filter>Manager</Filter>
+    <ClCompile Include="AssimpLoader.cpp">
+      <Filter>Utils</Filter>
     </ClCompile>
     <ClCompile Include="Network.cpp">
       <Filter>Server</Filter>
@@ -176,7 +200,56 @@
     </ClCompile>
     <ClCompile Include="D3D1211On12.cpp" />
     <ClCompile Include="TestPlayer.cpp">
-      <Filter>Object\Test</Filter>
+      <Filter>Object\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Collision.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="OcNode.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="OcTree.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Manifold.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Object\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerAnimation.cpp">
+      <Filter>Object\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Bomb.cpp">
+      <Filter>Object\Bomb</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D1211On12.cpp" />
+    <ClCompile Include="MapObjectsLoader.cpp">
+      <Filter>Object\Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerState.cpp">
+      <Filter>Object\Player\PlayerStates</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerOnGroundMoveState.cpp">
+      <Filter>Object\Player\PlayerStates</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerOnGroundAimState.cpp">
+      <Filter>Object\Player\PlayerStates</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerOnAirState.cpp">
+      <Filter>Object\Player\PlayerStates</Filter>
+    </ClCompile>
+    <ClCompile Include="Item.cpp">
+      <Filter>Object\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerBullet.cpp">
+      <Filter>Object\Player\Projectile\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>Object\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyState.cpp">
+      <Filter>Object\Enemy\EnemyState</Filter>
     </ClCompile>
     <ClCompile Include="Packet.cpp" />
   </ItemGroup>
@@ -242,7 +315,7 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="TestCameraScript.h">
-      <Filter>Object\Test</Filter>
+      <Filter>Object\Player</Filter>
     </ClInclude>
     <ClInclude Include="Resources.h">
       <Filter>Manager</Filter>
@@ -305,7 +378,7 @@
       <Filter>Object\Component</Filter>
     </ClInclude>
     <ClInclude Include="TestDragon.h">
-      <Filter>Object\Test</Filter>
+      <Filter>Object\Player</Filter>
     </ClInclude>
     <ClInclude Include="RigidBody.h">
       <Filter>Object\Component</Filter>
@@ -313,11 +386,11 @@
     <ClInclude Include="BoxCollider.h">
       <Filter>Object\Component\Collider</Filter>
     </ClInclude>
-    <ClInclude Include="OcNode.h">
-      <Filter>Manager</Filter>
+    <ClInclude Include="OrientedBoxCollider.h">
+      <Filter>Object\Component\Collider</Filter>
     </ClInclude>
-    <ClInclude Include="OcTree.h">
-      <Filter>Manager</Filter>
+    <ClInclude Include="AssimpLoader.h">
+      <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="Network.h">
       <Filter>Server</Filter>
@@ -327,7 +400,59 @@
     </ClInclude>
     <ClInclude Include="D3D1211On12.h" />
     <ClInclude Include="TestPlayer.h">
-      <Filter>Object\Test</Filter>
+      <Filter>Object\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Collision.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="OcNode.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="OcTree.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Manifold.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Object\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerAnimation.h">
+      <Filter>Object\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Bomb.h">
+      <Filter>Object\Bomb</Filter>
+    </ClInclude>
+    <ClInclude Include="json.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D1211On12.h" />
+    <ClInclude Include="MapObjectsLoader.h">
+      <Filter>Object\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerState.h">
+      <Filter>Object\Player\PlayerStates</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerOnGroundMoveState.h">
+      <Filter>Object\Player\PlayerStates</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerOnGroundAimState.h">
+      <Filter>Object\Player\PlayerStates</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerOnAirState.h">
+      <Filter>Object\Player\PlayerStates</Filter>
+    </ClInclude>
+    <ClInclude Include="Item.h">
+      <Filter>Object\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerBullet.h">
+      <Filter>Object\Player\Projectile\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>Object\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyState.h">
+      <Filter>Object\Enemy\EnemyState</Filter>
     </ClInclude>
     <ClInclude Include="Packet.h" />
   </ItemGroup>

@@ -12,6 +12,8 @@ enum class KEY_TYPE
 	S = 'S',
 	D = 'D',
 
+	SPACE = VK_SPACE,
+
 	Q = 'Q',
 	E = 'E',
 	Z = 'Z',
@@ -24,9 +26,11 @@ enum class KEY_TYPE
 
 	LBUTTON = VK_LBUTTON,
 	RBUTTON = VK_RBUTTON,
+
+	ESC = VK_ESCAPE,
 };
 
-static constexpr int NUM_OF_KEYS = 18;
+static constexpr int NUM_OF_KEYS = 20;
 
 constexpr std::array<KEY_TYPE, NUM_OF_KEYS> ALL_KEYS =
 {
@@ -48,6 +52,9 @@ constexpr std::array<KEY_TYPE, NUM_OF_KEYS> ALL_KEYS =
 	KEY_TYPE::KEY_4,
 	KEY_TYPE::LBUTTON,
 	KEY_TYPE::RBUTTON,
+	KEY_TYPE::SPACE,
+	KEY_TYPE::ESC
+
 };
 
 enum class KEY_STATE
@@ -81,6 +88,7 @@ public:
 	bool GetButtonUp(KEY_TYPE key) { return GetState(key) == KEY_STATE::UP; }
 
 	const POINT& GetMousePos() { return m_mousePos; }
+	const POINT& GetMouseDelta() { return m_mouseDelta; }
 
 private:
 	inline KEY_STATE GetState(KEY_TYPE key) { return m_states[static_cast<uint8>(key)]; }
@@ -89,5 +97,7 @@ private:
 	HWND m_hwnd;
 	vector<KEY_STATE> m_states;
 	POINT m_mousePos = {};
+	POINT m_mouseLastPos = {};
+	POINT m_mouseDelta = {};
 };
 

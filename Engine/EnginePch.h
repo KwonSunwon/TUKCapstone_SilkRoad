@@ -6,11 +6,17 @@
 // TCP/IP 占쏙옙占?
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
 #define _WINSOCKAPI_
+
+#include "assimp/scene.h"		// assimp/scene.h �켱������ include ���� �� ���� ���� �߻�
+
 #include <WinSock2.h> 
 #include <WS2tcpip.h>
 #pragma comment(lib, "ws2_32")
 
-// 占쏙옙占쏙옙 include
+// ���� include
+#include "assimp/Importer.hpp"
+#include "assimp/cimport.h"
+#include "assimp/postprocess.h"
 #include <windows.h>
 #include <tchar.h>
 #include <memory>
@@ -28,11 +34,14 @@
 #include <mutex>
 #include <atomic>
 
+#include <algorithm>
+#include <limits>
 using namespace std;
 
 
 #include <filesystem>
 namespace fs = std::filesystem;
+
 
 #include "d3dx12.h"
 #include "SimpleMath.h"
@@ -46,6 +55,7 @@ namespace fs = std::filesystem;
 #include <d2d1_3.h>
 #include <dwrite.h>
 #include <d3d11on12.h>
+#include "json.hpp"
 
 using namespace DirectX;
 using namespace DirectX::PackedVector;
@@ -83,7 +93,9 @@ using namespace Microsoft::WRL;
 #pragma comment(lib, "FBX\\release\\zlib-md.lib")
 #endif
 
-// 占쏙옙占쏙옙 typedef
+#pragma comment(lib, "assimp\\assimp-vc143-mt.lib")
+
+// ���� typedef
 using int8 = __int8;
 using int16 = __int16;
 using int32 = __int32;
@@ -198,6 +210,7 @@ public:								\
 
 #define INPUT				GET_SINGLE(Input)
 #define DELTA_TIME			GET_SINGLE(Timer)->GetDeltaTime()
+#define DEBUG_MODE			GET_SINGLE(Timer)->GetDebugMode()
 
 #define CONST_BUFFER(type)	GEngine->GetConstantBuffer(type)
 

@@ -20,6 +20,7 @@ TestCameraScript::~TestCameraScript()
 
 void TestCameraScript::LateUpdate()
 {
+
 	Vec3 pos = GetTransform()->GetLocalPosition();
 
 	if (INPUT->GetButton(KEY_TYPE::UP))
@@ -37,28 +38,28 @@ void TestCameraScript::LateUpdate()
 	if (INPUT->GetButton(KEY_TYPE::Q))
 	{
 		Vec3 rotation = GetTransform()->GetLocalRotation();
-		rotation.x += DELTA_TIME * 0.5f;
+		rotation.x += DELTA_TIME * 2.5f;
 		GetTransform()->SetLocalRotation(rotation);
 	}
 
 	if (INPUT->GetButton(KEY_TYPE::E))
 	{
 		Vec3 rotation = GetTransform()->GetLocalRotation();
-		rotation.x -= DELTA_TIME * 0.5f;
+		rotation.x -= DELTA_TIME * 2.5f;
 		GetTransform()->SetLocalRotation(rotation);
 	}
 
 	if (INPUT->GetButton(KEY_TYPE::Z))
 	{
 		Vec3 rotation = GetTransform()->GetLocalRotation();
-		rotation.y += DELTA_TIME * 0.5f;
+		rotation.y += DELTA_TIME * 2.5f;
 		GetTransform()->SetLocalRotation(rotation);
 	}
 
 	if (INPUT->GetButton(KEY_TYPE::C))
 	{
 		Vec3 rotation = GetTransform()->GetLocalRotation();
-		rotation.y -= DELTA_TIME * 0.5f;
+		rotation.y -= DELTA_TIME * 2.5f;
 		GetTransform()->SetLocalRotation(rotation);
 	}
 
@@ -67,6 +68,17 @@ void TestCameraScript::LateUpdate()
 		const POINT& pos = INPUT->GetMousePos();
 		GET_SINGLE(SceneManager)->Pick(pos.x, pos.y);
 	}
-	//pos.y = GET_SINGLE(SceneManager)->GetActiveScene()->m_terrain->GetTerrain()->getHeight(pos.x, pos.z);
 	GetTransform()->SetLocalPosition(pos);
+
+	Vec3 rot = GetTransform()->GetLocalRotation();
+	const POINT& mouseDelta = INPUT->GetMouseDelta();
+
+	// Rotate according to mouse movement
+
+
+	if (rot.x + mouseDelta.y * 0.001f < XMConvertToRadians(40.f) && rot.x + mouseDelta.y * 0.001f > XMConvertToRadians(-40.f))
+		rot.x += mouseDelta.y * 0.001f;
+
+	GetTransform()->SetLocalRotation(rot);
+	
 }

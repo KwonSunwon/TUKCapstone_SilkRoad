@@ -85,7 +85,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)Output\</OutDir>
-    <IncludePath>$(SolutionDir)Library/Include/FBX/;$(SolutionDir)Library/Include/;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Library/Include/FBX/;$(SolutionDir)Library/Include/assimp/;$(SolutionDir)Library/Include/;$(IncludePath)</IncludePath>
     <LibraryPath>$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -176,15 +176,19 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Animator.h" />
+    <ClInclude Include="AssimpLoader.h" />
     <ClInclude Include="BaseCollider.h" />
+    <ClInclude Include="Bomb.h" />
     <ClInclude Include="BoxCollider.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Collision.h" />
     <ClInclude Include="CommandQueue.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="ConstantBuffer.h" />
     <ClInclude Include="D3D1211On12.h" />
     <ClInclude Include="d3dx12.h" />
     <ClInclude Include="Device.h" />
+    <ClInclude Include="EnemyState.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="EnginePch.h" />
     <ClInclude Include="FBXLoader.h" />
@@ -193,19 +197,32 @@
     <ClInclude Include="Input.h" />
     <ClInclude Include="InstancingBuffer.h" />
     <ClInclude Include="InstancingManager.h" />
+    <ClInclude Include="Item.h" />
+    <ClInclude Include="json.hpp" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="LockQueue.h" />
+    <ClInclude Include="Manifold.h" />
+    <ClInclude Include="MapObjectsLoader.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="MeshData.h" />
     <ClInclude Include="MeshRenderer.h" />
     <ClInclude Include="MonoBehaviour.h" />
+    <ClInclude Include="Enemy.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="OcNode.h" />
     <ClInclude Include="OcTree.h" />
     <ClInclude Include="Packet.h" />
+    <ClInclude Include="OrientedBoxCollider.h" />
     <ClInclude Include="ParticleSystem.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="PlayerAnimation.h" />
+    <ClInclude Include="PlayerBullet.h" />
+    <ClInclude Include="PlayerOnAirState.h" />
+    <ClInclude Include="PlayerOnGroundAimState.h" />
+    <ClInclude Include="PlayerOnGroundMoveState.h" />
+    <ClInclude Include="PlayerState.h" />
     <ClInclude Include="RenderTargetGroup.h" />
     <ClInclude Include="Resources.h" />
     <ClInclude Include="RigidBody.h" />
@@ -229,14 +246,18 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animator.cpp" />
+    <ClCompile Include="AssimpLoader.cpp" />
     <ClCompile Include="BaseCollider.cpp" />
+    <ClCompile Include="Bomb.cpp" />
     <ClCompile Include="BoxCollider.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Collision.cpp" />
     <ClCompile Include="CommandQueue.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="ConstantBuffer.cpp" />
     <ClCompile Include="D3D1211On12.cpp" />
     <ClCompile Include="Device.cpp" />
+    <ClCompile Include="EnemyState.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="EnginePch.cpp" />
     <ClCompile Include="FBXLoader.cpp" />
@@ -245,17 +266,22 @@
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="InstancingBuffer.cpp" />
     <ClCompile Include="InstancingManager.cpp" />
+    <ClCompile Include="Item.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="LockQueue.cpp" />
+    <ClCompile Include="Manifold.cpp" />
+    <ClCompile Include="MapObjectsLoader.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="MeshData.cpp" />
     <ClCompile Include="MeshRenderer.cpp" />
     <ClCompile Include="MonoBehaviour.cpp" />
+    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="OcNode.cpp" />
     <ClCompile Include="OcTree.cpp" />
     <ClCompile Include="Packet.cpp" />
+    <ClCompile Include="OrientedBoxCollider.cpp" />
     <ClCompile Include="ParticleSystem.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -263,6 +289,13 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PlayerAnimation.cpp" />
+    <ClCompile Include="PlayerBullet.cpp" />
+    <ClCompile Include="PlayerOnAirState.cpp" />
+    <ClCompile Include="PlayerOnGroundAimState.cpp" />
+    <ClCompile Include="PlayerOnGroundMoveState.cpp" />
+    <ClCompile Include="PlayerState.cpp" />
     <ClCompile Include="RenderTargetGroup.cpp" />
     <ClCompile Include="Resources.cpp" />
     <ClCompile Include="RigidBody.cpp" />

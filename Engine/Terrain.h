@@ -10,8 +10,10 @@ public:
 	void Init(int32 sizeX, int32 sizeZ);
 
 	virtual void FinalUpdate() override;
+	virtual void Awake() override;
 
-	float getHeight(float, float);
+	void getHeight(float, float, shared_ptr<float>, shared_ptr<Vec3>);
+	vector< shared_ptr<GameObject>> testCols;
 
 private:
 	int32 m_sizeX = 15;
@@ -23,6 +25,9 @@ private:
 
 	shared_ptr<class Material> m_material;
 	shared_ptr<vector<int>> m_height;
+	shared_ptr<vector<int>> m_normal;
+
+	
 };
 
 
