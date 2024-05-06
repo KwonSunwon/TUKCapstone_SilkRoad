@@ -56,6 +56,8 @@ public:
 	bool m_isCheck = false;
 	bool m_isActive = true;
 
+	shared_ptr<MonoBehaviour> GetMonobehaviour(string className);
+
 private:
 	array<shared_ptr<Component>, FIXED_COMPONENT_COUNT> m_components;
 	vector<shared_ptr<MonoBehaviour>> m_scripts;
