@@ -137,3 +137,9 @@ PlayerPacket::PlayerPacket()
 	m_type = PACKET_TYPE::PT_PLAYER;
 	m_targetId = -1;
 }
+
+QuitPacket::QuitPacket()
+{
+	m_size = sizeof(QuitPacket);
+	m_type = PACKET_TYPE::PT_QUIT;
+}

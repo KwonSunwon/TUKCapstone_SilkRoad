@@ -291,8 +291,9 @@ void Guest::Connect()
 	setsockopt(m_socket, SOL_SOCKET, SO_RCVTIMEO, (const char*)&optval, sizeof(optval));
 	optval = TRUE;
 	setsockopt(m_socket, IPPROTO_TCP, TCP_NODELAY, (const char*)&optval, sizeof(optval));
+
 	GET_SINGLE(SceneManager)->GetActiveScene()->m_networkPlayers[0]->m_myNetworkId = 0;
-	if (initPacket.m_networkId == 1) {
+	if(initPacket.m_networkId == 1) {
 		GET_SINGLE(SceneManager)->GetActiveScene()->m_networkPlayers[1]->m_myNetworkId = 2;
 	}
 	else {
@@ -444,7 +445,7 @@ bool Guest::Recv(shared_ptr<Packet> packet)
 #pragma region Network
 void NetworkManager::Initialize()
 {
-	m_network = make_unique<Network>();
+	m_network = nullptr;
 }
 
 void NetworkManager::Update()
@@ -471,7 +472,8 @@ void NetworkManager::MakeCorrectPacket()
 void NetworkManager::RunMulti()
 {
 	if(GetNetworkState() == NETWORK_STATE::SINGLE) {
-		m_network.release();
+		if(m_network)
+			m_network.release();
 		m_network = make_unique<Host>();
 
 		SetNetworkState(NETWORK_STATE::HOST);
@@ -482,7 +484,8 @@ void NetworkManager::RunMulti()
 void NetworkManager::ConnectAsGuest()
 {
 	if(GetNetworkState() != NETWORK_STATE::GUEST) {
-		m_network.release();
+		if(m_network)
+			m_network.release();
 		m_network = make_unique<Guest>();
 
 		SetNetworkState(NETWORK_STATE::GUEST);
@@ -518,19 +521,23 @@ bool NetworkManager::Recv(shared_ptr<Packet> packet)
 void NetworkScript::LateUpdate()
 {
 	if(INPUT->GetButtonDown(KEY_TYPE::KEY_1)) {
-		GET_SINGLE(NetworkManager)->m_networkId = 0;
-		GET_SINGLE(NetworkManager)->RunMulti();
+		if(GET_SINGLE(NetworkManager)->GetNetworkState() != NETWORK_STATE::HOST) {
+			GET_SINGLE(NetworkManager)->m_networkId = 0;
+			GET_SINGLE(NetworkManager)->RunMulti();
+		}
 	}
 
 	if(INPUT->GetButtonDown(KEY_TYPE::KEY_2)) {
-		GET_SINGLE(NetworkManager)->ConnectAsGuest();
+		if(GET_SINGLE(NetworkManager)->GetNetworkState() != NETWORK_STATE::GUEST)
+			// Window Popup for input server IP
+
+
+			GET_SINGLE(NetworkManager)->ConnectAsGuest();
 	}
 
 	if(INPUT->GetButtonDown(KEY_TYPE::KEY_3)) {
-		/*Packet packet;
-		packet.header.type = PACKET_TYPE::NET;
-		packet.id = -1;
-		GET_SINGLE(NetworkManager)->Send(packet);*/
+		GET_SINGLE(NetworkManager)->SetNetworkState(NETWORK_STATE::SINGLE);
+		// Disconnect
 	}
 }
 #pragma endregion

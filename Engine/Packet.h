@@ -39,8 +39,10 @@ enum class PACKET_TYPE : BYTE {
 	PT_NONE = 0,
 	PT_INIT = 1,
 	PT_MOVE,
+	PT_PLAYER,
+	//...
+	PT_QUIT,
 	PT_MAX,
-	PT_PLAYER
 };
 
 #pragma pack(push, 1)
@@ -83,6 +85,12 @@ public:
 	Vec3 m_velocity;
 	Vec3 m_rotation;
 	uint32 m_animationIndex;
+};
+
+class QuitPacket : public Packet {
+public:
+	QuitPacket();
+	~QuitPacket() {}
 };
 
 #pragma pack(pop)
