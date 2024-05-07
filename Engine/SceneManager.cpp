@@ -574,7 +574,7 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 
 #pragma region Enemy
 	{
-		for (int i = 0; i < 1; ++i)
+		for (int i = 0; i < 25; ++i)
 		{
 			int idx = 0;
 			shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\BR_Characters.fbx");
