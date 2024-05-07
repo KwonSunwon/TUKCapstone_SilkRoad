@@ -33,7 +33,7 @@ void PlayerBullet::Update()
 	}
 	
 
-	// �浹ó��
+	// 충돌처리
 	for (auto col : *(rb->GetCollideEvent())) {
 		shared_ptr<MonoBehaviour> script =  col->m_rb2->GetGameObject()->GetMonobehaviour("Enemy");
 		if (script) {

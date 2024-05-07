@@ -629,7 +629,7 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 		//추가적인 컴포넌트 부착
 		{
 			shared_ptr<NetworkPlayer> networkPlayer = make_shared<NetworkPlayer>();
-			go->AddComponent(make_shared<NetworkPlayer>());
+			go->AddComponent(networkPlayer);
 			scene->m_networkPlayers[0] = networkPlayer;
 			//go->AddComponent(make_shared<PlayerAnimation>());
 		}
@@ -701,13 +701,13 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 		//추가적인 컴포넌트 부착
 		{
 			shared_ptr<NetworkPlayer> networkPlayer = make_shared<NetworkPlayer>();
-			go->AddComponent(make_shared<NetworkPlayer>());
+			go->AddComponent(networkPlayer);
 			scene->m_networkPlayers[1] = networkPlayer;
 			//go->AddComponent(make_shared<PlayerAnimation>());
 		}
 
 
-		scene->SetPlayer(go, GUEST_PLAYER1);
+		scene->SetPlayer(go, GUEST_PLAYER2);
 
 		scene->AddGameObject(go);
 

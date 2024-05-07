@@ -3,6 +3,7 @@
 #include "RigidBody.h"
 #include "Transform.h"
 #include "Animator.h"
+#include "GameObject.h"
 
 void NetworkPlayer::Awake()
 {
@@ -21,7 +22,7 @@ void NetworkPlayer::LateUpdate()
 void NetworkPlayer::ProcessPacket(shared_ptr<PlayerPacket> packet)
 {
 	shared_ptr<RigidBody> rb = GetRigidBody();
-	rb->MoveTo(packet->m_position);
+	//rb->MoveTo(packet->m_position);
 	rb->SetLinearVelocity(packet->m_velocity);
 	rb->SetRotation(packet->m_rotation);
 	if (GetAnimator()->GetCurrentClipIndex() != packet->m_animationIndex)

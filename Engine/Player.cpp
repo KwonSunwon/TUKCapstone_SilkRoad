@@ -9,6 +9,9 @@
 #include "PlayerOnGroundAImState.h"
 #include "PlayerOnAirState.h"
 #include "PlayerBullet.h"
+#include "Network.h"
+#include "Packet.h"
+#include "Animator.h"
 
 void Player::Awake()
 {
@@ -48,12 +51,22 @@ void Player::Update()
 void Player::LateUpdate()
 {
 	shared_ptr<PlayerState> nextState = m_curState->OnLateUpdateState();
+	shared_ptr<RigidBody> rb = GetRigidBody();
+	shared_ptr<Transform> transform = GetTransform();
 	if (nextState)
 	{
 		m_curState->OnExit();
 		m_curState = nextState;
 		m_curState->OnEnter();
 	}
+
+	shared_ptr<PlayerPacket> playerPacket = make_shared<PlayerPacket>();
+	playerPacket->m_targetId = GET_SINGLE(NetworkManager)->m_networkId;
+	playerPacket->m_position = rb->GetPosition();
+	playerPacket->m_velocity = rb->GetLinearVelocity();
+	playerPacket->m_rotation = transform->GetLocalRotation();
+	playerPacket->m_animationIndex = GetAnimator()->GetCurrentClipIndex();
+	SEND(playerPacket)
 }
 
 void Player::Fire()

@@ -56,7 +56,7 @@ Host::Host() : Network()
 
 void Host::MainLoop()
 {
-	Packet packet;
+	/*Packet packet;
 	while(GetState() == NETWORK_STATE::HOST) {
 		if(m_guestInfos.empty()) {
 			continue;
@@ -66,7 +66,7 @@ void Host::MainLoop()
 				m_receivedPacketQue.Push(make_shared<Packet>(packet));
 			}
 		}
-	}
+	}*/
 }
 
 void Host::GameLoop()
@@ -203,6 +203,9 @@ void Host::Connection(ushort id)
 				case PACKET_TYPE::PT_MOVE:
 					packet = make_shared<MovePacket>();
 					break;
+				case PACKET_TYPE::PT_PLAYER:
+					packet = make_shared<PlayerPacket>();
+					break;
 				}
 				m_buffer.Read(reinterpret_cast<char*>(packet.get()), packet->m_size);
 
@@ -318,17 +321,17 @@ void Guest::Sender()
 		//		closesocket(m_socket);
 		//	}
 		//}
-#define DEBUG
-#ifdef DEBUG
-		shared_ptr<PlayerPacket> testPlayerPacket = make_shared<PlayerPacket>();
-		testPlayerPacket->m_position = { 3500.f, 1500.f, 2500.f };
-		testPlayerPacket->m_rotation = { 0.f, 0.f, 0.f };
-		testPlayerPacket->m_velocity = { 100.f, 0.f, 0.f };
-		testPlayerPacket->m_animationIndex = 2;
-
-		//m_receivedPacketQue.Push(testPlayerPacket);
-		send(m_socket, (char*)testPlayerPacket.get(), testPlayerPacket->m_size, 0);
-#endif // DEBUG
+//#define DEBUG
+//#ifdef DEBUG
+//		shared_ptr<PlayerPacket> testPlayerPacket = make_shared<PlayerPacket>();
+//		testPlayerPacket->m_position = { 3500.f, 1500.f, 2500.f };
+//		testPlayerPacket->m_rotation = { 0.f, 0.f, 0.f };
+//		testPlayerPacket->m_velocity = { 100.f, 0.f, 0.f };
+//		testPlayerPacket->m_animationIndex = 2;
+//
+//		//m_receivedPacketQue.Push(testPlayerPacket);
+//		send(m_socket, (char*)testPlayerPacket.get(), testPlayerPacket->m_size, 0);
+//#endif // DEBUG
 		pair<shared_ptr<char[]>, ushort> data;
 		while(m_toServerDataQue.TryPop(data)) {
 			retval = send(m_socket, data.first.get(), data.second, 0);
@@ -376,6 +379,9 @@ void Guest::Receiver()
 					break;
 				case PACKET_TYPE::PT_MOVE:
 					packet = make_shared<MovePacket>();
+					break;
+				case PACKET_TYPE::PT_PLAYER:
+					packet = make_shared<PlayerPacket>();
 					break;
 				}
 				m_buffer.Read(reinterpret_cast<char*>(packet.get()), packet->m_size);

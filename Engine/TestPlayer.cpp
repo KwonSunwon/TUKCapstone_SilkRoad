@@ -45,6 +45,6 @@ void TestPlayer::LateUpdate()
 			//send(socket, (char*)&packet, sizeof(MovePacket), 0);
 
 			// GET_SINGLE(NetworkManager)->Send(reinterpret_pointer_cast<char[]>(packet), sizeof(MovePacket));
-			SEND(MovePacket);
+			//SEND(MovePacket);
 		}
 }

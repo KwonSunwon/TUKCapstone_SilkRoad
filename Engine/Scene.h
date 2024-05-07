@@ -4,7 +4,7 @@ enum PlayerType
 {
 	MAIN_PLAYER,
 	GUEST_PLAYER1,
-	GUIDE_PLAYER2
+	GUEST_PLAYER2
 };
 
 class GameObject;
