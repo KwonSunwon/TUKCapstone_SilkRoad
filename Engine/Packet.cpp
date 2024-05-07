@@ -130,3 +130,10 @@ MovePacket::MovePacket()
 	m_type = PACKET_TYPE::PT_MOVE;
 	m_targetId = -1;
 }
+
+PlayerPacket::PlayerPacket()
+{
+	m_size = sizeof(PlayerPacket);
+	m_type = PACKET_TYPE::PT_PLAYER;
+	m_targetId = -1;
+}

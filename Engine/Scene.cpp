@@ -17,6 +17,7 @@
 #include "Network.h"
 #include "Collision.h"
 #include "Manifold.h"
+#include "NetworkPlayer.h"
 
 #include "RigidBody.h"
 #include "SceneManager.h"

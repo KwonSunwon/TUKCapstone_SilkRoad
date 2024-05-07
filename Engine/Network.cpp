@@ -7,6 +7,7 @@
 #include "GameObject.h"
 #include "Transform.h"
 #include "Timer.h"
+#include "NetworkPlayer.h"
 
 Network::Network()
 {
@@ -37,6 +38,9 @@ void Network::Update()
 				}
 			}*/
 			players[packet->m_targetId]->GetTransform()->SetLocalPosition(reinterpret_pointer_cast<MovePacket>(packet)->m_position);
+			break;
+		case PACKET_TYPE::PT_PLAYER:
+			GET_SINGLE(SceneManager)->GetActiveScene()->m_networkPlayers[0]->ProcessPacket(reinterpret_pointer_cast<PlayerPacket>(packet));
 			break;
 		default:
 			break;
@@ -96,6 +100,9 @@ void Host::RunMulti()
 	}
 
 	m_listenSocket = move(listenSocket);
+
+	GET_SINGLE(SceneManager)->GetActiveScene()->m_networkPlayers[0]->m_myNetworkId = 1;
+	GET_SINGLE(SceneManager)->GetActiveScene()->m_networkPlayers[1]->m_myNetworkId = 2;
 
 	m_waitLoopThread = thread{ &Host::WaitLoop, this };
 }
@@ -281,6 +288,13 @@ void Guest::Connect()
 	setsockopt(m_socket, SOL_SOCKET, SO_RCVTIMEO, (const char*)&optval, sizeof(optval));
 	optval = TRUE;
 	setsockopt(m_socket, IPPROTO_TCP, TCP_NODELAY, (const char*)&optval, sizeof(optval));
+	GET_SINGLE(SceneManager)->GetActiveScene()->m_networkPlayers[0]->m_myNetworkId = 0;
+	if (initPacket.m_networkId == 1) {
+		GET_SINGLE(SceneManager)->GetActiveScene()->m_networkPlayers[1]->m_myNetworkId = 2;
+	}
+	else {
+		GET_SINGLE(SceneManager)->GetActiveScene()->m_networkPlayers[1]->m_myNetworkId = 1;
+	}
 
 	thread senderThread = thread{ &Guest::Sender, this };
 	thread receiverThread = thread{ &Guest::Receiver, this };
@@ -304,6 +318,17 @@ void Guest::Sender()
 		//		closesocket(m_socket);
 		//	}
 		//}
+#define DEBUG
+#ifdef DEBUG
+		shared_ptr<PlayerPacket> testPlayerPacket = make_shared<PlayerPacket>();
+		testPlayerPacket->m_position = { 3500.f, 1500.f, 2500.f };
+		testPlayerPacket->m_rotation = { 0.f, 0.f, 0.f };
+		testPlayerPacket->m_velocity = { 100.f, 0.f, 0.f };
+		testPlayerPacket->m_animationIndex = 2;
+
+		//m_receivedPacketQue.Push(testPlayerPacket);
+		send(m_socket, (char*)testPlayerPacket.get(), testPlayerPacket->m_size, 0);
+#endif // DEBUG
 		pair<shared_ptr<char[]>, ushort> data;
 		while(m_toServerDataQue.TryPop(data)) {
 			retval = send(m_socket, data.first.get(), data.second, 0);

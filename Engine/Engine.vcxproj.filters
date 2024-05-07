@@ -252,6 +252,9 @@
       <Filter>Object\Enemy\EnemyState</Filter>
     </ClCompile>
     <ClCompile Include="Packet.cpp" />
+    <ClCompile Include="NetworkPlayer.cpp">
+      <Filter>Object\Player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -455,6 +458,9 @@
       <Filter>Object\Enemy\EnemyState</Filter>
     </ClInclude>
     <ClInclude Include="Packet.h" />
+    <ClInclude Include="NetworkPlayer.h">
+      <Filter>Object\Player</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath.inl">

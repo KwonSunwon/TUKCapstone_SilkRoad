@@ -54,9 +54,12 @@ public:
 	void PhysicsStep(int iterations);
 	
 	shared_ptr<Terrain> m_terrain;
-private:
-	array<shared_ptr<GameObject>, 3> m_players;
 
+	array<shared_ptr<class NetworkPlayer>, 2> m_networkPlayers;
+
+
+	array<shared_ptr<GameObject>, 3> m_players;
+private:
 	vector<shared_ptr<GameObject>>		m_gameObjects;
 	vector<shared_ptr<GameObject>>		m_collidableGameObjects;
 	vector<shared_ptr<class Camera>>	m_cameras;
