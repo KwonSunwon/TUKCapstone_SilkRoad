@@ -214,7 +214,7 @@ public:								\
 
 #define CONST_BUFFER(type)	GEngine->GetConstantBuffer(type)
 
-#define SEND(T) GET_SINGLE(NetworkManager)->Send(reinterpret_pointer_cast<char[]>(T), sizeof(T));
+#define SEND(T) GET_SINGLE(NetworkManager)->Send(reinterpret_pointer_cast<char[]>(T), T->m_size);
 
 struct TransformParams
 {
