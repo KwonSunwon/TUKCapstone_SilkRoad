@@ -6,7 +6,7 @@
 #include "GameObject.h"
 #include "Camera.h"
 #include "Manifold.h"
-
+#include "Enemy.h"
 
 void PlayerBullet::Update()
 {
@@ -24,6 +24,15 @@ void PlayerBullet::Update()
 		GetRigidBody()->SetStatic(true);
 		//GetGameObject()->SetActive(false);
 
+	}
+	shared_ptr<RigidBody> rb = GetRigidBody();
+	shared_ptr<Transform> transform = GetTransform();
+	for (auto col : *(rb->GetCollideEvent())) {
+		shared_ptr<MonoBehaviour> script =  col->m_rb2->GetGameObject()->GetMonobehaviour("Enemy");
+		if (script) {
+			shared_ptr<Enemy> enemyScript = dynamic_pointer_cast<Enemy>(script);
+			enemyScript->SetMaxWalkSpeed(0);
+		}
 	}
 }
 

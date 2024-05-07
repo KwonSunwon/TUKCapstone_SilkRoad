@@ -167,3 +167,12 @@ void GameObject::AddComponent(shared_ptr<Component> component)
 		m_scripts.push_back(dynamic_pointer_cast<MonoBehaviour>(component));
 	}
 }
+
+shared_ptr<MonoBehaviour> GameObject::GetMonobehaviour(string name)
+{
+	for (auto script : m_scripts) {
+		if (script->name == name){
+			return script;
+		}
+	}
+}

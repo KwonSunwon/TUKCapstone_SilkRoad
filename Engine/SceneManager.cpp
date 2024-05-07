@@ -663,6 +663,7 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 			rb->SetStatic(true);
 			rb->SetUseGravity(false);
 			rb->SetMass(10000000);
+			rb->SetOverlap();
 			go->SetCheckFrustum(false);
 			go->AddComponent(rb);
 		}

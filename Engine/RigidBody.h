@@ -31,18 +31,21 @@ public:
 
 	//getter, setter
 public:
-	Vec3	GetPosition() { return m_position; }
+	Vec3	GetPosition()		{ return m_position; }
 	Vec3	GetLinearVelocity() { return m_linearVelocity; }
-	float	GetMass() { return m_mass; }
-	float	GetRestitution() { return m_restitution; }
+	Vec3	GetXZVelocity()		{ return Vec3(m_linearVelocity.x, 0, m_linearVelocity.z); }
+	Vec3	GetRotation()		{ return m_rotation; }
+	float	GetMass()			{ return m_mass; }
+	float	GetRestitution()	{ return m_restitution; }
+	
+	float	GetInvMass()		{
+								if (m_isStatic)return 0;
+								else return m_invMass; }
+	float	GetMaxSpeed()		{ return m_maxSpeed; }
+	float	GetMaxAirSpeed()	{ return m_maxAirSpeed; }
+	
 	bool	GetStatic() { return m_isStatic; }
-	float	GetInvMass() {
-		if (m_isStatic)return 0;
-		else return m_invMass; }
-	float	GetMaxSpeed() { return m_maxSpeed; }
-	float	GetMaxAirSpeed() { return m_maxAirSpeed; }
-	Vec3	GetXZVelocity() { return Vec3(m_linearVelocity.x, 0, m_linearVelocity.z); }
-	Vec3	GetRotation() { return m_rotation; }
+	bool	GetIsBlockBody() { return m_blockBody; }
 
 	//mass, restitution, static, maxSpeed는 설정해주지 않으면 디폴트 값으로 적용됨
 	void	SetLinearVelocity(Vec3 linearVelocity) { m_linearVelocity = linearVelocity; }
@@ -54,6 +57,8 @@ public:
 	void	SetUseGravity(bool useGravity) { m_useGravity = useGravity; }
 	void	SetMaxAirSpeed(float maxAirSpeed) { m_maxAirSpeed = maxAirSpeed; }
 	void	SetRotation(Vec3 rotation) { m_rotation = rotation; }
+	void	SetBlock() { m_blockBody = true; }
+	void	SetOverlap() { m_blockBody = false; }
 
 	shared_ptr<vector<shared_ptr<Manifold>>> GetCollideEvent() { return m_manifolds; }
 	void	AddCollideEvent(shared_ptr<Manifold> event);
@@ -82,6 +87,8 @@ private:
 	Vec3 m_gravity = { 0.f,-980.f,0.f };
 	bool m_useGravity = true;
 	
+	bool m_blockBody = true;
+
 	shared_ptr<vector<shared_ptr<Manifold>>> m_manifolds;
 	shared_ptr< Terrain > m_gameTerrain;
 	shared_ptr<BaseCollider> m_baseCollider;

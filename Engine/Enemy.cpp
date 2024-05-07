@@ -9,6 +9,8 @@
 
 void Enemy::Awake()
 {
+	name = "Enemy";
+
 	shared_ptr<RigidBody> rb = GetRigidBody();
 	rb->SetStatic(false);
 	rb->SetMaxSpeed(m_maxWalkSpeed);

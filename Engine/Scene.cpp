@@ -338,18 +338,22 @@ void Scene::IntersectColliders(shared_ptr<BaseCollider> bs, shared_ptr<BaseColli
 		return;
 	}
 
+	if (rb1->GetIsBlockBody() && rb2->GetIsBlockBody()) {
 
-	if (rb1->GetStatic()) {
-		rb2->Move(*normal * (*depth));
+		if (rb1->GetStatic()) {
+			rb2->Move(*normal * (*depth));
+		}
+
+		else if (rb2->GetStatic()) {
+			rb1->Move(-(*normal) * (*depth));
+		}
+		else {
+			rb1->Move(-(*normal) * (*depth) / 2.f);
+			rb2->Move(*normal * (*depth) / 2.f);
+		}
 	}
 
-	else if (rb2->GetStatic()) {
-		rb1->Move(-(*normal) * (*depth));
-	}
-	else {
-		rb1->Move(-(*normal) * (*depth) / 2.f);
-		rb2->Move(*normal * (*depth) / 2.f);
-	}
+
 	shared_ptr<Manifold> contact = make_shared<Manifold>(rb1, rb2, normal, *depth, make_shared<vector<Vec3>>(), make_shared<int>());
 	FindContactPoints(bs, bsDst, contact->m_contacts, contact->m_contectCount, contact->m_normal);
 	shared_ptr<Vec3> normal2 = make_shared<Vec3>();
@@ -386,7 +390,8 @@ void Scene::testCollision()
 	for (shared_ptr<Manifold> contact : m_contacts) {
 		shared_ptr<RigidBody> rb1 = contact->m_rb1;
 		shared_ptr<RigidBody> rb2 = contact->m_rb2;
-		
+		if (!rb1->GetIsBlockBody() || !rb2->GetIsBlockBody())
+			continue;
 
 
 		Vec3 normal = *contact->m_normal;
