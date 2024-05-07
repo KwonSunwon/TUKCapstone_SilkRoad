@@ -10,6 +10,7 @@ class Item : public MonoBehaviour, public std::enable_shared_from_this<Item>
 	virtual void LateUpdate() override;
 
 public:
+	void SetItemId(int id) { m_id = id; }
 	
 private:
 	void FloatingItem();
