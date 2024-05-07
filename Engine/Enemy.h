@@ -30,6 +30,8 @@ public:
 	void SetHP(float hp) { m_HP = hp; }
 	float GetHP() { return m_HP; }
 
+	void GetDamage(float damage) { m_HP -= damage; }
+
 
 private:
 	shared_ptr<class EnemyState> m_curState;

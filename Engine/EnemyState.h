@@ -19,7 +19,7 @@ public:
 	EnemyState(shared_ptr<Enemy> enemy) : m_enemy(enemy) {}
 	virtual ~EnemyState() {}
 
-	virtual shared_ptr<EnemyState> OnUpdateState() { return nullptr; };
+	virtual shared_ptr<EnemyState> OnUpdateState();
 	virtual shared_ptr<EnemyState> OnLateUpdateState() { return nullptr; };
 	virtual void OnEnter() {};
 	virtual void OnExit() {};
@@ -60,4 +60,8 @@ class EnemyDieState : public EnemyState
 {
 public:
 	EnemyDieState(shared_ptr<Enemy> enemy) : EnemyState(enemy) {}
+
+	virtual shared_ptr<EnemyState> OnUpdateState() override;
+	virtual void OnEnter() override;
+	virtual shared_ptr<EnemyState> OnLateUpdateState() override;
 };

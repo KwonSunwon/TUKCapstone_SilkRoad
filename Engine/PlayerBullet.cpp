@@ -7,32 +7,42 @@
 #include "Camera.h"
 #include "Manifold.h"
 #include "Enemy.h"
+#include "Timer.h"
 
 void PlayerBullet::Update()
 {
-	Vec3 pos = GetRigidBody()->GetPosition();
-	if (pos.y < 0 || pos.y >= 50000.f || pos.x < 0 || pos.x >= 50000.f || pos.z < 0 || pos.z >= 50000.f)
-	{
-		GetRigidBody()->MoveTo(Vec3(0, 50000.f, 0));
-		GetRigidBody()->SetLinearVelocity(Vec3(0, 0, 0));
-		GetRigidBody()->SetStatic(true);
-		//GetGameObject()->SetActive(false);
-	}
-	for (auto col : *(GetRigidBody()->GetCollideEvent())) {
-		GetRigidBody()->MoveTo(Vec3(0, 50000.f, 0));
-		GetRigidBody()->SetLinearVelocity(Vec3(0, 0, 0));
-		GetRigidBody()->SetStatic(true);
-		//GetGameObject()->SetActive(false);
-
-	}
 	shared_ptr<RigidBody> rb = GetRigidBody();
 	shared_ptr<Transform> transform = GetTransform();
+	Vec3 pos = rb->GetPosition();
+	m_lifeTime += DELTA_TIME;
+	if (m_lifeTime > m_maxLifeTime)
+	{
+		rb->MoveTo(Vec3(-1.f, 0, 0));
+		rb->SetLinearVelocity(Vec3(0, 0, 0));
+		rb->SetStatic(true);
+		//GetGameObject()->SetActive(false);
+		return;
+	}
+	if (pos.y < 0 || pos.y >= 50000.f || pos.x < 0 || pos.x >= 50000.f || pos.z < 0 || pos.z >= 50000.f)
+	{
+		rb->MoveTo(Vec3(-1.f, 0., 0));
+		rb->SetLinearVelocity(Vec3(0, 0, 0));
+		rb->SetStatic(true);
+		//GetGameObject()->SetActive(false);
+		return;
+	}
+	
+
+	// 충돌처리
 	for (auto col : *(rb->GetCollideEvent())) {
 		shared_ptr<MonoBehaviour> script =  col->m_rb2->GetGameObject()->GetMonobehaviour("Enemy");
 		if (script) {
 			shared_ptr<Enemy> enemyScript = dynamic_pointer_cast<Enemy>(script);
-			enemyScript->SetMaxWalkSpeed(0);
+			enemyScript->GetDamage(m_attackPower);
 		}
+		rb->MoveTo(Vec3(-1.f, 0, 0));
+		rb->SetLinearVelocity(Vec3(0, 0, 0));
+		rb->SetStatic(true);
 	}
 }
 
@@ -42,6 +52,8 @@ void PlayerBullet::Fire(shared_ptr<Player> shooter)
 	Vec3 cameraUp = shooter->GetPlayerCamera()->GetTransform()->GetUp();
 	cameraLook.Normalize();
 	cameraUp.Normalize();
+
+	m_lifeTime = 0.f;
 
 	GetGameObject()->SetActive(true);
 
