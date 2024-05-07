@@ -1,9 +1,9 @@
 #pragma once
 
-// std::byte �������?����
+// std::byte 占쏙옙占쏙옙占쏙옙占?占쏙옙占쏙옙
 #define _HAS_STD_BYTE 0
 
-// TCP/IP ���?
+// TCP/IP 占쏙옙占?
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
 #define _WINSOCKAPI_
 
@@ -27,8 +27,9 @@
 #include <map>
 #include <fstream>
 #include <queue>
+#include <utility>
 
-// Thread ����
+// Thread 占쏙옙占쏙옙
 #include <thread>
 #include <mutex>
 #include <atomic>
@@ -65,7 +66,7 @@ using namespace Microsoft::WRL;
 
 #include "FBX/fbxsdk.h"
 
-// ���� lib
+// 占쏙옙占쏙옙 lib
 #pragma comment(lib, "d3d12")
 #pragma comment(lib, "dxgi")
 #pragma comment(lib, "dxguid")
@@ -163,10 +164,10 @@ enum
 
 struct WindowInfo
 {
-	HWND	hwnd; // ���?������
-	int32	width; // �ʺ�
-	int32	height; // ����
-	bool	windowed; // â���?or ��üȭ��
+	HWND	hwnd; // 占쏙옙占?占쏙옙占쏙옙占쏙옙
+	int32	width; // 占십븝옙
+	int32	height; // 占쏙옙占쏙옙
+	bool	windowed; // 창占쏙옙占?or 占쏙옙체화占쏙옙
 };
 
 struct Vertex
@@ -212,6 +213,8 @@ public:								\
 #define DEBUG_MODE			GET_SINGLE(Timer)->GetDebugMode()
 
 #define CONST_BUFFER(type)	GEngine->GetConstantBuffer(type)
+
+#define SEND(T) GET_SINGLE(NetworkManager)->Send(reinterpret_pointer_cast<char[]>(packet), sizeof(T));
 
 struct TransformParams
 {

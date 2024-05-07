@@ -103,8 +103,8 @@ void SceneManager::RenderUI(shared_ptr<D3D11On12Device> device)
 
 void SceneManager::LoadScene(wstring sceneName)
 {
-	// TODO : ���� Scene ����
-	// TODO : ���Ͽ��� Scene ���� �ε�
+	// TODO : ???? Scene ????
+	// TODO : ??????? Scene ???? ?��?
 
 	m_activeScene = LoadTestScene();
 
@@ -114,7 +114,7 @@ void SceneManager::LoadScene(wstring sceneName)
 
 void SceneManager::SetLayerName(uint8 index, const wstring& name)
 {
-	// ���� ������ ����
+	// ???? ?????? ????
 	const wstring& prevName = m_layerNames[index];
 	m_layerIndex.erase(prevName);
 
@@ -140,7 +140,7 @@ shared_ptr<GameObject> SceneManager::Pick(int32 screenX, int32 screenY)
 
 	Matrix projectionMatrix = camera->GetProjectionMatrix();
 
-	// ViewSpace���� Picking ����
+	// ViewSpace???? Picking ????
 	float viewX = (+2.0f * screenX / width - 1.0f) / projectionMatrix(0, 0);
 	float viewY = (-2.0f * screenY / height + 1.0f) / projectionMatrix(1, 1);
 
@@ -157,16 +157,16 @@ shared_ptr<GameObject> SceneManager::Pick(int32 screenX, int32 screenY)
 		if(gameObject->GetCollider() == nullptr)
 			continue;
 
-		// ViewSpace������ Ray ����
+		// ViewSpace?????? Ray ????
 		Vec4 rayOrigin = Vec4(0.0f, 0.0f, 0.0f, 1.0f);
 		Vec4 rayDir = Vec4(viewX, viewY, 1.0f, 0.0f);
 
-		// WorldSpace������ Ray ����
+		// WorldSpace?????? Ray ????
 		rayOrigin = XMVector3TransformCoord(rayOrigin, viewMatrixInv);
 		rayDir = XMVector3TransformNormal(rayDir, viewMatrixInv);
 		rayDir.Normalize();
 
-		// WorldSpace���� ����
+		// WorldSpace???? ????
 		float distance = 0.f;
 		if(gameObject->GetCollider()->Intersects(rayOrigin, rayDir, OUT distance) == false)
 			continue;
@@ -191,7 +191,7 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 	{
 		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"ComputeShader");
 
-		// UAV �� Texture ����
+		// UAV ?? Texture ????
 		shared_ptr<Texture> texture = GET_SINGLE(Resources)->CreateTexture(L"UAVTexture",
 			DXGI_FORMAT_R8G8B8A8_UNORM, 1024, 1024,
 			CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT), D3D12_HEAP_FLAG_NONE,
@@ -202,7 +202,7 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 		material->SetInt(0, 1);
 		GEngine->GetComputeDescHeap()->SetUAV(texture->GetUAVHandle(), UAV_REGISTER::u0);
 
-		// ������ �׷� (1 * 1024 * 1)
+		// ?????? ??? (1 * 1024 * 1)
 		material->Dispatch(1, 1024, 1);
 	}
 #pragma endregion
@@ -214,12 +214,12 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 		shared_ptr<GameObject> camera = make_shared<GameObject>();
 		camera->SetName(L"Main_Camera");
 		camera->AddComponent(make_shared<Transform>());
-		camera->AddComponent(make_shared<Camera>()); // Near=1, Far=1000, FOV=45��
+		camera->AddComponent(make_shared<Camera>()); // Near=1, Far=1000, FOV=45??
 		camera->AddComponent(make_shared<TestCameraScript>());
 		camera->GetCamera()->SetFar(100000.f);
 		camera->GetTransform()->SetLocalPosition(Vec3(0.f, 900.f, 0.f));
 		uint8 layerIndex = GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI");
-		camera->GetCamera()->SetCullingMaskLayerOnOff(layerIndex, true); // UI�� �� ����
+		camera->GetCamera()->SetCullingMaskLayerOnOff(layerIndex, true); // UI?? ?? ????
 		scene->AddGameObject(camera);
 	}
 #pragma endregion
@@ -233,8 +233,8 @@ shared_ptr<Scene> SceneManager::LoadTestScene()
 		camera->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 0.f));
 		camera->GetCamera()->SetProjectionType(PROJECTION_TYPE::ORTHOGRAPHIC);
 		uint8 layerIndex = GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI");
-		camera->GetCamera()->SetCullingMaskAll(); // �� ����
-		camera->GetCamera()->SetCullingMaskLayerOnOff(layerIndex, false); // UI�� ����
+		camera->GetCamera()->SetCullingMaskAll(); // ?? ????
+		camera->GetCamera()->SetCullingMaskLayerOnOff(layerIndex, false); // UI?? ????
 		scene->AddGameObject(camera);
 	}
 #pragma endregion

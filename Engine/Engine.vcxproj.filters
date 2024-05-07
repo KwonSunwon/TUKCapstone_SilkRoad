@@ -251,6 +251,7 @@
     <ClCompile Include="EnemyState.cpp">
       <Filter>Object\Enemy\EnemyState</Filter>
     </ClCompile>
+    <ClCompile Include="Packet.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -453,6 +454,7 @@
     <ClInclude Include="EnemyState.h">
       <Filter>Object\Enemy\EnemyState</Filter>
     </ClInclude>
+    <ClInclude Include="Packet.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath.inl">
