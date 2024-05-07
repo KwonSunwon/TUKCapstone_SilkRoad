@@ -175,4 +175,5 @@ shared_ptr<MonoBehaviour> GameObject::GetMonobehaviour(string name)
 			return script;
 		}
 	}
+	return nullptr;
 }

@@ -15,6 +15,7 @@ void PlayerBullet::Update()
 	shared_ptr<Transform> transform = GetTransform();
 	Vec3 pos = rb->GetPosition();
 	m_lifeTime += DELTA_TIME;
+
 	if (m_lifeTime > m_maxLifeTime)
 	{
 		rb->MoveTo(Vec3(-1.f, 0, 0));
@@ -40,9 +41,13 @@ void PlayerBullet::Update()
 			shared_ptr<Enemy> enemyScript = dynamic_pointer_cast<Enemy>(script);
 			enemyScript->GetDamage(m_attackPower);
 		}
-		rb->MoveTo(Vec3(-1.f, 0, 0));
-		rb->SetLinearVelocity(Vec3(0, 0, 0));
-		rb->SetStatic(true);
+		if (col->m_rb2->GetIsBlockBody())
+		{
+			rb->MoveTo(Vec3(-1.f, 0, 0));
+			rb->SetLinearVelocity(Vec3(0, 0, 0));
+			rb->SetStatic(true);
+			return;
+		}
 	}
 }
 
