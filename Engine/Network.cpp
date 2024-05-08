@@ -537,6 +537,7 @@ void NetworkScript::LateUpdate()
 			return;
 
 		// Window dialog for input server ip
+		INPUT->SetCursorHidden(false);
 		ShowWindow(GET_SINGLE(NetworkManager)->m_dialog, SW_SHOW);
 		GET_SINGLE(NetworkManager)->m_eventHandle = CreateEvent(NULL, FALSE, FALSE, NULL);
 
@@ -549,6 +550,7 @@ void NetworkScript::LateUpdate()
 			}
 		}
 
+		INPUT->SetCursorHidden(true);
 		GET_SINGLE(NetworkManager)->ConnectAsGuest();
 	}
 

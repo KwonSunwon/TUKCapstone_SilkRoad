@@ -12,22 +12,22 @@ void Input::Init(HWND hwnd)
 void Input::Update()
 {
 	HWND hwnd = ::GetActiveWindow();
-	if (m_hwnd != hwnd) {
-		for (const KEY_TYPE key : ALL_KEYS)
+	if(m_hwnd != hwnd) {
+		for(const KEY_TYPE key : ALL_KEYS)
 			m_states[static_cast<int32>(key)] = KEY_STATE::NONE;
 		return;
 	}
 
-	if (GetButton(KEY_TYPE::ESC))
+	if(GetButton(KEY_TYPE::ESC))
 		PostQuitMessage(0);
 
-	for (const KEY_TYPE key : ALL_KEYS) {
-		// Å°°¡ ´­·Á ÀÖÀ¸¸é true
-		if (::GetAsyncKeyState(static_cast<int32>(key)) & 0x8000) {
+	for(const KEY_TYPE key : ALL_KEYS) {
+		// í‚¤ê°€ ëˆŒë ¤ ìˆìœ¼ë©´ true
+		if(::GetAsyncKeyState(static_cast<int32>(key)) & 0x8000) {
 			KEY_STATE& state = m_states[static_cast<int32>(key)];
 
-			// ÀÌÀü ÇÁ·¹ÀÓ¿¡ Å°¸¦ ´©¸¥ »óÅÂ¶ó¸é PRESS
-			if (state == KEY_STATE::PRESS || state == KEY_STATE::DOWN)
+			// ì´ì „ í”„ë ˆì„ì— í‚¤ë¥¼ ëˆ„ë¥¸ ìƒíƒœë¼ë©´ PRESS
+			if(state == KEY_STATE::PRESS || state == KEY_STATE::DOWN)
 				state = KEY_STATE::PRESS;
 			else
 				state = KEY_STATE::DOWN;
@@ -35,18 +35,29 @@ void Input::Update()
 		else {
 			KEY_STATE& state = m_states[static_cast<int32>(key)];
 
-			// ÀÌÀü ÇÁ·¹ÀÓ¿¡ Å°¸¦ ´©¸¥ »óÅÂ¶ó¸é UP
-			if (state == KEY_STATE::PRESS || state == KEY_STATE::DOWN)
+			// ì´ì „ í”„ë ˆì„ì— í‚¤ë¥¼ ëˆ„ë¥¸ ìƒíƒœë¼ë©´ UP
+			if(state == KEY_STATE::PRESS || state == KEY_STATE::DOWN)
 				state = KEY_STATE::UP;
 			else
 				state = KEY_STATE::NONE;
 		}
 	}
-	SetCursor(NULL);
-	POINT ptCursorPos;
-	GetCursorPos(&ptCursorPos);
 
-	m_mouseDelta.x = (double)(ptCursorPos.x - 300);
-	m_mouseDelta.y = (double)(ptCursorPos.y - 300);
-	SetCursorPos(300, 300);
+	if(m_isCursorLock) {
+		SetCursor(NULL);
+		POINT ptCursorPos;
+		GetCursorPos(&ptCursorPos);
+
+		m_mouseDelta.x = (double)(ptCursorPos.x - 300);
+		m_mouseDelta.y = (double)(ptCursorPos.y - 300);
+		SetCursorPos(300, 300);
+	}
+}
+
+void Input::SetCursorHidden(bool isHidden)
+{
+	if(isHidden)
+		ShowCursor(FALSE);
+	else
+		ShowCursor(TRUE);
 }

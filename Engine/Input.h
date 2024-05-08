@@ -80,15 +80,17 @@ public:
 	void Init(HWND hwnd);
 	void Update();
 
-	// ´©¸£°í ÀÖÀ» ¶§
+	// ëˆ„ë¥´ê³  ìˆì„ ë•Œ
 	bool GetButton(KEY_TYPE key) { return GetState(key) == KEY_STATE::PRESS; }
-	// ¸Ç Ã³À½ ´­·¶À» ¶§
+	// ë§¨ ì²˜ìŒ ëˆŒë €ì„ ë•Œ
 	bool GetButtonDown(KEY_TYPE key) { return GetState(key) == KEY_STATE::DOWN; }
-	// ¸Ç Ã³À½ ´­·¶´Ù ¶ÃÀ» ¶§
+	// ë§¨ ì²˜ìŒ ëˆŒë €ë‹¤ ë—ì„ ë•Œ
 	bool GetButtonUp(KEY_TYPE key) { return GetState(key) == KEY_STATE::UP; }
 
 	const POINT& GetMousePos() { return m_mousePos; }
 	const POINT& GetMouseDelta() { return m_mouseDelta; }
+
+	void SetCursorHidden(bool isHidden);
 
 private:
 	inline KEY_STATE GetState(KEY_TYPE key) { return m_states[static_cast<uint8>(key)]; }
@@ -99,5 +101,7 @@ private:
 	POINT m_mousePos = {};
 	POINT m_mouseLastPos = {};
 	POINT m_mouseDelta = {};
+
+	bool m_isCursorLock = true;
 };
 
