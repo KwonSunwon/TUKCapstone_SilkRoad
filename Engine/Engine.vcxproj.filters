@@ -461,6 +461,7 @@
     <ClInclude Include="NetworkPlayer.h">
       <Filter>Object\Player</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath.inl">
@@ -507,5 +508,8 @@
     <FxCompile Include="..\Resources\Shader\math.fx">
       <Filter>Shader</Filter>
     </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Engine.rc" />
   </ItemGroup>
 </Project>

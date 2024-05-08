@@ -9,6 +9,8 @@
 #include "Timer.h"
 #include "NetworkPlayer.h"
 
+#include "resource.h"
+
 Network::Network()
 {
 	if(WSAStartup(MAKEWORD(2, 2), &m_wsaData) != 0) {
@@ -445,7 +447,7 @@ bool Guest::Recv(shared_ptr<Packet> packet)
 #pragma region Network
 void NetworkManager::Initialize()
 {
-	m_network = nullptr;
+	m_network = make_unique<Network>();
 }
 
 void NetworkManager::Update()
@@ -488,6 +490,8 @@ void NetworkManager::ConnectAsGuest()
 			m_network.release();
 		m_network = make_unique<Guest>();
 
+		dynamic_cast<Guest*>(m_network.get())->SetServerIP(m_hostIP);
+
 		SetNetworkState(NETWORK_STATE::GUEST);
 		dynamic_cast<Guest*>(m_network.get())->Connect();
 	}
@@ -521,18 +525,31 @@ bool NetworkManager::Recv(shared_ptr<Packet> packet)
 void NetworkScript::LateUpdate()
 {
 	if(INPUT->GetButtonDown(KEY_TYPE::KEY_1)) {
-		if(GET_SINGLE(NetworkManager)->GetNetworkState() != NETWORK_STATE::HOST) {
-			GET_SINGLE(NetworkManager)->m_networkId = 0;
-			GET_SINGLE(NetworkManager)->RunMulti();
-		}
+		if(GET_SINGLE(NetworkManager)->GetNetworkState() == NETWORK_STATE::HOST)
+			return;
+
+		GET_SINGLE(NetworkManager)->m_networkId = 0;
+		GET_SINGLE(NetworkManager)->RunMulti();
 	}
 
 	if(INPUT->GetButtonDown(KEY_TYPE::KEY_2)) {
-		if(GET_SINGLE(NetworkManager)->GetNetworkState() != NETWORK_STATE::GUEST)
-			// Window Popup for input server IP
+		if(GET_SINGLE(NetworkManager)->GetNetworkState() == NETWORK_STATE::GUEST)
+			return;
 
+		// Window dialog for input server ip
+		ShowWindow(GET_SINGLE(NetworkManager)->m_dialog, SW_SHOW);
+		GET_SINGLE(NetworkManager)->m_eventHandle = CreateEvent(NULL, FALSE, FALSE, NULL);
 
-			GET_SINGLE(NetworkManager)->ConnectAsGuest();
+		MSG msg;
+		while(GetMessage(&msg, NULL, 0, 0)) {
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
+			if(WaitForSingleObject(GET_SINGLE(NetworkManager)->m_eventHandle, 0) == WAIT_OBJECT_0) {
+				break;
+			}
+		}
+
+		GET_SINGLE(NetworkManager)->ConnectAsGuest();
 	}
 
 	if(INPUT->GetButtonDown(KEY_TYPE::KEY_3)) {

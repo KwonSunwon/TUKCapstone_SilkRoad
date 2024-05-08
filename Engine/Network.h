@@ -145,6 +145,9 @@ public:
 	void Send(char* data, int size) override;
 	void Send(shared_ptr<char[]> data, int size) override;
 	bool Recv(shared_ptr<Packet> packet) override;
+
+	void SetServerIP(shared_ptr<char[]> serverIP) { m_serverIP = serverIP.get(); }
+
 private:
 
 	// 임시코드
@@ -178,6 +181,11 @@ public:
 	ushort m_networkId = 0;
 
 	unique_ptr<Network> m_network;
+
+	HANDLE m_eventHandle;
+	HWND m_dialog;
+
+	shared_ptr<char[]> m_hostIP;
 private:
 };
 

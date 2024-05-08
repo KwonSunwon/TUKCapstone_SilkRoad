@@ -225,6 +225,7 @@
     <ClInclude Include="PlayerOnGroundMoveState.h" />
     <ClInclude Include="PlayerState.h" />
     <ClInclude Include="RenderTargetGroup.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Resources.h" />
     <ClInclude Include="RigidBody.h" />
     <ClInclude Include="RootSignature.h" />
@@ -336,6 +337,9 @@
     <FxCompile Include="..\Resources\Shader\terrain.fx" />
     <FxCompile Include="..\Resources\Shader\tessellation.fx" />
     <FxCompile Include="..\Resources\Shader\utils.fx" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Engine.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
