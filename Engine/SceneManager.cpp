@@ -35,7 +35,7 @@
 
 void SceneManager::Update()
 {
-	if(m_activeScene == nullptr)
+	if (m_activeScene == nullptr)
 		return;
 
 	m_activeScene->Update();
@@ -43,8 +43,8 @@ void SceneManager::Update()
 	m_activeScene->FinalUpdate();
 	m_activeScene->GetMainCamera()->GetTransform()->FinalUpdate();
 	m_activeScene->GetMainCamera()->FinalUpdate();
-	
-	for(int i = 0; i < m_iterations; ++i) {
+
+	for (int i = 0; i < m_iterations; ++i) {
 		m_activeScene->PhysicsStep(m_iterations);
 		m_activeScene->testCollision();
 	}
@@ -61,17 +61,17 @@ void SceneManager::Update()
 // TEMP
 void SceneManager::Render()
 {
-	if(m_activeScene)
+	if (m_activeScene)
 		m_activeScene->Render();
 }
 void SceneManager::RenderUI(shared_ptr<D3D11On12Device> device)
 {
 	uint8 backbufferindex = GEngine->GetSwapChain()->GetBackBufferIndex();
-	if(m_activeScene)
+	if (m_activeScene)
 		m_activeScene->RenderUI();
 	D2D1_SIZE_F rtSize = device->GetD3D11On12RT(backbufferindex)->GetSize();
 	D2D1_RECT_F textRect = D2D1::RectF(0, 0, rtSize.width, rtSize.height);
-	
+
 	shared_ptr<GameObject> player = GET_SINGLE(SceneManager)->GetActiveScene()->GetPlayers()[0];
 	//Vec3 playerPos = player->GetTransform()->GetLocalPosition();
 	static const WCHAR text[] = L"";
@@ -135,7 +135,7 @@ void SceneManager::SetLayerName(uint8 index, const wstring& name)
 uint8 SceneManager::LayerNameToIndex(const wstring& name)
 {
 	auto findIt = m_layerIndex.find(name);
-	if(findIt == m_layerIndex.end())
+	if (findIt == m_layerIndex.end())
 		return 0;
 
 	return findIt->second;
@@ -162,9 +162,9 @@ shared_ptr<GameObject> SceneManager::Pick(int32 screenX, int32 screenY)
 	float minDistance = FLT_MAX;
 	shared_ptr<GameObject> picked;
 
-	for(auto& gameObject : gameObjects)
+	for (auto& gameObject : gameObjects)
 	{
-		if(gameObject->GetCollider() == nullptr)
+		if (gameObject->GetCollider() == nullptr)
 			continue;
 
 		// ViewSpace?????? Ray ????
@@ -178,10 +178,10 @@ shared_ptr<GameObject> SceneManager::Pick(int32 screenX, int32 screenY)
 
 		// WorldSpace???? ????
 		float distance = 0.f;
-		if(gameObject->GetCollider()->Intersects(rayOrigin, rayDir, OUT distance) == false)
+		if (gameObject->GetCollider()->Intersects(rayOrigin, rayDir, OUT distance) == false)
 			continue;
 
-		if(distance < minDistance)
+		if (distance < minDistance)
 		{
 			minDistance = distance;
 			picked = gameObject;
@@ -381,7 +381,7 @@ shared_ptr<Scene> SceneManager::LoadL()
 
 
 		scene->SetPlayer(go, GUEST_PLAYER1);
-		
+
 		scene->AddGameObject(go);
 
 	}
@@ -477,6 +477,9 @@ shared_ptr<Scene> SceneManager::LoadL()
 				transform->SetLocalScale(Vec3(1.2f, 1.2f, 1.2f));
 				//transform->SetLocalRotation(Vec3(XMConvertToRadians(0.f), XMConvertToRadians(0.f), XMConvertToRadians(0.f)));
 			}
+		}
+	}
+
 
 
 #pragma region Terrain
@@ -532,60 +535,60 @@ shared_ptr<Scene> SceneManager::LoadL()
 
 
 
-		for (int i = 0; i < 10; ++i) {
+	for (int i = 0; i < 10; ++i) {
 
 
-			shared_ptr<GameObject> gm = make_shared<GameObject>();
-			gm->AddComponent(make_shared<Transform>());
-			gm->GetTransform()->SetLocalScale(Vec3(150.f, 100.f, 100.f));
-			gm->GetTransform()->SetLocalPosition(Vec3(1500.f+ 50.f*i, 1500.f + 400.f *i, 2000.f + 0*i ));
+		shared_ptr<GameObject> gm = make_shared<GameObject>();
+		gm->AddComponent(make_shared<Transform>());
+		gm->GetTransform()->SetLocalScale(Vec3(150.f, 100.f, 100.f));
+		gm->GetTransform()->SetLocalPosition(Vec3(1500.f + 50.f * i, 1500.f + 400.f * i, 2000.f + 0 * i));
 
-			shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
-			{
-				shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadCubeMesh();
-				meshRenderer->SetMesh(mesh);
-			}
-
-			{
-				shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"WireFrame");
-				shared_ptr<Material> material = make_shared<Material>();
-				material->SetShader(shader);
-
-				material->SetInt(3, 1);
-				material->SetVec4(3, Vec4(1, 1, 1, 1));
-				meshRenderer->SetMaterial(material);
-			}
-			gm->AddComponent(meshRenderer);
-			
-			gm->AddComponent(make_shared<RigidBody>());
-			//gm->AddComponent(make_shared<TestDragon>());
-
-			if (i & 1) {
-				gm->AddComponent(make_shared<OrientedBoxCollider>());
-				gm->GetCollider()->SetExtent(Vec3(75, 50, 50));
-				
-
-				/*gm->AddComponent(make_shared<SphereCollider>());
-				gm->GetCollider()->SetRadius(100.f);*/
-
-
-			}
-			else {
-				/*gm->AddComponent(make_shared<SphereCollider>());
-				gm->GetCollider()->SetRadius(100.f);*/
-
-				gm->AddComponent(make_shared<OrientedBoxCollider>());
-				gm->GetCollider()->SetExtent(Vec3(75, 50, 50));
-
-
-			}
-
-
-
-			if (gm->GetCollider()->GetDebugCollider() != nullptr)
-				scene->AddGameObject(gm->GetCollider()->GetDebugCollider());
-			scene->AddGameObject(gm);
+		shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
+		{
+			shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadCubeMesh();
+			meshRenderer->SetMesh(mesh);
 		}
+
+		{
+			shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"WireFrame");
+			shared_ptr<Material> material = make_shared<Material>();
+			material->SetShader(shader);
+
+			material->SetInt(3, 1);
+			material->SetVec4(3, Vec4(1, 1, 1, 1));
+			meshRenderer->SetMaterial(material);
+		}
+		gm->AddComponent(meshRenderer);
+
+		gm->AddComponent(make_shared<RigidBody>());
+		//gm->AddComponent(make_shared<TestDragon>());
+
+		if (i & 1) {
+			gm->AddComponent(make_shared<OrientedBoxCollider>());
+			gm->GetCollider()->SetExtent(Vec3(75, 50, 50));
+
+
+			/*gm->AddComponent(make_shared<SphereCollider>());
+			gm->GetCollider()->SetRadius(100.f);*/
+
+
+		}
+		else {
+			/*gm->AddComponent(make_shared<SphereCollider>());
+			gm->GetCollider()->SetRadius(100.f);*/
+
+			gm->AddComponent(make_shared<OrientedBoxCollider>());
+			gm->GetCollider()->SetExtent(Vec3(75, 50, 50));
+
+
+		}
+
+
+
+		if (gm->GetCollider()->GetDebugCollider() != nullptr)
+			scene->AddGameObject(gm->GetCollider()->GetDebugCollider());
+		scene->AddGameObject(gm);
+	}
 
 #pragma endregion 
 
