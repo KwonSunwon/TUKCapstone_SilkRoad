@@ -14,7 +14,7 @@ void JumpAnimationEvent()
 void TestDragon::Awake()
 {
 	shared_ptr<RigidBody> rb = GetRigidBody();
-	rb->SetStatic(true);
+	//rb->SetStatic(true);
 
 }
 void TestDragon::Update()
