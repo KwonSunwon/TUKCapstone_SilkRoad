@@ -55,6 +55,9 @@
     <Filter Include="Object\Enemy\EnemyState">
       <UniqueIdentifier>{537641c0-1380-49b3-a5ff-e0588bd78b83}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scenes">
+      <UniqueIdentifier>{dbb72512-a76a-4430-94e5-92b92f26f0b0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -254,6 +257,9 @@
     <ClCompile Include="Packet.cpp" />
     <ClCompile Include="NetworkPlayer.cpp">
       <Filter>Object\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="MainStage1.cpp">
+      <Filter>Scenes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -460,6 +466,9 @@
     <ClInclude Include="Packet.h" />
     <ClInclude Include="NetworkPlayer.h">
       <Filter>Object\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="MainStage1.h">
+      <Filter>Scenes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

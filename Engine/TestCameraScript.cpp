@@ -76,6 +76,11 @@ void TestCameraScript::LateUpdate()
 	// Rotate according to mouse movement
 
 
+	if (INPUT->GetButton(KEY_TYPE::KEY_4))
+	{
+		GET_SINGLE(SceneManager)->reset = true;
+	}
+
 	if (rot.x + mouseDelta.y * 0.001f < XMConvertToRadians(40.f) && rot.x + mouseDelta.y * 0.001f > XMConvertToRadians(-40.f))
 		rot.x += mouseDelta.y * 0.001f;
 

@@ -192,6 +192,7 @@ void Scene::PushLightData()
 	CONST_BUFFER(CONSTANT_BUFFER_TYPE::GLOBAL)->SetGraphicsGlobalData(&lightParams, sizeof(lightParams));
 }
 
+
 void Scene::AddGameObject(shared_ptr<GameObject> gameObject)
 {
 	if(gameObject->GetRigidBody() != nullptr)
@@ -381,6 +382,21 @@ void Scene::testCollision()
 		}
 	}
 
+	Resolution();
+
+}
+
+void Scene::PhysicsStep(int iterations)
+{
+	for (const shared_ptr<GameObject>& gameObject : m_gameObjects)
+	{
+		if (gameObject->GetRigidBody())
+			gameObject->GetRigidBody()->MovementStep(iterations);
+	}
+}
+
+void Scene::Resolution()
+{
 	for (shared_ptr<Manifold> contact : m_contacts) {
 		shared_ptr<RigidBody> rb1 = contact->m_rb1;
 		shared_ptr<RigidBody> rb2 = contact->m_rb2;
@@ -393,59 +409,16 @@ void Scene::testCollision()
 
 		Vec3 relativeVelocity = rb2->GetLinearVelocity() - rb1->GetLinearVelocity();
 		if (relativeVelocity.Dot(normal) > 0.f) {
-			return;
+			continue;
 		}
 
 		float e = min(rb1->GetRestitution(), rb2->GetRestitution());
-		float j = -(1.f + e) * relativeVelocity.Dot(normal);
-		j /= rb1->GetInvMass() + rb2->GetInvMass();
-		Vec3 impulse = (normal) * j;
-
-		rb1->SetLinearVelocity(rb1->GetLinearVelocity() - impulse * rb1->GetInvMass());
-		rb2->SetLinearVelocity(rb2->GetLinearVelocity() + impulse * rb2->GetInvMass());
-	}
-
-
-	/*for (shared_ptr<Manifold> contact : m_contacts) {
-		shared_ptr<RigidBody> rb1 = contact->m_rb1;
-		shared_ptr<RigidBody> rb2 = contact->m_rb2;
-		Vec3 normal = *contact->m_normal;
-		int contactCounts = *contact->m_contectCount;
-		vector<Vec3> constactPoints = *contact->m_contacts;
-
-		
-
-		float e = min(rb1->GetRestitution(), rb2->GetRestitution());
-
-		for (int i = 0; i < contactCounts; ++i) {
-			Vec3 ra = constactPoints[i] - rb1->GetPosition();
-			Vec3 rb = constactPoints[i] - rb2->GetPosition()
-			
-
-			Vec3 relativeVelocity = rb2->GetLinearVelocity() - rb1->GetLinearVelocity();
-			if (relativeVelocity.Dot(normal) > 0.f) {
-				return;
-			}
-		}
-		
-
-
 		float j = -(1.f + e) * relativeVelocity.Dot(normal);
 		j /= rb1->GetInvMass() + rb2->GetInvMass();
 		Vec3 impulse = (normal)*j;
 
 		rb1->SetLinearVelocity(rb1->GetLinearVelocity() - impulse * rb1->GetInvMass());
 		rb2->SetLinearVelocity(rb2->GetLinearVelocity() + impulse * rb2->GetInvMass());
-	}*/
-	
-
-}
-
-void Scene::PhysicsStep(int iterations)
-{
-	for (const shared_ptr<GameObject>& gameObject : m_gameObjects)
-	{
-		if (gameObject->GetRigidBody())
-			gameObject->GetRigidBody()->MovementStep(iterations);
 	}
 }
+

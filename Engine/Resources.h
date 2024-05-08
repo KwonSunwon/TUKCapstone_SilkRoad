@@ -31,6 +31,8 @@ public:
 	shared_ptr<Mesh> LoadSphereMesh();
 	shared_ptr<Mesh> LoadTerrainMesh(int32 sizeX = 15, int32 sizeZ = 15);
 
+	shared_ptr<GameObject> LoadItemPrefab(int id, Vec3 Location);
+
 	shared_ptr<Texture> CreateTexture(const wstring& name, DXGI_FORMAT format, uint32 width, uint32 height,
 		const D3D12_HEAP_PROPERTIES& heapProperty, D3D12_HEAP_FLAGS heapFlags,
 		D3D12_RESOURCE_FLAGS resFlags = D3D12_RESOURCE_FLAG_NONE, Vec4 clearColor = Vec4());
@@ -42,6 +44,7 @@ public:
 private:
 	void CreateDefaultShader();
 	void CreateDefaultMaterial();
+	void CreateDefaultGameObject();
 
 private:
 	using KeyObjMap = std::map<wstring/*key*/, shared_ptr<Object>>;

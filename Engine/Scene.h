@@ -39,6 +39,7 @@ public:
 
 private:
 	void PushLightData();
+	void Resolution();
 
 public:
 	void SetPlayer(shared_ptr<GameObject> player, PlayerType type) { m_players[type] = player; }
@@ -65,7 +66,6 @@ private:
 	vector<shared_ptr<class Camera>>	m_cameras;
 	vector<shared_ptr<class Light>>		m_lights;
 	vector<shared_ptr<class Manifold>>	m_contacts;
-	//test func
 private:
 	shared_ptr<OcTree> m_ocTree = make_shared<OcTree>(100000, 1000);
 

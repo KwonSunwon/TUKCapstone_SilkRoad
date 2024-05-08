@@ -62,6 +62,8 @@ void RigidBody::MovementStep(int iterations)
 	if (m_position.y < -10) {
 		m_position.y = 2000;
 	}
+	if (DELTA_TIME > 0.5)
+		return;
 	
 	ApplyFriction(iterations);
 	ApplyAccVel(iterations);
