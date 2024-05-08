@@ -257,6 +257,7 @@
     <ClCompile Include="MainStage1.cpp">
       <Filter>Scenes</Filter>
     </ClCompile>
+    <ClCompile Include="DummyTerrain.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -462,6 +463,7 @@
     <ClInclude Include="MainStage1.h">
       <Filter>Scenes</Filter>
     </ClInclude>
+    <ClInclude Include="DummyTerrain.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath.inl">

@@ -29,6 +29,7 @@
 #include "Item.h"
 #include "PlayerBullet.h"
 #include "Enemy.h"
+#include "DummyTerrain.h"
 
 #include "Network.h"
 
@@ -179,6 +180,9 @@ shared_ptr<class Scene> LoadMainScene()
 			scene->AddGameObject(obj->GetCollider()->GetDebugCollider());
 		}
 
+		shared_ptr<DummyTerrain> DT = make_shared<DummyTerrain>();
+		DT->SetMonovihaviourName("Terrain");
+		obj->AddComponent(DT);
 		scene->AddGameObject(obj);
 		scene->m_terrain = obj->GetTerrain();
 
@@ -253,7 +257,7 @@ shared_ptr<class Scene> LoadMainScene()
 		{
 			shared_ptr<RigidBody> rb = make_shared<RigidBody>();
 
-			rb->SetStatic(true);
+			rb->SetStatic(false);
 			rb->SetMass(80.f);
 			rb->SetRestitution(0.f);
 			go->SetCheckFrustum(false);
@@ -357,8 +361,12 @@ shared_ptr<class Scene> LoadMainScene()
 				playerScript->AddBullet(bulletScript);
 
 				bullet->AddComponent(bulletScript);
-
+				
+				shared_ptr<GameObject> bomb = GET_SINGLE(Resources)->LoadBombPrefab(Vec3(0,0,0));
+				shared_ptr<Bomb> bombScript= dynamic_pointer_cast<Bomb>(bomb->GetMonobehaviour("Bomb"));
+				bulletScript->SetBomb(bombScript);
 				scene->AddGameObject(bullet);
+				scene->AddGameObject(bomb);
 
 			}
 			playerScript->SetPlayerCamera(scene->GetMainCamera());
@@ -453,152 +461,70 @@ shared_ptr<class Scene> LoadMainScene()
 
 #pragma endregion
 
-#pragma region Bomb
-	{
-		shared_ptr<GameObject> go = make_shared<GameObject>();
-		//Resource에서 메쉬 로드용
-		{
 
-			go->AddComponent(make_shared<Transform>());
-			shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
-			{
-				shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadSphereMesh();
-				meshRenderer->SetMesh(mesh);
-			}
-
-
-			{
-
-				meshRenderer->SetMaterial(GET_SINGLE(Resources)->Get<Material>(L"GameObject"));
-			}
-			go->AddComponent(meshRenderer);
-		}
-
-		//Transform 설정
-		{
-			shared_ptr<Transform> transform = go->GetTransform();
-			transform->SetLocalPosition(Vec3(15000.f, 1500.f, 2000.f));
-			//transform->SetLocalScale(Vec3(1000.f, 1000.f, 1000.f));
-			//transform->SetLocalRotation(Vec3(XMConvertToRadians(0.f), XMConvertToRadians(0.f), XMConvertToRadians(0.f)));
-		}
-
-		//강체 설정
-		{
-			shared_ptr<RigidBody> rb = make_shared<RigidBody>();
-
-
-
-
-			rb->SetStatic(true);
-			rb->SetMass(100000.f);
-			rb->SetRestitution(0.f);
-			go->SetCheckFrustum(false);
-			go->AddComponent(rb);
-		}
-
-		//콜라이더 설정 
-		//콜라이더의 위치,회전은 Gameobject의 Transform을 사용
-		{
-			//OBB를 사용할 경우 이곳의 주석을 풀어서 사용
-			/*shared_ptr<OrientedBoxCollider> collider = make_shared<OrientedBoxCollider>();
-			collider->SetExtent(Vec3(50, 100, 50));*/
-
-			//Sphere를 사용할경우 이곳의 주석을 풀어서 사용
-			shared_ptr<SphereCollider> collider = make_shared<SphereCollider>();
-			collider->SetRadius(100.f);
-
-
-
-
-
-
-			//collider->SetOffset(Vec3(0, 80, 0));
-			go->AddComponent(collider);
-		}
-
-
-
-		//디버그용 콜라이더 매쉬 설정
-		if (DEBUG_MODE)
-		{
-			scene->AddGameObject(go->GetCollider()->GetDebugCollider());
-		}
-
-		//Instancing 유무 설정(사용:0,0  미사용:0,1)
-		{
-			go->GetMeshRenderer()->GetMaterial()->SetInt(0, 0);
-		}
-
-		//추가적인 컴포넌트 부착
-		{
-			go->AddComponent(make_shared<Bomb>());
-		}
-
-		scene->AddGameObject(go);
-
-	}
 
 #pragma region test
 
 
 
+	for (int j = 0; j < 5; ++j) {
+		for (int i = 0; i < 10; ++i) {
 
-	for (int i = 0; i < 10; ++i) {
+
+			shared_ptr<GameObject> gm = make_shared<GameObject>();
+			gm->AddComponent(make_shared<Transform>());
+			gm->GetTransform()->SetLocalScale(Vec3(150.f, 100.f, 100.f));
+			gm->GetTransform()->SetLocalPosition(Vec3(12500 + 100 * i, 1500.f + 400.f * i, 15000+ 100*j));
+
+			shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
+			{
+				shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadCubeMesh();
+				meshRenderer->SetMesh(mesh);
+			}
+
+			{
+				shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"WireFrame");
+				shared_ptr<Material> material = make_shared<Material>();
+				material->SetShader(shader);
+
+				material->SetInt(3, 1);
+				material->SetVec4(3, Vec4(1, 1, 1, 1));
+				meshRenderer->SetMaterial(material);
+			}
+			gm->AddComponent(meshRenderer);
+
+			gm->AddComponent(make_shared<RigidBody>());
+			//gm->AddComponent(make_shared<TestDragon>());
+
+			if (i & 1) {
+				gm->AddComponent(make_shared<OrientedBoxCollider>());
+				gm->GetCollider()->SetExtent(Vec3(75, 50, 50));
 
 
-		shared_ptr<GameObject> gm = make_shared<GameObject>();
-		gm->AddComponent(make_shared<Transform>());
-		gm->GetTransform()->SetLocalScale(Vec3(150.f, 100.f, 100.f));
-		gm->GetTransform()->SetLocalPosition(Vec3(2500 + 100 * i, 1500.f + 400.f * i, 4800));
+				/*gm->AddComponent(make_shared<SphereCollider>());
+				gm->GetCollider()->SetRadius(100.f);*/
 
-		shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
-		{
-			shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadCubeMesh();
-			meshRenderer->SetMesh(mesh);
+
+			}
+			else {
+				gm->AddComponent(make_shared<SphereCollider>());
+				gm->GetCollider()->SetRadius(100.f);
+
+				/*gm->AddComponent(make_shared<OrientedBoxCollider>());
+				gm->GetCollider()->SetExtent(Vec3(75, 50, 50));*/
+
+
+			}
+
+			//Instancing 유무 설정(사용:0,0  미사용:0,1)
+			{
+				gm->GetMeshRenderer()->GetMaterial()->SetInt(0, 1);
+			}
+
+			if (gm->GetCollider()->GetDebugCollider() != nullptr)
+				scene->AddGameObject(gm->GetCollider()->GetDebugCollider());
+			scene->AddGameObject(gm);
 		}
-
-		{
-			shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"WireFrame");
-			shared_ptr<Material> material = make_shared<Material>();
-			material->SetShader(shader);
-
-			material->SetInt(3, 1);
-			material->SetVec4(3, Vec4(1, 1, 1, 1));
-			meshRenderer->SetMaterial(material);
-		}
-		gm->AddComponent(meshRenderer);
-
-		gm->AddComponent(make_shared<RigidBody>());
-		//gm->AddComponent(make_shared<TestDragon>());
-
-		if (i & 1) {
-			gm->AddComponent(make_shared<OrientedBoxCollider>());
-			gm->GetCollider()->SetExtent(Vec3(75, 50, 50));
-
-
-			/*gm->AddComponent(make_shared<SphereCollider>());
-			gm->GetCollider()->SetRadius(100.f);*/
-
-
-		}
-		else {
-			/*gm->AddComponent(make_shared<SphereCollider>());
-			gm->GetCollider()->SetRadius(100.f);*/
-
-			gm->AddComponent(make_shared<OrientedBoxCollider>());
-			gm->GetCollider()->SetExtent(Vec3(75, 50, 50));
-
-
-		}
-
-		//Instancing 유무 설정(사용:0,0  미사용:0,1)
-		{
-			gm->GetMeshRenderer()->GetMaterial()->SetInt(0, 1);
-		}
-
-		if (gm->GetCollider()->GetDebugCollider() != nullptr)
-			scene->AddGameObject(gm->GetCollider()->GetDebugCollider());
-		scene->AddGameObject(gm);
 	}
 
 #pragma endregion 

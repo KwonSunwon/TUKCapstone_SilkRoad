@@ -1,9 +1,25 @@
 #pragma once
 #include "MonoBehaviour.h"
 
+enum BulletType
+{
+	BASIC,
+	EXPLOSIVE,
+};
+
 class PlayerBullet : public MonoBehaviour
 {
 public:
 	virtual void Update() override;
-	void Fire(class shared_ptr<class Player> shooter);
+	void Fire(class shared_ptr<class Player> shooter, BulletType bulletType);
+	void SetBomb(shared_ptr<class Bomb> bomb) { 
+		
+		m_bomb = bomb; }
+
+private:
+	void ProcessCollides();
+
+	BulletType m_bulletType = BulletType::BASIC;
+
+	shared_ptr<class Bomb> m_bomb;
 };

@@ -273,13 +273,15 @@ void FindContactPoint(shared_ptr<BoundingSphere> mainSphere, shared_ptr<Bounding
 
 void FindContactPoint(shared_ptr<BoundingSphere> mainSphere, shared_ptr<BoundingOrientedBox> mainCube, shared_ptr<vector<Vec3>> cp, shared_ptr<Vec3> normal)
 {
-	(*cp).push_back(mainSphere->Center + *normal * mainSphere->Radius);
+	//(*cp).push_back(mainSphere->Center + *normal * mainSphere->Radius);
+	(*cp)[0]=(mainSphere->Center + *normal * mainSphere->Radius);
 }
 
 void FindContactPoint(shared_ptr<BoundingOrientedBox> mainCube, shared_ptr<BoundingSphere> mainSphere, shared_ptr<vector<Vec3>> cp, shared_ptr<Vec3> normal)
 {
 
-	(*cp).push_back(mainSphere->Center - *normal * mainSphere->Radius);
+	//(*cp).push_back(mainSphere->Center - *normal * mainSphere->Radius);
+	(*cp)[0] = (mainSphere->Center - *normal * mainSphere->Radius);
 }
 
 void FindContactPoint(shared_ptr<BoundingOrientedBox> mainCube, shared_ptr<BoundingOrientedBox> subCube, shared_ptr<vector<Vec3>> cp, shared_ptr<Vec3> normal)
@@ -304,7 +306,8 @@ void FindContactPoint(shared_ptr<BoundingOrientedBox> mainCube, shared_ptr<Bound
 		Vec3 axis = *normal;
 		pt += axis * FLT_EPSILON;
 		if (subCube->Contains(pt)) {
-			(*cp).push_back(cornersA[k]);
+			//(*cp).push_back(cornersA[k]);
+			(*cp)[0]=(cornersA[k]);
 		}
 	
 	}
@@ -314,7 +317,8 @@ void FindContactPoint(shared_ptr<BoundingOrientedBox> mainCube, shared_ptr<Bound
 		Vec3 axis = -(*normal);
 		pt += axis * FLT_EPSILON;
 		if (mainCube->Contains(pt)) {
-			(*cp).push_back(cornersA[k]);
+			//(*cp).push_back(cornersA[k]);
+			(*cp)[0] = (cornersA[k]);
 		}
 	}
 }
@@ -322,6 +326,7 @@ void FindContactPoint(shared_ptr<BoundingOrientedBox> mainCube, shared_ptr<Bound
 
 void FindContactPoints(shared_ptr<BaseCollider> bs, shared_ptr<BaseCollider> bsDst, shared_ptr<vector<Vec3>> contacts, shared_ptr<int> contactCount, shared_ptr<Vec3> normal)
 {
+	contacts->reserve(4);
 	for (Vec3 cp : *contacts) {
 		cp = { 0,0,0 };
 	}

@@ -12,8 +12,9 @@
 
 void Player::Awake()
 {
+	SetMonovihaviourName("Player");
 	shared_ptr<RigidBody> rb = GetRigidBody();
-	rb->SetStatic(true);
+	//rb->SetStatic(true);
 	m_curState = make_shared<PlayerWalkState>(shared_from_this());
 
 }
@@ -59,7 +60,7 @@ void Player::LateUpdate()
 void Player::Fire()
 {
 	m_fireElapsedTime = 1.f / m_fireRate;
-	m_bullets[m_bulletPivot++]->Fire(shared_from_this());
+	m_bullets[m_bulletPivot++]->Fire(shared_from_this(),BulletType::EXPLOSIVE);
 	if (m_bulletPivot >= m_bullets.size())
 		m_bulletPivot = 0;
 }

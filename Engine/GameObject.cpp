@@ -171,8 +171,9 @@ void GameObject::AddComponent(shared_ptr<Component> component)
 shared_ptr<MonoBehaviour> GameObject::GetMonobehaviour(string name)
 {
 	for (auto script : m_scripts) {
-		if (script->name == name){
+		if (script->GetMonovihaviourName() == name) {
 			return script;
 		}
 	}
+	return nullptr;
 }

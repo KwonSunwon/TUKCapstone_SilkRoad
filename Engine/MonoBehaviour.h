@@ -7,9 +7,11 @@ public:
 	MonoBehaviour();
 	virtual ~MonoBehaviour();
 
-	string name;
+	void SetMonovihaviourName(string name) { m_monovihaviourName = name; }
+	string GetMonovihaviourName() { return m_monovihaviourName; }
 
 private:
 	virtual void FinalUpdate() sealed { }
+	string m_monovihaviourName;
 };
 
