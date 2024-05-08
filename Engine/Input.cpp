@@ -56,6 +56,7 @@ void Input::Update()
 
 void Input::SetCursorHidden(bool isHidden)
 {
+	m_isCursorLock = isHidden;
 	if(isHidden)
 		ShowCursor(FALSE);
 	else
