@@ -89,7 +89,7 @@ void PlayerBullet::ProcessCollides()
 		case EXPLOSIVE:
 			{
 				Vec3 pos = (*col->m_contacts)[0];
-				m_bomb->SetBombPosition(pos);
+				m_bomb->SetBombPosition((rb)->GetPosition());
 				m_bomb->SetBombActive();
 			}
 
