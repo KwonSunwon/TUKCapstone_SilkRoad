@@ -12,6 +12,8 @@
 #include "Network.h"
 #include "Packet.h"
 #include "Animator.h"
+#include "Manifold.h"
+#include "Item.h"
 
 void Player::Awake()
 {
@@ -23,6 +25,7 @@ void Player::Awake()
 }
 void Player::Update()
 {
+	ProcessGetItem();
 
 	shared_ptr<Transform> transform = GetTransform();
 	shared_ptr<RigidBody> rb = GetRigidBody();
@@ -76,7 +79,12 @@ void Player::LateUpdate()
 void Player::Fire()
 {
 	m_fireElapsedTime = 1.f / m_fireRate;
-	m_bullets[m_bulletPivot++]->Fire(shared_from_this(),BulletType::BASIC);
+
+	BulletType bulletType = CalcBulletType();
+	m_bullets[m_bulletPivot++]->Fire(shared_from_this(), bulletType);
+	m_fireTime++;
+
+
 	if (m_bulletPivot >= m_bullets.size())
 		m_bulletPivot = 0;
 }
@@ -84,4 +92,26 @@ void Player::Fire()
 void Player::AddBullet(shared_ptr<class PlayerBullet> bullet)
 {
 	m_bullets.push_back(bullet);
+}
+
+void Player::ProcessGetItem()
+{
+	shared_ptr<RigidBody> rb = GetRigidBody();
+	for (auto col : *(rb->GetCollideEvent())) {
+		shared_ptr<MonoBehaviour> scriptI = col->m_rb2->GetGameObject()->GetMonobehaviour("Item");
+		if (scriptI) {
+			shared_ptr<Item> itemScript = dynamic_pointer_cast<Item>(scriptI);
+			m_itemLevels[itemScript->GetItemID()]++;
+			col->m_rb2->MoveTo(Vec3(0, 1000000, 0));
+		}
+	}
+}
+
+BulletType Player::CalcBulletType()
+{
+	if (m_itemLevels[0] == 0)
+		return BulletType::BASIC;
+
+	if (m_fireTime % (5 - m_itemLevels[0]) == 0)
+		return BulletType::EXPLOSIVE;
 }

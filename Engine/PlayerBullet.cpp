@@ -24,7 +24,7 @@ void PlayerBullet::Update()
 		rb->MoveTo(Vec3(-1.f, 0, 0));
 		rb->SetLinearVelocity(Vec3(0, 0, 0));
 		rb->SetStatic(true);
-		//GetGameObject()->SetActive(false);
+		GetGameObject()->SetActive(false);
 		return;
 	}
 	if (pos.y < 0 || pos.y >= 50000.f || pos.x < 0 || pos.x >= 50000.f || pos.z < 0 || pos.z >= 50000.f)
@@ -32,7 +32,7 @@ void PlayerBullet::Update()
 		rb->MoveTo(Vec3(-1.f, 0., 0));
 		rb->SetLinearVelocity(Vec3(0, 0, 0));
 		rb->SetStatic(true);
-		//GetGameObject()->SetActive(false);
+		GetGameObject()->SetActive(false);
 		return;
 	}
 	
