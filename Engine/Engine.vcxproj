@@ -188,6 +188,7 @@
     <ClInclude Include="D3D1211On12.h" />
     <ClInclude Include="d3dx12.h" />
     <ClInclude Include="Device.h" />
+    <ClInclude Include="DummyTerrain.h" />
     <ClInclude Include="EnemyState.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="EnginePch.h" />
@@ -259,6 +260,7 @@
     <ClCompile Include="ConstantBuffer.cpp" />
     <ClCompile Include="D3D1211On12.cpp" />
     <ClCompile Include="Device.cpp" />
+    <ClCompile Include="DummyTerrain.cpp" />
     <ClCompile Include="EnemyState.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="EnginePch.cpp" />

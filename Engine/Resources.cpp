@@ -11,6 +11,7 @@
 #include "OrientedBoxCollider.h"
 #include "Timer.h"
 #include "MeshRenderer.h"
+#include "Bomb.h"
 
 void Resources::Init()
 {
@@ -365,6 +366,69 @@ shared_ptr<GameObject> Resources::LoadItemPrefab(int id, Vec3 location)
 
 
 #pragma endregion
+}
+
+shared_ptr<GameObject> Resources::LoadBombPrefab(Vec3 Location)
+{
+#pragma region Bomb
+	{
+		shared_ptr<GameObject> go = make_shared<GameObject>();
+		//Resource에서 메쉬 로드용
+		{
+
+			go->AddComponent(make_shared<Transform>());
+			shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
+			{
+				shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadSphereMesh();
+				meshRenderer->SetMesh(mesh);
+			}
+			{
+				meshRenderer->SetMaterial(GET_SINGLE(Resources)->Get<Material>(L"GameObject"));
+			}
+			go->AddComponent(meshRenderer);
+		}
+
+		//Transform 설정
+		{
+			shared_ptr<Transform> transform = go->GetTransform();
+			transform->SetLocalPosition(Vec3(15000.f, 1500.f, 2000.f));
+		}
+
+		//강체 설정
+		{
+			shared_ptr<RigidBody> rb = make_shared<RigidBody>();
+
+			rb->SetStatic(true);
+			rb->SetMass(100000.f);
+			rb->SetRestitution(0.f);
+			go->SetCheckFrustum(false);
+			go->AddComponent(rb);
+		}
+
+		//콜라이더 설정 
+		//콜라이더의 위치,회전은 Gameobject의 Transform을 사용
+		{
+			//Sphere를 사용할경우 이곳의 주석을 풀어서 사용
+			shared_ptr<SphereCollider> collider = make_shared<SphereCollider>();
+			collider->SetRadius(100.f);
+			go->AddComponent(collider);
+		}
+
+
+		//Instancing 유무 설정(사용:0,0  미사용:0,1)
+		{
+			go->GetMeshRenderer()->GetMaterial()->SetInt(0, 0);
+		}
+
+		//추가적인 컴포넌트 부착
+		{
+			shared_ptr<Bomb> bomb = make_shared<Bomb>();
+			bomb->SetMonovihaviourName("Bomb");
+			go->AddComponent(bomb);
+		}
+		return go;
+
+	}
 }
 
 shared_ptr<Texture> Resources::CreateTexture(const wstring& name, DXGI_FORMAT format, uint32 width, uint32 height,

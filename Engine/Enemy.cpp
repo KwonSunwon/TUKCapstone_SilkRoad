@@ -9,7 +9,7 @@
 
 void Enemy::Awake()
 {
-	name = "Enemy";
+	SetMonovihaviourName("Enemy");
 
 	shared_ptr<RigidBody> rb = GetRigidBody();
 	rb->SetStatic(false);

@@ -48,13 +48,21 @@ void SceneManager::Update()
 		m_activeScene->PhysicsStep(m_iterations);
 		m_activeScene->testCollision();
 	}
-	if (reset) {
+
+	if (reset && s == 1) {
 		reset = false;
 		m_activeScene = LoadMainScene();
-		s = 1;
+		s = 2;
 		m_activeScene->Awake();
 		m_activeScene->Start();
 	}
+
+	if (reset) {
+		
+		s = 1;
+	}
+
+	
 
 }
 
@@ -81,7 +89,9 @@ void SceneManager::RenderUI(shared_ptr<D3D11On12Device> device)
 	std::wostringstream ss;
 	//ss << L"X:" << playerPos.x << L", Y:" << playerPos.y << L", Z:" << playerPos.z;
 	if (s == 0)
-		ss << "Loading";
+		ss << "press any key to start";
+	else if(s==1)
+		ss << "Loading...";
 	else
 		ss << "+";
 	std::wstring playerPosText = ss.str();
@@ -534,74 +544,7 @@ shared_ptr<Scene> SceneManager::LoadL()
 #pragma endregion
 
 
-
-	for (int i = 0; i < 10; ++i) {
-
-
-		shared_ptr<GameObject> gm = make_shared<GameObject>();
-		gm->AddComponent(make_shared<Transform>());
-		gm->GetTransform()->SetLocalScale(Vec3(150.f, 100.f, 100.f));
-		gm->GetTransform()->SetLocalPosition(Vec3(1500.f + 50.f * i, 1500.f + 400.f * i, 2000.f + 0 * i));
-
-		shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
-		{
-			shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadCubeMesh();
-			meshRenderer->SetMesh(mesh);
-		}
-
-		{
-			shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"WireFrame");
-			shared_ptr<Material> material = make_shared<Material>();
-			material->SetShader(shader);
-
-			material->SetInt(3, 1);
-			material->SetVec4(3, Vec4(1, 1, 1, 1));
-			meshRenderer->SetMaterial(material);
-		}
-		gm->AddComponent(meshRenderer);
-
-		gm->AddComponent(make_shared<RigidBody>());
-		//gm->AddComponent(make_shared<TestDragon>());
-
-		if (i & 1) {
-			gm->AddComponent(make_shared<OrientedBoxCollider>());
-			gm->GetCollider()->SetExtent(Vec3(75, 50, 50));
-
-
-			/*gm->AddComponent(make_shared<SphereCollider>());
-			gm->GetCollider()->SetRadius(100.f);*/
-
-
-		}
-		else {
-			/*gm->AddComponent(make_shared<SphereCollider>());
-			gm->GetCollider()->SetRadius(100.f);*/
-
-			gm->AddComponent(make_shared<OrientedBoxCollider>());
-			gm->GetCollider()->SetExtent(Vec3(75, 50, 50));
-
-
-		}
-
-
-
-		if (gm->GetCollider()->GetDebugCollider() != nullptr)
-			scene->AddGameObject(gm->GetCollider()->GetDebugCollider());
-		scene->AddGameObject(gm);
-	}
-
-#pragma endregion 
-
-
-#pragma region Network
-	{
-		shared_ptr<GameObject> network = make_shared<GameObject>();
-		network->SetName(L"Network");
-		network->AddComponent(make_shared<NetworkScript>());
-		scene->AddGameObject(network);
-	}
-#pragma endregion
-
+	
 	return scene;
 
 }
