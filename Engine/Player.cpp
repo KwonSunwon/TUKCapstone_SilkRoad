@@ -76,7 +76,7 @@ void Player::LateUpdate()
 void Player::Fire()
 {
 	m_fireElapsedTime = 1.f / m_fireRate;
-	m_bullets[m_bulletPivot++]->Fire(shared_from_this(),BulletType::EXPLOSIVE);
+	m_bullets[m_bulletPivot++]->Fire(shared_from_this(),BulletType::BASIC);
 	if (m_bulletPivot >= m_bullets.size())
 		m_bulletPivot = 0;
 }

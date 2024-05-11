@@ -74,7 +74,7 @@ shared_ptr<EnemyState> EnemyWalkState::OnUpdateState()
 void EnemyWalkState::OnEnter()
 {
 	m_enemy->GetAnimator()->Play(static_cast<uint32>(ENEMY_STATE::WALK));
-	// ÇÃ·¹ÀÌ¾î Å¸°İ
+	// í”Œë ˆì´ì–´ íƒ€ê²©
 }
 
 shared_ptr<EnemyState> EnemyAttackState::OnUpdateState()
@@ -113,6 +113,7 @@ shared_ptr<EnemyState> EnemyDieState::OnLateUpdateState()
 {
 	if (m_enemy->GetAnimator()->IsAnimationEndOnThisFrame())
 	{
+		m_enemy->GetTransform()->SetLocalPosition(Vec3(0, 0, 0));
 		m_enemy->GetRigidBody()->MoveTo(Vec3(-1.f, 0, 0));
 		return make_shared<EnemyIdleState>(m_enemy);
 	}

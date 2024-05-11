@@ -14,7 +14,6 @@ void PlayerBullet::Update()
 {
 	ProcessCollides();
 
-	Vec3 pos = GetRigidBody()->GetPosition();
 	shared_ptr<RigidBody> rb = GetRigidBody();
 	shared_ptr<Transform> transform = GetTransform();
 	Vec3 pos = rb->GetPosition();
@@ -37,8 +36,6 @@ void PlayerBullet::Update()
 		return;
 	}
 	
-
-	}
 
 }
 
@@ -85,7 +82,7 @@ void PlayerBullet::ProcessCollides()
 		case BASIC:
 			if (scriptE) {
 				shared_ptr<Enemy> enemyScript = dynamic_pointer_cast<Enemy>(scriptE);
-				//enemyScript->Damage(att);
+				enemyScript->GetDamage(m_attackPower);
 				return;
 			}
 			break;
@@ -102,7 +99,10 @@ void PlayerBullet::ProcessCollides()
 		default:
 			break;
 		}
-
+		rb->MoveTo(Vec3(-1.f, 0., 0));
+		rb->SetLinearVelocity(Vec3(0, 0, 0));
+		rb->SetStatic(true);
+		return;
 			
 			//enemyScript->(0);
 		
