@@ -81,9 +81,9 @@ void TestCameraScript::LateUpdate()
 		GET_SINGLE(SceneManager)->reset = true;
 	}
 
-	if (rot.x + mouseDelta.y * 0.001f < XMConvertToRadians(40.f) && rot.x + mouseDelta.y * 0.001f > XMConvertToRadians(-40.f))
+	/*if (rot.x + mouseDelta.y * 0.001f < XMConvertToRadians(40.f) && rot.x + mouseDelta.y * 0.001f > XMConvertToRadians(-40.f))
 		rot.x += mouseDelta.y * 0.001f;
 
-	GetTransform()->SetLocalRotation(rot);
+	GetTransform()->SetLocalRotation(rot);*/
 	
 }

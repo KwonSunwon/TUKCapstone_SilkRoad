@@ -47,13 +47,21 @@ void SceneManager::Update()
 		m_activeScene->PhysicsStep(m_iterations);
 		m_activeScene->testCollision();
 	}
-	if (reset) {
+
+	if (reset && s == 1) {
 		reset = false;
 		m_activeScene = LoadMainScene();
-		s = 1;
+		s = 2;
 		m_activeScene->Awake();
 		m_activeScene->Start();
 	}
+
+	if (reset) {
+		
+		s = 1;
+	}
+
+	
 
 }
 
@@ -80,7 +88,9 @@ void SceneManager::RenderUI(shared_ptr<D3D11On12Device> device)
 	std::wostringstream ss;
 	//ss << L"X:" << playerPos.x << L", Y:" << playerPos.y << L", Z:" << playerPos.z;
 	if (s == 0)
-		ss << "Loading";
+		ss << "press any key to start";
+	else if(s==1)
+		ss << "Loading...";
 	else
 		ss << "+";
 	std::wstring playerPosText = ss.str();
@@ -371,7 +381,7 @@ shared_ptr<Scene> SceneManager::LoadL()
 #pragma endregion
 
 
-
+	
 	return scene;
 
 }
