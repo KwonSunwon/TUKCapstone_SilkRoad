@@ -97,6 +97,7 @@ void PlayerBullet::ProcessCollides()
 		default:
 			break;
 		}
+		transform->SetLocalPosition(Vec3(-1.f, 0, 0));
 		rb->MoveTo(Vec3(-1.f, 0., 0));
 		rb->SetLinearVelocity(Vec3(0, 0, 0));
 		rb->SetStatic(true);
