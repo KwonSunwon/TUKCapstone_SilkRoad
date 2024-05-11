@@ -262,6 +262,7 @@
       <Filter>Scenes</Filter>
     </ClCompile>
     <ClCompile Include="DummyTerrain.cpp" />
+    <ClCompile Include="Props.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -472,6 +473,7 @@
       <Filter>Scenes</Filter>
     </ClInclude>
     <ClInclude Include="DummyTerrain.h" />
+    <ClInclude Include="Props.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath.inl">
