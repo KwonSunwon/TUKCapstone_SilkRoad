@@ -541,7 +541,10 @@ shared_ptr<class Scene> LoadMainScene()
 			{
 				shared_ptr<Transform> transform = go->GetTransform();
 				transform->SetLocalPosition(Vec3(5000.f + (i / 5) * 1000.f, 1500.f, 5000.f + i % 5 * 1000.f));
-				transform->SetLocalScale(Vec3(1.2f, 1.2f, 1.2f));
+				if (i == 9)
+					transform->SetLocalScale(Vec3(12.f, 12.f, 12.f));
+				else
+					transform->SetLocalScale(Vec3(1.2f, 1.2f, 1.2f));
 				//transform->SetLocalRotation(Vec3(XMConvertToRadians(0.f), XMConvertToRadians(0.f), XMConvertToRadians(0.f)));
 			}
 
@@ -551,6 +554,8 @@ shared_ptr<class Scene> LoadMainScene()
 
 				rb->SetStatic(true);
 				rb->SetMass(150.f);
+				if (i == 9)
+					rb->SetMass(100000000.f);
 				rb->SetRestitution(0.f);
 				go->SetCheckFrustum(false);
 				go->AddComponent(rb);
@@ -561,15 +566,20 @@ shared_ptr<class Scene> LoadMainScene()
 			{
 				//OBB를 사용할 경우 이곳의 주석을 풀어서 사용
 				shared_ptr<OrientedBoxCollider> collider = make_shared<OrientedBoxCollider>();
-				collider->SetExtent(Vec3(50, 100, 50));
+				if (i == 9)
+					collider->SetExtent(Vec3(500, 1000, 500));
+				else
+					collider->SetExtent(Vec3(50, 100, 50));
 
 				//Sphere를 사용할경우 이곳의 주석을 풀어서 사용
 				/*shared_ptr<SphereCollider> collider = make_shared<SphereCollider>();
 				collider->SetRadius(100.f);*/
 
 
-
-				collider->SetOffset(Vec3(0, 100, 0));
+				if (i == 9)
+					collider->SetOffset(Vec3(0, 1000, 0));
+				else
+					collider->SetOffset(Vec3(0, 100, 0));
 				go->AddComponent(collider);
 			}
 
