@@ -19,11 +19,19 @@ public:
 
 private:
 	shared_ptr<class PlayerState> m_curState;
-	float m_fireRate = 12.f;		// ÃÊ´ç °ø°Ý È½¼ö
+	float m_fireRate = 12.f;		// ì´ˆë‹¹ ê³µê²© íšŸìˆ˜
 	float m_fireElapsedTime = 0.f;
 
 	uint32 m_bulletPivot = 0;
 	vector<shared_ptr<PlayerBullet>> m_bullets;
 	shared_ptr<Camera> m_playerCamera;
+
+	array<int, 10> m_itemLevels;
+
+	int m_fireTime = 0;
+
+private:
+	void ProcessGetItem();
+	BulletType CalcBulletType();
 };
 

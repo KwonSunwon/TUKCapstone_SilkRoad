@@ -7,6 +7,7 @@
 
 void Item::Awake()
 {
+	SetMonovihaviourName("Item");
 	m_startHeight = GetTransform()->GetLocalPosition().y;
 	
 
