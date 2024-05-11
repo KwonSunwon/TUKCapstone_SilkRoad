@@ -59,7 +59,7 @@ void RigidBody::MovementStep(int iterations)
 		return;
 
 
-	if (m_position.y < -10) {
+	if (m_position.y < -100) {
 		m_position.y = 2000;
 	}
 	if (DELTA_TIME > 0.5)
