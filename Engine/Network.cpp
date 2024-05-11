@@ -8,6 +8,7 @@
 #include "Transform.h"
 #include "Timer.h"
 #include "NetworkPlayer.h"
+#include "Enemy.h"
 
 Network::Network()
 {
@@ -41,6 +42,9 @@ void Network::Update()
 			break;
 		case PACKET_TYPE::PT_PLAYER:
 			GET_SINGLE(SceneManager)->GetActiveScene()->m_networkPlayers[0]->ProcessPacket(reinterpret_pointer_cast<PlayerPacket>(packet));
+			break;
+		case PACKET_TYPE::PT_ENEMY:
+			GET_SINGLE(SceneManager)->GetActiveScene()->m_enemies[packet->m_targetId]->ProcessPacket(reinterpret_pointer_cast<EnemyPacket>(packet));
 			break;
 		default:
 			break;
@@ -206,6 +210,9 @@ void Host::Connection(ushort id)
 				case PACKET_TYPE::PT_PLAYER:
 					packet = make_shared<PlayerPacket>();
 					break;
+				case PACKET_TYPE::PT_ENEMY:
+					packet = make_shared<EnemyPacket>();
+					break;
 				}
 				m_buffer.Read(reinterpret_cast<char*>(packet.get()), packet->m_size);
 
@@ -292,7 +299,7 @@ void Guest::Connect()
 	optval = TRUE;
 	setsockopt(m_socket, IPPROTO_TCP, TCP_NODELAY, (const char*)&optval, sizeof(optval));
 	GET_SINGLE(SceneManager)->GetActiveScene()->m_networkPlayers[0]->m_myNetworkId = 0;
-	if (initPacket.m_networkId == 1) {
+	if(initPacket.m_networkId == 1) {
 		GET_SINGLE(SceneManager)->GetActiveScene()->m_networkPlayers[1]->m_myNetworkId = 2;
 	}
 	else {
@@ -382,6 +389,9 @@ void Guest::Receiver()
 					break;
 				case PACKET_TYPE::PT_PLAYER:
 					packet = make_shared<PlayerPacket>();
+					break;
+				case PACKET_TYPE::PT_ENEMY:
+					packet = make_shared<EnemyPacket>();
 					break;
 				}
 				m_buffer.Read(reinterpret_cast<char*>(packet.get()), packet->m_size);

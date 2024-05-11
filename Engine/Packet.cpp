@@ -137,3 +137,10 @@ PlayerPacket::PlayerPacket()
 	m_type = PACKET_TYPE::PT_PLAYER;
 	m_targetId = -1;
 }
+
+EnemyPacket::EnemyPacket()
+{
+	m_size = sizeof(EnemyPacket);
+	m_targetId = -1;
+	m_type = PACKET_TYPE::PT_ENEMY;
+}
