@@ -37,7 +37,7 @@
 shared_ptr<class Scene> LoadMainScene()
 {
 #pragma region LayerMask
-	
+
 	GET_SINGLE(SceneManager)->SetLayerName(0, L"Default");
 	GET_SINGLE(SceneManager)->SetLayerName(1, L"UI");
 #pragma endregion
@@ -176,7 +176,7 @@ shared_ptr<class Scene> LoadMainScene()
 			obj->AddComponent(collider);
 		}
 		//디버그용 콜라이더 매쉬 설정
-		if (DEBUG_MODE)
+		if(DEBUG_MODE)
 		{
 			scene->AddGameObject(obj->GetCollider()->GetDebugCollider());
 		}
@@ -191,7 +191,7 @@ shared_ptr<class Scene> LoadMainScene()
 #pragma endregion
 
 #pragma region UI_Test
-	for (int32 i = 0; i < 6; i++)
+	for(int32 i = 0; i < 6; i++)
 	{
 		shared_ptr<GameObject> obj = make_shared<GameObject>();
 		obj->SetLayerIndex(GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI")); // UI
@@ -207,9 +207,9 @@ shared_ptr<class Scene> LoadMainScene()
 			shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"Texture");
 
 			shared_ptr<Texture> texture;
-			if (i < 3)
+			if(i < 3)
 				texture = GEngine->GetRTGroup(RENDER_TARGET_GROUP_TYPE::G_BUFFER)->GetRTTexture(i);
-			else if (i < 5)
+			else if(i < 5)
 				texture = GEngine->GetRTGroup(RENDER_TARGET_GROUP_TYPE::LIGHTING)->GetRTTexture(i - 3);
 			else
 				texture = GEngine->GetRTGroup(RENDER_TARGET_GROUP_TYPE::SHADOW)->GetRTTexture(0);
@@ -283,7 +283,7 @@ shared_ptr<class Scene> LoadMainScene()
 		}
 
 		//디버그용 콜라이더 매쉬 설정
-		if (DEBUG_MODE)
+		if(DEBUG_MODE)
 		{
 			scene->AddGameObject(go->GetCollider()->GetDebugCollider());
 		}
@@ -311,7 +311,7 @@ shared_ptr<class Scene> LoadMainScene()
 		{
 			shared_ptr<Player> playerScript = make_shared<Player>();
 			// 총알 오브젝트 풀 생성
-			for (int i = 0; i < 20; ++i)
+			for(int i = 0; i < 20; ++i)
 			{
 				shared_ptr<GameObject> bullet = make_shared<GameObject>();
 				bullet->SetName(L"Bullet");
@@ -362,9 +362,9 @@ shared_ptr<class Scene> LoadMainScene()
 				playerScript->AddBullet(bulletScript);
 
 				bullet->AddComponent(bulletScript);
-				
-				shared_ptr<GameObject> bomb = GET_SINGLE(Resources)->LoadBombPrefab(Vec3(0,0,0));
-				shared_ptr<Bomb> bombScript= dynamic_pointer_cast<Bomb>(bomb->GetMonobehaviour("Bomb"));
+
+				shared_ptr<GameObject> bomb = GET_SINGLE(Resources)->LoadBombPrefab(Vec3(0, 0, 0));
+				shared_ptr<Bomb> bombScript = dynamic_pointer_cast<Bomb>(bomb->GetMonobehaviour("Bomb"));
 				bulletScript->SetBomb(bombScript);
 				scene->AddGameObject(bullet);
 				scene->AddGameObject(bomb);
@@ -428,7 +428,7 @@ shared_ptr<class Scene> LoadMainScene()
 		}
 
 		//디버그용 콜라이더 매쉬 설정
-		if (DEBUG_MODE)
+		if(DEBUG_MODE)
 		{
 			scene->AddGameObject(go->GetCollider()->GetDebugCollider());
 		}
@@ -500,7 +500,7 @@ shared_ptr<class Scene> LoadMainScene()
 		}
 
 		//디버그용 콜라이더 매쉬 설정
-		if (DEBUG_MODE)
+		if(DEBUG_MODE)
 		{
 			scene->AddGameObject(go->GetCollider()->GetDebugCollider());
 		}
@@ -584,7 +584,7 @@ shared_ptr<class Scene> LoadMainScene()
 			}
 
 			//디버그용 콜라이더 매쉬 설정
-			if (DEBUG_MODE)
+			if(DEBUG_MODE)
 			{
 				scene->AddGameObject(go->GetCollider()->GetDebugCollider());
 			}
@@ -598,7 +598,11 @@ shared_ptr<class Scene> LoadMainScene()
 			{
 				shared_ptr<Enemy> enemyScript = make_shared<Enemy>();
 				enemyScript->AddPlayer(scene->GetPlayers()[0]);
+				enemyScript->AddPlayer(scene->GetPlayers()[GUEST_PLAYER1]);
+				enemyScript->AddPlayer(scene->GetPlayers()[GUEST_PLAYER2]);
 				go->AddComponent(enemyScript);
+				enemyScript->SetNetworkId(i);
+				scene->m_enemies[i] = enemyScript;
 				//go->AddComponent(make_shared<PlayerAnimation>());
 			}
 

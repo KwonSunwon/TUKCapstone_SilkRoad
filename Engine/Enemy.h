@@ -20,7 +20,7 @@ public:
 
 	void SetChaseRange(float range) { m_chaseRange = range; }
 	float GetChaseRange() { return m_chaseRange; }
-	
+
 	void SetMaxWalkSpeed(float speed) { m_maxWalkSpeed = speed; }
 	float GetMaxWalkSpeed() { return m_maxWalkSpeed; }
 
@@ -32,10 +32,12 @@ public:
 
 	void GetDamage(float damage) { m_HP -= damage; }
 
+	void ProcessPacket(shared_ptr<class EnemyPacket> packet);
+	void SetNetworkId(uint32 id) { m_networkId = id; }
 
 private:
 	shared_ptr<class EnemyState> m_curState;
-	float m_fireRate = 1.f;		// ÃÊ´ç °ø°Ý È½¼ö
+	float m_fireRate = 1.f;		// ì´ˆë‹¹ ê³µê²© íšŸìˆ˜
 	float m_fireElapsedTime = 0.f;
 	float m_chaseRange = 2000.f;
 	float m_attackRange = 300.f;
@@ -45,6 +47,8 @@ private:
 
 	vector<shared_ptr<class GameObject>> m_players;
 	uint32 m_targetPlayerIndex = 0;
+
+	uint32 m_networkId = -1;
 
 };
 

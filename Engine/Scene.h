@@ -53,11 +53,11 @@ public:
 	void IntersectColliders(shared_ptr<BaseCollider> collider1, shared_ptr<BaseCollider> collider2);
 	void testCollision();
 	void PhysicsStep(int iterations);
-	
+
 	shared_ptr<Terrain> m_terrain;
 
 	array<shared_ptr<class NetworkPlayer>, 2> m_networkPlayers;
-
+	array<shared_ptr<class Enemy>, 10> m_enemies;
 
 	array<shared_ptr<GameObject>, 3> m_players;
 private:
@@ -69,6 +69,6 @@ private:
 private:
 	shared_ptr<OcTree> m_ocTree = make_shared<OcTree>(100000, 1000);
 
-	
+
 };
 
