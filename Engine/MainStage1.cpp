@@ -610,71 +610,71 @@ shared_ptr<class Scene> LoadMainScene()
 
 
 
-#pragma region test
-
-
-
-	for (int j = 0; j < 5; ++j) {
-		for (int i = 0; i < 10; ++i) {
-
-
-			shared_ptr<GameObject> gm = make_shared<GameObject>();
-			gm->AddComponent(make_shared<Transform>());
-			gm->GetTransform()->SetLocalScale(Vec3(150.f, 100.f, 100.f));
-			gm->GetTransform()->SetLocalPosition(Vec3(12500 + 100 * i, 1500.f + 400.f * i, 15000+ 100*j));
-
-			shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
-			{
-				shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadCubeMesh();
-				meshRenderer->SetMesh(mesh);
-			}
-
-			{
-				shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"WireFrame");
-				shared_ptr<Material> material = make_shared<Material>();
-				material->SetShader(shader);
-
-				material->SetInt(3, 1);
-				material->SetVec4(3, Vec4(1, 1, 1, 1));
-				meshRenderer->SetMaterial(material);
-			}
-			gm->AddComponent(meshRenderer);
-
-			gm->AddComponent(make_shared<RigidBody>());
-			//gm->AddComponent(make_shared<TestDragon>());
-
-			if (i & 1) {
-				gm->AddComponent(make_shared<OrientedBoxCollider>());
-				gm->GetCollider()->SetExtent(Vec3(75, 50, 50));
-
-
-				/*gm->AddComponent(make_shared<SphereCollider>());
-				gm->GetCollider()->SetRadius(100.f);*/
-
-
-			}
-			else {
-				gm->AddComponent(make_shared<SphereCollider>());
-				gm->GetCollider()->SetRadius(100.f);
-
-				/*gm->AddComponent(make_shared<OrientedBoxCollider>());
-				gm->GetCollider()->SetExtent(Vec3(75, 50, 50));*/
-
-
-			}
-
-			//Instancing 유무 설정(사용:0,0  미사용:0,1)
-			{
-				gm->GetMeshRenderer()->GetMaterial()->SetInt(0, 1);
-			}
-
-			if (gm->GetCollider()->GetDebugCollider() != nullptr)
-				scene->AddGameObject(gm->GetCollider()->GetDebugCollider());
-			scene->AddGameObject(gm);
-		}
-	}
-
-#pragma endregion 
+//#pragma region test
+//
+//
+//
+//	for (int j = 0; j < 5; ++j) {
+//		for (int i = 0; i < 10; ++i) {
+//
+//
+//			shared_ptr<GameObject> gm = make_shared<GameObject>();
+//			gm->AddComponent(make_shared<Transform>());
+//			gm->GetTransform()->SetLocalScale(Vec3(150.f, 100.f, 100.f));
+//			gm->GetTransform()->SetLocalPosition(Vec3(12500 + 100 * i, 1500.f + 400.f * i, 15000+ 100*j));
+//
+//			shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
+//			{
+//				shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadCubeMesh();
+//				meshRenderer->SetMesh(mesh);
+//			}
+//
+//			{
+//				shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"WireFrame");
+//				shared_ptr<Material> material = make_shared<Material>();
+//				material->SetShader(shader);
+//
+//				material->SetInt(3, 1);
+//				material->SetVec4(3, Vec4(1, 1, 1, 1));
+//				meshRenderer->SetMaterial(material);
+//			}
+//			gm->AddComponent(meshRenderer);
+//
+//			gm->AddComponent(make_shared<RigidBody>());
+//			//gm->AddComponent(make_shared<TestDragon>());
+//
+//			if (i & 1) {
+//				gm->AddComponent(make_shared<OrientedBoxCollider>());
+//				gm->GetCollider()->SetExtent(Vec3(75, 50, 50));
+//
+//
+//				/*gm->AddComponent(make_shared<SphereCollider>());
+//				gm->GetCollider()->SetRadius(100.f);*/
+//
+//
+//			}
+//			else {
+//				gm->AddComponent(make_shared<SphereCollider>());
+//				gm->GetCollider()->SetRadius(100.f);
+//
+//				/*gm->AddComponent(make_shared<OrientedBoxCollider>());
+//				gm->GetCollider()->SetExtent(Vec3(75, 50, 50));*/
+//
+//
+//			}
+//
+//			//Instancing 유무 설정(사용:0,0  미사용:0,1)
+//			{
+//				gm->GetMeshRenderer()->GetMaterial()->SetInt(0, 1);
+//			}
+//
+//			if (gm->GetCollider()->GetDebugCollider() != nullptr)
+//				scene->AddGameObject(gm->GetCollider()->GetDebugCollider());
+//			scene->AddGameObject(gm);
+//		}
+//	}
+//
+//#pragma endregion 
 
 
 #pragma region Network

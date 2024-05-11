@@ -21,20 +21,28 @@ shared_ptr<PlayerState> PlayerOnAirState::OnUpdateState()
 
 	if (INPUT->GetButton(KEY_TYPE::W))
 	{
-		forceDir += transform->GetLook();
+		Vec3 lookProj = Vec3(transform->GetLook().x, 0, transform->GetLook().z);
+		lookProj.Normalize();
+		forceDir += lookProj;
 	}
 
 	if (INPUT->GetButton(KEY_TYPE::S))
 	{
-		forceDir -= transform->GetLook();
+		Vec3 lookProj = Vec3(transform->GetLook().x, 0, transform->GetLook().z);
+		lookProj.Normalize();
+		forceDir -= lookProj;
 	}
 	if (INPUT->GetButton(KEY_TYPE::A))
 	{
-		forceDir -= transform->GetRight();
+		Vec3 rightProj = Vec3(transform->GetRight().x, 0, transform->GetRight().z);
+		rightProj.Normalize();
+		forceDir -= rightProj;
 	}
 	if (INPUT->GetButton(KEY_TYPE::D))
 	{
-		forceDir += transform->GetRight();
+		Vec3 rightProj = Vec3(transform->GetRight().x, 0, transform->GetRight().z);
+		rightProj.Normalize();
+		forceDir += rightProj;
 	}
 	if (INPUT->GetButton(KEY_TYPE::LBUTTON))
 	{
@@ -59,7 +67,7 @@ void PlayerJumpUpState::OnEnter()
 	shared_ptr<RigidBody> rb = m_player->GetRigidBody();
 	shared_ptr<Transform> transform = m_player->GetTransform();
 
-	Vec3 forceDir = transform->GetUp();
+	Vec3 forceDir = Vec3(0, 1, 0);
 	float jumpForceMag = 300000000;
 
 	forceDir.Normalize();
@@ -93,7 +101,7 @@ shared_ptr<PlayerState> PlayerJumpLoopState::OnUpdateState()
 
 	for (auto col : *(rb->GetCollideEvent())) {
 		Vec3 axis = *col->m_normal;
-		if (axis.Dot(transform->GetUp()) < -0.5f) {
+		if (axis.Dot(Vec3(0, 1, 0)) < -0.5f) {
 			return make_shared<PlayerJumpDownState>(m_player);
 		}
 	}

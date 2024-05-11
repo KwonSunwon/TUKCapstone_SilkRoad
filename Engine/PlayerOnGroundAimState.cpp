@@ -21,22 +21,29 @@ shared_ptr<PlayerState> PlayerOnGroundAimState::OnUpdateState()
 
 	if (INPUT->GetButton(KEY_TYPE::W))
 	{
-		forceDir += transform->GetLook();
+		Vec3 lookProj = Vec3(transform->GetLook().x, 0, transform->GetLook().z);
+		lookProj.Normalize();
+		forceDir += lookProj;
 	}
 
 	if (INPUT->GetButton(KEY_TYPE::S))
 	{
-		forceDir -= transform->GetLook();
+		Vec3 lookProj = Vec3(transform->GetLook().x, 0, transform->GetLook().z);
+		lookProj.Normalize();
+		forceDir -= lookProj;
 	}
 	if (INPUT->GetButton(KEY_TYPE::A))
 	{
-		forceDir -= transform->GetRight();
+		Vec3 rightProj = Vec3(transform->GetRight().x, 0, transform->GetRight().z);
+		rightProj.Normalize();
+		forceDir -= rightProj;
 	}
 	if (INPUT->GetButton(KEY_TYPE::D))
 	{
-		forceDir += transform->GetRight();
+		Vec3 rightProj = Vec3(transform->GetRight().x, 0, transform->GetRight().z);
+		rightProj.Normalize();
+		forceDir += rightProj;
 	}
-
 	float forceMag = 300000;
 	rb->SetMaxSpeed(500.f);
 
@@ -50,7 +57,7 @@ shared_ptr<PlayerState> PlayerOnGroundAimState::OnUpdateState()
 
 	for (auto col : *(rb->GetCollideEvent())) {
 		Vec3 axis = *col->m_normal;
-		if (axis.Dot(transform->GetUp()) < -0.5f) {
+		if (axis.Dot(Vec3(0, 1, 0))) {
 			m_onAirTime = 0.f;
 		}
 	}
