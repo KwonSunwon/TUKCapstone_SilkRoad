@@ -31,7 +31,6 @@
 #include "Enemy.h"
 #include "MainStage1.h"
 #include "Network.h"
-#include "NetworkPlayer.h"
 
 void SceneManager::Update()
 {
@@ -58,11 +57,11 @@ void SceneManager::Update()
 	}
 
 	if (reset) {
-		
+
 		s = 1;
 	}
 
-	
+
 
 }
 
@@ -90,7 +89,7 @@ void SceneManager::RenderUI(shared_ptr<D3D11On12Device> device)
 	//ss << L"X:" << playerPos.x << L", Y:" << playerPos.y << L", Z:" << playerPos.z;
 	if (s == 0)
 		ss << "press any key to start";
-	else if(s==1)
+	else if (s == 1)
 		ss << "Loading...";
 	else
 		ss << "+";
@@ -123,8 +122,8 @@ void SceneManager::RenderUI(shared_ptr<D3D11On12Device> device)
 
 void SceneManager::LoadScene(wstring sceneName)
 {
-	// TODO : ???? Scene ????
-	// TODO : ??????? Scene ???? ?��?
+	// TODO : ���� Scene ����
+	// TODO : ���Ͽ��� Scene ���� �ε�
 
 	m_activeScene = LoadL();
 
@@ -134,7 +133,7 @@ void SceneManager::LoadScene(wstring sceneName)
 
 void SceneManager::SetLayerName(uint8 index, const wstring& name)
 {
-	// ???? ?????? ????
+	// ���� ������ ����
 	const wstring& prevName = m_layerNames[index];
 	m_layerIndex.erase(prevName);
 
@@ -160,7 +159,7 @@ shared_ptr<GameObject> SceneManager::Pick(int32 screenX, int32 screenY)
 
 	Matrix projectionMatrix = camera->GetProjectionMatrix();
 
-	// ViewSpace???? Picking ????
+	// ViewSpace���� Picking ����
 	float viewX = (+2.0f * screenX / width - 1.0f) / projectionMatrix(0, 0);
 	float viewY = (-2.0f * screenY / height + 1.0f) / projectionMatrix(1, 1);
 
@@ -177,16 +176,16 @@ shared_ptr<GameObject> SceneManager::Pick(int32 screenX, int32 screenY)
 		if (gameObject->GetCollider() == nullptr)
 			continue;
 
-		// ViewSpace?????? Ray ????
+		// ViewSpace������ Ray ����
 		Vec4 rayOrigin = Vec4(0.0f, 0.0f, 0.0f, 1.0f);
 		Vec4 rayDir = Vec4(viewX, viewY, 1.0f, 0.0f);
 
-		// WorldSpace?????? Ray ????
+		// WorldSpace������ Ray ����
 		rayOrigin = XMVector3TransformCoord(rayOrigin, viewMatrixInv);
 		rayDir = XMVector3TransformNormal(rayDir, viewMatrixInv);
 		rayDir.Normalize();
 
-		// WorldSpace???? ????
+		// WorldSpace���� ����
 		float distance = 0.f;
 		if (gameObject->GetCollider()->Intersects(rayOrigin, rayDir, OUT distance) == false)
 			continue;
@@ -213,7 +212,7 @@ shared_ptr<Scene> SceneManager::LoadL()
 	{
 		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"ComputeShader");
 
-		// UAV ?? Texture ????
+		// UAV �� Texture ����
 		shared_ptr<Texture> texture = GET_SINGLE(Resources)->CreateTexture(L"UAVTexture",
 			DXGI_FORMAT_R8G8B8A8_UNORM, 1024, 1024,
 			CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT), D3D12_HEAP_FLAG_NONE,
@@ -224,7 +223,7 @@ shared_ptr<Scene> SceneManager::LoadL()
 		material->SetInt(0, 1);
 		GEngine->GetComputeDescHeap()->SetUAV(texture->GetUAVHandle(), UAV_REGISTER::u0);
 
-		// ?????? ??? (1 * 1024 * 1)
+		// ������ �׷� (1 * 1024 * 1)
 		material->Dispatch(1, 1024, 1);
 	}
 #pragma endregion
@@ -236,12 +235,12 @@ shared_ptr<Scene> SceneManager::LoadL()
 		shared_ptr<GameObject> camera = make_shared<GameObject>();
 		camera->SetName(L"Main_Camera");
 		camera->AddComponent(make_shared<Transform>());
-		camera->AddComponent(make_shared<Camera>()); // Near=1, Far=1000, FOV=45??
+		camera->AddComponent(make_shared<Camera>()); // Near=1, Far=1000, FOV=45��
 		camera->AddComponent(make_shared<TestCameraScript>());
 		camera->GetCamera()->SetFar(100000.f);
 		camera->GetTransform()->SetLocalPosition(Vec3(0.f, 900.f, 0.f));
 		uint8 layerIndex = GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI");
-		camera->GetCamera()->SetCullingMaskLayerOnOff(layerIndex, true); // UI?? ?? ????
+		camera->GetCamera()->SetCullingMaskLayerOnOff(layerIndex, true); // UI�� �� ����
 		scene->AddGameObject(camera);
 	}
 #pragma endregion
@@ -255,8 +254,8 @@ shared_ptr<Scene> SceneManager::LoadL()
 		camera->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 0.f));
 		camera->GetCamera()->SetProjectionType(PROJECTION_TYPE::ORTHOGRAPHIC);
 		uint8 layerIndex = GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI");
-		camera->GetCamera()->SetCullingMaskAll(); // ?? ????
-		camera->GetCamera()->SetCullingMaskLayerOnOff(layerIndex, false); // UI?? ????
+		camera->GetCamera()->SetCullingMaskAll(); // �� ����
+		camera->GetCamera()->SetCullingMaskLayerOnOff(layerIndex, false); // UI�� ����
 		scene->AddGameObject(camera);
 	}
 #pragma endregion
@@ -328,168 +327,6 @@ shared_ptr<Scene> SceneManager::LoadL()
 
 #pragma endregion
 
-#pragma region First Network Characters Setting Example
-	{
-		int idx = 0;
-		shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Characters.fbx");
-		vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
-		shared_ptr<GameObject> go = gameObjects[idx];
-		//Transform 설정
-		{
-			shared_ptr<Transform> transform = go->GetTransform();
-			transform->SetLocalPosition(Vec3(3500.f, 1500.f, 2500.f));
-			//transform->SetLocalScale(Vec3(1.f, 1.f, 1.f));
-			//transform->SetLocalRotation(Vec3(XMConvertToRadians(0.f), XMConvertToRadians(0.f), XMConvertToRadians(0.f)));
-		}
-
-		//강체 설정
-		{
-			shared_ptr<RigidBody> rb = make_shared<RigidBody>();
-
-			rb->SetStatic(true);
-			rb->SetMass(80.f);
-			rb->SetRestitution(0.f);
-			go->SetCheckFrustum(false);
-			go->AddComponent(rb);
-		}
-
-		//콜라이더 설정 
-		//콜라이더의 위치,회전은 Gameobject의 Transform을 사용
-		{
-			//OBB를 사용할 경우 이곳의 주석을 풀어서 사용
-			shared_ptr<OrientedBoxCollider> collider = make_shared<OrientedBoxCollider>();
-			collider->SetExtent(Vec3(50, 100, 50));
-
-			//Sphere를 사용할경우 이곳의 주석을 풀어서 사용
-			/*shared_ptr<SphereCollider> collider = make_shared<SphereCollider>();
-			collider->SetRadius(100.f);*/
-
-
-
-			collider->SetOffset(Vec3(0, 80, 0));
-			go->AddComponent(collider);
-		}
-
-		//디버그용 콜라이더 매쉬 설정
-		if (DEBUG_MODE)
-		{
-			scene->AddGameObject(go->GetCollider()->GetDebugCollider());
-		}
-
-		//Instancing 유무 설정(사용:0,0  미사용:0,1)
-		{
-			go->GetMeshRenderer()->GetMaterial()->SetInt(0, 0);
-		}
-
-		//추가적인 컴포넌트 부착
-		{
-			shared_ptr<NetworkPlayer> networkPlayer = make_shared<NetworkPlayer>();
-			go->AddComponent(networkPlayer);
-			scene->m_networkPlayers[0] = networkPlayer;
-			//go->AddComponent(make_shared<PlayerAnimation>());
-		}
-
-
-		scene->SetPlayer(go, GUEST_PLAYER1);
-
-		scene->AddGameObject(go);
-
-	}
-
-
-
-#pragma endregion
-
-#pragma region Second Network Characters Setting Example
-	{
-		int idx = 0;
-		shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Characters.fbx");
-		vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
-		shared_ptr<GameObject> go = gameObjects[idx];
-		//Transform 설정
-		{
-			shared_ptr<Transform> transform = go->GetTransform();
-			transform->SetLocalPosition(Vec3(4500.f, 1500.f, 2500.f));
-			//transform->SetLocalScale(Vec3(1.f, 1.f, 1.f));
-			//transform->SetLocalRotation(Vec3(XMConvertToRadians(0.f), XMConvertToRadians(0.f), XMConvertToRadians(0.f)));
-		}
-
-		//강체 설정
-		{
-			shared_ptr<RigidBody> rb = make_shared<RigidBody>();
-
-			rb->SetStatic(true);
-			rb->SetMass(80.f);
-			rb->SetRestitution(0.f);
-			go->SetCheckFrustum(false);
-			go->AddComponent(rb);
-		}
-
-		//콜라이더 설정 
-		//콜라이더의 위치,회전은 Gameobject의 Transform을 사용
-		{
-			//OBB를 사용할 경우 이곳의 주석을 풀어서 사용
-			shared_ptr<OrientedBoxCollider> collider = make_shared<OrientedBoxCollider>();
-			collider->SetExtent(Vec3(50, 100, 50));
-
-			//Sphere를 사용할경우 이곳의 주석을 풀어서 사용
-			/*shared_ptr<SphereCollider> collider = make_shared<SphereCollider>();
-			collider->SetRadius(100.f);*/
-
-
-
-			collider->SetOffset(Vec3(0, 80, 0));
-			go->AddComponent(collider);
-		}
-
-		//디버그용 콜라이더 매쉬 설정
-		if (DEBUG_MODE)
-		{
-			scene->AddGameObject(go->GetCollider()->GetDebugCollider());
-		}
-
-		//Instancing 유무 설정(사용:0,0  미사용:0,1)
-		{
-			go->GetMeshRenderer()->GetMaterial()->SetInt(0, 0);
-		}
-
-		//추가적인 컴포넌트 부착
-		{
-			shared_ptr<NetworkPlayer> networkPlayer = make_shared<NetworkPlayer>();
-			go->AddComponent(networkPlayer);
-			scene->m_networkPlayers[1] = networkPlayer;
-			//go->AddComponent(make_shared<PlayerAnimation>());
-		}
-
-
-		scene->SetPlayer(go, GUEST_PLAYER2);
-
-		scene->AddGameObject(go);
-
-	}
-
-
-
-#pragma endregion
-
-#pragma region Enemy
-	{
-		for (int i = 0; i < 25; ++i)
-		{
-			int idx = 0;
-			shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\BR_Characters.fbx");
-			vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
-			shared_ptr<GameObject> go = gameObjects[idx];
-			//Transform 설정
-			{
-				shared_ptr<Transform> transform = go->GetTransform();
-				transform->SetLocalPosition(Vec3(5000.f + (i / 5) * 1000.f, 1500.f, 5000.f + i % 5 * 1000.f));
-				transform->SetLocalScale(Vec3(1.2f, 1.2f, 1.2f));
-				//transform->SetLocalRotation(Vec3(XMConvertToRadians(0.f), XMConvertToRadians(0.f), XMConvertToRadians(0.f)));
-			}
-		}
-	}
-
 
 
 #pragma region Terrain
@@ -544,7 +381,7 @@ shared_ptr<Scene> SceneManager::LoadL()
 #pragma endregion
 
 
-	
+
 	return scene;
 
 }
