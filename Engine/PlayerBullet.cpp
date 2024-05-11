@@ -83,7 +83,6 @@ void PlayerBullet::ProcessCollides()
 			if (scriptE) {
 				shared_ptr<Enemy> enemyScript = dynamic_pointer_cast<Enemy>(scriptE);
 				enemyScript->GetDamage(m_attackPower);
-				return;
 			}
 			break;
 
@@ -92,7 +91,6 @@ void PlayerBullet::ProcessCollides()
 				Vec3 pos = (*col->m_contacts)[0];
 				m_bomb->SetBombPosition(pos);
 				m_bomb->SetBombActive();
-				return;
 			}
 
 			break;

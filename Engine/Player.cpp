@@ -114,4 +114,6 @@ BulletType Player::CalcBulletType()
 
 	if (m_fireTime % (5 - m_itemLevels[0]) == 0)
 		return BulletType::EXPLOSIVE;
+
+	return BulletType::BASIC;
 }

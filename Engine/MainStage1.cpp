@@ -531,7 +531,7 @@ shared_ptr<class Scene> LoadMainScene()
 
 #pragma region Enemy
 	{
-		for (int i = 0; i < 1; ++i)
+		for (int i = 0; i < 10; ++i)
 		{
 			int idx = 0;
 			shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\BR_Characters.fbx");
