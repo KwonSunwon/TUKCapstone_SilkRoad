@@ -1415,7 +1415,7 @@
             "meshName": "SM_Bld_Scav_Refinery_Silo_01.fbx",
             "position": {
                 "x": 5379.0,
-                "y": 163.0906982421875,
+                "y": 49.0,
                 "z": -1967.0006103515625
             },
             "rotation": {
@@ -1445,7 +1445,7 @@
             "meshName": "SM_Bld_Scav_Refinery_Silo_01.fbx",
             "position": {
                 "x": -1370.0,
-                "y": 163.0906982421875,
+                "y": 58.0,
                 "z": 3160.0
             },
             "rotation": {
