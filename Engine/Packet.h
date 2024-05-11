@@ -39,7 +39,8 @@ enum class PACKET_TYPE : BYTE {
 	PT_NONE = 0,
 	PT_INIT = 1,
 	PT_MOVE,
-	PT_MAX
+	PT_MAX,
+	PT_PLAYER
 };
 
 #pragma pack(push, 1)
@@ -71,4 +72,17 @@ public:
 public:
 	Vec3 m_position;
 };
+
+class PlayerPacket : public Packet {
+public:
+	PlayerPacket();
+	~PlayerPacket() {}
+
+public:
+	Vec3 m_position;
+	Vec3 m_velocity;
+	Vec3 m_rotation;
+	uint32 m_animationIndex;
+};
+
 #pragma pack(pop)

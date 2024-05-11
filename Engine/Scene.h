@@ -4,7 +4,7 @@ enum PlayerType
 {
 	MAIN_PLAYER,
 	GUEST_PLAYER1,
-	GUIDE_PLAYER2
+	GUEST_PLAYER2
 };
 
 class GameObject;
@@ -39,6 +39,7 @@ public:
 
 private:
 	void PushLightData();
+	void Resolution();
 
 public:
 	void SetPlayer(shared_ptr<GameObject> player, PlayerType type) { m_players[type] = player; }
@@ -54,15 +55,17 @@ public:
 	void PhysicsStep(int iterations);
 	
 	shared_ptr<Terrain> m_terrain;
-private:
-	array<shared_ptr<GameObject>, 3> m_players;
 
+	array<shared_ptr<class NetworkPlayer>, 2> m_networkPlayers;
+
+
+	array<shared_ptr<GameObject>, 3> m_players;
+private:
 	vector<shared_ptr<GameObject>>		m_gameObjects;
 	vector<shared_ptr<GameObject>>		m_collidableGameObjects;
 	vector<shared_ptr<class Camera>>	m_cameras;
 	vector<shared_ptr<class Light>>		m_lights;
 	vector<shared_ptr<class Manifold>>	m_contacts;
-	//test func
 private:
 	shared_ptr<OcTree> m_ocTree = make_shared<OcTree>(100000, 1000);
 

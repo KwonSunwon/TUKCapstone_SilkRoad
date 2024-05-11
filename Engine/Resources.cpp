@@ -2,11 +2,21 @@
 #include "Resources.h"
 #include "Engine.h"
 #include "MeshData.h"
+#include "GameObject.h"
+#include "RigidBody.h"
+#include "Item.h"
+#include "Transform.h"
+#include "BaseCollider.h"
+#include "SphereCollider.h"
+#include "OrientedBoxCollider.h"
+#include "Timer.h"
+#include "MeshRenderer.h"
 
 void Resources::Init()
 {
 	CreateDefaultShader();
 	CreateDefaultMaterial();
+	CreateDefaultGameObject();
 }
 
 shared_ptr<Mesh> Resources::LoadPointMesh()
@@ -132,8 +142,8 @@ shared_ptr<Mesh> Resources::LoadCubeMesh()
 shared_ptr<Mesh> Resources::LoadSphereMesh()
 {
 	shared_ptr<Mesh> findMesh = Get<Mesh>(L"Sphere");
-	if (findMesh)
-		return findMesh;
+	/*if (findMesh)
+		return findMesh;*/
 
 	float radius = 0.5f; // 구의 반지름
 	uint32 stackCount = 20; // 가로 분할
@@ -297,6 +307,64 @@ shared_ptr<Mesh> Resources::LoadTerrainMesh(int32 sizeX, int32 sizeZ)
 	mesh->Create(vec, idx);
 	Add(L"Terrain", mesh);
 	return mesh;
+}
+
+shared_ptr<GameObject> Resources::LoadItemPrefab(int id, Vec3 location)
+{
+#pragma region Item
+	{
+		int idx = 0;
+		shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Item_Cylinder.fbx");
+		vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
+		shared_ptr<GameObject> go = gameObjects[idx];
+
+		//Transform 설정
+		{
+			shared_ptr<Transform> transform = go->GetTransform();
+			transform->SetLocalPosition(location);
+		}
+
+		//강체 설정
+		{
+			shared_ptr<RigidBody> rb = make_shared<RigidBody>();
+
+			rb->SetStatic(true);
+			rb->SetUseGravity(false);
+			rb->SetOverlap();
+			go->SetCheckFrustum(false);
+			go->AddComponent(rb);
+		}
+
+		//콜라이더 설정 
+		//콜라이더의 위치,회전은 Gameobject의 Transform을 사용
+		{
+			shared_ptr<SphereCollider> collider = make_shared<SphereCollider>();
+			collider->SetRadius(30.f);
+
+			collider->SetOffset(Vec3(0, 15, 0));
+			go->AddComponent(collider);
+		}
+
+
+
+		//Instancing 유무 설정(사용:0,0  미사용:0,1)
+		{
+			go->GetMeshRenderer()->GetMaterial()->SetInt(0, 0);
+		}
+
+		//추가적인 컴포넌트 부착
+		{
+			shared_ptr<Item> item = make_shared<Item>();
+			item->SetItemId(id);
+			go->AddComponent(item);
+			
+		}
+		return go;
+	}
+
+
+
+#pragma endregion
 }
 
 shared_ptr<Texture> Resources::CreateTexture(const wstring& name, DXGI_FORMAT format, uint32 width, uint32 height,
@@ -668,11 +736,11 @@ void Resources::CreateDefaultMaterial()
 	{
 		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"Deferred");
 		shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"Leather", L"..\\Resources\\Texture\\Leather.jpg");
-		shared_ptr<Texture> texture2 = GET_SINGLE(Resources)->Load<Texture>(L"Leather_Normal", L"..\\Resources\\Texture\\Leather_Normal.jpg");
+		//shared_ptr<Texture> texture2 = GET_SINGLE(Resources)->Load<Texture>(L"Leather_Normal", L"..\\Resources\\Texture\\Leather_Normal.jpg");
 		shared_ptr<Material> material = make_shared<Material>();
 		material->SetShader(shader);
 		material->SetTexture(0, texture);
-		material->SetTexture(1, texture2);
+		//material->SetTexture(1, texture2);
 		Add<Material>(L"GameObject", material);
 	}
 
@@ -710,5 +778,10 @@ void Resources::CreateDefaultMaterial()
 
 		Add<Material>(L"ComputeAnimation", material);
 	}
+
+}
+
+void Resources::CreateDefaultGameObject()
+{
 
 }

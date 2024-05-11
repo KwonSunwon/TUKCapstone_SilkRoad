@@ -201,6 +201,7 @@
     <ClInclude Include="json.hpp" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="LockQueue.h" />
+    <ClInclude Include="MainStage1.h" />
     <ClInclude Include="Manifold.h" />
     <ClInclude Include="MapObjectsLoader.h" />
     <ClInclude Include="Material.h" />
@@ -209,6 +210,7 @@
     <ClInclude Include="MeshRenderer.h" />
     <ClInclude Include="MonoBehaviour.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="NetworkPlayer.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="OcNode.h" />
     <ClInclude Include="OcTree.h" />
@@ -269,6 +271,7 @@
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="LockQueue.cpp" />
+    <ClCompile Include="MainStage1.cpp" />
     <ClCompile Include="Manifold.cpp" />
     <ClCompile Include="MapObjectsLoader.cpp" />
     <ClCompile Include="Material.cpp" />
@@ -277,6 +280,7 @@
     <ClCompile Include="MeshRenderer.cpp" />
     <ClCompile Include="MonoBehaviour.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="NetworkPlayer.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="OcNode.cpp" />
     <ClCompile Include="OcTree.cpp" />

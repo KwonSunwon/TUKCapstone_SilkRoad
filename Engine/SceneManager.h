@@ -25,11 +25,14 @@ public:
 
 	shared_ptr<class GameObject> Pick(int32 screenX, int32 screenY);
 
+
+	bool reset = false;
 public:
 	shared_ptr<Scene> GetActiveScene() { return m_activeScene; }
 
 private:
-	shared_ptr<Scene> LoadTestScene();
+
+	shared_ptr<Scene> LoadL();
 
 private:
 	shared_ptr<Scene> m_activeScene;
@@ -38,6 +41,6 @@ private:
 	map<wstring, uint8> m_layerIndex;
 
 	int m_iterations = 1;
-
+	int s = 0;
 };
 

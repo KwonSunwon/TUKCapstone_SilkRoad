@@ -20,36 +20,44 @@ void Bomb::Update()
 
 	if (INPUT->GetButtonDown(KEY_TYPE::RBUTTON))
 	{
-		isBombActivate = true;
+		m_isBombActivate = true;
 	}
 	explosion();
 
 
 	for (auto col : *(GetRigidBody()->GetCollideEvent())) {
 		col->m_rb2->SetfrictionCoef(0.f);
-		//col->m_rb2->SetLinearVelocity(*col->m_normal * 10000.f);
-		col->m_rb2->SetMaxSpeed(3000.f);
+		//col->m_rb2->SetLinearVelocity(*col->m_normal * m_bombPower);
+		col->m_rb2->SetMaxSpeed(m_bombPower);
 	}
 
 }
 
 void Bomb::explosion()
 {
-	if (!isBombActivate)
+	if (!m_isBombActivate)
 		return;
 
 	shared_ptr<BaseCollider> bs = GetGameObject()->GetCollider();
 	shared_ptr<RigidBody> rb = GetRigidBody();
 
-	rb->MoveTo(Vec3(1500.f, 200.f, 2000.f));
+	rb->MoveTo(m_bombPos);
 	rb->SetLinearVelocity(Vec3(0.f, 10000.f, 0.f));
-	bs->SetRadius(bombTime * 2500);
-	bombTime += DELTA_TIME;
 
-	if (bombTime > 0.5f) {
-		bombTime = 0.f;
-		isBombActivate = false;
-		bs->SetRadius(0.f);
-		rb->MoveTo(Vec3(15000.f, 1500.f, 2000.f));
+
+	m_bombTime += DELTA_TIME * 3.14 / m_bombMaxTime;
+	float size =  sin(m_bombTime) * m_bombSize;
+	
+
+
+	GetTransform()->SetLocalScale(Vec3(size, size, size));
+	bs->SetRadius(size/2);
+	//bombTime += DELTA_TIME;
+
+	if (m_bombTime > 3.14f) {
+		m_bombTime = 0.f;
+		m_isBombActivate = false;
+		//bs->SetRadius(0.f);
+		rb->MoveTo(Vec3(10000, 300, 5000));
 	}
 }
