@@ -318,9 +318,10 @@ void FindContactPoint(shared_ptr<BoundingOrientedBox> mainCube, shared_ptr<Bound
 		pt += axis * FLT_EPSILON;
 		if (mainCube->Contains(pt)) {
 			//(*cp).push_back(cornersA[k]);
-			(*cp)[0] = (cornersA[k]);
+			(*cp)[0] = (cornersB[k]);
 		}
 	}
+	(*cp)[0] = (cornersB[0]);
 }
 
 
