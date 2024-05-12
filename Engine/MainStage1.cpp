@@ -468,7 +468,7 @@ shared_ptr<class Scene> LoadMainScene()
 		//Transform 설정
 		{
 			shared_ptr<Transform> transform = go->GetTransform();
-			transform->SetLocalPosition(Vec3(4500.f, 1500.f, 2500.f));
+			transform->SetLocalPosition(Vec3(-4500.f, 1500.f, 2500.f));
 			//transform->SetLocalScale(Vec3(1.f, 1.f, 1.f));
 			//transform->SetLocalRotation(Vec3(XMConvertToRadians(0.f), XMConvertToRadians(0.f), XMConvertToRadians(0.f)));
 		}
@@ -851,7 +851,8 @@ shared_ptr<class Scene> LoadMainScene()
 				enemyScript->SetNetworkId(i);
 				scene->m_enemies[i+15] = enemyScript;
 				if (i == 5) {
-					enemyScript->SetHP(1500);
+					enemyScript->SetHP(500);
+					scene->m_bossMonsterScript = enemyScript;
 				}
 				//go->AddComponent(make_shared<PlayerAnimation>());
 			}
@@ -882,7 +883,7 @@ shared_ptr<class Scene> LoadMainScene()
 
 
 	for (int j = 0; j < 5; ++j) {
-		for (int i = 0; i < 10; ++i) {
+		for (int i = 0; i < 5; ++i) {
 
 			int idx = 0;
 			shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Prop_Crate_03.fbx");
@@ -890,7 +891,7 @@ shared_ptr<class Scene> LoadMainScene()
 			shared_ptr<GameObject> gm = gameObjects[idx];
 
 			gm->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
-			gm->GetTransform()->SetLocalPosition(Vec3(12500 + 100 * i, 1500.f + 400.f * i, 15000+ 100*j));
+			gm->GetTransform()->SetLocalPosition(Vec3(12750 + 100 * i, 1500.f + 400.f * i, 15000+ 100*j));
 
 
 			gm->AddComponent(make_shared<RigidBody>());

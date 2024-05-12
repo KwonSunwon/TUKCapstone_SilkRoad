@@ -115,11 +115,28 @@ void SceneManager::RenderUI(shared_ptr<D3D11On12Device> device)
 	// 아이템 획득 메시지 출력
 	std::wostringstream ss2;
 	ss2 << "";
+	// 0 : 폭탄 1 : 공속 2 : 총알 데미지 증가 3 : 폭발 데미지 4 : 폭발 크기
 	if (playerScript != nullptr)
 	{
 		if (playerScript->isItemGetDraw(0))
 		{
 			ss2 << L"Brilliant Behemoth" << endl << L"Adds explosion to bullets.";
+		}
+		else if (playerScript->isItemGetDraw(1))
+		{
+			ss2 << L"Battery Pack" << endl << L"Increase Attack Speed.";
+		}
+		else if (playerScript->isItemGetDraw(2))
+		{
+			ss2 << L"Fat Bullet" << endl << L"Increase Bullet Damage.";
+		}
+		else if (playerScript->isItemGetDraw(3))
+		{
+			ss2 << L"Gunpowder Pack" << endl << L"Increase explosion Damage.";
+		}
+		else if (playerScript->isItemGetDraw(4))
+		{
+			ss2 << L"Ham" << endl << L"Increase Explosion Range.";
 		}
 	}
 	std::wstring getItemDrawText;
@@ -153,17 +170,40 @@ void SceneManager::RenderUI(shared_ptr<D3D11On12Device> device)
 		connectInfoTime -= DELTA_TIME;
 	}
 	std::wstring hostIPDrawText;
-	getItemDrawText = ss3.str();
+	hostIPDrawText = ss3.str();
 
 	textRect = D2D1::RectF(0, 800, 300, 900);
 
 	device->GetD2DDeviceContext()->DrawText(
-		getItemDrawText.c_str(),
-		static_cast<UINT32>(getItemDrawText.length()),
+		hostIPDrawText.c_str(),
+		static_cast<UINT32>(hostIPDrawText.length()),
 		device->GetTextFormat().Get(),
 		&textRect,
 		device->GetSolidColorBrush().Get()
 	);
+
+	// 보스 사망 시 게임 클리어 메시지 출력
+	std::wostringstream ss4;
+	ss4 << "";
+	if (GET_SINGLE(SceneManager)->GetActiveScene()->m_bossMonsterScript != nullptr)
+	{
+		if (GET_SINGLE(SceneManager)->GetActiveScene()->m_bossMonsterScript->GetRigidBody()->GetStatic())
+		{
+			ss4 << L"Stage1 Clear!";
+		}
+	}
+	std::wstring stageClearDrawText;
+	stageClearDrawText = ss4.str();
+	
+	textRect = D2D1::RectF(600, 100, 1000, 200);
+	device->GetD2DDeviceContext()->DrawText(
+		stageClearDrawText.c_str(),
+		static_cast<UINT32>(stageClearDrawText.length()),
+		device->GetTextFormat().Get(),
+		&textRect,
+		device->GetSolidColorBrush().Get()
+	);
+
 
 	device->GetD2DDeviceContext()->EndDraw();
 	// Release our wrapped render target resource. Releasing 

@@ -12,6 +12,7 @@ class BaseCollider;
 class OcTree;
 class Terrain;
 class Player;
+class Enemy;
 
 class Scene
 {
@@ -65,6 +66,7 @@ public:
 
 	array<shared_ptr<GameObject>, 3> m_players;
 	shared_ptr<Player> m_mainPlayerScript;
+	shared_ptr<Enemy> m_bossMonsterScript;
 private:
 	vector<shared_ptr<GameObject>>		m_gameObjects;
 	vector<shared_ptr<GameObject>>		m_collidableGameObjects;
