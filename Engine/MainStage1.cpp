@@ -615,7 +615,10 @@ shared_ptr<class Scene> LoadMainScene()
 #pragma region Item
 	{
 		scene->AddGameObject(GET_SINGLE(Resources)->LoadItemPrefab(0, Vec3(3000, 300, 5000)));
-		scene->AddGameObject(GET_SINGLE(Resources)->LoadItemPrefab(0, Vec3(4000, 300, 5000)));
+		scene->AddGameObject(GET_SINGLE(Resources)->LoadItemPrefab(1, Vec3(4000, 300, 5000)));
+		scene->AddGameObject(GET_SINGLE(Resources)->LoadItemPrefab(2, Vec3(5000, 300, 5000)));
+		scene->AddGameObject(GET_SINGLE(Resources)->LoadItemPrefab(3, Vec3(6000, 300, 5000)));
+		scene->AddGameObject(GET_SINGLE(Resources)->LoadItemPrefab(4, Vec3(7000, 300, 5000)));
 	}
 
 

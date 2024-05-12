@@ -3,6 +3,13 @@
 #include "PlayerBullet.h"
 #include "Camera.h"
 
+struct FireInfo {
+	BulletType bulletType = BulletType::BASIC;
+	float bulletDamage = 0.f;
+	
+	float explosionDamage = 0.f;
+	float explosionSize = 0.f;
+};
 
 class Player : public MonoBehaviour, public std::enable_shared_from_this<Player>
 {
@@ -30,8 +37,11 @@ private:
 
 	int m_fireTime = 0;
 
+	FireInfo m_fireInfo;
+
 private:
 	void ProcessGetItem();
+	void CalcBulletStat(int id);
 	BulletType CalcBulletType();
 };
 
