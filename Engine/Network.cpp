@@ -109,6 +109,8 @@ void Host::RunMulti()
 	struct hostent* host = gethostbyname(hostname);
 	m_myIP = inet_ntoa(*(struct in_addr*)*host->h_addr_list);
 
+	GET_SINGLE(NetworkManager)->m_displayVar = 1;
+
 	m_listenSocket = move(listenSocket);
 
 	GET_SINGLE(SceneManager)->GetActiveScene()->m_networkPlayers[0]->m_myNetworkId = 1;
@@ -149,6 +151,8 @@ void Host::WaitLoop()
 		connectionThread.detach();
 
 		OutputDebugString(L"Connect New Guest\n");
+
+		GET_SINGLE(NetworkManager)->m_displayVar = 2;
 	}
 	closesocket(m_listenSocket);
 	OutputDebugString(L"Host WaitLoop End\n");
