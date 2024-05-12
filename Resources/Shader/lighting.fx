@@ -48,8 +48,8 @@ VS_OUT VS_DirLight(VS_IN input)
 PS_OUT PS_DirLight(VS_OUT input)
 {
     // 안개 파라미터
-    float fogStart = 500000.0f; // 안개가 시작되는 거리
-    float fogEnd = 1000000.0f; // 안개가 완전히 덮치는 거리
+    float fogStart = 5000.0f; // 안개가 시작되는 거리
+    float fogEnd = 10000.0f; // 안개가 완전히 덮치는 거리
     float fogDensity = 0.0f; // 선형 안개 밀도
     float4 fogColor = float4(0.0, 0.0, 0.0, 1.0); // 안개의 색상
     

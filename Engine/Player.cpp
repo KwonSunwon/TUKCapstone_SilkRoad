@@ -119,7 +119,7 @@ void Player::CalcBulletStat(int id)
 	case 0:
 		break;
 	case 1:
-		m_fireRate -= 1;
+		m_fireRate += 3;
 		break;
 
 	case 2:
