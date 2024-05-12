@@ -279,6 +279,17 @@ void Guest::Connect()
 		throw runtime_error("Fail initialize socket");
 	}
 
+	ifstream file("HostIp.txt");
+	if(!file.is_open()) {
+		OutputDebugString(L"Fail open HostIp.txt\n");
+	}
+	else {
+		char buffer[16];
+		file.getline(buffer, 16);
+		m_serverIP = buffer;
+		file.close();
+	}
+
 	struct sockaddr_in serverAddr;
 	memset(&serverAddr, 0, sizeof(serverAddr));
 	serverAddr.sin_family = AF_INET;
