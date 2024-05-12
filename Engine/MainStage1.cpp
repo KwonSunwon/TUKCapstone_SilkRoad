@@ -851,7 +851,8 @@ shared_ptr<class Scene> LoadMainScene()
 				enemyScript->SetNetworkId(i + 15);
 				scene->m_enemies[i + 15] = enemyScript;
 				if(i == 5) {
-					enemyScript->SetHP(1500);
+					enemyScript->SetHP(500);
+					scene->m_bossMonsterScript = enemyScript;
 				}
 				//go->AddComponent(make_shared<PlayerAnimation>());
 			}
