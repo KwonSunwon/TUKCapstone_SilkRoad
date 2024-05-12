@@ -55,11 +55,8 @@ shared_ptr<PlayerState> PlayerOnGroundAimState::OnUpdateState()
 
 	m_onAirTime += DELTA_TIME;
 
-	for (auto col : *(rb->GetCollideEvent())) {
-		Vec3 axis = *col->m_normal;
-		if (axis.Dot(Vec3(0, 1, 0))) {
-			m_onAirTime = 0.f;
-		}
+	if (rb->GetIsFalling()) {
+		m_onAirTime = 0.f;
 	}
 
 	if (m_onAirTime >= m_onAirCheckTime)

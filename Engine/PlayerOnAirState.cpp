@@ -99,11 +99,10 @@ shared_ptr<PlayerState> PlayerJumpLoopState::OnUpdateState()
 	shared_ptr<RigidBody> rb = m_player->GetRigidBody();
 	shared_ptr<Transform> transform = m_player->GetTransform();
 
-	for (auto col : *(rb->GetCollideEvent())) {
-		Vec3 axis = *col->m_normal;
-		if (axis.Dot(Vec3(0, 1, 0)) < -0.5f) {
-			return make_shared<PlayerJumpDownState>(m_player);
-		}
+
+	if (rb->GetIsFalling()) {
+		return make_shared<PlayerJumpDownState>(m_player);
 	}
+
 	return nullptr;
 }

@@ -16,16 +16,16 @@ public:
 	
 
 public:
-	//ÇöÀç À§Ä¡¿¡ ´ëÇÑ »ó´ëÀûÀÎ ÁÂÇ¥ ÀÌµ¿
+	//í˜„ì¬ ìœ„ì¹˜ì— ëŒ€í•œ ìƒëŒ€ì ì¸ ì¢Œí‘œ ì´ë™
 	void	Move(Vec3 amount);
 
-	//ÇöÀç À§Ä¡¿Í °ü°è¾ø´Â Àı´ëÀûÀÎ ÁÂÇ¥ ÀÌµ¿
+	//í˜„ì¬ ìœ„ì¹˜ì™€ ê´€ê³„ì—†ëŠ” ì ˆëŒ€ì ì¸ ì¢Œí‘œ ì´ë™
 	void	MoveTo(Vec3 position);
 
-	//Èû¿¡ ¹æÇâÀ¸·Î ÈûÀ» °¡ÇÑ´Ù. Áú·®ÀÌ Å¬¼ö·Ï ÀûÀº ¿µÇâÀ» ¹ŞÀ½
+	//í˜ì— ë°©í–¥ìœ¼ë¡œ í˜ì„ ê°€í•œë‹¤. ì§ˆëŸ‰ì´ í´ìˆ˜ë¡ ì ì€ ì˜í–¥ì„ ë°›ìŒ
 	void	AddForce(Vec3 amount) { m_force += amount; }
 
-	//ÇÁ·¹ÀÓ ¿öÅ©¿¡¼­ »ç¿ëÇÏ´Â ÇÔ¼öÀÌ¹Ç·Î ÀÓÀÇ»ç¿ëX
+	//í”„ë ˆì„ ì›Œí¬ì—ì„œ ì‚¬ìš©í•˜ëŠ” í•¨ìˆ˜ì´ë¯€ë¡œ ì„ì˜ì‚¬ìš©X
 	void	MovementStep(int iterations);
 
 
@@ -47,7 +47,9 @@ public:
 	bool	GetStatic() { return m_isStatic; }
 	bool	GetIsBlockBody() { return m_blockBody; }
 
-	//mass, restitution, static, maxSpeed´Â ¼³Á¤ÇØÁÖÁö ¾ÊÀ¸¸é µğÆúÆ® °ªÀ¸·Î Àû¿ëµÊ
+	bool	GetIsFalling();
+
+	//mass, restitution, static, maxSpeedëŠ” ì„¤ì •í•´ì£¼ì§€ ì•Šìœ¼ë©´ ë””í´íŠ¸ ê°’ìœ¼ë¡œ ì ìš©ë¨
 	void	SetLinearVelocity(Vec3 linearVelocity) { m_linearVelocity = linearVelocity; }
 	void	SetMass(float mass) { m_mass = mass; m_invMass = 1 / mass; }
 	void	SetRestitution(float restitution) { m_restitution = restitution; }
@@ -59,6 +61,7 @@ public:
 	void	SetRotation(Vec3 rotation) { m_rotation = rotation; }
 	void	SetBlock() { m_blockBody = true; }
 	void	SetOverlap() { m_blockBody = false; }
+	void	SetAutoFirction(bool autoFriction) { m_autoFriction = autoFriction; }
 
 	shared_ptr<vector<shared_ptr<Manifold>>> GetCollideEvent() { return m_manifolds; }
 	void	AddCollideEvent(shared_ptr<Manifold> event);
@@ -73,22 +76,23 @@ private:
 	Vec3 m_rotation = {};
 	Vec3 m_rotationVelocity = {};
 	Vec3 m_force = {};
-	float m_mass = 50.f;			//kg´ÜÀ§				
-	float m_restitution = 0.5f;		//Åº¼º 0~1 0¿¡ °¡±î¿ï¼ö·Ï Åº¼ºÀÌ ÁÙ¾îµéÀ½
+	float m_mass = 50.f;			//kgë‹¨ìœ„				
+	float m_restitution = 0.5f;		//íƒ„ì„± 0~1 0ì— ê°€ê¹Œìš¸ìˆ˜ë¡ íƒ„ì„±ì´ ì¤„ì–´ë“¤ìŒ
 	float m_invMass= 1/50.f;
 	float m_inertia = 0.f;
 	bool m_isStatic = false;
 	float m_frictionCoef = 2.f;
 
-	float m_maxSpeed = 1000.f;		//ÃÖ°í¼Óµµ cm/s´ÜÀ§ 
+	float m_maxSpeed = 1000.f;		//ìµœê³ ì†ë„ cm/së‹¨ìœ„ 
 	float m_maxAirSpeed = 1000.f;
 	
+	bool m_isLanded = true;
 
 	Vec3 m_gravity = { 0.f,-980.f,0.f };
 	bool m_useGravity = true;
 	
 	bool m_blockBody = true;
-
+	bool m_autoFriction = true;
 	shared_ptr<vector<shared_ptr<Manifold>>> m_manifolds;
 	shared_ptr< Terrain > m_gameTerrain;
 	shared_ptr<BaseCollider> m_baseCollider;

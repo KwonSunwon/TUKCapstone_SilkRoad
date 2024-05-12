@@ -35,6 +35,14 @@ void RigidBody::Awake()
 
 void RigidBody::FinalUpdate()
 {
+	if (m_autoFriction) {
+		if (GetIsFalling()) {
+			m_frictionCoef = 2.0;
+		}
+		else {
+			m_frictionCoef = 0.2;
+		}
+	}
 	GetTransform()->SetLocalPosition(m_position);
 }
 
@@ -74,6 +82,16 @@ void RigidBody::MovementStep(int iterations)
 	if (m_linearVelocity.LengthSquared() > 0.f) {
 		m_baseCollider->UpdateNodePos();
 	}
+}
+
+bool RigidBody::GetIsFalling()
+{
+	for (auto col : *GetCollideEvent()) {
+		Vec3 axis = *col->m_normal;
+		if (axis.Dot(Vec3(0, 1, 0))<-0.5)
+			return true;
+	}
+	return false;
 }
 
 void RigidBody::AddCollideEvent(shared_ptr<Manifold> event)

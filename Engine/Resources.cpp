@@ -365,9 +365,9 @@ shared_ptr<GameObject> Resources::LoadItemPrefab(int id, Vec3 location)
 		//콜라이더의 위치,회전은 Gameobject의 Transform을 사용
 		{
 			shared_ptr<SphereCollider> collider = make_shared<SphereCollider>();
-			collider->SetRadius(30.f);
+			collider->SetRadius(100.f);
 
-			collider->SetOffset(Vec3(0, 15, 0));
+			collider->SetOffset(Vec3(0, 50, 0));
 			go->AddComponent(collider);
 		}
 
