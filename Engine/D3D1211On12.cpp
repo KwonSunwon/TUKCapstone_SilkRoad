@@ -18,7 +18,7 @@ void D3D11On12Device::Init(ComPtr<ID3D12Device> device, ComPtr<IDXGIFactory> dxg
 		reinterpret_cast<IUnknown**>(cmdQueue.GetAddressOf()), 1, 0, &d3d11Device, &m_d3d11DeviceContext, nullptr);
 	d3d11Device.As(&m_d3d11On12Device);
 
-	// D2D/Dwrite ƒƒ∆˜≥Õ∆Æ ª˝º∫
+	// D2D/Dwrite Ïª¥Ìè¨ÎÑåÌä∏ ÏÉùÏÑ±
 	{
 		D2D1_FACTORY_OPTIONS d2dFactoryOptions = {};
 		D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, __uuidof(ID2D1Factory3), &d2dFactoryOptions, &m_d2dFactory);
@@ -74,8 +74,8 @@ void D3D11On12Device::Init(ComPtr<ID3D12Device> device, ComPtr<IDXGIFactory> dxg
 			DWRITE_FONT_WEIGHT_NORMAL,
 			DWRITE_FONT_STYLE_NORMAL,
 			DWRITE_FONT_STRETCH_NORMAL,
-			50,
-			L"en-us",
+			30,
+			L"ko-kr",
 			&m_textFormat
 		);
 		m_textFormat->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);

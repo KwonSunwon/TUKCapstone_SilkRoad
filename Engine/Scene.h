@@ -11,6 +11,7 @@ class GameObject;
 class BaseCollider;
 class OcTree;
 class Terrain;
+class Player;
 
 class Scene
 {
@@ -45,6 +46,9 @@ public:
 	void SetPlayer(shared_ptr<GameObject> player, PlayerType type) { m_players[type] = player; }
 	array<shared_ptr<GameObject>, 3> GetPlayers() { return m_players; }
 
+	void SetMainPlayerScript(shared_ptr<Player> player) { m_mainPlayerScript = player; }
+	shared_ptr<Player> GetMainPlayerScript() { return m_mainPlayerScript; }
+
 	void AddGameObject(shared_ptr<GameObject> gameObject);
 	void RemoveGameObject(shared_ptr<GameObject> gameObject);
 
@@ -60,6 +64,7 @@ public:
 	array<shared_ptr<class Enemy>, 10> m_enemies;
 
 	array<shared_ptr<GameObject>, 3> m_players;
+	shared_ptr<Player> m_mainPlayerScript;
 private:
 	vector<shared_ptr<GameObject>>		m_gameObjects;
 	vector<shared_ptr<GameObject>>		m_collidableGameObjects;

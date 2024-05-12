@@ -371,6 +371,7 @@ shared_ptr<class Scene> LoadMainScene()
 
 			}
 			playerScript->SetPlayerCamera(scene->GetMainCamera());
+			scene->SetMainPlayerScript(playerScript);
 			go->AddComponent(playerScript);
 		}
 

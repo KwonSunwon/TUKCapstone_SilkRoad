@@ -80,6 +80,7 @@ void SceneManager::RenderUI(shared_ptr<D3D11On12Device> device)
 	D2D1_RECT_F textRect = D2D1::RectF(0, 0, rtSize.width, rtSize.height);
 
 	shared_ptr<GameObject> player = GET_SINGLE(SceneManager)->GetActiveScene()->GetPlayers()[0];
+	shared_ptr<Player> playerScript = GET_SINGLE(SceneManager)->GetActiveScene()->GetMainPlayerScript();
 	//Vec3 playerPos = player->GetTransform()->GetLocalPosition();
 	static const WCHAR text[] = L"";
 	//static const WCHAR text[] = L"11On12";
@@ -102,6 +103,7 @@ void SceneManager::RenderUI(shared_ptr<D3D11On12Device> device)
 	device->GetD2DDeviceContext()->SetTarget(device->GetD3D11On12RT(backbufferindex).Get());
 	device->GetD2DDeviceContext()->BeginDraw();
 	device->GetD2DDeviceContext()->SetTransform(D2D1::Matrix3x2F::Identity());
+	// 로딩씬 텍스트 및 조준점 출력
 	device->GetD2DDeviceContext()->DrawText(
 		playerPosText.c_str(),
 		static_cast<UINT32>(playerPosText.length()),
@@ -109,8 +111,31 @@ void SceneManager::RenderUI(shared_ptr<D3D11On12Device> device)
 		&textRect,
 		device->GetSolidColorBrush().Get()
 	);
-	device->GetD2DDeviceContext()->EndDraw();
 
+	std::wostringstream ss2;
+	ss2 << "";
+	if (playerScript != nullptr)
+	{
+		if (playerScript->isItemGetDraw(0))
+		{
+			ss2 << L"Brilliant Behemoth" << endl << L"Adds explosion to bullets.";
+		}
+	}
+	std::wstring getItemDrawText = ss.str();
+	getItemDrawText = ss2.str();
+	
+
+	textRect = D2D1::RectF(600, 600, 1000, 700);
+
+
+	device->GetD2DDeviceContext()->DrawText(
+		getItemDrawText.c_str(),
+		static_cast<UINT32>(getItemDrawText.length()),
+		device->GetTextFormat().Get(),
+		&textRect,
+		device->GetSolidColorBrush().Get()
+	);
+	device->GetD2DDeviceContext()->EndDraw();
 	// Release our wrapped render target resource. Releasing 
 	// transitions the back buffer resource to the state specified
 	// as the OutState when the wrapped resource was created.

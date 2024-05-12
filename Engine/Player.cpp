@@ -94,6 +94,16 @@ void Player::AddBullet(shared_ptr<class PlayerBullet> bullet)
 	m_bullets.push_back(bullet);
 }
 
+bool Player::isItemGetDraw(int index)
+{
+	if (m_itemGetDrawTime[index] > 0.f)
+	{
+		m_itemGetDrawTime[index] -= DELTA_TIME;
+		return true;
+	}
+	return false;
+}
+
 void Player::ProcessGetItem()
 {
 	shared_ptr<RigidBody> rb = GetRigidBody();
@@ -102,6 +112,7 @@ void Player::ProcessGetItem()
 		if (scriptI) {
 			shared_ptr<Item> itemScript = dynamic_pointer_cast<Item>(scriptI);
 			m_itemLevels[itemScript->GetItemID()]++;
+			m_itemGetDrawTime[itemScript->GetItemID()]+=3.f;
 			col->m_rb2->MoveTo(Vec3(0, 1000000, 0));
 		}
 	}
