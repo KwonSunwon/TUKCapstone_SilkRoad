@@ -118,6 +118,8 @@ public:
 	void Send(shared_ptr<char[]> data, int size) override;
 	bool Recv(shared_ptr<Packet> packet) override;
 
+	char* m_myIP;
+
 private:
 	vector<GuestInfo> m_guestInfos;
 	SOCKET m_listenSocket;
@@ -174,6 +176,8 @@ public:
 	void Send(char* data, int size);
 	void Send(shared_ptr<char[]> data, int size);
 	bool Recv(shared_ptr<Packet> packet);
+
+	char* GetMyIP() { return dynamic_cast<Host*>(m_network.get())->m_myIP; }
 
 	ushort m_networkId = 0;
 

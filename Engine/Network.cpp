@@ -103,6 +103,12 @@ void Host::RunMulti()
 		throw runtime_error("Fail listen listen socket");
 	}
 
+	// Get my ip address
+	char hostname[256];
+	gethostname(hostname, sizeof(hostname));
+	struct hostent* host = gethostbyname(hostname);
+	m_myIP = inet_ntoa(*(struct in_addr*)*host->h_addr_list);
+
 	m_listenSocket = move(listenSocket);
 
 	GET_SINGLE(SceneManager)->GetActiveScene()->m_networkPlayers[0]->m_myNetworkId = 1;
