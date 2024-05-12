@@ -103,6 +103,14 @@ void Host::RunMulti()
 		throw runtime_error("Fail listen listen socket");
 	}
 
+	// Get my ip address
+	char hostname[256];
+	gethostname(hostname, sizeof(hostname));
+	struct hostent* host = gethostbyname(hostname);
+	m_myIP = inet_ntoa(*(struct in_addr*)*host->h_addr_list);
+
+	GET_SINGLE(NetworkManager)->m_displayVar = 1;
+
 	m_listenSocket = move(listenSocket);
 
 	GET_SINGLE(SceneManager)->GetActiveScene()->m_networkPlayers[0]->m_myNetworkId = 1;
@@ -143,6 +151,8 @@ void Host::WaitLoop()
 		connectionThread.detach();
 
 		OutputDebugString(L"Connect New Guest\n");
+
+		GET_SINGLE(NetworkManager)->m_displayVar = 2;
 	}
 	closesocket(m_listenSocket);
 	OutputDebugString(L"Host WaitLoop End\n");
@@ -277,6 +287,17 @@ void Guest::Connect()
 	m_socket = socket(AF_INET, SOCK_STREAM, 0);
 	if(m_socket == INVALID_SOCKET) {
 		throw runtime_error("Fail initialize socket");
+	}
+
+	ifstream file("HostIp.txt");
+	if(!file.is_open()) {
+		OutputDebugString(L"Fail open HostIp.txt\n");
+	}
+	else {
+		char buffer[16];
+		file.getline(buffer, 16);
+		m_serverIP = buffer;
+		file.close();
 	}
 
 	struct sockaddr_in serverAddr;
