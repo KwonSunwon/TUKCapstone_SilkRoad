@@ -7,6 +7,7 @@
 #include "BaseCollider.h"
 #include "Timer.h"
 #include "Manifold.h"
+#include "Enemy.h"
 void Bomb::Awake()
 {
 	SetMonovihaviourName("Bomb");
@@ -27,8 +28,12 @@ void Bomb::Update()
 	for (auto col : *(GetRigidBody()->GetCollideEvent())) {
 		
 		col->m_rb2->SetfrictionCoef(0.f);
-		//col->m_rb2->SetLinearVelocity(*col->m_normal * m_bombPower);
 		col->m_rb2->SetMaxSpeed(m_bombPower);
+		shared_ptr<MonoBehaviour> scriptE = col->m_rb2->GetGameObject()->GetMonobehaviour("Enemy");
+		if (scriptE) {
+			shared_ptr<Enemy> enemyScript = dynamic_pointer_cast<Enemy>(scriptE);
+			enemyScript->GetDamage(300.f*DELTA_TIME);
+		}
 	}
 
 }

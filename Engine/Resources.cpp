@@ -318,19 +318,19 @@ shared_ptr<GameObject> Resources::LoadItemPrefab(int id, Vec3 location)
 		shared_ptr<MeshData> meshData = make_shared<MeshData>();
 		switch (id) {
 		case 0:
-			 meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Item_Cylinder.fbx");
+			 meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Item_Bomb.fbx");
 			 break;
 
 		case 1:
-			meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Item_Box.fbx");
+			meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Item_BatteryPack_02.fbx");
 			break;
 
 		case 2:
-			meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Item_Bomb.fbx");
+			meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Item_Cylinder.fbx");
 			break;
 
 		case 3:
-			meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Item_BatteryPack_02.fbx");
+			meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Item_Box.fbx");
 			break;
 
 		case 4:

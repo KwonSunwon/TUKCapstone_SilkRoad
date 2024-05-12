@@ -2,7 +2,7 @@
 #include "MonoBehaviour.h"
 #include "PlayerBullet.h"
 #include "Camera.h"
-
+static array<int, 10> m_itemLevels;
 struct FireInfo {
 	BulletType bulletType = BulletType::BASIC;
 	float bulletDamage = 0.f;
@@ -33,7 +33,7 @@ private:
 	vector<shared_ptr<PlayerBullet>> m_bullets;
 	shared_ptr<Camera> m_playerCamera;
 
-	array<int, 10> m_itemLevels;
+	
 
 	int m_fireTime = 0;
 
