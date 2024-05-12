@@ -112,6 +112,7 @@ void SceneManager::RenderUI(shared_ptr<D3D11On12Device> device)
 		device->GetSolidColorBrush().Get()
 	);
 
+	// 아이템 획득 메시지 출력
 	std::wostringstream ss2;
 	ss2 << "";
 	if (playerScript != nullptr)
@@ -121,12 +122,40 @@ void SceneManager::RenderUI(shared_ptr<D3D11On12Device> device)
 			ss2 << L"Brilliant Behemoth" << endl << L"Adds explosion to bullets.";
 		}
 	}
-	std::wstring getItemDrawText = ss.str();
+	std::wstring getItemDrawText;
 	getItemDrawText = ss2.str();
 	
 
 	textRect = D2D1::RectF(600, 600, 1000, 700);
 
+	
+	device->GetD2DDeviceContext()->DrawText(
+		getItemDrawText.c_str(),
+		static_cast<UINT32>(getItemDrawText.length()),
+		device->GetTextFormat().Get(),
+		&textRect,
+		device->GetSolidColorBrush().Get()
+	);
+
+
+	// 호스트 방 개설 시 IP 출력
+	std::wostringstream ss3;
+	ss3 << "";
+	static float connectInfoTime = 3.f;
+	if (GET_SINGLE(NetworkManager)->m_displayVar == 1)
+	{
+		GET_SINGLE(NetworkManager)->GetMyIP();
+		ss3 << L"Host IP : " << GET_SINGLE(NetworkManager)->GetMyIP();
+	}
+	else if (GET_SINGLE(NetworkManager)->m_displayVar == 2 && connectInfoTime > 0.f)
+	{
+		ss3 << L"Guest1 Connected";
+		connectInfoTime -= DELTA_TIME;
+	}
+	std::wstring hostIPDrawText;
+	getItemDrawText = ss3.str();
+
+	textRect = D2D1::RectF(0, 800, 300, 900);
 
 	device->GetD2DDeviceContext()->DrawText(
 		getItemDrawText.c_str(),
@@ -135,6 +164,7 @@ void SceneManager::RenderUI(shared_ptr<D3D11On12Device> device)
 		&textRect,
 		device->GetSolidColorBrush().Get()
 	);
+
 	device->GetD2DDeviceContext()->EndDraw();
 	// Release our wrapped render target resource. Releasing 
 	// transitions the back buffer resource to the state specified

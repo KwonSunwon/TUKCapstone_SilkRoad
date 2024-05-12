@@ -182,6 +182,8 @@ public:
 	ushort m_networkId = 0;
 
 	unique_ptr<Network> m_network;
+
+	atomic<int> m_displayVar = 0;
 private:
 };
 
