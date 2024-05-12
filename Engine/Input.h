@@ -18,6 +18,7 @@ enum class KEY_TYPE
 	E = 'E',
 	Z = 'Z',
 	C = 'C',
+	P = 'P',
 
 	KEY_1 = '1',
 	KEY_2 = '2',
@@ -30,7 +31,7 @@ enum class KEY_TYPE
 	ESC = VK_ESCAPE,
 };
 
-static constexpr int NUM_OF_KEYS = 20;
+static constexpr int NUM_OF_KEYS = 21;
 
 constexpr std::array<KEY_TYPE, NUM_OF_KEYS> ALL_KEYS =
 {
@@ -53,7 +54,8 @@ constexpr std::array<KEY_TYPE, NUM_OF_KEYS> ALL_KEYS =
 	KEY_TYPE::LBUTTON,
 	KEY_TYPE::RBUTTON,
 	KEY_TYPE::SPACE,
-	KEY_TYPE::ESC
+	KEY_TYPE::ESC,
+	KEY_TYPE::P,
 
 };
 
@@ -80,11 +82,11 @@ public:
 	void Init(HWND hwnd);
 	void Update();
 
-	// ´©¸£°í ÀÖÀ» ¶§
+	// ëˆ„ë¥´ê³  ìˆì„ ë•Œ
 	bool GetButton(KEY_TYPE key) { return GetState(key) == KEY_STATE::PRESS; }
-	// ¸Ç Ã³À½ ´­·¶À» ¶§
+	// ë§¨ ì²˜ìŒ ëˆŒë €ì„ ë•Œ
 	bool GetButtonDown(KEY_TYPE key) { return GetState(key) == KEY_STATE::DOWN; }
-	// ¸Ç Ã³À½ ´­·¶´Ù ¶ÃÀ» ¶§
+	// ë§¨ ì²˜ìŒ ëˆŒë €ë‹¤ ë—ì„ ë•Œ
 	bool GetButtonUp(KEY_TYPE key) { return GetState(key) == KEY_STATE::UP; }
 
 	const POINT& GetMousePos() { return m_mousePos; }
