@@ -39,9 +39,12 @@ void PlayerBullet::Update()
 
 }
 
-void PlayerBullet::Fire(shared_ptr<Player> shooter, BulletType bulletType)
+void PlayerBullet::Fire(shared_ptr<Player> shooter, FireInfo fireInfo)
 {
-	m_bulletType = bulletType;
+	m_bulletType = fireInfo.bulletType;
+	m_attackPower = fireInfo.bulletDamage;
+	m_bombPower = fireInfo.explosionDamage;
+	m_bombSize = fireInfo.explosionSize;
 
 	Vec3 cameraLook = shooter->GetPlayerCamera()->GetTransform()->GetLook();
 	Vec3 cameraUp = shooter->GetPlayerCamera()->GetTransform()->GetUp();
@@ -89,6 +92,7 @@ void PlayerBullet::ProcessCollides()
 		case EXPLOSIVE:
 			{
 				Vec3 pos = (*col->m_contacts)[0];
+				m_bomb->SetBombSize(m_bombSize);
 				m_bomb->SetBombPosition((rb)->GetPosition());
 				m_bomb->SetBombActive();
 			}

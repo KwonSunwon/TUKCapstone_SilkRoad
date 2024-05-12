@@ -7,6 +7,7 @@
 #include "BaseCollider.h"
 #include "Timer.h"
 #include "Manifold.h"
+#include "Enemy.h"
 void Bomb::Awake()
 {
 	SetMonovihaviourName("Bomb");
@@ -27,8 +28,30 @@ void Bomb::Update()
 	for (auto col : *(GetRigidBody()->GetCollideEvent())) {
 		
 		col->m_rb2->SetfrictionCoef(0.f);
-		//col->m_rb2->SetLinearVelocity(*col->m_normal * m_bombPower);
 		col->m_rb2->SetMaxSpeed(m_bombPower);
+		
+
+		Vec3 normal = *col->m_normal;
+
+
+		Vec3 relativeVelocity = col->m_rb2->GetLinearVelocity() - normal * 2000;
+		if (relativeVelocity.Dot(normal) > 0.f) {
+			continue;
+		}
+
+		float e = min(col->m_rb1->GetRestitution(), col->m_rb2->GetRestitution());
+		float j = -(1.f + e) * relativeVelocity.Dot(normal);
+		j /= col->m_rb1->GetInvMass() + col->m_rb2->GetInvMass();
+		Vec3 impulse = (normal)*j;
+
+		col->m_rb2->SetLinearVelocity(col->m_rb2->GetLinearVelocity() + impulse * col->m_rb2->GetInvMass());
+
+
+		shared_ptr<MonoBehaviour> scriptE = col->m_rb2->GetGameObject()->GetMonobehaviour("Enemy");
+		if (scriptE) {
+			shared_ptr<Enemy> enemyScript = dynamic_pointer_cast<Enemy>(scriptE);
+			enemyScript->GetDamage(100.f*DELTA_TIME);
+		}
 	}
 
 }
@@ -59,6 +82,6 @@ void Bomb::explosion()
 		m_isBombActivate = false;
 		//bs->SetRadius(0.f);
 		//rb->MoveTo(Vec3(10000, 300, 5000));
-		rb->MoveTo(Vec3(22500 + 500, 1200.f, 15000 + 200));
+		rb->MoveTo(Vec3(22500 + 500,- 1200.f, 15000 + 200));
 	}
 }

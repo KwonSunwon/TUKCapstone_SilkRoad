@@ -11,10 +11,8 @@ class PlayerBullet : public MonoBehaviour
 {
 public:
 	virtual void Update() override;
-	void Fire(class shared_ptr<class Player> shooter, BulletType bulletType);
-	void SetBomb(shared_ptr<class Bomb> bomb) { 
-		
-		m_bomb = bomb; }
+	void Fire(class shared_ptr<class Player> shooter, struct FireInfo fireInfo);
+	void SetBomb(shared_ptr<class Bomb> bomb) { m_bomb = bomb; }
 
 private:
 	void ProcessCollides();
@@ -29,4 +27,6 @@ private:
 	float m_lifeTime = 0.f;
 	float m_maxLifeTime = 3.f;
 	float m_attackPower = 20.f;
+	float m_bombPower = 100.f;
+	float m_bombSize = 500.f;
 };

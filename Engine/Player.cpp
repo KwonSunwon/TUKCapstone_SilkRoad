@@ -21,7 +21,10 @@ void Player::Awake()
 	shared_ptr<RigidBody> rb = GetRigidBody();
 	//rb->SetStatic(true);
 	m_curState = make_shared<PlayerWalkState>(shared_from_this());
-
+	m_fireInfo.bulletDamage = 20.f;
+	m_fireInfo.bulletType = BulletType::BASIC;
+	m_fireInfo.explosionDamage = 100.f;
+	m_fireInfo.explosionSize = 500.f;
 }
 void Player::Update()
 {
@@ -78,10 +81,12 @@ void Player::LateUpdate()
 
 void Player::Fire()
 {
+	BulletType bulletType = CalcBulletType();
+	m_fireInfo.bulletType = bulletType;
 	m_fireElapsedTime = 1.f / m_fireRate;
 
-	BulletType bulletType = CalcBulletType();
-	m_bullets[m_bulletPivot++]->Fire(shared_from_this(), bulletType);
+	
+	m_bullets[m_bulletPivot++]->Fire(shared_from_this(), m_fireInfo);
 	m_fireTime++;
 
 
@@ -114,7 +119,34 @@ void Player::ProcessGetItem()
 			m_itemLevels[itemScript->GetItemID()]++;
 			m_itemGetDrawTime[itemScript->GetItemID()]+=3.f;
 			col->m_rb2->MoveTo(Vec3(0, 1000000, 0));
+			CalcBulletStat(itemScript->GetItemID());
 		}
+	}
+}
+
+void Player::CalcBulletStat(int id)
+{
+	switch (id) {
+	case 0:
+		break;
+	case 1:
+		m_fireRate += 3;
+		break;
+
+	case 2:
+		m_fireInfo.bulletDamage += 4;
+		break;
+
+	case 3:
+		m_fireInfo.explosionDamage += 20;
+		break;
+
+	case 4:
+		m_fireInfo.explosionSize += 200;
+		break;
+
+
+
 	}
 }
 

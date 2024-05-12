@@ -23,6 +23,9 @@ void TestCameraScript::LateUpdate()
 
 	Vec3 pos = GetTransform()->GetLocalPosition();
 
+	if (INPUT->GetButton(KEY_TYPE::P))
+		PostQuitMessage(0);
+
 	if (INPUT->GetButton(KEY_TYPE::UP))
 		pos += GetTransform()->GetLook() * m_speed * DELTA_TIME;
 

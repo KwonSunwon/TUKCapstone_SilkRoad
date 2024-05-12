@@ -61,7 +61,7 @@ public:
 	shared_ptr<Terrain> m_terrain;
 
 	array<shared_ptr<class NetworkPlayer>, 2> m_networkPlayers;
-	array<shared_ptr<class Enemy>, 10> m_enemies;
+	array<shared_ptr<class Enemy>, 21> m_enemies;
 
 	array<shared_ptr<GameObject>, 3> m_players;
 	shared_ptr<Player> m_mainPlayerScript;

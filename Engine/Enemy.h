@@ -39,7 +39,7 @@ private:
 	shared_ptr<class EnemyState> m_curState;
 	float m_fireRate = 1.f;		// 초당 공격 횟수
 	float m_fireElapsedTime = 0.f;
-	float m_chaseRange = 2000.f;
+	float m_chaseRange = 6000.f;
 	float m_attackRange = 300.f;
 	float m_maxWalkSpeed = 800.f;
 	float m_walkForce = 300000.f;
