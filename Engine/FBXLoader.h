@@ -29,7 +29,7 @@ struct BoneWeight
 		else
 			boneWeights.push_back(Pair(index, weight));
 
-		// °¡ÁßÄ¡´Â ÃÖ´ë 4°³
+		// ê°€ì¤‘ì¹˜ëŠ” ìµœëŒ€ 4ê°œ
 		if (boneWeights.size() > 4)
 			boneWeights.pop_back();
 	}
@@ -48,7 +48,7 @@ struct FbxMeshInfo
 	vector<Vertex>						vertices;
 	vector<vector<uint32>>				indices;
 	vector<FbxMaterialInfo>				materials;
-	vector<BoneWeight>					boneWeights; // »À °¡ÁßÄ¡
+	vector<BoneWeight>					boneWeights; // ë¼ˆ ê°€ì¤‘ì¹˜
 	bool								hasAnimation;
 };
 
@@ -93,8 +93,10 @@ private:
 
 	void ParseNode(FbxNode* root);
 	void ParseNodeWithAssimp(FbxNode* root, aiNode* assimpNode, const aiScene* assimpScene);
+	void ParseNodeWithAssimpNotAnim(FbxNode* root, aiNode* assimpNode, const aiScene* assimpScene);
 	void LoadMesh(FbxMesh* mesh);
-	void LoadMeshWithAssimp(FbxMesh* mesh, aiMesh* assimpMesh);
+	void LoadMeshWithAssimp(aiMesh* assimpMesh, const aiScene* assimpScene);
+	void LoadMeshWithAssimpNotAnim(FbxMesh* mesh, aiMesh* assimpMesh);
 	void LoadMaterial(FbxSurfaceMaterial* surfaceMaterial);
 
 	void		GetNormal(FbxMesh* mesh, FbxMeshInfo* container, int32 idx, int32 vertexCounter);
@@ -112,7 +114,9 @@ private:
 	void LoadAnimationInfo();
 
 	void LoadAnimationData(FbxMesh* mesh, FbxMeshInfo* meshInfo);
+	void LoadAnimationDataWithAssimp(const aiScene* assimpScene, FbxMeshInfo* meshInfo, aiMesh* assimpMesh);
 	void LoadBoneWeight(FbxCluster* cluster, int32 boneIdx, FbxMeshInfo* meshInfo);
+	void LoadBoneWeight(aiBone* bone, int32 boneIdx, FbxMeshInfo* meshInfo);
 	void LoadOffsetMatrix(FbxCluster* cluster, const FbxAMatrix& matNodeTransform, int32 boneIdx, FbxMeshInfo* meshInfo);
 	void LoadKeyframe(int32 animIndex, FbxNode* node, FbxCluster* cluster, const FbxAMatrix& matNodeTransform, int32 boneIdx, FbxMeshInfo* container);
 
@@ -120,6 +124,8 @@ private:
 	FbxAMatrix GetTransform(FbxNode* node);
 
 	void FillBoneWeight(FbxMesh* mesh, FbxMeshInfo* meshInfo);
+
+	void FillBoneWeight(const aiMesh* assimpMesh, FbxMeshInfo* meshInfo);
 
 private:
 	FbxManager* m_manager = nullptr;

@@ -26,37 +26,40 @@ void FBXLoader::LoadFbx(const wstring& path)
 	assimpLoader->LoadFbx(path);
 
 	assimpLoader->GetScene()->mRootNode;
-	// ∆ƒ¿œ µ•¿Ã≈Õ ∑ŒµÂ
+	// ÌååÏùº Îç∞Ïù¥ÌÑ∞ Î°úÎìú
 	Import(path);
 
 	// Animation	
 	LoadBones(m_scene->GetRootNode());
 	LoadAnimationInfo();
 
-	// ∑ŒµÂµ» µ•¿Ã≈Õ ∆ƒΩÃ (Mesh/Material/Skin)
+	// Î°úÎìúÎêú Îç∞Ïù¥ÌÑ∞ ÌååÏã± (Mesh/Material/Skin)
 	if (m_animClips.empty())
-		ParseNodeWithAssimp(m_scene->GetRootNode(), assimpLoader->GetScene()->mRootNode, assimpLoader->GetScene());
-	else
+		ParseNodeWithAssimpNotAnim(m_scene->GetRootNode(), assimpLoader->GetScene()->mRootNode, assimpLoader->GetScene());
+	else {
 		ParseNode(m_scene->GetRootNode());
+		ParseNodeWithAssimp(m_scene->GetRootNode(), assimpLoader->GetScene()->mRootNode, assimpLoader->GetScene());
+	}
 
-	// øÏ∏Æ ±∏¡∂ø° ∏¬∞‘ Texture / Material ª˝º∫
+	
+	// Ïö∞Î¶¨ Íµ¨Ï°∞Ïóê ÎßûÍ≤å Texture / Material ÏÉùÏÑ±
 	CreateTextures();
 	CreateMaterials();
 }
 
 void FBXLoader::Import(const wstring& path)
 {
-	// FBX SDK ∞¸∏Æ¿⁄ ∞¥√º ª˝º∫
+	// FBX SDK Í¥ÄÎ¶¨Ïûê Í∞ùÏ≤¥ ÏÉùÏÑ±
 	m_manager = FbxManager::Create();
 
-	// IOSettings ∞¥√º ª˝º∫ π◊ º≥¡§
+	// IOSettings Í∞ùÏ≤¥ ÏÉùÏÑ± Î∞è ÏÑ§Ï†ï
 	FbxIOSettings* settings = FbxIOSettings::Create(m_manager, IOSROOT);
 	m_manager->SetIOSettings(settings);
 
-	// FbxImporter ∞¥√º ª˝º∫
+	// FbxImporter Í∞ùÏ≤¥ ÏÉùÏÑ±
 	m_scene = FbxScene::Create(m_manager, "");
 
-	// ≥™¡ﬂø° Texture ∞Ê∑Œ ∞ËªÍ«“ ∂ß æµ ∞Õ
+	// ÎÇòÏ§ëÏóê Texture Í≤ΩÎ°ú Í≥ÑÏÇ∞Ìï† Îïå Ïì∏ Í≤É
 	m_resourceDirectory = fs::path(path).parent_path().wstring() + L"\\" + L"Texture.fbm";
 
 	m_importer = FbxImporter::Create(m_manager, "");
@@ -68,7 +71,7 @@ void FBXLoader::Import(const wstring& path)
 
 	m_scene->GetGlobalSettings().SetAxisSystem(FbxAxisSystem::DirectX);
 
-	// æ¿ ≥ªø°º≠ ªÔ∞¢«¸»≠ «“ ºˆ ¿÷¥¬ ∏µÁ ≥ÎµÂ∏¶ ªÔ∞¢«¸»≠ Ω√≈≤¥Ÿ.
+	// Ïî¨ ÎÇ¥ÏóêÏÑú ÏÇºÍ∞ÅÌòïÌôî Ìï† Ïàò ÏûàÎäî Î™®Îì† ÎÖ∏ÎìúÎ•º ÏÇºÍ∞ÅÌòïÌôî ÏãúÌÇ®Îã§.
 	FbxGeometryConverter geometryConverter(m_manager);
 	geometryConverter.Triangulate(m_scene, true);
 
@@ -89,7 +92,7 @@ void FBXLoader::ParseNode(FbxNode* node)
 		}
 	}
 
-	// Material ∑ŒµÂ
+	// Material Î°úÎìú
 	const uint32 materialCount = node->GetMaterialCount();
 	for (uint32 i = 0; i < materialCount; ++i)
 	{
@@ -97,7 +100,7 @@ void FBXLoader::ParseNode(FbxNode* node)
 		LoadMaterial(surfaceMaterial);
 	}
 
-	// Tree ±∏¡∂ ¿Á±Õ »£√‚
+	// Tree Íµ¨Ï°∞ Ïû¨Í∑Ä Ìò∏Ï∂ú
 	const int32 childCount = node->GetChildCount();
 	for (int32 i = 0; i < childCount; ++i)
 		ParseNode(node->GetChild(i));
@@ -105,19 +108,33 @@ void FBXLoader::ParseNode(FbxNode* node)
 
 void FBXLoader::ParseNodeWithAssimp(FbxNode* node, aiNode* assimpNode, const aiScene* assimpScene)
 {
+	if (assimpNode->mMeshes)
+		LoadMeshWithAssimp(assimpScene->mMeshes[*assimpNode->mMeshes], assimpScene);
+
+
+
+	// Tree Íµ¨Ï°∞ Ïû¨Í∑Ä Ìò∏Ï∂ú
+	const int32 childCount = assimpNode->mNumChildren;
+	for (int32 i = 0; i < childCount; ++i)
+		ParseNodeWithAssimp(node,assimpNode->mChildren[i], assimpScene);
+}
+
+void FBXLoader::ParseNodeWithAssimpNotAnim(FbxNode* node, aiNode* assimpNode, const aiScene* assimpScene)
+{
 	FbxNodeAttribute* attribute = node->GetNodeAttribute();
+
 
 	if (attribute)
 	{
 		switch (attribute->GetAttributeType())
 		{
 		case FbxNodeAttribute::eMesh:
-			LoadMeshWithAssimp(node->GetMesh(), assimpScene->mMeshes[*assimpNode->mMeshes]);
+			LoadMeshWithAssimpNotAnim(node->GetMesh(), assimpScene->mMeshes[*assimpNode->mMeshes]);
 			break;
 		}
 	}
 
-	// Material ∑ŒµÂ
+	// Material ÔøΩŒµÔøΩ
 	const uint32 materialCount = node->GetMaterialCount();
 	for (uint32 i = 0; i < materialCount; ++i)
 	{
@@ -125,12 +142,11 @@ void FBXLoader::ParseNodeWithAssimp(FbxNode* node, aiNode* assimpNode, const aiS
 		LoadMaterial(surfaceMaterial);
 	}
 
-	// Tree ±∏¡∂ ¿Á±Õ »£√‚
+	// Tree ÔøΩÔøΩÔøΩÔøΩ ÔøΩÔøΩÔøΩ »£ÔøΩÔøΩ
 	const int32 childCount = node->GetChildCount();
 	for (int32 i = 0; i < childCount; ++i)
-		ParseNodeWithAssimp(node->GetChild(i), assimpNode->mChildren[i], assimpScene);
+		ParseNodeWithAssimpNotAnim(node->GetChild(i), assimpNode->mChildren[i], assimpScene);
 }
-
 void FBXLoader::LoadMesh(FbxMesh* mesh)
 {
 	m_meshes.push_back(FbxMeshInfo());
@@ -143,54 +159,76 @@ void FBXLoader::LoadMesh(FbxMesh* mesh)
 	meshInfo.vertices.resize(vertexCount);
 	meshInfo.boneWeights.resize(vertexCount);
 
-
-	// Position
-	FbxVector4* controlPoints = mesh->GetControlPoints();
-	for (int32 i = 0; i < vertexCount; ++i)
-	{
-		meshInfo.vertices[i].pos.x = static_cast<float>(controlPoints[i].mData[0]);
-		meshInfo.vertices[i].pos.y = static_cast<float>(controlPoints[i].mData[1]);
-		meshInfo.vertices[i].pos.z = static_cast<float>(controlPoints[i].mData[2]);
-	}
-
 	const int32 materialCount = mesh->GetNode()->GetMaterialCount();
 	meshInfo.indices.resize(materialCount);
 
-	FbxGeometryElementMaterial* geometryElementMaterial = mesh->GetElementMaterial();
-
-	const int32 polygonSize = mesh->GetPolygonSize(0);
-	assert(polygonSize == 3);
-
-	uint32 arrIdx[3];
-	uint32 vertexCounter = 0; // ¡§¡°¿« ∞≥ºˆ
-
-	const int32 triCount = mesh->GetPolygonCount(); // ∏ﬁΩ¨¿« ªÔ∞¢«¸ ∞≥ºˆ∏¶ ∞°¡Æø¬¥Ÿ
-
-	for (int32 i = 0; i < triCount; i++) // ªÔ∞¢«¸¿« ∞≥ºˆ
-	{
-		for (int32 j = 0; j < 3; j++) // ªÔ∞¢«¸¿∫ ºº ∞≥¿« ¡§¡°¿∏∑Œ ±∏º∫
-		{
-			int32 controlPointIndex = mesh->GetPolygonVertex(i, j); // ¡¶æÓ¡°¿« ¿Œµ¶Ω∫ √ﬂ√‚
-			arrIdx[j] = controlPointIndex;
-
-			GetNormal(mesh, &meshInfo, controlPointIndex, vertexCounter);
-			GetTangent(mesh, &meshInfo, controlPointIndex, vertexCounter);
-			GetUV(mesh, &meshInfo, controlPointIndex, mesh->GetTextureUVIndex(i, j));
-
-			vertexCounter++;
-		}
-
-		const uint32 subsetIdx = geometryElementMaterial->GetIndexArray().GetAt(i);
-		meshInfo.indices[subsetIdx].push_back(arrIdx[0]);
-		meshInfo.indices[subsetIdx].push_back(arrIdx[1]);
-		meshInfo.indices[subsetIdx].push_back(arrIdx[2]);
-	}
+	
 
 	// Animation
 	LoadAnimationData(mesh, &meshInfo);
 }
 
-void FBXLoader::LoadMeshWithAssimp(FbxMesh* mesh, aiMesh* assimpMesh)
+void FBXLoader::LoadMeshWithAssimp(aiMesh* assimpMesh, const aiScene* assimpScene)
+{
+	//m_meshes.push_back(FbxMeshInfo());
+	FbxMeshInfo& meshInfo = m_meshes.back();
+
+	meshInfo.name = s2ws((string)assimpMesh->mName.C_Str());
+
+	const int32 vertexCountByAssimp = assimpMesh->mNumVertices;
+	//meshInfo.vertices.clear();
+	meshInfo.vertices.resize(vertexCountByAssimp);
+	meshInfo.boneWeights.resize(vertexCountByAssimp);
+
+	bool a = assimpMesh->HasTangentsAndBitangents();
+
+	// Position
+	
+
+	for (int32 i = 0; i < vertexCountByAssimp; ++i)
+	{
+		meshInfo.vertices[i].pos.x = static_cast<float>(assimpMesh->mVertices[i].x);
+		meshInfo.vertices[i].pos.y = static_cast<float>(assimpMesh->mVertices[i].y);
+		meshInfo.vertices[i].pos.z = static_cast<float>(-assimpMesh->mVertices[i].z);
+
+		meshInfo.vertices[i].uv.x = static_cast<float>(assimpMesh->mTextureCoords[0][i].x);
+		meshInfo.vertices[i].uv.y = static_cast<float>(assimpMesh->mTextureCoords[0][i].y);
+
+		meshInfo.vertices[i].normal.x = static_cast<float>(assimpMesh->mNormals[i].x);
+		meshInfo.vertices[i].normal.y = static_cast<float>(assimpMesh->mNormals[i].y);
+		meshInfo.vertices[i].normal.z = static_cast<float>(assimpMesh->mNormals[i].z);
+
+		meshInfo.vertices[i].tangent.x = static_cast<float>(assimpMesh->mTangents[i].x);
+		meshInfo.vertices[i].tangent.y = static_cast<float>(assimpMesh->mTangents[i].y);
+		meshInfo.vertices[i].tangent.z = static_cast<float>(assimpMesh->mTangents[i].z);
+
+	}
+
+	meshInfo.indices[0].clear();
+	meshInfo.indices.resize(1);
+
+	uint32 arrIdx[3];
+	uint32 vertexCounter = 0; // Ï†ïÏ†êÏùò Í∞úÏàò
+
+
+	const int32 triCountByAssimp = assimpMesh->mNumFaces; // Î©îÏâ¨Ïùò ÏÇºÍ∞ÅÌòï Í∞úÏàòÎ•º Í∞ÄÏ†∏Ïò®Îã§
+
+	for (int32 i = 0; i < triCountByAssimp; i++) // ÏÇºÍ∞ÅÌòïÏùò Í∞úÏàò
+	{
+
+		const aiFace& face = assimpMesh->mFaces[i];
+		meshInfo.indices[0].push_back(face.mIndices[0]);
+
+		meshInfo.indices[0].push_back(face.mIndices[2]);
+		meshInfo.indices[0].push_back(face.mIndices[1]);
+
+	}
+
+	// Animation
+	LoadAnimationDataWithAssimp(assimpScene, &meshInfo, assimpMesh);
+}
+
+void FBXLoader::LoadMeshWithAssimpNotAnim(FbxMesh* mesh, aiMesh* assimpMesh)
 {
 	m_meshes.push_back(FbxMeshInfo());
 	FbxMeshInfo& meshInfo = m_meshes.back();
@@ -211,6 +249,7 @@ void FBXLoader::LoadMeshWithAssimp(FbxMesh* mesh, aiMesh* assimpMesh)
 
 	// Position
 	FbxVector4* controlPoints = mesh->GetControlPoints();
+
 	for (int32 i = 0; i < vertexCountByAssimp; ++i)
 	{
 		meshInfo.vertices[i].pos.x = static_cast<float>(assimpMesh->mVertices[i].x);
@@ -228,6 +267,7 @@ void FBXLoader::LoadMeshWithAssimp(FbxMesh* mesh, aiMesh* assimpMesh)
 		meshInfo.vertices[i].tangent.y = static_cast<float>(assimpMesh->mTangents[i].y);
 		meshInfo.vertices[i].tangent.z = static_cast<float>(assimpMesh->mTangents[i].z);
 
+
 	}
 
 	const int32 materialCount = mesh->GetNode()->GetMaterialCount();
@@ -239,16 +279,16 @@ void FBXLoader::LoadMeshWithAssimp(FbxMesh* mesh, aiMesh* assimpMesh)
 	assert(polygonSize == 3);
 
 	uint32 arrIdx[3];
-	uint32 vertexCounter = 0; // ¡§¡°¿« ∞≥ºˆ
+	uint32 vertexCounter = 0; // ÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩ ÔøΩÔøΩÔøΩÔøΩ
 
-	const int32 triCount = mesh->GetPolygonCount(); // ∏ﬁΩ¨¿« ªÔ∞¢«¸ ∞≥ºˆ∏¶ ∞°¡Æø¬¥Ÿ
-	const int32 triCountByAssimp = assimpMesh->mNumFaces; // ∏ﬁΩ¨¿« ªÔ∞¢«¸ ∞≥ºˆ∏¶ ∞°¡Æø¬¥Ÿ
+	const int32 triCount = mesh->GetPolygonCount(); // ÔøΩﬁΩÔøΩÔøΩÔøΩ ÔøΩÔ∞¢ÔøΩÔøΩ ÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩ ÔøΩÔøΩÔøΩÔøΩÔøΩ¬¥ÔøΩ
+	const int32 triCountByAssimp = assimpMesh->mNumFaces; // ÔøΩﬁΩÔøΩÔøΩÔøΩ ÔøΩÔ∞¢ÔøΩÔøΩ ÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩ ÔøΩÔøΩÔøΩÔøΩÔøΩ¬¥ÔøΩ
 	assert(triCount == triCountByAssimp);
-	for (int32 i = 0; i < triCountByAssimp; i++) // ªÔ∞¢«¸¿« ∞≥ºˆ
+	for (int32 i = 0; i < triCountByAssimp; i++) // ÔøΩÔ∞¢ÔøΩÔøΩÔøΩÔøΩ ÔøΩÔøΩÔøΩÔøΩ
 	{
-		for (int32 j = 0; j < 3; j++) // ªÔ∞¢«¸¿∫ ºº ∞≥¿« ¡§¡°¿∏∑Œ ±∏º∫
+		for (int32 j = 0; j < 3; j++) // ÔøΩÔ∞¢ÔøΩÔøΩÔøΩÔøΩ ÔøΩÔøΩ ÔøΩÔøΩÔøΩÔøΩ ÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩ ÔøΩÔøΩÔøΩÔøΩ
 		{
-			int32 controlPointIndex = mesh->GetPolygonVertex(i, j); // ¡¶æÓ¡°¿« ¿Œµ¶Ω∫ √ﬂ√‚
+			int32 controlPointIndex = mesh->GetPolygonVertex(i, j); // ÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩ ÔøΩŒµÔøΩÔøΩÔøΩ ÔøΩÔøΩÔøΩÔøΩ
 			arrIdx[j] = controlPointIndex;
 			vertexCounter++;
 		}
@@ -258,10 +298,14 @@ void FBXLoader::LoadMeshWithAssimp(FbxMesh* mesh, aiMesh* assimpMesh)
 		meshInfo.indices[subsetIdx].push_back(face.mIndices[0]);
 		meshInfo.indices[subsetIdx].push_back(face.mIndices[1]);
 		meshInfo.indices[subsetIdx].push_back(face.mIndices[2]);
+
+
 	}
 
 	// Animation
 	// LoadAnimationData(mesh, &meshInfo);
+
+
 }
 
 void FBXLoader::LoadMaterial(FbxSurfaceMaterial* surfaceMaterial)
@@ -314,7 +358,7 @@ void FBXLoader::GetTangent(FbxMesh* mesh, FbxMeshInfo* meshInfo, int32 idx, int3
 {
 	if (mesh->GetElementTangentCount() == 0)
 	{
-		// TEMP : ø¯∑°¥¬ ¿Ã∑± ¿˙∑± æÀ∞Ì∏Æ¡Ú¿∏∑Œ Tangent ∏∏µÈæÓ¡‡æﬂ «‘
+		// TEMP : ÏõêÎûòÎäî Ïù¥Îü∞ Ï†ÄÎü∞ ÏïåÍ≥†Î¶¨Ï¶òÏúºÎ°ú Tangent ÎßåÎì§Ïñ¥Ï§òÏïº Ìï®
 		meshInfo->vertices[idx].tangent.x = 1.f;
 		meshInfo->vertices[idx].tangent.y = 0.f;
 		meshInfo->vertices[idx].tangent.z = 0.f;
@@ -505,7 +549,7 @@ void FBXLoader::LoadAnimationInfo()
 
 		shared_ptr<FbxAnimClipInfo> animClip = make_shared<FbxAnimClipInfo>();
 		animClip->name = s2ws(animStack->GetName());
-		animClip->keyFrames.resize(m_bones.size()); // ≈∞«¡∑π¿”¿∫ ∫ª¿« ∞≥ºˆ∏∏≈≠
+		animClip->keyFrames.resize(m_bones.size()); // ÌÇ§ÌîÑÎ†àÏûÑÏùÄ Î≥∏Ïùò Í∞úÏàòÎßåÌÅº
 
 		FbxTakeInfo* takeInfo = m_scene->GetTakeInfo(animStack->GetName());
 		animClip->startTime = takeInfo->mLocalTimeSpan.GetStart();
@@ -544,7 +588,6 @@ void FBXLoader::LoadAnimationData(FbxMesh* mesh, FbxMeshInfo* meshInfo)
 					assert(boneIdx >= 0);
 
 					FbxAMatrix matNodeTransform = GetTransform(mesh->GetNode());
-					LoadBoneWeight(cluster, boneIdx, meshInfo);
 					LoadOffsetMatrix(cluster, matNodeTransform, boneIdx, meshInfo);
 
 					const int32 animCount = m_animNames.Size();
@@ -554,12 +597,53 @@ void FBXLoader::LoadAnimationData(FbxMesh* mesh, FbxMeshInfo* meshInfo)
 			}
 		}
 	}
-
-	FillBoneWeight(mesh, meshInfo);
 }
 
 
+
+void FBXLoader::LoadAnimationDataWithAssimp(const aiScene* assimpScene, FbxMeshInfo* meshInfo, aiMesh* assimpMesh)
+{
+	if (assimpMesh->mNumBones == 0)
+		return;
+
+	meshInfo->hasAnimation = true;
+
+	for (unsigned int i = 0; i < assimpMesh->mNumBones; ++i)
+	{
+		aiBone* bone = assimpMesh->mBones[i];
+		int32 boneIdx = FindBoneIndex(string(bone->mName.C_Str()));
+		assert(boneIdx >= 0);
+
+		LoadBoneWeight(bone, boneIdx, meshInfo);
+	}
+
+	FillBoneWeight(assimpMesh, meshInfo);
+}
+
 void FBXLoader::FillBoneWeight(FbxMesh* mesh, FbxMeshInfo* meshInfo)
+{
+	const int32 size = static_cast<int32>(meshInfo->boneWeights.size());
+	for (int32 v = 0; v < size; v++)
+	{
+		BoneWeight& boneWeight = meshInfo->boneWeights[v];
+		boneWeight.Normalize();
+
+		float animBoneIndex[4] = {};
+		float animBoneWeight[4] = {};
+
+		const int32 weightCount = static_cast<int32>(boneWeight.boneWeights.size());
+		for (int32 w = 0; w < weightCount; w++)
+		{
+			animBoneIndex[w] = static_cast<float>(boneWeight.boneWeights[w].first);
+			animBoneWeight[w] = static_cast<float>(boneWeight.boneWeights[w].second);
+		}
+
+		memcpy(&meshInfo->vertices[v].indices, animBoneIndex, sizeof(Vec4));
+		memcpy(&meshInfo->vertices[v].weights, animBoneWeight, sizeof(Vec4));
+	}
+}
+
+void FBXLoader::FillBoneWeight(const aiMesh* assimpMesh, FbxMeshInfo* meshInfo)
 {
 	const int32 size = static_cast<int32>(meshInfo->boneWeights.size());
 	for (int32 v = 0; v < size; v++)
@@ -590,6 +674,17 @@ void FBXLoader::LoadBoneWeight(FbxCluster* cluster, int32 boneIdx, FbxMeshInfo* 
 		double weight = cluster->GetControlPointWeights()[i];
 		int32 vtxIdx = cluster->GetControlPointIndices()[i];
 		meshInfo->boneWeights[vtxIdx].AddWeights(boneIdx, weight);
+	}
+}
+
+void FBXLoader::LoadBoneWeight(aiBone* bone, int32 boneIdx, FbxMeshInfo* meshInfo)
+{
+	for (unsigned int i = 0; i < bone->mNumWeights; ++i)
+	{
+		aiVertexWeight& weight = bone->mWeights[i]; // Í∞ÄÏ§ëÏπò Ï†ïÎ≥¥ Í∞ÄÏ†∏Ïò§Í∏∞
+		int32 vtxIdx = weight.mVertexId; // Ï†ïÏ†ê Ïù∏Îç±Ïä§ Í∞ÄÏ†∏Ïò§Í∏∞
+		float w = weight.mWeight; // Í∞ÄÏ§ëÏπò Í∞í Í∞ÄÏ†∏Ïò§Í∏∞
+		meshInfo->boneWeights[vtxIdx].AddWeights(boneIdx, w); // Í∞ÄÏ§ëÏπò Ï∂îÍ∞Ä
 	}
 }
 
@@ -637,7 +732,7 @@ void FBXLoader::LoadKeyframe(int32 animIndex, FbxNode* node, FbxCluster* cluster
 
 	FbxTime::EMode timeMode = m_scene->GetGlobalSettings().GetTimeMode();
 
-	// æ÷¥œ∏ﬁ¿Ãº« ∞Ò∂Û¡‹
+	// Ïï†ÎãàÎ©îÏù¥ÏÖò Í≥®ÎùºÏ§å
 	FbxAnimStack* animStack = m_scene->FindMember<FbxAnimStack>(m_animNames[animIndex]->Buffer());
 	m_scene->SetCurrentAnimationStack(OUT animStack);
 
