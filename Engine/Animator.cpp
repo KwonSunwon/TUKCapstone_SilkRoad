@@ -27,6 +27,12 @@ void Animator::FinalUpdate()
 		m_firstLapCompleted = true;
 		m_updateTime = 0.f;
 	}
+	if (m_blend_animation) {
+		m_blend_updateTime -= DELTA_TIME;
+	}
+	if (m_blend_updateTime < 0.f) {
+		m_blend_animation = false;
+	}
 
 	const int32 ratio = static_cast<int32>(animClip.frameCount / animClip.duration);
 	m_frame = static_cast<int32>(m_updateTime * ratio);
@@ -64,6 +70,7 @@ void Animator::PushData()
 
 	// Compute Shader
 	shared_ptr<Mesh> mesh = GetGameObject()->GetMeshRenderer()->GetMesh();
+	mesh->GetBoneFrameDataBuffer(m_blend_clipIndex)->PushComputeSRVData(SRV_REGISTER::t6);
 	mesh->GetBoneFrameDataBuffer(m_clipIndex)->PushComputeSRVData(SRV_REGISTER::t8);
 	mesh->GetBoneOffsetBuffer()->PushComputeSRVData(SRV_REGISTER::t9);
 
@@ -72,7 +79,14 @@ void Animator::PushData()
 	m_computeMaterial->SetInt(0, boneCount);
 	m_computeMaterial->SetInt(1, m_frame);
 	m_computeMaterial->SetInt(2, m_nextFrame);
+	m_computeMaterial->SetInt(3, m_blend_frame);
 	m_computeMaterial->SetFloat(0, m_frameRatio);
+	m_computeMaterial->SetFloat(2, 1 - m_blend_updateTime / 0.25);
+
+	if(m_blend_animation)
+		m_computeMaterial->SetFloat(3, 1.f);
+	else
+		m_computeMaterial->SetFloat(3, -1.f);
 
 	uint32 groupCount = (boneCount / 256) + 1;
 	m_computeMaterial->Dispatch(groupCount, 1, 1);
@@ -84,9 +98,14 @@ void Animator::PushData()
 void Animator::Play(uint32 idx)
 {
 	assert(idx < m_animClips->size());
+	m_blend_clipIndex = m_clipIndex;
 	m_clipIndex = idx;
 	m_firstLapCompleted = false;
 	m_updateTime = 0.f;
+
+	m_blend_updateTime = 0.25f;
+	m_blend_animation = true;
+	m_blend_frame = m_frame;
 }
 
 void Animator::SetEventFunction(int32 idx, float updateTime, function<void()> func)

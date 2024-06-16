@@ -7,7 +7,7 @@ class Material;
 class StructuredBuffer;
 class Mesh;
 
-//mixamo 30ÇÁ·¹ÀÓ, with skin, uniform, fbx binary
+//mixamo 30í”„ë ˆì„, with skin, uniform, fbx binary
 
 class Animator : public Component
 {
@@ -29,8 +29,8 @@ public:
 	bool IsAnimationEndOnThisFrame() { return m_updateTime + DELTA_TIME >= m_animClips->at(m_clipIndex).duration; }
 	void Play(uint32 idx);
 
-	//¾Ö´Ï¸ŞÀÌ¼Ç ÀÎµ¦½º, ¿øÇÏ´Â ½Ã°£, ±× ¶§ µ¿ÀÛÇÏ±æ ¿øÇÏ´Â ÇÔ¼ö¸¦ ³Ñ°ÜÁØ´Ù.
-	//µü ÇÑ¹ø ½ÇÇàÈÄ ÇØ´ç ÀÌº¥Æ®´Â Áö¿î´Ù.
+	//ì• ë‹ˆë©”ì´ì…˜ ì¸ë±ìŠ¤, ì›í•˜ëŠ” ì‹œê°„, ê·¸ ë•Œ ë™ì‘í•˜ê¸¸ ì›í•˜ëŠ” í•¨ìˆ˜ë¥¼ ë„˜ê²¨ì¤€ë‹¤.
+	//ë”± í•œë²ˆ ì‹¤í–‰í›„ í•´ë‹¹ ì´ë²¤íŠ¸ëŠ” ì§€ìš´ë‹¤.
 	void SetEventFunction(int32 idx, float updateTime, function<void()> func);
 
 public:
@@ -44,13 +44,19 @@ private:
 	vector<pair<pair<int32, float >, function<void()>>> m_eventFunction;
 
 	float							m_updateTime = 0.f;
+	
 	int32							m_clipIndex = 0;
 	int32							m_frame = 0;
 	int32							m_nextFrame = 0;
 	float							m_frameRatio = 0;
 	bool							m_firstLapCompleted = false;
 
+	bool							m_blend_animation = false;
+	float							m_blend_updateTime = 0.f;
+	int32							m_blend_clipIndex = 0;
+	int32							m_blend_frame = 0;
+
 	shared_ptr<Material>			m_computeMaterial;
-	shared_ptr<StructuredBuffer>	m_boneFinalMatrix;  // Æ¯Á¤ ÇÁ·¹ÀÓÀÇ ÃÖÁ¾ Çà·Ä
+	shared_ptr<StructuredBuffer>	m_boneFinalMatrix;  // íŠ¹ì • í”„ë ˆì„ì˜ ìµœì¢… í–‰ë ¬
 	bool							m_boneFinalUpdated = false;
 };
