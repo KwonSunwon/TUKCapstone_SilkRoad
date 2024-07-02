@@ -77,6 +77,8 @@ public:
 	//virtual Packet Recv();
 	virtual bool Recv(shared_ptr<Packet> packet) { return false; }
 
+	shared_ptr<Packet> PacketProcess();
+
 	NETWORK_STATE GetState() { return m_networkState; }
 	void SetState(NETWORK_STATE state) { m_networkState = state; }
 

@@ -52,6 +52,34 @@ void Network::Update()
 	}
 }
 
+shared_ptr<Packet> Network::PacketProcess()
+{
+	PACKET_TYPE packetType = static_cast<PACKET_TYPE>(m_buffer.Peek(2));
+	shared_ptr<Packet> packet = nullptr;
+	switch(packetType)
+	{
+	case PACKET_TYPE::PT_NONE:
+		packet = make_shared<Packet>();
+		break;
+	case PACKET_TYPE::PT_INIT:
+		packet = make_shared<InitPacket>();
+		break;
+	case PACKET_TYPE::PT_MOVE:
+		packet = make_shared<MovePacket>();
+		break;
+	case PACKET_TYPE::PT_PLAYER:
+		packet = make_shared<PlayerPacket>();
+		break;
+	case PACKET_TYPE::PT_ENEMY:
+		packet = make_shared<EnemyPacket>();
+		break;
+	}
+
+	m_buffer.Read(reinterpret_cast<char*>(packet.get()), packet->m_size);
+
+	return packet;
+}
+
 #pragma region Host
 Host::Host() : Network()
 {
@@ -206,25 +234,7 @@ void Host::Connection(ushort id)
 
 			ushort packetSize = m_buffer.Peek();
 			while(packetSize <= m_buffer.Size()) {
-				// Save packet to m_receivedPacketQue for apply to game
-				PACKET_TYPE packetType = static_cast<PACKET_TYPE>(m_buffer.Peek(2));
-				switch(packetType) {
-				case PACKET_TYPE::PT_NONE:
-					break;
-				case PACKET_TYPE::PT_INIT:
-					packet = make_shared<InitPacket>();
-					break;
-				case PACKET_TYPE::PT_MOVE:
-					packet = make_shared<MovePacket>();
-					break;
-				case PACKET_TYPE::PT_PLAYER:
-					packet = make_shared<PlayerPacket>();
-					break;
-				case PACKET_TYPE::PT_ENEMY:
-					packet = make_shared<EnemyPacket>();
-					break;
-				}
-				m_buffer.Read(reinterpret_cast<char*>(packet.get()), packet->m_size);
+				packet = PacketProcess();
 
 				m_receivedPacketQue.Push(packet);
 
@@ -397,25 +407,7 @@ void Guest::Receiver()
 
 			ushort packetSize = m_buffer.Peek();
 			while(packetSize <= m_buffer.Size()) {
-				// Save packet to m_receivedPacketQue for apply to game
-				PACKET_TYPE packetType = static_cast<PACKET_TYPE>(m_buffer.Peek(2));
-				switch(packetType) {
-				case PACKET_TYPE::PT_NONE:
-					break;
-				case PACKET_TYPE::PT_INIT:
-					packet = make_shared<InitPacket>();
-					break;
-				case PACKET_TYPE::PT_MOVE:
-					packet = make_shared<MovePacket>();
-					break;
-				case PACKET_TYPE::PT_PLAYER:
-					packet = make_shared<PlayerPacket>();
-					break;
-				case PACKET_TYPE::PT_ENEMY:
-					packet = make_shared<EnemyPacket>();
-					break;
-				}
-				m_buffer.Read(reinterpret_cast<char*>(packet.get()), packet->m_size);
+				packet = PacketProcess();
 
 				m_receivedPacketQue.Push(packet);
 
