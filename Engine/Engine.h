@@ -27,6 +27,7 @@ public:
 	shared_ptr<RootSignature> GetRootSignature() { return m_rootSignature; }
 	shared_ptr<GraphicsDescriptorHeap> GetGraphicsDescHeap() { return m_graphicsDescHeap; }
 	shared_ptr<ComputeDescriptorHeap> GetComputeDescHeap() { return m_computeDescHeap; }
+	shared_ptr<D3D11On12Device> GetD3D11On12Device() { return m_d3d11on12Device; }
 
 	shared_ptr<ConstantBuffer> GetConstantBuffer(CONSTANT_BUFFER_TYPE type) { return m_constantBuffers[static_cast<uint8>(type)]; }
 	shared_ptr<RenderTargetGroup> GetRTGroup(RENDER_TARGET_GROUP_TYPE type) { return m_rtGroups[static_cast<uint8>(type)]; }
@@ -44,7 +45,7 @@ private:
 	void CreateRenderTargetGroups();
 
 private:
-	// ±×·ÁÁú È­¸é Å©±â °ü·Ã
+	// ê·¸ë ¤ì§ˆ í™”ë©´ í¬ê¸° ê´€ë ¨
 	WindowInfo		m_window;
 	D3D12_VIEWPORT	m_viewport = {};
 	D3D12_RECT		m_scissorRect = {};

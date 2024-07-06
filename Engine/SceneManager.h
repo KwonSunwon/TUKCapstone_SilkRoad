@@ -33,6 +33,8 @@ public:
 private:
 
 	shared_ptr<Scene> LoadL();
+	void LoadTextBrush();
+	void LoadTextFormats();
 
 private:
 	shared_ptr<Scene> m_activeScene;

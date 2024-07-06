@@ -13,6 +13,7 @@ class OcTree;
 class Terrain;
 class Player;
 class Enemy;
+class TextObject;
 
 class Scene
 {
@@ -53,6 +54,9 @@ public:
 	void AddGameObject(shared_ptr<GameObject> gameObject);
 	void RemoveGameObject(shared_ptr<GameObject> gameObject);
 
+	void AddTextObject(shared_ptr<TextObject> textObject);
+	void RemoveTextObject(shared_ptr<TextObject> textObject);
+
 	const vector<shared_ptr<GameObject>>& GetGameObjects() { return m_gameObjects; }
 
 	void IntersectColliders(shared_ptr<BaseCollider> collider1, shared_ptr<BaseCollider> collider2);
@@ -70,6 +74,7 @@ public:
 private:
 	vector<shared_ptr<GameObject>>		m_gameObjects;
 	vector<shared_ptr<GameObject>>		m_collidableGameObjects;
+	vector<shared_ptr<TextObject>>		m_textObjects;
 	vector<shared_ptr<class Camera>>	m_cameras;
 	vector<shared_ptr<class Light>>		m_lights;
 	vector<shared_ptr<class Manifold>>	m_contacts;

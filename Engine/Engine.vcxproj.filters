@@ -58,6 +58,9 @@
     <Filter Include="Scenes">
       <UniqueIdentifier>{dbb72512-a76a-4430-94e5-92b92f26f0b0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Object\UI">
+      <UniqueIdentifier>{e482b187-8c87-41d4-9a5b-7984bdc85e7c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -263,6 +266,15 @@
     </ClCompile>
     <ClCompile Include="DummyTerrain.cpp" />
     <ClCompile Include="Props.cpp" />
+    <ClCompile Include="TextObject.cpp">
+      <Filter>Object\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UIObject.cpp">
+      <Filter>Object\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="CanvasObject.cpp">
+      <Filter>Object\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -474,6 +486,15 @@
     </ClInclude>
     <ClInclude Include="DummyTerrain.h" />
     <ClInclude Include="Props.h" />
+    <ClInclude Include="TextObject.h">
+      <Filter>Object\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UIObject.h">
+      <Filter>Object\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="CanvasObject.h">
+      <Filter>Object\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath.inl">

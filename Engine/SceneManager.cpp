@@ -32,6 +32,10 @@
 #include "MainStage1.h"
 #include "Network.h"
 
+#include "UIObject.h"
+#include "TextObject.h"
+#include "CanvasObject.h"
+
 void SceneManager::Update()
 {
 	if (m_activeScene == nullptr)
@@ -74,8 +78,6 @@ void SceneManager::Render()
 void SceneManager::RenderUI(shared_ptr<D3D11On12Device> device)
 {
 	uint8 backbufferindex = GEngine->GetSwapChain()->GetBackBufferIndex();
-	if (m_activeScene)
-		m_activeScene->RenderUI();
 	D2D1_SIZE_F rtSize = device->GetD3D11On12RT(backbufferindex)->GetSize();
 	D2D1_RECT_F textRect = D2D1::RectF(0, 0, rtSize.width, rtSize.height);
 
@@ -102,6 +104,10 @@ void SceneManager::RenderUI(shared_ptr<D3D11On12Device> device)
 	// Render text directly to the back buffer.
 	device->GetD2DDeviceContext()->SetTarget(device->GetD3D11On12RT(backbufferindex).Get());
 	device->GetD2DDeviceContext()->BeginDraw();
+
+	if (m_activeScene)
+		m_activeScene->RenderUI();
+
 	device->GetD2DDeviceContext()->SetTransform(D2D1::Matrix3x2F::Identity());
 	// 로딩씬 텍스트 및 조준점 출력
 	device->GetD2DDeviceContext()->DrawText(
@@ -295,6 +301,33 @@ shared_ptr<GameObject> SceneManager::Pick(int32 screenX, int32 screenY)
 	return picked;
 }
 
+void SceneManager::LoadTextBrush()
+{
+	auto device = GEngine->GetD3D11On12Device()->GetD2DDeviceContext();
+	device->CreateSolidColorBrush(D2D1::ColorF{ 0x1e1e1e }, &TextObject::s_brushes["BLACK"]);
+	device->CreateSolidColorBrush(D2D1::ColorF{ D2D1::ColorF::Red }, &TextObject::s_brushes["RED"]);
+	device->CreateSolidColorBrush(D2D1::ColorF{ D2D1::ColorF::DeepSkyBlue }, &TextObject::s_brushes["BLUE"]);
+	device->CreateSolidColorBrush(D2D1::ColorF{ D2D1::ColorF::White }, &TextObject::s_brushes["WHITE"]);
+}
+
+void SceneManager::LoadTextFormats()
+{
+	auto dwFacory = GEngine->GetD3D11On12Device()->GetDWriteFactory();
+
+	dwFacory->CreateTextFormat(
+		L"NanumSquareR",
+		NULL,
+		DWRITE_FONT_WEIGHT_NORMAL,
+		DWRITE_FONT_STYLE_NORMAL,
+		DWRITE_FONT_STRETCH_NORMAL,
+		30,
+		L"ko-kr",
+		&TextObject::s_formats["default"]
+	);
+	TextObject::s_formats["default"]->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
+	TextObject::s_formats["default"]->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+
+}
 
 shared_ptr<Scene> SceneManager::LoadL()
 {
@@ -355,10 +388,25 @@ shared_ptr<Scene> SceneManager::LoadL()
 	}
 #pragma endregion
 
+#pragma region TextUIResources
+	{
+		LoadTextBrush();
+		LoadTextFormats();
+	}
+#pragma endregion
 
-
-
-
+#pragma redion TextUI
+	{
+		auto loadingText = make_shared<TextObject>();
+		loadingText->SetFormat("default");
+		loadingText->SetBrush("WHITE");
+		loadingText->SetText(L"Loading...");
+		loadingText->SetPivot(ePivot::CENTERTOP);
+		loadingText->SetScreenPivot(ePivot::CENTERTOP);
+		loadingText->SetPosition(Vec2(50.0f, 50.0f));
+		scene->AddTextObject(loadingText);
+	}
+#pragma endregion
 
 
 

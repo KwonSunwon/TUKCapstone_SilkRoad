@@ -16,6 +16,7 @@ public:
 	ComPtr<ID2D1DeviceContext2>	GetD2DDeviceContext() { return m_d2dDeviceContext; }
 	ComPtr<ID2D1Bitmap1> GetD3D11On12RT(uint8 index) { return m_d2dRenderTargets[index]; }
 	ComPtr<ID3D11Resource> GetWrappedBackBuffer(uint8 index) {return m_wrappedBackBuffers[index]; }
+	ComPtr<IDWriteFactory> GetDWriteFactory() { return m_dWriteFactory; }
 
 	ComPtr<ID2D1SolidColorBrush> GetSolidColorBrush() { return m_textBrush; }
 	ComPtr<IDWriteTextFormat> GetTextFormat() { return m_textFormat; }
@@ -33,7 +34,7 @@ private:
 	ComPtr<ID2D1Bitmap1>		m_d2dRenderTargets[FrameCount];
 	ComPtr<ID3D11Resource>		m_wrappedBackBuffers[FrameCount];
 
-	// ¸®¼Ò½º
+	// ë¦¬ì†ŒìŠ¤
 	ComPtr<ID2D1SolidColorBrush> m_textBrush;
 	ComPtr<IDWriteTextFormat> m_textFormat;
 };

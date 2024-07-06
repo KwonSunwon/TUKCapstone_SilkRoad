@@ -22,6 +22,10 @@
 #include "RigidBody.h"
 #include "SceneManager.h"
 #include "Terrain.h"
+
+#include "UIObject.h"
+#include "TextObject.h"
+
 Scene::Scene()
 {
 
@@ -172,7 +176,8 @@ void Scene::RenderForward()
 
 void Scene::RenderUI()
 {
-
+	for (const auto& t : m_textObjects)
+		t->Render(GEngine->GetD3D11On12Device()->GetD2DDeviceContext());
 }
 
 void Scene::PushLightData()
@@ -240,6 +245,18 @@ void Scene::RemoveGameObject(shared_ptr<GameObject> gameObject)
 	if(findIt != m_gameObjects.end())
 		m_gameObjects.erase(findIt);
 
+}
+
+void Scene::AddTextObject(shared_ptr<TextObject> textObject)
+{
+	m_textObjects.push_back(textObject);
+}
+
+void Scene::RemoveTextObject(shared_ptr<TextObject> textObject)
+{
+	auto findIt = std::find(m_textObjects.begin(), m_textObjects.end(), textObject);
+	if (findIt != m_textObjects.end())
+		m_textObjects.erase(findIt);
 }
 
 
