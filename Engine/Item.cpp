@@ -70,8 +70,8 @@ void Item::AddGetItemText()
 
 	text->SetPivot(ePivot::CENTER);
 	text->SetScreenPivot(ePivot::CENTER);
-	float yOffset = GET_SINGLE(SceneManager)->GetActiveScene()->GetTextObjects().size() * 90.f;
-	text->SetPosition(Vec2(0.f, 100.f + yOffset));
+	float yOffset = text->getNum() * 90.f;
+	text->SetPosition(Vec2(0.f, yOffset));
 	
 	GET_SINGLE(SceneManager)->GetActiveScene()->AddTextObject(text);
 }

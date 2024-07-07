@@ -62,8 +62,13 @@ public:
 
 	virtual void Render(const ComPtr<ID2D1DeviceContext2>& device) override;
 	virtual void Update() override;
+
+	int getNum() { return s_num; }
 	
 private:
 	float m_timer;
 	float m_alpha;
+
+	static int s_num;
+
 };

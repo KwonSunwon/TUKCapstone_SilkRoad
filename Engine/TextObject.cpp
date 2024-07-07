@@ -209,11 +209,13 @@ float TextObject::GetHeight() const
 	return m_height;
 }
 
+int GettingItemTextObject::s_num = 0;
+
 GettingItemTextObject::GettingItemTextObject(const wstring& itemName)
 {
 	m_timer = 0.0f;
 	m_alpha = 1.0f;
-
+	s_num++;
 
 	SetBrush("WHITE");
 	SetFormat("default");
@@ -240,5 +242,6 @@ void GettingItemTextObject::Update()
 	{
 		m_timer = 0.0f;
 		m_isValid = false;
+		s_num--;
 	}
 }
