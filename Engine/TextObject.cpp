@@ -2,6 +2,7 @@
 #include "TextObject.h"
 #include "UIObject.h"
 #include "Engine.h"
+#include "Timer.h"
 
 unordered_map<string, ComPtr<ID2D1SolidColorBrush>>	TextObject::s_brushes;
 unordered_map<string, ComPtr<IDWriteTextFormat>>	TextObject::s_formats;
@@ -206,4 +207,38 @@ float TextObject::GetWidth() const
 float TextObject::GetHeight() const
 {
 	return m_height;
+}
+
+GettingItemTextObject::GettingItemTextObject(const wstring& itemName)
+{
+	m_timer = 0.0f;
+	m_alpha = 1.0f;
+
+
+	SetBrush("WHITE");
+	SetFormat("default");
+	SetText(itemName);
+	SetPivot(ePivot::CENTER);
+	SetScreenPivot(ePivot::CENTER);
+	SetPosition({ 0.0f, 100.0f });
+}
+
+void GettingItemTextObject::Render(const ComPtr<ID2D1DeviceContext2>& device)
+{
+	device->SetTransform(D2D1::Matrix3x2F::Translation(m_position.x, m_position.y));
+	s_brushes[m_brush]->SetOpacity(m_alpha);
+	device->DrawText(m_text.c_str(), static_cast<UINT32>(m_text.size()), s_formats[m_format].Get(), &m_rect, s_brushes[m_brush].Get());
+	s_brushes[m_brush]->SetOpacity(1.0f);
+}
+
+void GettingItemTextObject::Update()
+{
+	m_timer += DELTA_TIME;
+	m_alpha = min(1.0f, 3.0f - m_timer);
+
+	if (m_timer > 3.0f)
+	{
+		m_timer = 0.0f;
+		m_isValid = false;
+	}
 }

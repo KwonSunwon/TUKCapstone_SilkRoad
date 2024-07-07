@@ -12,6 +12,7 @@ class Item : public MonoBehaviour, public std::enable_shared_from_this<Item>
 public:
 	void SetItemId(int id) { m_itemId = id; }
 	int GetItemID() { return m_itemId; }
+	void AddGetItemText();
 private:
 	void FloatingItem();
 	void RotateItem();

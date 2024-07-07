@@ -55,6 +55,12 @@ void Scene::Update()
 		gameObject->Update();
 	}
 
+	erase_if(m_textObjects, [](shared_ptr<TextObject>& object) { return !object->isValid(); });
+	for (const shared_ptr<TextObject>& textObject : m_textObjects)
+	{
+		textObject->Update();
+	}
+
 }
 
 void Scene::LateUpdate()

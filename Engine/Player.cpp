@@ -14,6 +14,11 @@
 #include "Animator.h"
 #include "Manifold.h"
 #include "Item.h"
+#include "TextObject.h"
+#include "UIObject.h"
+#include "SceneManager.h"
+#include "Scene.h"
+
 
 void Player::Awake()
 {
@@ -117,12 +122,16 @@ void Player::ProcessGetItem()
 		if (scriptI) {
 			shared_ptr<Item> itemScript = dynamic_pointer_cast<Item>(scriptI);
 			m_itemLevels[itemScript->GetItemID()]++;
-			m_itemGetDrawTime[itemScript->GetItemID()]+=3.f;
+
+			itemScript->AddGetItemText();
+
 			col->m_rb2->MoveTo(Vec3(0, 1000000, 0));
 			CalcBulletStat(itemScript->GetItemID());
 		}
 	}
 }
+
+
 
 void Player::CalcBulletStat(int id)
 {

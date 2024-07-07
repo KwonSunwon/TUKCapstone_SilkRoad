@@ -110,13 +110,6 @@ void SceneManager::RenderUI(shared_ptr<D3D11On12Device> device)
 
 	device->GetD2DDeviceContext()->SetTransform(D2D1::Matrix3x2F::Identity());
 	// 로딩씬 텍스트 및 조준점 출력
-	device->GetD2DDeviceContext()->DrawText(
-		playerPosText.c_str(),
-		static_cast<UINT32>(playerPosText.length()),
-		device->GetTextFormat().Get(),
-		&textRect,
-		device->GetSolidColorBrush().Get()
-	);
 
 	// 아이템 획득 메시지 출력
 	std::wostringstream ss2;
@@ -395,15 +388,15 @@ shared_ptr<Scene> SceneManager::LoadL()
 	}
 #pragma endregion
 
-#pragma redion TextUI
+#pragma region TextUI
 	{
 		auto loadingText = make_shared<TextObject>();
 		loadingText->SetFormat("default");
 		loadingText->SetBrush("WHITE");
-		loadingText->SetText(L"Loading...");
-		loadingText->SetPivot(ePivot::CENTERTOP);
-		loadingText->SetScreenPivot(ePivot::CENTERTOP);
-		loadingText->SetPosition(Vec2(50.0f, 50.0f));
+		loadingText->SetText(L"press number 4 to start");
+		loadingText->SetPivot(ePivot::CENTER);
+		loadingText->SetScreenPivot(ePivot::CENTER);
+		loadingText->SetPosition(Vec2(0.f, 0.f));
 		scene->AddTextObject(loadingText);
 	}
 #pragma endregion

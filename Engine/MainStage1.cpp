@@ -34,6 +34,10 @@
 #include "Network.h"
 #include "NetworkPlayer.h"
 
+#include "UIObject.h"
+#include "TextObject.h"
+#include "CanvasObject.h"
+
 shared_ptr<class Scene> LoadMainScene()
 {
 #pragma region LayerMask
@@ -221,6 +225,25 @@ shared_ptr<class Scene> LoadMainScene()
 		}
 		obj->AddComponent(meshRenderer);
 		//scene->AddGameObject(obj);
+	}
+#pragma endregion
+
+#pragma region TextUI
+	{
+		auto loadingText = make_shared<TextObject>();
+		loadingText->SetFormat("default");
+		loadingText->SetBrush("WHITE");
+		loadingText->SetText(L"+");
+		loadingText->SetPivot(ePivot::CENTER);
+		loadingText->SetScreenPivot(ePivot::CENTER);
+		loadingText->SetPosition(Vec2(0.f, 0.f));
+		scene->AddTextObject(loadingText);
+
+		auto testText = make_shared<GettingItemTextObject>(L"Test");
+		testText->SetPivot(ePivot::CENTER);
+		testText->SetScreenPivot(ePivot::CENTER);
+		testText->SetPosition(Vec2(0.f, 100.f));
+		scene->AddTextObject(testText);
 	}
 #pragma endregion
 

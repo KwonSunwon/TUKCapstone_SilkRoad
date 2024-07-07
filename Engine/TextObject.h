@@ -53,3 +53,17 @@ protected:
 	float		m_width;
 	float		m_height;
 };
+
+class GettingItemTextObject : public TextObject
+{
+public:
+	GettingItemTextObject(const wstring& itemName);
+	~GettingItemTextObject() = default;
+
+	virtual void Render(const ComPtr<ID2D1DeviceContext2>& device) override;
+	virtual void Update() override;
+	
+private:
+	float m_timer;
+	float m_alpha;
+};
