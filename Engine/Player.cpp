@@ -104,15 +104,6 @@ void Player::AddBullet(shared_ptr<class PlayerBullet> bullet)
 	m_bullets.push_back(bullet);
 }
 
-bool Player::isItemGetDraw(int index)
-{
-	if (m_itemGetDrawTime[index] > 0.f)
-	{
-		m_itemGetDrawTime[index] -= DELTA_TIME;
-		return true;
-	}
-	return false;
-}
 
 void Player::ProcessGetItem()
 {

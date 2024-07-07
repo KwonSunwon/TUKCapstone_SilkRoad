@@ -239,11 +239,6 @@ shared_ptr<class Scene> LoadMainScene()
 		loadingText->SetPosition(Vec2(0.f, 0.f));
 		scene->AddTextObject(loadingText);
 
-		auto testText = make_shared<GettingItemTextObject>(L"Test");
-		testText->SetPivot(ePivot::CENTER);
-		testText->SetScreenPivot(ePivot::CENTER);
-		testText->SetPosition(Vec2(0.f, 100.f));
-		scene->AddTextObject(testText);
 	}
 #pragma endregion
 
@@ -890,6 +885,10 @@ shared_ptr<class Scene> LoadMainScene()
 	{
 		scene->AddGameObject(GET_SINGLE(Resources)->LoadItemPrefab(0, Vec3(27328, 220, 7446)));
 		scene->AddGameObject(GET_SINGLE(Resources)->LoadItemPrefab(1, Vec3(16805, 121, 6721)));
+		scene->AddGameObject(GET_SINGLE(Resources)->LoadItemPrefab(1, Vec3(16755, 121, 6721)));
+		scene->AddGameObject(GET_SINGLE(Resources)->LoadItemPrefab(1, Vec3(16835, 121, 6721)));
+		scene->AddGameObject(GET_SINGLE(Resources)->LoadItemPrefab(1, Vec3(16845, 121, 6721)));
+		scene->AddGameObject(GET_SINGLE(Resources)->LoadItemPrefab(1, Vec3(16855, 121, 6721)));
 		scene->AddGameObject(GET_SINGLE(Resources)->LoadItemPrefab(2, Vec3(28623, 128, 15045)));
 		scene->AddGameObject(GET_SINGLE(Resources)->LoadItemPrefab(3, Vec3(25451, 121, 24415)));
 		scene->AddGameObject(GET_SINGLE(Resources)->LoadItemPrefab(4, Vec3(25651, 121, 24415)));
