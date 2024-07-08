@@ -3,6 +3,9 @@
 #include "UIObject.h"
 #include "Engine.h"
 #include "Timer.h"
+#include "Camera.h"
+#include "Scene.h"
+#include "SceneManager.h"
 
 unordered_map<string, ComPtr<ID2D1SolidColorBrush>>	TextObject::s_brushes;
 unordered_map<string, ComPtr<IDWriteTextFormat>>	TextObject::s_formats;
@@ -235,13 +238,76 @@ void GettingItemTextObject::Render(const ComPtr<ID2D1DeviceContext2>& device)
 
 void GettingItemTextObject::Update()
 {
+	const float lifeTime{ 3.0f };
 	m_timer += DELTA_TIME;
-	m_alpha = min(1.0f, 3.0f - m_timer);
+	m_alpha = min(1.0f, lifeTime - m_timer);
 
-	if (m_timer > 3.0f)
+	if (m_timer > lifeTime)
 	{
 		m_timer = 0.0f;
 		m_isValid = false;
 		s_num--;
+	}
+}
+
+DamageIndicatorTextObject::DamageIndicatorTextObject(const wstring& damage)
+{
+	m_timer = 0.0f;
+	m_alpha = 1.0f;
+	m_camera = GET_SINGLE(SceneManager) ->GetActiveScene()->GetMainCamera();
+	m_isOnScreen = false;
+	m_scale = 0.8f;
+
+	SetBrush("YELLOW");
+	SetFormat("default");
+	SetText(damage);
+	SetPivot(ePivot::CENTER);
+	SetScreenPivot(ePivot::LEFTTOP);
+}
+
+void DamageIndicatorTextObject::Render(const ComPtr<ID2D1DeviceContext2>& device)
+{
+	if (!m_isOnScreen) return;
+
+	D2D1::Matrix3x2F matrix{ D2D1::Matrix3x2F::Identity() };
+	matrix.SetProduct(matrix, D2D1::Matrix3x2F::Scale(m_scale, m_scale, D2D1_POINT_2F{ m_rect.right / 2.0f, m_rect.bottom / 2.0f }));
+	matrix.SetProduct(matrix, D2D1::Matrix3x2F::Translation(m_position.x, m_position.y));
+	device->SetTransform(matrix);
+
+	s_brushes[m_brush]->SetOpacity(m_alpha);
+	device->DrawText(m_text.c_str(), static_cast<UINT32>(m_text.size()), s_formats[m_format].Get(), &m_rect, s_brushes[m_brush].Get());
+	s_brushes[m_brush]->SetOpacity(1.0f);
+
+}
+
+void DamageIndicatorTextObject::Update()
+{
+	const float lifeTime{ 1.5f };
+
+	Vec3 screenPos{ m_originPosition };
+	screenPos = Vec3::Transform(screenPos, m_camera->GetViewMatrix());
+	screenPos = Vec3::Transform(screenPos, m_camera->GetProjectionMatrix());
+
+	if (screenPos.x < -1.0f || screenPos.x > 1.0f || screenPos.y < -1.0f || screenPos.y > 1.0f || screenPos.z < 0.0f || screenPos.z > 1.0f)
+	{
+		m_isOnScreen = false;
+	}
+	else
+	{
+		screenPos.x = GEngine->GetWindow().width * (screenPos.x + 1.0f) / 2.0f;
+		screenPos.y = GEngine->GetWindow().height * (1.0f - screenPos.y) / 2.0f;
+		screenPos.y -= GEngine->GetWindow().height * 0.03f * m_timer;
+
+		SetPosition(Vec2{ screenPos.x, screenPos.y });
+		m_isOnScreen = true;
+	}
+
+	m_alpha = min(1.0f, lifeTime - m_timer);
+
+	m_timer += DELTA_TIME;
+
+	if (m_timer > lifeTime)
+	{
+		m_isValid = false;
 	}
 }

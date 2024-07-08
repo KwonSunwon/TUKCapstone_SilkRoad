@@ -85,7 +85,10 @@ void PlayerBullet::ProcessCollides()
 		case BASIC:
 			if (scriptE) {
 				shared_ptr<Enemy> enemyScript = dynamic_pointer_cast<Enemy>(scriptE);
+				if (enemyScript->IsDie()) break;
+
 				enemyScript->GetDamage(m_attackPower);
+				enemyScript->MakeDamageIndicator(m_attackPower, (rb)->GetPosition());
 			}
 			break;
 

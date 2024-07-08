@@ -238,6 +238,7 @@ void SceneManager::LoadTextBrush()
 	device->CreateSolidColorBrush(D2D1::ColorF{ D2D1::ColorF::Red }, &TextObject::s_brushes["RED"]);
 	device->CreateSolidColorBrush(D2D1::ColorF{ D2D1::ColorF::DeepSkyBlue }, &TextObject::s_brushes["BLUE"]);
 	device->CreateSolidColorBrush(D2D1::ColorF{ D2D1::ColorF::White }, &TextObject::s_brushes["WHITE"]);
+	device->CreateSolidColorBrush(D2D1::ColorF{ D2D1::ColorF::Yellow }, &TextObject::s_brushes["YELLOW"]);
 }
 
 void SceneManager::LoadTextFormats()

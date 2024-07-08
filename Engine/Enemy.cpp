@@ -9,6 +9,9 @@
 #include "Network.h"
 #include "Packet.h"
 #include "Animator.h"
+#include "Scene.h"
+#include "SceneManager.h"
+#include "TextObject.h"
 
 void Enemy::Awake()
 {
@@ -67,6 +70,18 @@ void Enemy::LateUpdate()
 		m_curState = nextState;
 		m_curState->OnEnter();
 	}
+}
+
+void Enemy::GetDamage(float damage)
+{
+	m_HP -= damage;
+}
+
+void Enemy::MakeDamageIndicator(float damage, Vec3 originPos)
+{
+	shared_ptr<DamageIndicatorTextObject> text = make_shared<DamageIndicatorTextObject>(to_wstring(static_cast<int>(damage)));
+	text->SetOriginPosition(originPos);
+	GET_SINGLE(SceneManager)->GetActiveScene()->AddTextObject(text);
 }
 
 void Enemy::ProcessPacket(shared_ptr<EnemyPacket> packet)

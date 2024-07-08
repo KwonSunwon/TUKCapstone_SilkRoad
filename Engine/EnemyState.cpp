@@ -106,6 +106,7 @@ void EnemyDieState::OnEnter()
 	m_enemy->GetRigidBody()->SetStatic(true);
 	m_enemy->GetRigidBody()->SetOverlap();
 	m_enemy->GetRigidBody()->SetLinearVelocity(Vec3(0, 0, 0));
+	m_enemy->SetDie(true);
 	//m_enemy->GetGameObject()->SetActive(false);
 }
 

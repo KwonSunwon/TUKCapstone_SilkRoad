@@ -2,6 +2,8 @@
 
 enum class ePivot;
 
+class Camera;
+
 class TextObject
 {
 public:
@@ -71,4 +73,26 @@ private:
 
 	static int s_num;
 
+};
+
+class DamageIndicatorTextObject : public TextObject
+{
+public:
+	DamageIndicatorTextObject(const wstring& damage);
+	~DamageIndicatorTextObject() = default;
+
+	virtual void Render(const ComPtr<ID2D1DeviceContext2>& device) override;
+	virtual void Update() override;
+
+	void SetOriginPosition(const Vec3& position) { m_originPosition = position; }
+
+private:
+	shared_ptr<Camera> m_camera;
+	Vec3 m_originPosition;
+
+	float m_timer;
+	float m_alpha;
+	float m_scale;
+
+	bool m_isOnScreen;
 };

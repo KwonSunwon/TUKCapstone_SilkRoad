@@ -30,10 +30,14 @@ public:
 	void SetHP(float hp) { m_HP = hp; }
 	float GetHP() { return m_HP; }
 
-	void GetDamage(float damage) { m_HP -= damage; }
+	void GetDamage(float damage);
+	void MakeDamageIndicator(float damage, Vec3 originPos);
 
 	void ProcessPacket(shared_ptr<class EnemyPacket> packet);
 	void SetNetworkId(uint32 id) { m_networkId = id; }
+
+	void SetDie(bool isDie) { m_isDie = isDie; }
+	bool IsDie() { return m_isDie; }
 
 private:
 	shared_ptr<class EnemyState> m_curState;
@@ -44,6 +48,8 @@ private:
 	float m_maxWalkSpeed = 800.f;
 	float m_walkForce = 300000.f;
 	float m_HP = 100.f;
+	bool m_isDie = false;
+	
 
 	vector<shared_ptr<class GameObject>> m_players;
 	uint32 m_targetPlayerIndex = 0;
