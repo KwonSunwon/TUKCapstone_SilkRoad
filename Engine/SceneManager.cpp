@@ -258,6 +258,58 @@ void SceneManager::LoadTextFormats()
 	TextObject::s_formats["default"]->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
 	TextObject::s_formats["default"]->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
 
+	dwFacory->CreateTextFormat(
+		L"NanumSquareR",
+		NULL,
+		DWRITE_FONT_WEIGHT_NORMAL,
+		DWRITE_FONT_STYLE_NORMAL,
+		DWRITE_FONT_STRETCH_NORMAL,
+		30,
+		L"ko-kr",
+		&TextObject::s_formats["30L"]
+	);
+	TextObject::s_formats["30L"]->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_LEADING);
+	TextObject::s_formats["30L"]->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_FAR);
+
+	dwFacory->CreateTextFormat(
+		L"NanumSquareR",
+		NULL,
+		DWRITE_FONT_WEIGHT_NORMAL,
+		DWRITE_FONT_STYLE_NORMAL,
+		DWRITE_FONT_STRETCH_NORMAL,
+		30,
+		L"ko-kr",
+		&TextObject::s_formats["30R"]
+	);
+	TextObject::s_formats["30R"]->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_TRAILING);
+	TextObject::s_formats["30R"]->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_FAR);
+
+	dwFacory->CreateTextFormat(
+		L"NanumSquareR",
+		NULL,
+		DWRITE_FONT_WEIGHT_NORMAL,
+		DWRITE_FONT_STYLE_NORMAL,
+		DWRITE_FONT_STRETCH_NORMAL,
+		18,
+		L"ko-kr",
+		&TextObject::s_formats["18L"]
+	);
+	TextObject::s_formats["18L"]->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_LEADING);
+	TextObject::s_formats["18L"]->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_FAR);
+
+	dwFacory->CreateTextFormat(
+		L"NanumSquareR",
+		NULL,
+		DWRITE_FONT_WEIGHT_NORMAL,
+		DWRITE_FONT_STYLE_NORMAL,
+		DWRITE_FONT_STRETCH_NORMAL,
+		18,
+		L"ko-kr",
+		&TextObject::s_formats["18R"]
+	);
+	TextObject::s_formats["18R"]->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_TRAILING);
+	TextObject::s_formats["18R"]->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_FAR);
+
 }
 
 shared_ptr<Scene> SceneManager::LoadL()
