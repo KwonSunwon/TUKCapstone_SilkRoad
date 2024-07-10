@@ -3,6 +3,7 @@
 enum class ePivot;
 
 class Camera;
+class Player;
 
 class TextObject
 {
@@ -95,4 +96,19 @@ private:
 	float m_scale;
 
 	bool m_isOnScreen;
+};
+
+class DebugTextObject : public TextObject
+{
+public:
+	DebugTextObject();
+	~DebugTextObject() = default;
+
+	//virtual void Render(const ComPtr<ID2D1DeviceContext2>& device) override;
+	virtual void Update() override;
+
+	void setPlayer(shared_ptr<Player> const player) { m_player = player; }
+
+private:
+	shared_ptr<Player> m_player;
 };

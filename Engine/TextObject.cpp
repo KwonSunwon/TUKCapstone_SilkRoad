@@ -6,6 +6,8 @@
 #include "Camera.h"
 #include "Scene.h"
 #include "SceneManager.h"
+#include "Player.h"
+#include "RigidBody.h"
 
 unordered_map<string, ComPtr<ID2D1SolidColorBrush>>	TextObject::s_brushes;
 unordered_map<string, ComPtr<IDWriteTextFormat>>	TextObject::s_formats;
@@ -310,4 +312,42 @@ void DamageIndicatorTextObject::Update()
 	{
 		m_isValid = false;
 	}
+}
+
+DebugTextObject::DebugTextObject()
+{
+	m_player = nullptr;
+
+	SetBrush("WHITE");
+	SetFormat("18L");
+	SetText(L"");
+	SetPivot(ePivot::LEFTTOP);
+	SetScreenPivot(ePivot::LEFTTOP);
+	SetPosition({ 0.0f, 0.0f });
+}
+
+void DebugTextObject::Update()
+{
+	m_player = GET_SINGLE(SceneManager)->GetActiveScene()->GetMainPlayerScript();
+
+	wstring debugText{};
+	if (!m_player) {
+		debugText += L"Player Position : NULL\n";
+		debugText += L"Player Velocity : NULL\n";
+		debugText += L"Player Rotation : NULL\n";
+	}
+	else {
+		debugText += L"Player Position : " + to_wstring((int)m_player->GetRigidBody()->GetPosition().x) + L", "
+			+ to_wstring((int)m_player->GetRigidBody()->GetPosition().y) + L", " + to_wstring((int)m_player->GetRigidBody()->GetPosition().z) + L"\n";
+
+		debugText += L"Player Velocity : " + to_wstring((int)m_player->GetRigidBody()->GetLinearVelocity().x) + L", "
+			+ to_wstring((int)m_player->GetRigidBody()->GetLinearVelocity().y) + L", " + to_wstring((int)m_player->GetRigidBody()->GetLinearVelocity().z) + L"\n";
+
+		debugText += L"Player Rotation : " + to_wstring(m_player->GetRigidBody()->GetRotation().x) + L", "
+			+ to_wstring(m_player->GetRigidBody()->GetRotation().y) + L", " + to_wstring(m_player->GetRigidBody()->GetRotation().z) + L"\n";
+
+	}
+	
+
+	SetText(debugText);
 }

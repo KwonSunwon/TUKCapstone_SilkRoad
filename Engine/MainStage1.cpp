@@ -239,6 +239,9 @@ shared_ptr<class Scene> LoadMainScene()
 		loadingText->SetPosition(Vec2(0.f, 0.f));
 		scene->AddTextObject(loadingText);
 
+		auto debugText = make_shared<DebugTextObject>();
+		scene->AddTextObject(debugText);
+
 	}
 #pragma endregion
 
