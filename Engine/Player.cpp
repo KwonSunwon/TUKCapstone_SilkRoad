@@ -87,6 +87,11 @@ void Player::LateUpdate()
 
 void Player::Fire()
 {
+	BulletType bulletType = CalcBulletType();
+	m_fireInfo.bulletType = bulletType;
+	m_fireElapsedTime = 1.f / m_fireRate;
+
+
 	float minDistance = FLT_MAX;
 	vector<shared_ptr<GameObject>>gameObjects = GET_SINGLE(SceneManager)->GetActiveScene()->GetCollidableGameObjects();
 	Vec3 cameraPos = m_playerCamera->GetTransform()->GetWorldPosition();
@@ -110,26 +115,36 @@ void Player::Fire()
 		}
 	}
 	
-	
-	if (picked) {
-		shared_ptr<MonoBehaviour> scriptE = picked->GetMonobehaviour("Enemy");
+	if (!picked)
+		return;
 
+	shared_ptr<MonoBehaviour> scriptE = picked->GetMonobehaviour("Enemy");
+	Vec3 damagePos = cameraPos + cameraDir * minDistance;
+
+	switch (m_fireInfo.bulletType) {
+	case BulletType::BASIC:
 		if (scriptE) {
 			shared_ptr<Enemy> enemyScript = dynamic_pointer_cast<Enemy>(scriptE);
 			if (enemyScript->IsDie()) return;
-
-			enemyScript->GetDamage(20);
-			enemyScript->MakeDamageIndicator(20, (picked)->GetRigidBody() -> GetPosition()+Vec3(0,100,0));
+			enemyScript->GetDamage(m_fireInfo.bulletDamage);
+			enemyScript->MakeDamageIndicator(m_fireInfo.bulletDamage, damagePos);
 		}
-		
+		break;
+
+	case BulletType::EXPLOSIVE:
+		if (scriptE) {
+			shared_ptr<Enemy> enemyScript = dynamic_pointer_cast<Enemy>(scriptE);
+			if (enemyScript->IsDie()) return;
+			enemyScript->GetDamage(m_fireInfo.explosionDamage);
+			enemyScript->MakeDamageIndicator(m_fireInfo.explosionDamage, damagePos);
+		}
+		break;
+
 	}
 
 
-	BulletType bulletType = CalcBulletType();
-	m_fireInfo.bulletType = bulletType;
-	m_fireElapsedTime = 1.f / m_fireRate;
-
 	
+	//총알 사용할때 코드
 	//m_bullets[m_bulletPivot++]->Fire(shared_from_this(), m_fireInfo);
 	//m_fireTime++;
 
