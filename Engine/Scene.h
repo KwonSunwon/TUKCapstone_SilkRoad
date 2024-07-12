@@ -58,6 +58,7 @@ public:
 	void RemoveTextObject(shared_ptr<TextObject> textObject);
 
 	const vector<shared_ptr<GameObject>>& GetGameObjects() { return m_gameObjects; }
+	const vector<shared_ptr<GameObject>>& GetCollidableGameObjects() { return m_collidableGameObjects; }
 	const vector<shared_ptr<TextObject>>& GetTextObjects() { return m_textObjects; }
 
 	void IntersectColliders(shared_ptr<BaseCollider> collider1, shared_ptr<BaseCollider> collider2);

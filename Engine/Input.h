@@ -92,6 +92,8 @@ public:
 	const POINT& GetMousePos() { return m_mousePos; }
 	const POINT& GetMouseDelta() { return m_mouseDelta; }
 
+	Vec2 m_screenCenter{};
+
 private:
 	inline KEY_STATE GetState(KEY_TYPE key) { return m_states[static_cast<uint8>(key)]; }
 

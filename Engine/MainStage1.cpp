@@ -329,66 +329,66 @@ shared_ptr<class Scene> LoadMainScene()
 		{
 			shared_ptr<Player> playerScript = make_shared<Player>();
 			// 총알 오브젝트 풀 생성
-			for(int i = 0; i < 20; ++i)
-			{
-				shared_ptr<GameObject> bullet = make_shared<GameObject>();
-				bullet->SetName(L"Bullet");
+			//for(int i = 0; i < 20; ++i)
+			//{
+			//	shared_ptr<GameObject> bullet = make_shared<GameObject>();
+			//	bullet->SetName(L"Bullet");
 
-				{
-					bullet->AddComponent(make_shared<Transform>());
-					bullet->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 0.f));
-					bullet->GetTransform()->SetLocalScale(Vec3(5.f, 5.f, 5.f));
-				}
+			//	{
+			//		bullet->AddComponent(make_shared<Transform>());
+			//		bullet->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 0.f));
+			//		bullet->GetTransform()->SetLocalScale(Vec3(5.f, 5.f, 5.f));
+			//	}
 
-				shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
-				{
-					shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadSphereMesh();
-					meshRenderer->SetMesh(mesh);
-				}
+			//	shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
+			//	{
+			//		shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadSphereMesh();
+			//		meshRenderer->SetMesh(mesh);
+			//	}
 
-				{
-					shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"WireFrame");
-					shared_ptr<Material> material = make_shared<Material>();
-					material->SetShader(shader);
+			//	{
+			//		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"WireFrame");
+			//		shared_ptr<Material> material = make_shared<Material>();
+			//		material->SetShader(shader);
 
-					material->SetInt(3, 1);
-					material->SetVec4(3, Vec4(1, 1, 1, 1));
-					meshRenderer->SetMaterial(material);
-				}
-				bullet->AddComponent(meshRenderer);
+			//		material->SetInt(3, 1);
+			//		material->SetVec4(3, Vec4(1, 1, 1, 1));
+			//		meshRenderer->SetMaterial(material);
+			//	}
+			//	bullet->AddComponent(meshRenderer);
 
-				{
-					shared_ptr<RigidBody> rb = make_shared<RigidBody>();
-					rb->SetStatic(true);
-					rb->SetRestitution(0.f);
-					bullet->SetCheckFrustum(false);
-					bullet->AddComponent(rb);
-				}
-				{
-					//shared_ptr<SphereCollider> collider = make_shared<SphereCollider>();
-					//collider->SetRadius(10.f);
-					shared_ptr<OrientedBoxCollider> collider = make_shared<OrientedBoxCollider>();
-					collider->SetExtent(Vec3(10, 10, 10));
-					bullet->AddComponent(collider);
-				}
-				{
-					//bullet->GetMeshRenderer()->GetMaterial()->SetInt(0, 0);
-				}
-				bullet->SetActive(true);
+			//	{
+			//		shared_ptr<RigidBody> rb = make_shared<RigidBody>();
+			//		rb->SetStatic(true);
+			//		rb->SetRestitution(0.f);
+			//		bullet->SetCheckFrustum(false);
+			//		bullet->AddComponent(rb);
+			//	}
+			//	{
+			//		//shared_ptr<SphereCollider> collider = make_shared<SphereCollider>();
+			//		//collider->SetRadius(10.f);
+			//		shared_ptr<OrientedBoxCollider> collider = make_shared<OrientedBoxCollider>();
+			//		collider->SetExtent(Vec3(10, 10, 10));
+			//		bullet->AddComponent(collider);
+			//	}
+			//	{
+			//		//bullet->GetMeshRenderer()->GetMaterial()->SetInt(0, 0);
+			//	}
+			//	bullet->SetActive(true);
 
-				shared_ptr<PlayerBullet> bulletScript = make_shared<PlayerBullet>();
-				playerScript->AddBullet(bulletScript);
+			//	shared_ptr<PlayerBullet> bulletScript = make_shared<PlayerBullet>();
+			//	playerScript->AddBullet(bulletScript);
 
-				bullet->AddComponent(bulletScript);
+			//	bullet->AddComponent(bulletScript);
 
-				shared_ptr<GameObject> bomb = GET_SINGLE(Resources)->LoadBombPrefab(Vec3(0, 0, 0));
-				bomb->GetRigidBody()->SetOverlap();
-				shared_ptr<Bomb> bombScript = dynamic_pointer_cast<Bomb>(bomb->GetMonobehaviour("Bomb"));
-				bulletScript->SetBomb(bombScript);
-				scene->AddGameObject(bullet);
-				scene->AddGameObject(bomb);
+			//	shared_ptr<GameObject> bomb = GET_SINGLE(Resources)->LoadBombPrefab(Vec3(0, 0, 0));
+			//	bomb->GetRigidBody()->SetOverlap();
+			//	shared_ptr<Bomb> bombScript = dynamic_pointer_cast<Bomb>(bomb->GetMonobehaviour("Bomb"));
+			//	bulletScript->SetBomb(bombScript);
+			//	scene->AddGameObject(bullet);
+			//	scene->AddGameObject(bomb);
 
-			}
+			//}
 			playerScript->SetPlayerCamera(scene->GetMainCamera());
 			scene->SetMainPlayerScript(playerScript);
 			go->AddComponent(playerScript);

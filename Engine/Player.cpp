@@ -18,7 +18,8 @@
 #include "UIObject.h"
 #include "SceneManager.h"
 #include "Scene.h"
-
+#include "Enemy.h"
+#include "BaseCollider.h"
 
 void Player::Awake()
 {
@@ -86,17 +87,55 @@ void Player::LateUpdate()
 
 void Player::Fire()
 {
+	float minDistance = FLT_MAX;
+	vector<shared_ptr<GameObject>>gameObjects = GET_SINGLE(SceneManager)->GetActiveScene()->GetCollidableGameObjects();
+	Vec3 cameraPos = m_playerCamera->GetTransform()->GetWorldPosition();
+	Vec3 cameraDir = m_playerCamera->GetTransform()->GetLook();
+	shared_ptr<GameObject> picked;
+	for (auto& gameObject : gameObjects) {
+		Vec4 rayOrigin = Vec4(cameraPos.x, cameraPos.y, cameraPos.z, 1.0f);
+		Vec4 rayDir = Vec4(cameraDir.x, cameraDir.y, cameraDir.z, 0.0f);
+
+		float distance = 0.f;
+		if (gameObject->GetCollider()->Intersects(rayOrigin, rayDir, OUT distance) == false)
+			continue;
+
+		if (gameObject->GetMonobehaviour("Player"))
+			continue;
+
+		if (distance < minDistance)
+		{
+			minDistance = distance;
+			picked = gameObject;
+		}
+	}
+	
+	
+	if (picked) {
+		shared_ptr<MonoBehaviour> scriptE = picked->GetMonobehaviour("Enemy");
+
+		if (scriptE) {
+			shared_ptr<Enemy> enemyScript = dynamic_pointer_cast<Enemy>(scriptE);
+			if (enemyScript->IsDie()) return;
+
+			enemyScript->GetDamage(20);
+			enemyScript->MakeDamageIndicator(20, (picked)->GetRigidBody() -> GetPosition()+Vec3(0,100,0));
+		}
+		
+	}
+
+
 	BulletType bulletType = CalcBulletType();
 	m_fireInfo.bulletType = bulletType;
 	m_fireElapsedTime = 1.f / m_fireRate;
 
 	
-	m_bullets[m_bulletPivot++]->Fire(shared_from_this(), m_fireInfo);
-	m_fireTime++;
+	//m_bullets[m_bulletPivot++]->Fire(shared_from_this(), m_fireInfo);
+	//m_fireTime++;
 
 
-	if (m_bulletPivot >= m_bullets.size())
-		m_bulletPivot = 0;
+	/*if (m_bulletPivot >= m_bullets.size())
+		m_bulletPivot = 0;*/
 }
 
 void Player::AddBullet(shared_ptr<class PlayerBullet> bullet)
