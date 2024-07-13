@@ -275,6 +275,9 @@
     <ClCompile Include="CanvasObject.cpp">
       <Filter>Object\UI</Filter>
     </ClCompile>
+    <ClCompile Include="SoundManager.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -494,6 +497,9 @@
     </ClInclude>
     <ClInclude Include="CanvasObject.h">
       <Filter>Object\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundManager.h">
+      <Filter>Manager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

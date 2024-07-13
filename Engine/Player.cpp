@@ -20,6 +20,7 @@
 #include "Scene.h"
 #include "Enemy.h"
 #include "BaseCollider.h"
+#include "SoundManager.h"
 
 void Player::Awake()
 {
@@ -128,6 +129,7 @@ void Player::Fire()
 			if (enemyScript->IsDie()) return;
 			enemyScript->GetDamage(m_fireInfo.bulletDamage);
 			enemyScript->MakeDamageIndicator(m_fireInfo.bulletDamage, damagePos);
+			GET_SINGLE(SoundManager)->soundPlay(Sounds::BUTTON_CLICK);
 		}
 		break;
 

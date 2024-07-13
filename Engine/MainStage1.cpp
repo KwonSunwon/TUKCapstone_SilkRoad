@@ -38,8 +38,11 @@
 #include "TextObject.h"
 #include "CanvasObject.h"
 
+#include "SoundManager.h"
 shared_ptr<class Scene> LoadMainScene()
 {
+	GET_SINGLE(SoundManager)->soundPlay(Sounds::BGM);
+
 #pragma region LayerMask
 
 	GET_SINGLE(SceneManager)->SetLayerName(0, L"Default");
