@@ -177,6 +177,7 @@
   <ItemGroup>
     <ClInclude Include="Animator.h" />
     <ClInclude Include="AssimpLoader.h" />
+    <ClInclude Include="AstarGrid.h" />
     <ClInclude Include="BaseCollider.h" />
     <ClInclude Include="Bomb.h" />
     <ClInclude Include="BoxCollider.h" />
@@ -219,6 +220,7 @@
     <ClInclude Include="OrientedBoxCollider.h" />
     <ClInclude Include="Packet.h" />
     <ClInclude Include="ParticleSystem.h" />
+    <ClInclude Include="PathFinding.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerAnimation.h" />
@@ -254,6 +256,7 @@
   <ItemGroup>
     <ClCompile Include="Animator.cpp" />
     <ClCompile Include="AssimpLoader.cpp" />
+    <ClCompile Include="AstarGrid.cpp" />
     <ClCompile Include="BaseCollider.cpp" />
     <ClCompile Include="Bomb.cpp" />
     <ClCompile Include="BoxCollider.cpp" />
@@ -294,6 +297,7 @@
     <ClCompile Include="OrientedBoxCollider.cpp" />
     <ClCompile Include="Packet.cpp" />
     <ClCompile Include="ParticleSystem.cpp" />
+    <ClCompile Include="PathFinding.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

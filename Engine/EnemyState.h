@@ -1,6 +1,7 @@
 #pragma once
 
 class Enemy;
+class PathFinding;
 
 enum class KEY_TYPE;
 

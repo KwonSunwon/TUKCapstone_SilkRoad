@@ -14,6 +14,7 @@ class Terrain;
 class Player;
 class Enemy;
 class TextObject;
+class AstarGrid;
 
 class Scene
 {
@@ -48,6 +49,9 @@ public:
 	void SetPlayer(shared_ptr<GameObject> player, PlayerType type) { m_players[type] = player; }
 	array<shared_ptr<GameObject>, 3> GetPlayers() { return m_players; }
 
+	void SetAstargrid(shared_ptr<AstarGrid> astarGrid) { m_astarGrid = astarGrid; }
+	shared_ptr<AstarGrid> GetAstarGrid() { return m_astarGrid; }
+
 	void SetMainPlayerScript(shared_ptr<Player> player) { m_mainPlayerScript = player; }
 	shared_ptr<Player> GetMainPlayerScript() { return m_mainPlayerScript; }
 
@@ -81,6 +85,7 @@ private:
 	vector<shared_ptr<class Manifold>>	m_contacts;
 private:
 	shared_ptr<OcTree> m_ocTree = make_shared<OcTree>(100000, 1000);
+	shared_ptr<AstarGrid> m_astarGrid = make_shared<AstarGrid>();
 
 
 };

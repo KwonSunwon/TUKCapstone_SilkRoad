@@ -61,6 +61,9 @@
     <Filter Include="Object\UI">
       <UniqueIdentifier>{e482b187-8c87-41d4-9a5b-7984bdc85e7c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Object\AI">
+      <UniqueIdentifier>{2931dd52-52b7-49a7-9a66-ef44d8b8031e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -274,6 +277,12 @@
     </ClCompile>
     <ClCompile Include="CanvasObject.cpp">
       <Filter>Object\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="AstarGrid.cpp">
+      <Filter>Object\AI</Filter>
+    </ClCompile>
+    <ClCompile Include="PathFinding.cpp">
+      <Filter>Object\AI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -494,6 +503,12 @@
     </ClInclude>
     <ClInclude Include="CanvasObject.h">
       <Filter>Object\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="AstarGrid.h">
+      <Filter>Object\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="PathFinding.h">
+      <Filter>Object\AI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

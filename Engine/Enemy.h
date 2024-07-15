@@ -39,6 +39,8 @@ public:
 	void SetDie(bool isDie) { m_isDie = isDie; }
 	bool IsDie() { return m_isDie; }
 
+	std::list<class PathNode> GetPath();
+
 private:
 	shared_ptr<class EnemyState> m_curState;
 	float m_fireRate = 1.f;		// 초당 공격 횟수
@@ -52,6 +54,7 @@ private:
 	
 
 	vector<shared_ptr<class GameObject>> m_players;
+	shared_ptr<class PathFinding> m_pathFinding;
 	uint32 m_targetPlayerIndex = 0;
 
 	uint32 m_networkId = -1;

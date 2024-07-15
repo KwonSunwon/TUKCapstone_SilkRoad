@@ -26,6 +26,8 @@
 #include "UIObject.h"
 #include "TextObject.h"
 
+#include "AstarGrid.h"
+
 Scene::Scene()
 {
 

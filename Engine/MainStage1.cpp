@@ -38,6 +38,8 @@
 #include "TextObject.h"
 #include "CanvasObject.h"
 
+#include "AstarGrid.h"
+
 shared_ptr<class Scene> LoadMainScene()
 {
 #pragma region LayerMask
@@ -191,6 +193,12 @@ shared_ptr<class Scene> LoadMainScene()
 		scene->AddGameObject(obj);
 		scene->m_terrain = obj->GetTerrain();
 
+	}
+#pragma endregion
+
+#pragma region AstarGrid
+	{
+		scene->GetAstarGrid()->LoadGridFromFile("..\\Resources\\MapData\\AstarNodeData_Stage1.bin");
 	}
 #pragma endregion
 

@@ -12,6 +12,7 @@
 #include "Scene.h"
 #include "SceneManager.h"
 #include "TextObject.h"
+#include "PathFinding.h"
 
 void Enemy::Awake()
 {
@@ -21,7 +22,7 @@ void Enemy::Awake()
 	rb->SetStatic(false);
 	rb->SetMaxSpeed(m_maxWalkSpeed);
 	rb->SetMass(80.f);
-
+	m_pathFinding = make_shared<PathFinding>();
 	m_curState = make_shared<EnemyIdleState>(shared_from_this());
 
 }
@@ -99,4 +100,11 @@ void Enemy::ProcessPacket(shared_ptr<EnemyPacket> packet)
 void Enemy::Fire()
 {
 	m_fireElapsedTime = 1.f / m_fireRate;
+}
+
+std::list<PathNode> Enemy::GetPath()
+{
+	shared_ptr<RigidBody> rb = GetRigidBody();
+	shared_ptr<RigidBody> rb2 = GetPlayers()[GetTargetPlayerIndex()]->GetRigidBody();
+	return m_pathFinding->FindPath(rb->GetPosition(), rb2->GetPosition());
 }
