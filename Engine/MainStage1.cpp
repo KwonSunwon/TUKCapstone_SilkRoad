@@ -41,7 +41,7 @@
 #include "SoundManager.h"
 shared_ptr<class Scene> LoadMainScene()
 {
-	GET_SINGLE(SoundManager)->soundPlay(Sounds::BGM);
+	GET_SINGLE(SoundManager)->soundPlay(Sounds::BGM_SPACE);
 
 #pragma region LayerMask
 

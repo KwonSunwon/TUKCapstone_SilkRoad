@@ -91,7 +91,7 @@ void Player::Fire()
 	BulletType bulletType = CalcBulletType();
 	m_fireInfo.bulletType = bulletType;
 	m_fireElapsedTime = 1.f / m_fireRate;
-
+	GET_SINGLE(SoundManager)->soundPlay(Sounds::WEAPON_ASSULT_FIRE);
 
 	float minDistance = FLT_MAX;
 	vector<shared_ptr<GameObject>>gameObjects = GET_SINGLE(SceneManager)->GetActiveScene()->GetCollidableGameObjects();
@@ -129,7 +129,7 @@ void Player::Fire()
 			if (enemyScript->IsDie()) return;
 			enemyScript->GetDamage(m_fireInfo.bulletDamage);
 			enemyScript->MakeDamageIndicator(m_fireInfo.bulletDamage, damagePos);
-			GET_SINGLE(SoundManager)->soundPlay(Sounds::BUTTON_CLICK);
+			GET_SINGLE(SoundManager)->soundPlay(Sounds::ENV_HIT_ENEMY);
 		}
 		break;
 
@@ -171,6 +171,7 @@ void Player::ProcessGetItem()
 			m_itemLevels[itemScript->GetItemID()]++;
 
 			itemScript->AddGetItemText();
+			GET_SINGLE(SoundManager)->soundPlay(Sounds::ENV_EAT_ITEM);
 
 			col->m_rb2->MoveTo(Vec3(0, 1000000, 0));
 			CalcBulletStat(itemScript->GetItemID());

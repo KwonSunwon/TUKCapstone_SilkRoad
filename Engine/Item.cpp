@@ -42,6 +42,7 @@ void Item::RotateItem()
 
 void Item::AddGetItemText()
 {
+
 	if (m_itemId == -1)
 	{
 		return;
