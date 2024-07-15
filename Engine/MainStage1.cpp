@@ -468,7 +468,7 @@ shared_ptr<class Scene> LoadMainScene()
 		//Transform 설정
 		{
 			shared_ptr<Transform> transform = go->GetTransform();
-			transform->SetLocalPosition(Vec3(-4500.f, 1500.f, 2500.f));
+			transform->SetLocalPosition(Vec3(4500.f, 1500.f, 2500.f));
 			//transform->SetLocalScale(Vec3(1.f, 1.f, 1.f));
 			//transform->SetLocalRotation(Vec3(XMConvertToRadians(0.f), XMConvertToRadians(0.f), XMConvertToRadians(0.f)));
 		}

@@ -41,7 +41,9 @@ void Network::Update()
 			players[packet->m_targetId]->GetTransform()->SetLocalPosition(reinterpret_pointer_cast<MovePacket>(packet)->m_position);
 			break;
 		case PACKET_TYPE::PT_PLAYER:
-			GET_SINGLE(SceneManager)->GetActiveScene()->m_networkPlayers[0]->ProcessPacket(reinterpret_pointer_cast<PlayerPacket>(packet));
+			if(packet->m_targetId == 2)
+				packet->m_targetId = 1;
+			GET_SINGLE(SceneManager)->GetActiveScene()->m_networkPlayers[packet->m_targetId]->ProcessPacket(reinterpret_pointer_cast<PlayerPacket>(packet));
 			break;
 		case PACKET_TYPE::PT_ENEMY:
 			GET_SINGLE(SceneManager)->GetActiveScene()->m_enemies[packet->m_targetId]->ProcessPacket(reinterpret_pointer_cast<EnemyPacket>(packet));
@@ -238,6 +240,10 @@ void Host::Connection(ushort id)
 
 				m_receivedPacketQue.Push(packet);
 
+				if(m_guestInfos.size() > 1 && packet->m_type == PACKET_TYPE::PT_PLAYER) {
+					send(m_guestInfos[(id + 1) % 2].socket, (char*)packet.get(), packet->m_size, 0);
+				}
+
 				packetSize = 0;
 				packet.reset();
 
@@ -407,7 +413,7 @@ void Guest::Receiver()
 
 			ushort packetSize = m_buffer.Peek();
 			while(packetSize <= m_buffer.Size()) {
-				packet = PacketProcess();
+				m_receivedPacketQue.Push(PacketProcess());
 
 				m_receivedPacketQue.Push(packet);
 
