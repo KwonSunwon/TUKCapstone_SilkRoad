@@ -15,7 +15,7 @@ void Engine::Init(const WindowInfo& info)
 {
 	m_window = info;
 
-	// ±◊∑¡¡˙ »≠∏È ≈©±‚∏¶ º≥¡§
+	// Í∑∏Î†§Ïßà ÌôîÎ©¥ ÌÅ¨Í∏∞Î•º ÏÑ§Ï†ï
 	m_viewport = { 0, 0, static_cast<FLOAT>(info.width), static_cast<FLOAT>(info.height), 0.0f, 1.0f };
 	m_scissorRect = CD3DX12_RECT(0, 0, info.width, info.height);
 
@@ -42,7 +42,7 @@ void Engine::Init(const WindowInfo& info)
 	GET_SINGLE(Timer)->Init();
 	GET_SINGLE(Resources)->Init();
 
-	// º≠πˆ ª˝º∫
+	// ÏÑúÎ≤Ñ ÏÉùÏÑ±
 	GET_SINGLE(NetworkManager)->Initialize();
 }
 
@@ -76,8 +76,8 @@ void Engine::RenderBegin()
 
 void Engine::RenderEnd()
 {
-	m_graphicsCmdQueue->RenderEnd();		// UI √‚∑¬¿ª ¿ß«ÿ ƒø∏«µÂ ≈• Ω««‡±Ó¡ˆ∏∏ ºˆ«‡
-	// UI ∑ª¥ı(d3d12∏¶ ≈Î«— render øœ∑· ¿Ã»ƒ ºˆ«‡)
+	m_graphicsCmdQueue->RenderEnd();		// UI Ï∂úÎ†•ÏùÑ ÏúÑÌï¥ Ïª§Îß®Îìú ÌÅê Ïã§ÌñâÍπåÏßÄÎßå ÏàòÌñâ
+	// UI Î†åÎçî(d3d12Î•º ÌÜµÌïú render ÏôÑÎ£å Ïù¥ÌõÑ ÏàòÌñâ)
 	GET_SINGLE(SceneManager)->RenderUI(m_d3d11on12Device);
 
 	m_swapChain->Present();
@@ -146,14 +146,15 @@ void Engine::CreateRenderTargetGroups()
 		vector<RenderTarget> rtVec(RENDER_TARGET_SHADOW_GROUP_MEMBER_COUNT);
 
 		rtVec[0].target = GET_SINGLE(Resources)->CreateTexture(L"ShadowTarget",
-			DXGI_FORMAT_R32_FLOAT, 4096, 4096,
+			DXGI_FORMAT_R32_FLOAT, 2048, 2048,
 			CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
-			D3D12_HEAP_FLAG_NONE, D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET);
+			D3D12_HEAP_FLAG_NONE, D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET, Vec4(), SHADOWMAP_COUNT);
+
 
 		shared_ptr<Texture> shadowDepthTexture = GET_SINGLE(Resources)->CreateTexture(L"ShadowDepthStencil",
-			DXGI_FORMAT_D32_FLOAT, 4096, 4096,
+			DXGI_FORMAT_D32_FLOAT, 2048, 2048,
 			CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
-			D3D12_HEAP_FLAG_NONE, D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL);
+			D3D12_HEAP_FLAG_NONE, D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL, Vec4(), SHADOWMAP_COUNT);
 
 		m_rtGroups[static_cast<uint8>(RENDER_TARGET_GROUP_TYPE::SHADOW)] = make_shared<RenderTargetGroup>();
 		m_rtGroups[static_cast<uint8>(RENDER_TARGET_GROUP_TYPE::SHADOW)]->Create(RENDER_TARGET_GROUP_TYPE::SHADOW, rtVec, shadowDepthTexture);

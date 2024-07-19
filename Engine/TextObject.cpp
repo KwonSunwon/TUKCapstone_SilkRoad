@@ -8,6 +8,8 @@
 #include "SceneManager.h"
 #include "Player.h"
 #include "RigidBody.h"
+#include "Camera.h"
+#include "Transform.h"
 
 unordered_map<string, ComPtr<ID2D1SolidColorBrush>>	TextObject::s_brushes;
 unordered_map<string, ComPtr<IDWriteTextFormat>>	TextObject::s_formats;
@@ -317,6 +319,7 @@ void DamageIndicatorTextObject::Update()
 DebugTextObject::DebugTextObject()
 {
 	m_player = nullptr;
+	m_camera = nullptr;
 
 	SetBrush("WHITE");
 	SetFormat("18L");
@@ -329,6 +332,8 @@ DebugTextObject::DebugTextObject()
 void DebugTextObject::Update()
 {
 	m_player = GET_SINGLE(SceneManager)->GetActiveScene()->GetMainPlayerScript();
+	m_camera = GET_SINGLE(SceneManager)->GetActiveScene()->GetMainCamera();
+	
 
 	wstring debugText{};
 	if (!m_player) {
@@ -343,11 +348,21 @@ void DebugTextObject::Update()
 		debugText += L"Player Velocity : " + to_wstring((int)m_player->GetRigidBody()->GetLinearVelocity().x) + L", "
 			+ to_wstring((int)m_player->GetRigidBody()->GetLinearVelocity().y) + L", " + to_wstring((int)m_player->GetRigidBody()->GetLinearVelocity().z) + L"\n";
 
-		debugText += L"Player Rotation : " + to_wstring(m_player->GetRigidBody()->GetRotation().x) + L", "
-			+ to_wstring(m_player->GetRigidBody()->GetRotation().y) + L", " + to_wstring(m_player->GetRigidBody()->GetRotation().z) + L"\n";
+		debugText += L"Player Rotation : " + to_wstring((int)m_player->GetTransform()->GetLocalRotation().x) + L", "
+			+ to_wstring((int)m_player->GetTransform()->GetLocalRotation().y) + L", " + to_wstring((int)m_player->GetTransform()->GetLocalRotation().z) + L"\n";
 
 	}
+
+	debugText += L"\n";
 	
+	if (!m_camera) {
+		debugText += L"MainCamera : NULL\n";
+	}
+	else {
+		debugText += L"MainCamera m_vecDeffered Size : " + to_wstring(m_camera->GetVecDeferred().size()) + L"\n";
+		debugText += L"MainCamera m_vecForward Size : " + to_wstring(m_camera->GetVecForward().size()) + L"\n";
+		debugText += L"MainCamera m_vecShadow Size : " + to_wstring(m_camera->GetVechadow().size()) + L"\n";
+	}
 
 	SetText(debugText);
 }

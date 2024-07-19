@@ -6,7 +6,7 @@
 #include "Transform.h"
 #include "Camera.h"
 
-void InstancingManager::Render(vector<shared_ptr<GameObject>>& gameObjects)
+void InstancingManager::Render(vector<shared_ptr<GameObject>>& gameObjects, bool isShadow)
 {
 	map<uint64, vector<shared_ptr<GameObject>>> cache;
 
@@ -24,7 +24,10 @@ void InstancingManager::Render(vector<shared_ptr<GameObject>>& gameObjects)
 
 		if (vec.size() == 1)
 		{
-			vec[0]->GetMeshRenderer()->Render();
+			if (isShadow)
+				vec[0]->GetMeshRenderer()->RenderShadow();
+			else
+				vec[0]->GetMeshRenderer()->Render();
 		}
 		else
 		{
@@ -41,7 +44,10 @@ void InstancingManager::Render(vector<shared_ptr<GameObject>>& gameObjects)
 			}
 
 			shared_ptr<InstancingBuffer>& buffer = m_buffers[instanceId];
-			vec[0]->GetMeshRenderer()->Render(buffer);
+			if (isShadow)
+				vec[0]->GetMeshRenderer()->RenderShadow(buffer);
+			else
+				vec[0]->GetMeshRenderer()->Render(buffer);
 		}
 	}
 }

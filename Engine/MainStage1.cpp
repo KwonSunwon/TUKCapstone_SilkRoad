@@ -76,11 +76,11 @@ shared_ptr<class Scene> LoadMainScene()
 		camera->SetName(L"Main_Camera");
 		camera->AddComponent(make_shared<Transform>());
 		camera->AddComponent(make_shared<Camera>()); // Near=1, Far=1000, FOV=45��
-		camera->AddComponent(make_shared<TestCameraScript>());
+		//camera->AddComponent(make_shared<TestCameraScript>());
 		camera->GetCamera()->SetFar(100000.f);
 		camera->GetTransform()->SetLocalPosition(Vec3(0.f, 900.f, 0.f));
 		uint8 layerIndex = GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI");
-		camera->GetCamera()->SetCullingMaskLayerOnOff(layerIndex, true); // UI�� �� ����
+		camera->GetCamera()->SetCullingMaskLayerOnOff(layerIndex, false); // UI�� �� ����
 		scene->AddGameObject(camera);
 	}
 #pragma endregion
@@ -96,7 +96,7 @@ shared_ptr<class Scene> LoadMainScene()
 		uint8 layerIndex = GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI");
 		camera->GetCamera()->SetCullingMaskAll(); // �� ����
 		camera->GetCamera()->SetCullingMaskLayerOnOff(layerIndex, false); // UI�� ����
-		scene->AddGameObject(camera);
+		//scene->AddGameObject(camera);
 	}
 #pragma endregion
 
@@ -152,6 +152,7 @@ shared_ptr<class Scene> LoadMainScene()
 		obj->GetTransform()->SetLocalScale(Vec3(781.25f, 1580.f, 781.25f));
 		obj->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 0.f));
 		obj->SetStatic(true);
+		obj->SetShadow(true);
 		obj->GetTerrain()->Init(64, 64);
 		obj->SetCheckFrustum(false);
 
@@ -209,7 +210,7 @@ shared_ptr<class Scene> LoadMainScene()
 		obj->SetLayerIndex(GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI")); // UI
 		obj->AddComponent(make_shared<Transform>());
 		obj->GetTransform()->SetLocalScale(Vec3(100.f, 100.f, 100.f));
-		obj->GetTransform()->SetLocalPosition(Vec3(-350.f + (i * 120), 250.f, 500.f));
+		obj->GetTransform()->SetLocalPosition(Vec3(3000.f + (i * 120), 250.f, 3000.f));
 		shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
 		{
 			shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadRectangleMesh();
@@ -232,7 +233,7 @@ shared_ptr<class Scene> LoadMainScene()
 			meshRenderer->SetMaterial(material);
 		}
 		obj->AddComponent(meshRenderer);
-		//scene->AddGameObject(obj);
+		scene->AddGameObject(obj);
 	}
 #pragma endregion
 
@@ -257,13 +258,15 @@ shared_ptr<class Scene> LoadMainScene()
 	{
 		shared_ptr<GameObject> light = make_shared<GameObject>();
 		light->AddComponent(make_shared<Transform>());
-		light->GetTransform()->SetLocalPosition(Vec3(0, 500, 0));
+		light->GetTransform()->SetLocalPosition(Vec3(25000.f, 10000, 25000));
 		light->AddComponent(make_shared<Light>());
-		light->GetLight()->SetLightDirection(Vec3(0, -1, 1.f));
+		//light->GetLight()->SetLightDirection(Vec3(0.3f, -1.0f, 1.0f));
+		light->GetLight()->SetLightDirection(Vec3(-0.1, -1.0f, 0.2));
 		light->GetLight()->SetLightType(LIGHT_TYPE::DIRECTIONAL_LIGHT);
 		light->GetLight()->SetDiffuse(Vec3(1.f, 1.f, 1.f));
 		light->GetLight()->SetAmbient(Vec3(0.5f, 0.5f, 0.5f));
 		light->GetLight()->SetSpecular(Vec3(0.1f, 0.1f, 0.1f));
+		light->AddComponent(make_shared<TestCameraScript>());
 
 		scene->AddGameObject(light);
 	}
@@ -340,7 +343,7 @@ shared_ptr<class Scene> LoadMainScene()
 		{
 			shared_ptr<Player> playerScript = make_shared<Player>();
 			// 총알 오브젝트 풀 생성
-			for(int i = 0; i < 20; ++i)
+			for(int i = 0; i < 1; ++i)
 			{
 				shared_ptr<GameObject> bullet = make_shared<GameObject>();
 				bullet->SetName(L"Bullet");
@@ -372,7 +375,7 @@ shared_ptr<class Scene> LoadMainScene()
 					shared_ptr<RigidBody> rb = make_shared<RigidBody>();
 					rb->SetStatic(true);
 					rb->SetRestitution(0.f);
-					bullet->SetCheckFrustum(false);
+					bullet->SetCheckFrustum(true);
 					bullet->AddComponent(rb);
 				}
 				{
@@ -402,6 +405,7 @@ shared_ptr<class Scene> LoadMainScene()
 			}
 			playerScript->SetPlayerCamera(scene->GetMainCamera());
 			scene->SetMainPlayerScript(playerScript);
+			go->SetShadow(true);
 			go->AddComponent(playerScript);
 		}
 
@@ -437,7 +441,7 @@ shared_ptr<class Scene> LoadMainScene()
 			rb->SetStatic(true);
 			rb->SetMass(80.f);
 			rb->SetRestitution(0.f);
-			go->SetCheckFrustum(false);
+			go->SetCheckFrustum(true);
 			go->AddComponent(rb);
 		}
 
@@ -475,6 +479,7 @@ shared_ptr<class Scene> LoadMainScene()
 			go->AddComponent(networkPlayer);
 			scene->m_networkPlayers[0] = networkPlayer;
 			//go->AddComponent(make_shared<PlayerAnimation>());
+			go->SetShadow(true);
 		}
 
 
@@ -509,7 +514,7 @@ shared_ptr<class Scene> LoadMainScene()
 			rb->SetStatic(true);
 			rb->SetMass(80.f);
 			rb->SetRestitution(0.f);
-			go->SetCheckFrustum(false);
+			go->SetCheckFrustum(true);
 			go->AddComponent(rb);
 		}
 
@@ -547,6 +552,7 @@ shared_ptr<class Scene> LoadMainScene()
 			go->AddComponent(networkPlayer);
 			scene->m_networkPlayers[1] = networkPlayer;
 			//go->AddComponent(make_shared<PlayerAnimation>());
+			go->SetShadow(true);
 		}
 
 
@@ -588,7 +594,7 @@ shared_ptr<class Scene> LoadMainScene()
 				if(i == 5)
 					rb->SetMass(100000000.f);
 				rb->SetRestitution(0.f);
-				go->SetCheckFrustum(false);
+				go->SetCheckFrustum(true);
 				go->AddComponent(rb);
 			}
 
@@ -632,6 +638,7 @@ shared_ptr<class Scene> LoadMainScene()
 				enemyScript->AddPlayer(scene->GetPlayers()[GUEST_PLAYER1]);
 				enemyScript->AddPlayer(scene->GetPlayers()[GUEST_PLAYER2]);
 				go->AddComponent(enemyScript);
+				go->SetShadow(true);
 				enemyScript->SetNetworkId(i);
 				scene->m_enemies[i] = enemyScript;
 				//go->AddComponent(make_shared<PlayerAnimation>());
@@ -670,7 +677,7 @@ shared_ptr<class Scene> LoadMainScene()
 				if(i == 5)
 					rb->SetMass(100000000.f);
 				rb->SetRestitution(0.f);
-				go->SetCheckFrustum(false);
+				go->SetCheckFrustum(true);
 				go->AddComponent(rb);
 			}
 
@@ -714,6 +721,7 @@ shared_ptr<class Scene> LoadMainScene()
 				enemyScript->AddPlayer(scene->GetPlayers()[GUEST_PLAYER1]);
 				enemyScript->AddPlayer(scene->GetPlayers()[GUEST_PLAYER2]);
 				go->AddComponent(enemyScript);
+				go->SetShadow(true);
 				enemyScript->SetNetworkId(i + 5);
 				scene->m_enemies[i + 5] = enemyScript;
 				//go->AddComponent(make_shared<PlayerAnimation>());
@@ -752,7 +760,7 @@ shared_ptr<class Scene> LoadMainScene()
 				if(i == 5)
 					rb->SetMass(100000000.f);
 				rb->SetRestitution(0.f);
-				go->SetCheckFrustum(false);
+				go->SetCheckFrustum(true);
 				go->AddComponent(rb);
 			}
 
@@ -796,6 +804,7 @@ shared_ptr<class Scene> LoadMainScene()
 				enemyScript->AddPlayer(scene->GetPlayers()[GUEST_PLAYER1]);
 				enemyScript->AddPlayer(scene->GetPlayers()[GUEST_PLAYER2]);
 				go->AddComponent(enemyScript);
+				go->SetShadow(true);
 				enemyScript->SetNetworkId(i + 10);
 				scene->m_enemies[i + 10] = enemyScript;
 				//go->AddComponent(make_shared<PlayerAnimation>());
@@ -833,7 +842,7 @@ shared_ptr<class Scene> LoadMainScene()
 				if(i == 5)
 					rb->SetMass(1000000000.f);
 				rb->SetRestitution(0.f);
-				go->SetCheckFrustum(false);
+				go->SetCheckFrustum(true);
 				go->AddComponent(rb);
 			}
 
@@ -877,6 +886,7 @@ shared_ptr<class Scene> LoadMainScene()
 				enemyScript->AddPlayer(scene->GetPlayers()[GUEST_PLAYER1]);
 				enemyScript->AddPlayer(scene->GetPlayers()[GUEST_PLAYER2]);
 				go->AddComponent(enemyScript);
+				go->SetShadow(true);
 				enemyScript->SetNetworkId(i + 15);
 				scene->m_enemies[i + 15] = enemyScript;
 				if(i == 5) {
@@ -959,6 +969,7 @@ shared_ptr<class Scene> LoadMainScene()
 
 			if(gm->GetCollider()->GetDebugCollider() != nullptr)
 				scene->AddGameObject(gm->GetCollider()->GetDebugCollider());
+			gm->SetShadow(true);
 			scene->AddGameObject(gm);
 		}
 	}

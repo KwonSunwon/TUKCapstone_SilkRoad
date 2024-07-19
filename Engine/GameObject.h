@@ -48,8 +48,13 @@ public:
 	void SetStatic(bool flag) { m_static = flag; }
 	bool IsStatic() { return m_static; }
 
+	void SetShadow(bool flag) { m_shadow = flag; }
+	bool IsShadow() { return m_shadow; }
+
 	void SetActive(bool flag) { m_isActive = flag; }
 	bool IsActive() { return m_isActive; }
+
+	float GetBoundingRadius();
 
 	int m_anim = 0;
 
@@ -65,5 +70,6 @@ private:
 	bool m_checkFrustum = true;
 	uint8 m_layerIndex = 0;
 	bool m_static = true;
+	bool m_shadow = false;
 };
 

@@ -4,8 +4,8 @@
 
 enum class PROJECTION_TYPE
 {
-	PERSPECTIVE, // ø¯±Ÿ ≈ıøµ
-	ORTHOGRAPHIC, // ¡˜±≥ ≈ıøµ
+	PERSPECTIVE, // ÏõêÍ∑º Ìà¨ÏòÅ
+	ORTHOGRAPHIC, // ÏßÅÍµê Ìà¨ÏòÅ
 };
 
 class Camera : public Component
@@ -25,6 +25,7 @@ public:
 	void Render_Deferred();
 	void Render_Forward();
 	void Render_Shadow();
+	void CalculateShadowMatrix();
 
 	void SetCullingMaskLayerOnOff(uint8 layer, bool on)
 	{
@@ -47,6 +48,13 @@ public:
 
 	Matrix& GetViewMatrix() { return m_matView; }
 	Matrix& GetProjectionMatrix() { return m_matProjection; }
+
+	Frustum& GetFrustum() { return m_frustum; }
+
+	vector<shared_ptr<GameObject>>& GetVecDeferred() { return m_vecDeferred; }
+	vector<shared_ptr<GameObject>>& GetVecForward() { return m_vecForward; }
+	vector<shared_ptr<GameObject>>& GetVecParticle() { return m_vecParticle; }
+	vector<shared_ptr<GameObject>>& GetVechadow() { return m_vecShadow; }
 
 private:
 	PROJECTION_TYPE m_type = PROJECTION_TYPE::PERSPECTIVE;
@@ -74,5 +82,7 @@ public:
 	// TEMP
 	static Matrix S_MatView;
 	static Matrix S_MatProjection;
+	static Matrix S_MatShadowView[SHADOWMAP_COUNT];
+	static Matrix S_MatShadowProjection[SHADOWMAP_COUNT];
 };
 

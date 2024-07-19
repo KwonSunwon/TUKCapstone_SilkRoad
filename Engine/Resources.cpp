@@ -357,7 +357,7 @@ shared_ptr<GameObject> Resources::LoadItemPrefab(int id, Vec3 location)
 			rb->SetStatic(true);
 			rb->SetUseGravity(false);
 			rb->SetOverlap();
-			go->SetCheckFrustum(false);
+			go->SetCheckFrustum(true);
 			go->AddComponent(rb);
 		}
 
@@ -383,6 +383,7 @@ shared_ptr<GameObject> Resources::LoadItemPrefab(int id, Vec3 location)
 			shared_ptr<Item> item = make_shared<Item>();
 			item->SetItemId(id);
 			go->AddComponent(item);
+			go->SetShadow(true);
 			
 		}
 		return go;
@@ -458,10 +459,10 @@ shared_ptr<GameObject> Resources::LoadBombPrefab(Vec3 Location)
 
 shared_ptr<Texture> Resources::CreateTexture(const wstring& name, DXGI_FORMAT format, uint32 width, uint32 height,
 	const D3D12_HEAP_PROPERTIES& heapProperty, D3D12_HEAP_FLAGS heapFlags,
-	D3D12_RESOURCE_FLAGS resFlags, Vec4 clearColor)
+	D3D12_RESOURCE_FLAGS resFlags, Vec4 clearColor, uint32 arraysize)
 {
 	shared_ptr<Texture> texture = make_shared<Texture>();
-	texture->Create(format, width, height, heapProperty, heapFlags, resFlags, clearColor);
+	texture->Create(format, width, height, heapProperty, heapFlags, resFlags, clearColor, arraysize);
 	Add(name, texture);
 
 	return texture;
@@ -687,8 +688,17 @@ void Resources::CreateDefaultShader()
 			DEPTH_STENCIL_TYPE::LESS,
 		};
 
+		ShaderArg arg =
+		{
+			"VS_Main",
+			"",
+			"",
+			"GS_Main",
+			"PS_Main"
+		};
+
 		shared_ptr<Shader> shader = make_shared<Shader>();
-		shader->CreateGraphicsShader(L"..\\Resources\\Shader\\shadow.fx", info);
+		shader->CreateGraphicsShader(L"..\\Resources\\Shader\\shadow.fx", info, arg);
 		Add<Shader>(L"Shadow", shader);
 	}
 

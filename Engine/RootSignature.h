@@ -13,7 +13,7 @@ private:
 	void CreateComputeRootSignature();
 
 private:
-	D3D12_STATIC_SAMPLER_DESC	m_samplerDesc;
+	D3D12_STATIC_SAMPLER_DESC	m_samplerDesc[2];
 	ComPtr<ID3D12RootSignature>	m_graphicsRootSignature;
 	ComPtr<ID3D12RootSignature>	m_computeRootSignature;
 };

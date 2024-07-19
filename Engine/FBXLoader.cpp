@@ -190,6 +190,9 @@ void FBXLoader::LoadMeshWithAssimp(aiMesh* assimpMesh, const aiScene* assimpScen
 		meshInfo.vertices[i].pos.x = static_cast<float>(assimpMesh->mVertices[i].x);
 		meshInfo.vertices[i].pos.y = static_cast<float>(assimpMesh->mVertices[i].y);
 		meshInfo.vertices[i].pos.z = static_cast<float>(-assimpMesh->mVertices[i].z);
+		m_maxPosition.x = max(m_maxPosition.x, abs(meshInfo.vertices[i].pos.x));
+		m_maxPosition.y = max(m_maxPosition.y, abs(meshInfo.vertices[i].pos.y));
+		m_maxPosition.z = max(m_maxPosition.z, abs(meshInfo.vertices[i].pos.z));
 
 		meshInfo.vertices[i].uv.x = static_cast<float>(assimpMesh->mTextureCoords[0][i].x);
 		meshInfo.vertices[i].uv.y = static_cast<float>(assimpMesh->mTextureCoords[0][i].y);
@@ -255,6 +258,9 @@ void FBXLoader::LoadMeshWithAssimpNotAnim(FbxMesh* mesh, aiMesh* assimpMesh)
 		meshInfo.vertices[i].pos.x = static_cast<float>(assimpMesh->mVertices[i].x);
 		meshInfo.vertices[i].pos.y = static_cast<float>(assimpMesh->mVertices[i].y);
 		meshInfo.vertices[i].pos.z = static_cast<float>(assimpMesh->mVertices[i].z);
+		m_maxPosition.x = max(m_maxPosition.x, abs(meshInfo.vertices[i].pos.x));
+		m_maxPosition.y = max(m_maxPosition.y, abs(meshInfo.vertices[i].pos.y));
+		m_maxPosition.z = max(m_maxPosition.z, abs(meshInfo.vertices[i].pos.z));
 
 		meshInfo.vertices[i].uv.x = static_cast<float>(assimpMesh->mTextureCoords[0][i].x);
 		meshInfo.vertices[i].uv.y = static_cast<float>(assimpMesh->mTextureCoords[0][i].y);

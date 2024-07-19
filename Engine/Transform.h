@@ -11,13 +11,13 @@ public:
 	void PushData();
 
 public:
-	// Parent ±‚¡ÿ
+	// Parent Í∏∞Ï§Ä
 	const Vec3& GetLocalPosition() { return m_localPosition; }
 	const Vec3& GetLocalRotation() { return m_localRotation; }
 	const Vec3& GetLocalScale() { return m_localScale; }
 
 	// TEMP
-	float GetBoundingSphereRadius() { return 0.01f; }
+	float GetBoundingSphereRadius();
 
 	const Matrix& GetLocalToWorldMatrix() { return m_matWorld; }
 	Vec3 GetWorldPosition() { return m_matWorld.Translation(); }
@@ -39,8 +39,11 @@ public:
 	void SetParent(shared_ptr<Transform> parent) { m_parent = parent; }
 	weak_ptr<Transform> GetParent() { return m_parent; }
 
+	void SetMaxVertexPos(const Vec3& pos);
+	Vec3 GetMaxVertexPos() { return m_maxVertexPos; }
+
 private:
-	// Parent ±‚¡ÿ
+	// Parent Í∏∞Ï§Ä
 	Vec3 m_localPosition = {};
 	Vec3 m_localRotation = {};
 	Vec3 m_localScale = { 1.f, 1.f, 1.f };
@@ -49,5 +52,7 @@ private:
 	Matrix m_matWorld = {};
 
 	weak_ptr<Transform> m_parent;
+
+	Vec3 m_maxVertexPos = Vec3{ 0,0,0 };
 };
 

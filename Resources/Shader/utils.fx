@@ -123,4 +123,48 @@ void Skinning(inout float3 pos, inout float3 normal, inout float3 tangent,
     normal = normalize(info.normal);
 }
 
+
+float CalcShadowFactor(float4 worldPos)
+{
+    float width, height, numElements, numMips;
+    g_shadowMap.GetDimensions(0, width, height, numElements, numMips);
+    matrix shadowCameraVP[4] = { g_mat_0, g_mat_1, g_mat_2, g_mat_3 };
+
+    for (int i = 0; i < SHADOWMAP_COUNT; ++i)
+    {
+    
+        float4 shadowClipPos = mul(worldPos, shadowCameraVP[i]);
+        float depth = shadowClipPos.z / shadowClipPos.w - 0.001f;
+        float2 uv = shadowClipPos.xy / shadowClipPos.w;
+        uv.y = -uv.y;
+        uv = uv * 0.5 + 0.5;
+    
+        if (depth < 0 || depth > 1)
+            continue; 
+        
+        if (uv.x < 0.0f || uv.x > 1.0f || uv.y < 0.0f || uv.y > 1.0f)
+            continue;
+        
+        float dx = 1.0f / width;
+        
+        float percentLit = 0.0f;
+        const float2 offset[9] =
+        {
+            float2(-dx, -dx), float2(0, -dx), float2(dx, -dx),
+        float2(-dx, 0), float2(0, 0), float2(dx, 0),
+        float2(-dx, dx), float2(0, dx), float2(dx, dx)
+        };
+    
+        [unroll]
+        for (int j = 0; j < 9; ++j)
+        {
+            float2 texcoord = uv + offset[j];
+            percentLit += g_shadowMap.SampleCmpLevelZero(g_shadowSampler, float3(texcoord, i), depth).r;
+            
+        }
+        return percentLit / 9.0f;
+    }
+    return 1.0f;
+}
+
 #endif

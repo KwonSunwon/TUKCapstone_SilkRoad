@@ -118,3 +118,24 @@ Vec3 Transform::DecomposeRotationMatrix(const Matrix& rotation)
 
 	return ret;
 }
+
+void Transform::SetMaxVertexPos(const Vec3& pos)
+{
+	if (m_maxVertexPos.x < pos.x)
+		m_maxVertexPos.x = pos.x;
+
+	if (m_maxVertexPos.y < pos.y)
+		m_maxVertexPos.y = pos.y;
+
+	if (m_maxVertexPos.z < pos.z)
+		m_maxVertexPos.z = pos.z;
+
+}
+
+float Transform::GetBoundingSphereRadius()
+{
+	Vec3 tmp = m_maxVertexPos * m_localScale;
+
+	{ return max(max(tmp.x, tmp.y), tmp.z); }
+	return m_maxVertexPos.Length();
+}

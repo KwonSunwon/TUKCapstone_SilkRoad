@@ -111,4 +111,5 @@ public:
 
 private:
 	shared_ptr<Player> m_player;
+	shared_ptr<Camera> m_camera;
 };

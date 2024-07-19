@@ -14,7 +14,7 @@ Light::Light() : Component(COMPONENT_TYPE::LIGHT)
 	m_shadowCamera->AddComponent(make_shared<Transform>());
 	m_shadowCamera->AddComponent(make_shared<Camera>());
 	uint8 layerIndex = GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI");
-	m_shadowCamera->GetCamera()->SetCullingMaskLayerOnOff(layerIndex, true); // UI¥¬ æ» ¬Ô¿Ω
+	m_shadowCamera->GetCamera()->SetCullingMaskLayerOnOff(layerIndex, true); // UIÎäî Ïïà Ï∞çÏùå
 }
 
 Light::~Light()
@@ -41,10 +41,13 @@ void Light::Render()
 	if (static_cast<LIGHT_TYPE>(m_lightInfo.lightType) == LIGHT_TYPE::DIRECTIONAL_LIGHT)
 	{
 		shared_ptr<Texture> shadowTex = GET_SINGLE(Resources)->Get<Texture>(L"ShadowTarget");
-		m_lightMaterial->SetTexture(2, shadowTex);
+		m_lightMaterial->SetTexture(3, shadowTex);
 
-		Matrix matVP = m_shadowCamera->GetCamera()->GetViewMatrix() * m_shadowCamera->GetCamera()->GetProjectionMatrix();
-		m_lightMaterial->SetMatrix(0, matVP);
+		for (int i = 0; i < SHADOWMAP_COUNT; ++i)
+		{
+			Matrix matVP = Camera::S_MatShadowView[i] * Camera::S_MatShadowProjection[i];
+			m_lightMaterial->SetMatrix(i, matVP);
+		}
 	}
 	else
 	{
@@ -84,9 +87,10 @@ void Light::SetLightType(LIGHT_TYPE type)
 		m_lightMaterial = GET_SINGLE(Resources)->Get<Material>(L"DirLight");
 
 		m_shadowCamera->GetCamera()->SetScale(1.f);
-		m_shadowCamera->GetCamera()->SetFar(10000.f);
-		m_shadowCamera->GetCamera()->SetWidth(4096);
-		m_shadowCamera->GetCamera()->SetHeight(4096);
+		m_shadowCamera->GetCamera()->SetFar(500.f);
+		m_shadowCamera->GetCamera()->SetWidth(500);
+		m_shadowCamera->GetCamera()->SetHeight(500);
+		m_shadowCamera->GetCamera()->SetProjectionType(PROJECTION_TYPE::ORTHOGRAPHIC);
 
 		break;
 	case LIGHT_TYPE::POINT_LIGHT:

@@ -85,6 +85,7 @@ public:
 
 public:
 	int32 GetMeshCount() { return static_cast<int32>(m_meshes.size()); }
+	Vec3 GetMaxPosition() { return m_maxPosition; }
 	const FbxMeshInfo& GetMesh(int32 idx) { return m_meshes[idx]; }
 	vector<shared_ptr<FbxBoneInfo>>& GetBones() { return m_bones; }
 	vector<shared_ptr<FbxAnimClipInfo>>& GetAnimClip() { return m_animClips; }
@@ -137,4 +138,6 @@ private:
 	vector<shared_ptr<FbxBoneInfo>>		m_bones;
 	vector<shared_ptr<FbxAnimClipInfo>>	m_animClips;
 	FbxArray<FbxString*>				m_animNames;
+
+	Vec3			m_maxPosition{ 0,0,0 };
 };

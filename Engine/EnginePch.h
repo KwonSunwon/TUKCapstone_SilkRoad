@@ -214,6 +214,8 @@ public:								\
 
 #define CONST_BUFFER(type)	GEngine->GetConstantBuffer(type)
 
+#define SHADOWMAP_COUNT 4
+
 #define SEND(T) GET_SINGLE(NetworkManager)->Send(reinterpret_pointer_cast<char[]>(T), T->m_size);
 
 struct TransformParams

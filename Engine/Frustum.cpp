@@ -2,10 +2,12 @@
 #include "Frustum.h"
 #include "Camera.h"
 
-void Frustum::FinalUpdate()
+void Frustum::FinalUpdate(Matrix matV, Matrix matP)
 {
-	Matrix matViewInv = Camera::S_MatView.Invert();
-	Matrix matProjectionInv = Camera::S_MatProjection.Invert();
+	/*Matrix matViewInv = Camera::S_MatView.Invert();
+	Matrix matProjectionInv = Camera::S_MatProjection.Invert();*/
+	Matrix matViewInv = matV.Invert();
+	Matrix matProjectionInv = matP.Invert();
 	Matrix matInv = matProjectionInv * matViewInv;
 
 	vector<Vec3> worldPos =
@@ -19,6 +21,7 @@ void Frustum::FinalUpdate()
 		::XMVector3TransformCoord(Vec3(1.f, -1.f, 1.f), matInv),
 		::XMVector3TransformCoord(Vec3(-1.f, -1.f, 1.f), matInv)
 	};
+	m_frustum = worldPos;
 
 	m_planes[PLANE_FRONT] = ::XMPlaneFromPoints(worldPos[0], worldPos[1], worldPos[2]); // CW
 	m_planes[PLANE_BACK] = ::XMPlaneFromPoints(worldPos[4], worldPos[7], worldPos[5]); // CCW

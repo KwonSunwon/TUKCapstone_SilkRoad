@@ -1,6 +1,8 @@
 #ifndef _PARAMS_FX_
 #define _PARAMS_FX_
 
+#define SHADOWMAP_COUNT 4
+
 struct LightColor
 {
     float4      diffuse;
@@ -67,11 +69,12 @@ cbuffer MATERIAL_PARAMS : register(b2)
 Texture2D g_tex_0 : register(t0);
 Texture2D g_tex_1 : register(t1);
 Texture2D g_tex_2 : register(t2);
-Texture2D g_tex_3 : register(t3);
-Texture2D g_tex_4 : register(t4);
+Texture2DArray g_shadowMap : register(t3);
+
 
 StructuredBuffer<Matrix> g_mat_bone : register(t7);
 
 SamplerState g_sam_0 : register(s0);
+SamplerComparisonState g_shadowSampler : register(s1);
 
 #endif

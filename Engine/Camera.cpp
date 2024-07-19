@@ -10,9 +10,12 @@
 #include "Shader.h"
 #include "ParticleSystem.h"
 #include "InstancingManager.h"
+#include "Frustum.h"
 
 Matrix Camera::S_MatView;
 Matrix Camera::S_MatProjection;
+Matrix Camera::S_MatShadowView[SHADOWMAP_COUNT];
+Matrix Camera::S_MatShadowProjection[SHADOWMAP_COUNT];
 
 Camera::Camera() : Component(COMPONENT_TYPE::CAMERA)
 {
@@ -29,11 +32,17 @@ void Camera::FinalUpdate()
 	m_matView = GetTransform()->GetLocalToWorldMatrix().Invert();
 
 	if (m_type == PROJECTION_TYPE::PERSPECTIVE)
+	{
 		m_matProjection = ::XMMatrixPerspectiveFovLH(m_fov, m_width / m_height, m_near, m_far);
+		// 프러스텀 용 (Far 줄인 버전)
+		Matrix matP = ::XMMatrixPerspectiveFovLH(m_fov, m_width / m_height, m_near, m_far * 0.1f);
+		m_frustum.FinalUpdate(m_matView, matP);
+	}
 	else
+	{
 		m_matProjection = ::XMMatrixOrthographicLH(m_width * m_scale, m_height * m_scale, m_near, m_far);
-
-	m_frustum.FinalUpdate();
+		m_frustum.FinalUpdate(m_matView, m_matProjection);
+	}
 }
 
 void Camera::SortGameObject()
@@ -59,7 +68,7 @@ void Camera::SortGameObject()
 				gameObject->GetTransform()->GetWorldPosition(),
 				gameObject->GetTransform()->GetBoundingSphereRadius()) == false)
 			{
-				//continue;
+				continue;
 			}
 		}
 
@@ -95,13 +104,13 @@ void Camera::SortShadowObject()
 		if (gameObject->GetMeshRenderer() == nullptr)
 			continue;
 
-		if (gameObject->IsStatic())
+		if (!gameObject->IsShadow())
 			continue;
 
 		if (IsCulled(gameObject->GetLayerIndex()))
 			continue;
 
-		if (gameObject->GetCheckFrustum())
+		/*if (gameObject->GetCheckFrustum())
 		{
 			if (m_frustum.ContainsSphere(
 				gameObject->GetTransform()->GetWorldPosition(),
@@ -109,7 +118,7 @@ void Camera::SortShadowObject()
 			{
 				continue;
 			}
-		}
+		}*/
 
 		m_vecShadow.push_back(gameObject);
 	}
@@ -119,6 +128,11 @@ void Camera::Render_Deferred()
 {
 	S_MatView = m_matView;
 	S_MatProjection = m_matProjection;
+
+	/*for (auto& gameObject : m_vecDeferred)
+	{
+		gameObject->GetMeshRenderer()->Render();
+	}*/
 
 	GET_SINGLE(InstancingManager)->Render(m_vecDeferred);
 }
@@ -140,9 +154,63 @@ void Camera::Render_Shadow()
 {
 	S_MatView = m_matView;
 	S_MatProjection = m_matProjection;
+	CalculateShadowMatrix();
 
-	for (auto& gameObject : m_vecShadow)
+	GET_SINGLE(InstancingManager)->Render(m_vecShadow, true);
+
+	/*for (auto& gameObject : m_vecShadow)
 	{
 		gameObject->GetMeshRenderer()->RenderShadow();
+	}*/
+}
+
+void Camera::CalculateShadowMatrix()
+{
+	constexpr array<float, SHADOWMAP_COUNT + 1> cascade = { 0.0f, 0.02f, 0.1f, 0.4f, 1.0f };
+	vector<Vec3> frustum = GET_SINGLE(SceneManager)->GetActiveScene()->GetMainCamera()->GetFrustum().GetFrustum();
+	if (frustum.size() != 8 ) {
+		return;
+	}
+
+	for (int i = 0; i < cascade.size() - 1; ++i)
+	{
+		Vec3 wFrustum[8]{};
+		for (int j = 0; j < 8; ++j)
+		{
+			wFrustum[j] = frustum[j];
+		}
+		for (int j = 0; j < 4; ++j)
+		{
+			Vec3 v{ wFrustum[j + 4] - wFrustum[j] };
+			Vec3 n{ v * cascade[i] };
+			Vec3 f{ v * cascade[i + 1] };
+
+			wFrustum[j + 4] = wFrustum[j] + f;
+			wFrustum[j] += n;
+		}
+
+		Vec3 center{};
+		for (const auto& v : wFrustum)
+		{
+			center += v;
+		}
+		center /= 8;
+
+		float radius = 0;
+		for (const auto& v : wFrustum)
+		{
+			float dist = (v - center).Length();
+			radius = max(radius, dist);
+		}
+
+		float offset{ max(5000.0f, radius) };
+		Vec3 shadowLightPos{ center + GetTransform()->GetLook() * -offset };
+
+		Matrix view = ::XMMatrixLookAtLH(shadowLightPos, center, Vec3(0, 1, 0));
+		Matrix proj = ::XMMatrixOrthographicLH(radius * 2, radius * 2, 0.0f, 50000);
+
+		Camera::S_MatShadowView[i] = view;
+		Camera::S_MatShadowProjection[i] = proj;
+		
 	}
 }

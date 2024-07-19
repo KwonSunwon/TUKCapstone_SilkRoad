@@ -10,7 +10,18 @@ void RootSignature::Init()
 
 void RootSignature::CreateGraphicsRootSignature()
 {
-	m_samplerDesc = CD3DX12_STATIC_SAMPLER_DESC(0);
+	m_samplerDesc[0] = CD3DX12_STATIC_SAMPLER_DESC(0);
+	m_samplerDesc[1] = CD3DX12_STATIC_SAMPLER_DESC(
+		1,								 					// ShaderRegister
+		D3D12_FILTER_COMPARISON_MIN_MAG_LINEAR_MIP_POINT,	// filter
+		D3D12_TEXTURE_ADDRESS_MODE_BORDER, 					// addressU
+		D3D12_TEXTURE_ADDRESS_MODE_BORDER, 					// addressV
+		D3D12_TEXTURE_ADDRESS_MODE_BORDER, 					// addressW
+		0.0f,												// mipLODBias
+		16,													// maxAnisotropy
+		D3D12_COMPARISON_FUNC_LESS_EQUAL,					// comparisonFunc
+		D3D12_STATIC_BORDER_COLOR_TRANSPARENT_BLACK			// borderColor
+	);
 
 	CD3DX12_DESCRIPTOR_RANGE ranges[] =
 	{
@@ -22,8 +33,8 @@ void RootSignature::CreateGraphicsRootSignature()
 	param[0].InitAsConstantBufferView(static_cast<uint32>(CBV_REGISTER::b0)); // b0
 	param[1].InitAsDescriptorTable(_countof(ranges), ranges);
 
-	D3D12_ROOT_SIGNATURE_DESC sigDesc = CD3DX12_ROOT_SIGNATURE_DESC(_countof(param), param, 1, &m_samplerDesc);
-	sigDesc.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT; // ÀÔ·Â Á¶¸³±â ´Ü°è
+	D3D12_ROOT_SIGNATURE_DESC sigDesc = CD3DX12_ROOT_SIGNATURE_DESC(_countof(param), param, 2, m_samplerDesc);
+	sigDesc.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT; // ìž…ë ¥ ì¡°ë¦½ê¸° ë‹¨ê³„
 
 	ComPtr<ID3DBlob> blobSignature;
 	ComPtr<ID3DBlob> blobError;

@@ -73,7 +73,7 @@ void MapObjectsLoader::Load(const wstring& path)
 				rb->SetStatic(true);
 				rb->SetMass(99999.f);
 				rb->SetRestitution(0.f);
-				go->SetCheckFrustum(false);
+				go->SetCheckFrustum(true);
 				go->AddComponent(rb);
 			}
 			{
@@ -87,8 +87,16 @@ void MapObjectsLoader::Load(const wstring& path)
 				m_scene->AddGameObject(go->GetCollider()->GetDebugCollider());
 			}
 		}
-		
+
 		go->GetMeshRenderer()->GetMaterial()->SetInt(0, 0);
+		go->SetShadow(true);
+
+		// 맵 테두리용 언덕 오브젝트
+		if (objInfo->meshName == "SM_Env_Ground_Junk_01.fbx")
+		{
+			go->SetCheckFrustum(false);
+		}
+		
 
 		m_scene->AddGameObject(go);
 

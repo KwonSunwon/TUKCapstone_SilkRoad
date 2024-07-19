@@ -32,7 +32,7 @@ shared_ptr<MeshData> MeshData::LoadFromFBX(const wstring& path)
 
 		GET_SINGLE(Resources)->Add<Mesh>(mesh->GetName(), mesh);
 
-		// Material Ã£¾Æ¼­ ¿¬µ¿
+		// Material ì°¾ì•„ì„œ ì—°ë™
 		vector<shared_ptr<Material>> materials;
 		for (size_t j = 0; j < loader.GetMesh(i).materials.size(); j++)
 		{
@@ -69,6 +69,7 @@ vector<shared_ptr<GameObject>> MeshData::Instantiate()
 		gameObject->AddComponent(make_shared<Transform>());
 		gameObject->AddComponent(make_shared<MeshRenderer>());
 		gameObject->GetMeshRenderer()->SetMesh(info.mesh);
+		gameObject->GetTransform()->SetMaxVertexPos(info.mesh->GetMaxVertexPosition());
 
 		for (uint32 i = 0; i < info.materials.size(); i++)
 			gameObject->GetMeshRenderer()->SetMaterial(info.materials[i]->Clone(), i);
