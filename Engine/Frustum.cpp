@@ -45,3 +45,28 @@ bool Frustum::ContainsSphere(const Vec3& pos, float radius)
 
 	return true;
 }
+
+bool Frustum::ContainsSphereShadow(const Vec3& pos, float radius)
+{
+	for (int i = 0; i < SHADOWMAP_COUNT; ++i)
+	{
+		bool flag = true;
+		FinalUpdate(Camera::S_MatShadowView[i], Camera::S_MatShadowProjection[i]);
+		for (const Vec4& plane : m_planes)
+		{
+			// n = (a, b, c)
+			Vec3 normal = Vec3(plane.x, plane.y, plane.z);
+
+			// ax + by + cz + d > radius
+			if (normal.Dot(pos) + plane.w > radius)
+			{
+				flag = false;
+				break;
+			}
+		}
+		if (flag == true)
+			return true;
+	}
+
+	return false;
+}

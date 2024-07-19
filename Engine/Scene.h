@@ -27,6 +27,7 @@ public:
 	void FinalUpdate();
 
 	shared_ptr<class Camera> GetMainCamera();
+	shared_ptr<class Light> GetMainLight();
 
 	void Render();
 

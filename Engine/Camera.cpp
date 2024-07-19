@@ -109,16 +109,16 @@ void Camera::SortShadowObject()
 
 		if (IsCulled(gameObject->GetLayerIndex()))
 			continue;
-
-		/*if (gameObject->GetCheckFrustum())
+		// 그림자 렌더링은 반드시 프러스텀 컬링을 진행하나, Terrain은 무조건 그림자를 그림.
+		if (!gameObject->GetTerrain())
 		{
-			if (m_frustum.ContainsSphere(
+			if (m_frustum.ContainsSphereShadow(
 				gameObject->GetTransform()->GetWorldPosition(),
 				gameObject->GetTransform()->GetBoundingSphereRadius()) == false)
 			{
 				continue;
 			}
-		}*/
+		}
 
 		m_vecShadow.push_back(gameObject);
 	}
@@ -207,7 +207,7 @@ void Camera::CalculateShadowMatrix()
 		Vec3 shadowLightPos{ center + GetTransform()->GetLook() * -offset };
 
 		Matrix view = ::XMMatrixLookAtLH(shadowLightPos, center, Vec3(0, 1, 0));
-		Matrix proj = ::XMMatrixOrthographicLH(radius * 2, radius * 2, 0.0f, 50000);
+		Matrix proj = ::XMMatrixOrthographicLH(radius * 2, radius * 2, 0.0f, 30000);
 
 		Camera::S_MatShadowView[i] = view;
 		Camera::S_MatShadowProjection[i] = proj;

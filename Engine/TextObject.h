@@ -4,6 +4,7 @@ enum class ePivot;
 
 class Camera;
 class Player;
+class Light;
 
 class TextObject
 {
@@ -112,4 +113,5 @@ public:
 private:
 	shared_ptr<Player> m_player;
 	shared_ptr<Camera> m_camera;
+	shared_ptr<Light> m_light;
 };

@@ -18,6 +18,7 @@
 #include "Collision.h"
 #include "Manifold.h"
 #include "NetworkPlayer.h"
+#include "Light.h"
 
 #include "RigidBody.h"
 #include "SceneManager.h"
@@ -88,6 +89,14 @@ shared_ptr<Camera> Scene::GetMainCamera()
 		return nullptr;
 
 	return m_cameras[0];
+}
+
+shared_ptr<Light> Scene::GetMainLight()
+{
+	if (m_lights.empty())
+		return nullptr;
+
+	return m_lights[0];
 }
 
 void Scene::Render()

@@ -87,9 +87,9 @@ void Light::SetLightType(LIGHT_TYPE type)
 		m_lightMaterial = GET_SINGLE(Resources)->Get<Material>(L"DirLight");
 
 		m_shadowCamera->GetCamera()->SetScale(1.f);
-		m_shadowCamera->GetCamera()->SetFar(500.f);
-		m_shadowCamera->GetCamera()->SetWidth(500);
-		m_shadowCamera->GetCamera()->SetHeight(500);
+		m_shadowCamera->GetCamera()->SetFar(5000.f);
+		m_shadowCamera->GetCamera()->SetWidth(5000);
+		m_shadowCamera->GetCamera()->SetHeight(5000);
 		m_shadowCamera->GetCamera()->SetProjectionType(PROJECTION_TYPE::ORTHOGRAPHIC);
 
 		break;

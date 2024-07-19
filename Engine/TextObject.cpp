@@ -10,6 +10,8 @@
 #include "RigidBody.h"
 #include "Camera.h"
 #include "Transform.h"
+#include "Light.h"
+#include "GameObject.h"
 
 unordered_map<string, ComPtr<ID2D1SolidColorBrush>>	TextObject::s_brushes;
 unordered_map<string, ComPtr<IDWriteTextFormat>>	TextObject::s_formats;
@@ -333,6 +335,7 @@ void DebugTextObject::Update()
 {
 	m_player = GET_SINGLE(SceneManager)->GetActiveScene()->GetMainPlayerScript();
 	m_camera = GET_SINGLE(SceneManager)->GetActiveScene()->GetMainCamera();
+	m_light = GET_SINGLE(SceneManager)->GetActiveScene()->GetMainLight();
 	
 
 	wstring debugText{};
@@ -361,7 +364,7 @@ void DebugTextObject::Update()
 	else {
 		debugText += L"MainCamera m_vecDeffered Size : " + to_wstring(m_camera->GetVecDeferred().size()) + L"\n";
 		debugText += L"MainCamera m_vecForward Size : " + to_wstring(m_camera->GetVecForward().size()) + L"\n";
-		debugText += L"MainCamera m_vecShadow Size : " + to_wstring(m_camera->GetVechadow().size()) + L"\n";
+		debugText += L"DirectionalLight m_vecShadow Size : " + to_wstring(m_light->GetShadowCamera()->GetCamera()->GetVechadow().size()) + L"\n";
 	}
 
 	SetText(debugText);

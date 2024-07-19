@@ -60,6 +60,8 @@ public:
 
 	void SetLightIndex(int8 index) { m_lightIndex = index; }
 
+	shared_ptr<GameObject> GetShadowCamera() { return m_shadowCamera; }
+
 private:
 	LightInfo m_lightInfo = {};
 
