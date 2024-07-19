@@ -45,7 +45,7 @@ shared_ptr<PlayerState> PlayerOnGroundAimState::OnUpdateState()
 		forceDir += rightProj;
 	}
 	float forceMag = 300000;
-	rb->SetMaxSpeed(500.f);
+	rb->SetMaxSpeed(m_player->GetMaxAimSpeed());
 
 
 	forceDir.Normalize();

@@ -31,7 +31,7 @@ public:
 	float GetHP() { return m_HP; }
 
 	void GetDamage(float damage);
-	void MakeDamageIndicator(float damage, Vec3 originPos);
+	void MakeDamageIndicator(float damage, Vec3 originPos, bool isCri);
 
 	void ProcessPacket(shared_ptr<class EnemyPacket> packet);
 	void SetNetworkId(uint32 id) { m_networkId = id; }

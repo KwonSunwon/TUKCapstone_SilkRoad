@@ -12,6 +12,7 @@ enum class COMPONENT_TYPE : uint8
 	COLLIDER,
 	ANIMATOR,
 	RIGIDBODY,
+	INTERACTIVE_OBJECT,
 	// ...
 	MONO_BEHAVIOUR,
 	END,
@@ -27,6 +28,7 @@ class Transform;
 class MeshRenderer;
 class Animator;
 class RigidBody;
+class InteractiveObject;
 
 class Component : public Object
 {
@@ -50,6 +52,7 @@ public:
 	shared_ptr<MeshRenderer> GetMeshRenderer();
 	shared_ptr<Animator> GetAnimator();
 	shared_ptr<RigidBody> GetRigidBody();
+	shared_ptr<InteractiveObject> GetInteractiveObject();
 
 private:
 	friend class GameObject;

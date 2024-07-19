@@ -10,6 +10,7 @@
 #include "BaseCollider.h"
 #include "Animator.h"
 #include "RigidBody.h"
+#include "InteractiveObject.h"
 
 GameObject::GameObject() : Object(OBJECT_TYPE::GAMEOBJECT)
 {
@@ -151,6 +152,12 @@ shared_ptr<RigidBody> GameObject::GetRigidBody()
 {
 	shared_ptr<Component> component = GetFixedComponent(COMPONENT_TYPE::RIGIDBODY);
 	return static_pointer_cast<RigidBody>(component);
+}
+
+shared_ptr<InteractiveObject> GameObject::GetInteractiveObject()
+{
+	shared_ptr<Component> component = GetFixedComponent(COMPONENT_TYPE::INTERACTIVE_OBJECT);
+	return static_pointer_cast<InteractiveObject>(component);
 }
 
 void GameObject::AddComponent(shared_ptr<Component> component)

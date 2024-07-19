@@ -207,6 +207,7 @@
     <ClInclude Include="Input.h" />
     <ClInclude Include="InstancingBuffer.h" />
     <ClInclude Include="InstancingManager.h" />
+    <ClInclude Include="InteractiveObject.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="json.hpp" />
     <ClInclude Include="Light.h" />
@@ -247,6 +248,7 @@
     <ClInclude Include="SimpleMath.h" />
     <ClInclude Include="SoundManager.h" />
     <ClInclude Include="SphereCollider.h" />
+    <ClInclude Include="StagePortal.h" />
     <ClInclude Include="StructuredBuffer.h" />
     <ClInclude Include="SwapChain.h" />
     <ClInclude Include="TableDescriptorHeap.h" />
@@ -284,6 +286,7 @@
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="InstancingBuffer.cpp" />
     <ClCompile Include="InstancingManager.cpp" />
+    <ClCompile Include="InteractiveObject.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="LockQueue.cpp" />
@@ -328,6 +331,7 @@
     <ClCompile Include="SimpleMath.cpp" />
     <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="SphereCollider.cpp" />
+    <ClCompile Include="StagePortal.cpp" />
     <ClCompile Include="StructuredBuffer.cpp" />
     <ClCompile Include="SwapChain.cpp" />
     <ClCompile Include="TableDescriptorHeap.cpp" />

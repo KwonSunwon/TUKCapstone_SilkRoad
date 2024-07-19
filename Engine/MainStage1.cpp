@@ -30,6 +30,7 @@
 #include "PlayerBullet.h"
 #include "Enemy.h"
 #include "DummyTerrain.h"
+#include "StagePortal.h"
 
 #include "Network.h"
 #include "NetworkPlayer.h"
@@ -705,7 +706,10 @@ shared_ptr<class Scene> LoadMainScene()
 				enemyScript->AddPlayer(scene->GetPlayers()[0]);
 				enemyScript->AddPlayer(scene->GetPlayers()[GUEST_PLAYER1]);
 				enemyScript->AddPlayer(scene->GetPlayers()[GUEST_PLAYER2]);
+
 				go->AddComponent(enemyScript);
+				
+
 				enemyScript->SetNetworkId(i + 5);
 				scene->m_enemies[i + 5] = enemyScript;
 				//go->AddComponent(make_shared<PlayerAnimation>());
@@ -790,7 +794,7 @@ shared_ptr<class Scene> LoadMainScene()
 				go->AddComponent(enemyScript);
 				enemyScript->SetNetworkId(i + 10);
 				scene->m_enemies[i + 10] = enemyScript;
-				//go->AddComponent(make_shared<PlayerAnimation>());
+				
 			}
 
 			scene->AddGameObject(go);
@@ -886,7 +890,20 @@ shared_ptr<class Scene> LoadMainScene()
 
 #pragma region Item
 	{
+
+		for (int i = 0; i < 16; ++i) {
+			scene->AddGameObject(GET_SINGLE(Resources)->LoadItemPrefab(i, Vec3(2500.f, 400.f, 3000.f+100.f*i)));
+		}
+
+		
 		scene->AddGameObject(GET_SINGLE(Resources)->LoadItemPrefab(0, Vec3(27328, 220, 7446)));
+		
+		
+
+
+
+
+
 		scene->AddGameObject(GET_SINGLE(Resources)->LoadItemPrefab(1, Vec3(16805, 121, 6721)));
 		scene->AddGameObject(GET_SINGLE(Resources)->LoadItemPrefab(1, Vec3(16755, 121, 6721)));
 		scene->AddGameObject(GET_SINGLE(Resources)->LoadItemPrefab(1, Vec3(16835, 121, 6721)));

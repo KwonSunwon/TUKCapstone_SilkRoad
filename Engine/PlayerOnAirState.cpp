@@ -50,7 +50,7 @@ shared_ptr<PlayerState> PlayerOnAirState::OnUpdateState()
 	}
 
 	float forceMag = 300000;
-	rb->SetMaxSpeed(1000.f);
+	rb->SetMaxSpeed(m_player->GetMaxJumpSpeed());
 
 
 	forceDir.Normalize();

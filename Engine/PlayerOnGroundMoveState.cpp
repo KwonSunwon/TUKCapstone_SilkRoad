@@ -51,7 +51,7 @@ shared_ptr<PlayerState> PlayerOnGroundMoveState::OnUpdateState()
 
 	float forceMag = 300000;
 
-	rb->SetMaxSpeed(1300.f);
+	rb->SetMaxSpeed(m_player->GetMaxWalkSpeed());
 
 	forceDir.Normalize();
 	Vec3 force = forceDir * forceMag;

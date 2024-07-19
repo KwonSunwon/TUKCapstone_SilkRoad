@@ -59,6 +59,7 @@ public:
 
 	const vector<shared_ptr<GameObject>>& GetGameObjects() { return m_gameObjects; }
 	const vector<shared_ptr<GameObject>>& GetCollidableGameObjects() { return m_collidableGameObjects; }
+	const vector<shared_ptr<GameObject>>& GetInteractiveGameObjects() { return m_interactiveGameObjects; }
 	const vector<shared_ptr<TextObject>>& GetTextObjects() { return m_textObjects; }
 
 	void IntersectColliders(shared_ptr<BaseCollider> collider1, shared_ptr<BaseCollider> collider2);
@@ -76,6 +77,7 @@ public:
 private:
 	vector<shared_ptr<GameObject>>		m_gameObjects;
 	vector<shared_ptr<GameObject>>		m_collidableGameObjects;
+	vector<shared_ptr<GameObject>>		m_interactiveGameObjects;
 	vector<shared_ptr<TextObject>>		m_textObjects;
 	vector<shared_ptr<class Camera>>	m_cameras;
 	vector<shared_ptr<class Light>>		m_lights;
