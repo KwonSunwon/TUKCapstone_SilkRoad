@@ -136,6 +136,6 @@ float Transform::GetBoundingSphereRadius()
 {
 	Vec3 tmp = m_maxVertexPos * m_localScale;
 
-	{ return max(max(tmp.x, tmp.y), tmp.z); }
+	{ return max(max(tmp.x, tmp.y), tmp.z) * 1.5f; }
 	return m_maxVertexPos.Length();
 }

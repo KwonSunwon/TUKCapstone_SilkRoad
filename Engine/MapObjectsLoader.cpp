@@ -92,7 +92,7 @@ void MapObjectsLoader::Load(const wstring& path)
 		go->SetShadow(true);
 
 		// 맵 테두리용 언덕 오브젝트
-		if (objInfo->meshName == "SM_Env_Ground_Junk_01.fbx")
+		if (objInfo->meshName == "SM_Env_Ground_Junk_01.fbx" || objInfo->meshName == "SM_Env_Ground_Junk_02.fbx")
 		{
 			go->SetCheckFrustum(false);
 		}
