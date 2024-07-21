@@ -18,7 +18,10 @@
 #include "UIObject.h"
 #include "SceneManager.h"
 #include "Scene.h"
-
+#include "Enemy.h"
+#include "BaseCollider.h"
+#include "SoundManager.h"
+#include "InteractiveObject.h"
 
 void Player::Awake()
 {
@@ -30,10 +33,21 @@ void Player::Awake()
 	m_fireInfo.bulletType = BulletType::BASIC;
 	m_fireInfo.explosionDamage = 100.f;
 	m_fireInfo.explosionSize = 500.f;
+
+	std::ifstream upgradeFile("upgrade.txt");
+	if (upgradeFile.is_open()) {
+		for (int i = 0; i < 10; ++i) {
+			// 파일에서 정수를 읽어와 배열에 저장
+			upgradeFile >> m_upgradeLevels[i];
+		}
+		upgradeFile.close();
+	}
+
 }
 void Player::Update()
 {
 	ProcessGetItem();
+	InteracitveObjectPick();
 
 	shared_ptr<Transform> transform = GetTransform();
 	shared_ptr<RigidBody> rb = GetRigidBody();
@@ -89,14 +103,72 @@ void Player::Fire()
 	BulletType bulletType = CalcBulletType();
 	m_fireInfo.bulletType = bulletType;
 	m_fireElapsedTime = 1.f / m_fireRate;
+	GET_SINGLE(SoundManager)->soundPlay(Sounds::WEAPON_ASSULT_FIRE);
+
+	float minDistance = FLT_MAX;
+	vector<shared_ptr<GameObject>>gameObjects = GET_SINGLE(SceneManager)->GetActiveScene()->GetCollidableGameObjects();
+	Vec3 cameraPos = m_playerCamera->GetTransform()->GetWorldPosition();
+	Vec3 cameraDir = m_playerCamera->GetTransform()->GetLook();
+	shared_ptr<GameObject> picked;
+	Vec4 rayOrigin = Vec4(cameraPos.x, cameraPos.y, cameraPos.z, 1.0f);
+	Vec4 rayDir = Vec4(cameraDir.x, cameraDir.y, cameraDir.z, 0.0f);
+
+	for (auto& gameObject : gameObjects) {
+		
+		float distance = 0.f;
+		if (gameObject->GetCollider()->Intersects(rayOrigin, rayDir, OUT distance) == false)
+			continue;
+
+		if (gameObject->GetMonobehaviour("Player"))
+			continue;
+
+		if (distance < minDistance)
+		{
+			minDistance = distance;
+			picked = gameObject;
+		}
+	}
+	
+	if (!picked)
+		return;
+
+	shared_ptr<MonoBehaviour> scriptE = picked->GetMonobehaviour("Enemy");
+	Vec3 damagePos = cameraPos + cameraDir * minDistance;
+
+	switch (m_fireInfo.bulletType) {
+	case BulletType::BASIC:
+		if (scriptE) {
+			shared_ptr<Enemy> enemyScript = dynamic_pointer_cast<Enemy>(scriptE);
+			if (enemyScript->IsDie()) return;
+
+			float finalDamage = CalcDamage();
+
+			enemyScript->GetDamage(finalDamage);
+			enemyScript->MakeDamageIndicator(finalDamage, damagePos, m_isCritical);
+			GET_SINGLE(SoundManager)->soundPlay(Sounds::ENV_HIT_ENEMY);
+		}
+		break;
+
+	case BulletType::EXPLOSIVE:
+		if (scriptE) {
+			shared_ptr<Enemy> enemyScript = dynamic_pointer_cast<Enemy>(scriptE);
+			if (enemyScript->IsDie()) return;
+			enemyScript->GetDamage(m_fireInfo.explosionDamage);
+			enemyScript->MakeDamageIndicator(m_fireInfo.explosionDamage, damagePos,m_isCritical);
+		}
+		break;
+
+	}
+
 
 	
-	m_bullets[m_bulletPivot++]->Fire(shared_from_this(), m_fireInfo);
-	m_fireTime++;
+	//총알 사용할때 코드
+	//m_bullets[m_bulletPivot++]->Fire(shared_from_this(), m_fireInfo);
+	//m_fireTime++;
 
 
-	if (m_bulletPivot >= m_bullets.size())
-		m_bulletPivot = 0;
+	/*if (m_bulletPivot >= m_bullets.size())
+		m_bulletPivot = 0;*/
 }
 
 void Player::AddBullet(shared_ptr<class PlayerBullet> bullet)
@@ -104,6 +176,47 @@ void Player::AddBullet(shared_ptr<class PlayerBullet> bullet)
 	m_bullets.push_back(bullet);
 }
 
+
+void Player::InteracitveObjectPick()
+{
+	float minDistance = FLT_MAX;
+	vector<shared_ptr<GameObject>>gameObjects = GET_SINGLE(SceneManager)->GetActiveScene()->GetInteractiveGameObjects();
+	Vec3 cameraPos = m_playerCamera->GetTransform()->GetWorldPosition();
+	Vec3 cameraDir = m_playerCamera->GetTransform()->GetLook();
+	shared_ptr<GameObject> picked;
+
+	Vec4 rayOrigin = Vec4(cameraPos.x, cameraPos.y, cameraPos.z, 1.0f);
+	Vec4 rayDir = Vec4(cameraDir.x, cameraDir.y, cameraDir.z, 0.0f);
+	for (auto& gameObject : gameObjects) {
+		
+
+		float distance = 0.f;
+		if (gameObject->GetCollider()->Intersects(rayOrigin, rayDir, OUT distance) == false)
+			continue;
+
+		if (gameObject->GetMonobehaviour("Player"))
+			continue;
+
+		if (distance > 250.f) {
+			continue;
+		}
+
+		if (distance < minDistance )
+		{
+			minDistance = distance;
+			picked = gameObject;
+		}
+	}
+
+	if (!picked)
+		return;
+
+	shared_ptr<MonoBehaviour> scriptI = picked->GetMonobehaviour("InteractiveObject");
+	shared_ptr<InteractiveObject> interactiveObjectScript = dynamic_pointer_cast<InteractiveObject>(scriptI);
+	interactiveObjectScript->PrintInteractiveText();
+
+
+}
 
 void Player::ProcessGetItem()
 {
@@ -115,16 +228,17 @@ void Player::ProcessGetItem()
 			m_itemLevels[itemScript->GetItemID()]++;
 
 			itemScript->AddGetItemText();
+			GET_SINGLE(SoundManager)->soundPlay(Sounds::ENV_EAT_ITEM);
 
 			col->m_rb2->MoveTo(Vec3(0, 1000000, 0));
-			CalcBulletStat(itemScript->GetItemID());
+			ApplyItem(itemScript->GetItemID());
 		}
 	}
 }
 
 
 
-void Player::CalcBulletStat(int id)
+void Player::ApplyItem(int id)
 {
 	switch (id) {
 	case 0:
@@ -145,8 +259,66 @@ void Player::CalcBulletStat(int id)
 		m_fireInfo.explosionSize += 200;
 		break;
 
+	case 5:
+		m_maxHP += 20;
+		break;
 
+	case 6:
+		m_maxWalkSpeed += 200;
+		break;
 
+	case 7:
+		m_maxJumpSpeed += 150;
+		break;
+
+	case 8:
+		m_maxAimSpeed += 150;
+		break;
+
+	case 9:
+		m_minusDamage -= 0.01f;
+		break;
+
+	case 10:
+		m_plusDamage += 0.02f;
+		break;
+
+	case 11:
+		m_criticalPercentage += 0.05f;
+		break;
+
+	case 12:
+		m_criticalDamage += 0.2f;
+		break;
+
+	case 13:
+		m_knockBackPower += 5;
+		break;
+
+	default:
+		break;
+
+	}
+}
+
+float Player::CalcDamage()
+{
+	// Randomly determine if this hit is a critical hit
+	bool isCriticalHit = (static_cast<float>(rand()) / RAND_MAX) < m_criticalPercentage;
+
+	// Calculate base damage
+	int minDamage = m_fireInfo.bulletDamage * (1.f - m_minusDamage);
+	int maxDamage = m_fireInfo.bulletDamage * (1.f + m_plusDamage);
+	int baseDamage = minDamage + rand() % (maxDamage - minDamage + 1);
+
+	// Apply critical damage if it's a critical hit
+	if (isCriticalHit) {
+		m_isCritical = true;
+		return baseDamage * m_criticalDamage;
+	}
+	else {
+		m_isCritical = false;
+		return baseDamage;
 	}
 }
 

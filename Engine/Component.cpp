@@ -4,6 +4,7 @@
 #include "MeshRenderer.h"
 #include "Animator.h"
 #include "RigidBody.h"
+#include "InteractiveObject.h"
 
 Component::Component(COMPONENT_TYPE type) : Object(OBJECT_TYPE::COMPONENT), m_type(type)
 {
@@ -37,4 +38,9 @@ shared_ptr<Animator> Component::GetAnimator()
 shared_ptr<RigidBody> Component::GetRigidBody()
 {
 	return m_gameObject.lock()->GetRigidBody();
+}
+
+shared_ptr<InteractiveObject> Component::GetInteractiveObject()
+{
+	return m_gameObject.lock()->GetInteractiveObject();
 }

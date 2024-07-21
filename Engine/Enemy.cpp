@@ -78,10 +78,14 @@ void Enemy::GetDamage(float damage)
 	m_HP -= damage;
 }
 
-void Enemy::MakeDamageIndicator(float damage, Vec3 originPos)
+void Enemy::MakeDamageIndicator(float damage, Vec3 originPos, bool isCri)
 {
 	shared_ptr<DamageIndicatorTextObject> text = make_shared<DamageIndicatorTextObject>(to_wstring(static_cast<int>(damage)));
 	text->SetOriginPosition(originPos);
+	if(isCri)
+		text->SetBrush("YELLOW");
+	else
+		text->SetBrush("WHITE");
 	GET_SINGLE(SceneManager)->GetActiveScene()->AddTextObject(text);
 }
 

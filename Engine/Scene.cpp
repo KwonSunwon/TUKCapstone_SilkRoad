@@ -223,6 +223,10 @@ void Scene::AddGameObject(shared_ptr<GameObject> gameObject)
 		m_ocTree->InsertObjectCollider(gameObject->GetCollider());
 	}
 
+	if (gameObject->GetInteractiveObject() != nullptr)
+	{
+		m_interactiveGameObjects.push_back(gameObject);
+	}
 
 	if(gameObject->GetCamera() != nullptr)
 	{

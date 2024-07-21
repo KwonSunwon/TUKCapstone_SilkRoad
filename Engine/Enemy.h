@@ -30,8 +30,11 @@ public:
 	void SetHP(float hp) { m_HP = hp; }
 	float GetHP() { return m_HP; }
 
+	void SetMaxHP(float maxHP) { m_MaxHP = maxHP; }
+	float GetMaxHP() { return m_MaxHP; }
+
 	void GetDamage(float damage);
-	void MakeDamageIndicator(float damage, Vec3 originPos);
+	void MakeDamageIndicator(float damage, Vec3 originPos, bool isCri);
 
 	void ProcessPacket(shared_ptr<class EnemyPacket> packet);
 	void SetNetworkId(uint32 id) { m_networkId = id; }
@@ -49,6 +52,7 @@ private:
 	float m_attackRange = 300.f;
 	float m_maxWalkSpeed = 800.f;
 	float m_walkForce = 300000.f;
+	float m_MaxHP = 100.f;
 	float m_HP = 100.f;
 	bool m_isDie = false;
 	

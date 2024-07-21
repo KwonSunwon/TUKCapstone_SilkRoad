@@ -88,7 +88,7 @@ void PlayerBullet::ProcessCollides()
 				if (enemyScript->IsDie()) break;
 
 				enemyScript->GetDamage(m_attackPower);
-				enemyScript->MakeDamageIndicator(m_attackPower, (rb)->GetPosition());
+				//enemyScript->MakeDamageIndicator(m_attackPower, (rb)->GetPosition());
 			}
 			break;
 

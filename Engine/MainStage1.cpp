@@ -30,6 +30,7 @@
 #include "PlayerBullet.h"
 #include "Enemy.h"
 #include "DummyTerrain.h"
+#include "StagePortal.h"
 
 #include "Network.h"
 #include "NetworkPlayer.h"
@@ -38,10 +39,12 @@
 #include "TextObject.h"
 #include "CanvasObject.h"
 
-#include "AstarGrid.h"
-
+#include "SoundManager.h"
+#include "EnemyHP.h"
 shared_ptr<class Scene> LoadMainScene()
 {
+	GET_SINGLE(SoundManager)->soundPlay(Sounds::BGM_SPACE);
+
 #pragma region LayerMask
 
 	GET_SINGLE(SceneManager)->SetLayerName(0, L"Default");
@@ -343,66 +346,66 @@ shared_ptr<class Scene> LoadMainScene()
 		{
 			shared_ptr<Player> playerScript = make_shared<Player>();
 			// 총알 오브젝트 풀 생성
-			for(int i = 0; i < 1; ++i)
-			{
-				shared_ptr<GameObject> bullet = make_shared<GameObject>();
-				bullet->SetName(L"Bullet");
+			//for(int i = 0; i < 20; ++i)
+			//{
+			//	shared_ptr<GameObject> bullet = make_shared<GameObject>();
+			//	bullet->SetName(L"Bullet");
 
-				{
-					bullet->AddComponent(make_shared<Transform>());
-					bullet->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 0.f));
-					bullet->GetTransform()->SetLocalScale(Vec3(5.f, 5.f, 5.f));
-				}
+			//	{
+			//		bullet->AddComponent(make_shared<Transform>());
+			//		bullet->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 0.f));
+			//		bullet->GetTransform()->SetLocalScale(Vec3(5.f, 5.f, 5.f));
+			//	}
 
-				shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
-				{
-					shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadSphereMesh();
-					meshRenderer->SetMesh(mesh);
-				}
+			//	shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
+			//	{
+			//		shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadSphereMesh();
+			//		meshRenderer->SetMesh(mesh);
+			//	}
 
-				{
-					shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"WireFrame");
-					shared_ptr<Material> material = make_shared<Material>();
-					material->SetShader(shader);
+			//	{
+			//		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"WireFrame");
+			//		shared_ptr<Material> material = make_shared<Material>();
+			//		material->SetShader(shader);
 
-					material->SetInt(3, 1);
-					material->SetVec4(3, Vec4(1, 1, 1, 1));
-					meshRenderer->SetMaterial(material);
-				}
-				bullet->AddComponent(meshRenderer);
+			//		material->SetInt(3, 1);
+			//		material->SetVec4(3, Vec4(1, 1, 1, 1));
+			//		meshRenderer->SetMaterial(material);
+			//	}
+			//	bullet->AddComponent(meshRenderer);
 
-				{
-					shared_ptr<RigidBody> rb = make_shared<RigidBody>();
-					rb->SetStatic(true);
-					rb->SetRestitution(0.f);
-					bullet->SetCheckFrustum(true);
-					bullet->AddComponent(rb);
-				}
-				{
-					//shared_ptr<SphereCollider> collider = make_shared<SphereCollider>();
-					//collider->SetRadius(10.f);
-					shared_ptr<OrientedBoxCollider> collider = make_shared<OrientedBoxCollider>();
-					collider->SetExtent(Vec3(10, 10, 10));
-					bullet->AddComponent(collider);
-				}
-				{
-					//bullet->GetMeshRenderer()->GetMaterial()->SetInt(0, 0);
-				}
-				bullet->SetActive(true);
+			//	{
+			//		shared_ptr<RigidBody> rb = make_shared<RigidBody>();
+			//		rb->SetStatic(true);
+			//		rb->SetRestitution(0.f);
+			//		bullet->SetCheckFrustum(false);
+			//		bullet->AddComponent(rb);
+			//	}
+			//	{
+			//		//shared_ptr<SphereCollider> collider = make_shared<SphereCollider>();
+			//		//collider->SetRadius(10.f);
+			//		shared_ptr<OrientedBoxCollider> collider = make_shared<OrientedBoxCollider>();
+			//		collider->SetExtent(Vec3(10, 10, 10));
+			//		bullet->AddComponent(collider);
+			//	}
+			//	{
+			//		//bullet->GetMeshRenderer()->GetMaterial()->SetInt(0, 0);
+			//	}
+			//	bullet->SetActive(true);
 
-				shared_ptr<PlayerBullet> bulletScript = make_shared<PlayerBullet>();
-				playerScript->AddBullet(bulletScript);
+			//	shared_ptr<PlayerBullet> bulletScript = make_shared<PlayerBullet>();
+			//	playerScript->AddBullet(bulletScript);
 
-				bullet->AddComponent(bulletScript);
+			//	bullet->AddComponent(bulletScript);
 
-				shared_ptr<GameObject> bomb = GET_SINGLE(Resources)->LoadBombPrefab(Vec3(0, 0, 0));
-				bomb->GetRigidBody()->SetOverlap();
-				shared_ptr<Bomb> bombScript = dynamic_pointer_cast<Bomb>(bomb->GetMonobehaviour("Bomb"));
-				bulletScript->SetBomb(bombScript);
-				scene->AddGameObject(bullet);
-				scene->AddGameObject(bomb);
+			//	shared_ptr<GameObject> bomb = GET_SINGLE(Resources)->LoadBombPrefab(Vec3(0, 0, 0));
+			//	bomb->GetRigidBody()->SetOverlap();
+			//	shared_ptr<Bomb> bombScript = dynamic_pointer_cast<Bomb>(bomb->GetMonobehaviour("Bomb"));
+			//	bulletScript->SetBomb(bombScript);
+			//	scene->AddGameObject(bullet);
+			//	scene->AddGameObject(bomb);
 
-			}
+			//}
 			playerScript->SetPlayerCamera(scene->GetMainCamera());
 			scene->SetMainPlayerScript(playerScript);
 			go->SetShadow(true);
@@ -642,7 +645,44 @@ shared_ptr<class Scene> LoadMainScene()
 				enemyScript->SetNetworkId(i);
 				scene->m_enemies[i] = enemyScript;
 				//go->AddComponent(make_shared<PlayerAnimation>());
+
+
+				//hpbar
+				{
+					shared_ptr<GameObject> obj = make_shared<GameObject>();
+					obj->AddComponent(make_shared<Transform>());
+					obj->GetTransform()->SetLocalScale(Vec3(100.f, 10.f, 100.f));
+
+					shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
+					{
+						shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadRectangleMesh();
+						meshRenderer->SetMesh(mesh);
+					}
+					{
+						shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"Deferred");
+						shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"Hpbar", L"..\\Resources\\Texture\\hpbar.png");
+						shared_ptr<Material> material = make_shared<Material>();
+						material->SetShader(shader);
+						material->SetTexture(0, texture);
+
+						meshRenderer->SetMaterial(material);
+					}
+					obj->AddComponent(meshRenderer);
+					shared_ptr<EnemyHP> enemyHP = make_shared<EnemyHP>();
+					enemyHP->SetParentEnemy(enemyScript);
+					//obj->GetTransform()->SetParent(go->GetTransform());
+					//obj->GetTransform()->SetLocalPosition(Vec3(0.f, 200.f, 0.f));
+					//obj->GetTransform()->SetLocalRotation(Vec3(XMConvertToRadians(0.f), XMConvertToRadians(180.f), XMConvertToRadians(0.f)));
+
+					obj->AddComponent(enemyHP);
+					scene->AddGameObject(obj);
+
+				}
 			}
+
+
+			
+
 
 			scene->AddGameObject(go);
 		}
@@ -720,6 +760,7 @@ shared_ptr<class Scene> LoadMainScene()
 				enemyScript->AddPlayer(scene->GetPlayers()[0]);
 				enemyScript->AddPlayer(scene->GetPlayers()[GUEST_PLAYER1]);
 				enemyScript->AddPlayer(scene->GetPlayers()[GUEST_PLAYER2]);
+
 				go->AddComponent(enemyScript);
 				go->SetShadow(true);
 				enemyScript->SetNetworkId(i + 5);
@@ -807,7 +848,7 @@ shared_ptr<class Scene> LoadMainScene()
 				go->SetShadow(true);
 				enemyScript->SetNetworkId(i + 10);
 				scene->m_enemies[i + 10] = enemyScript;
-				//go->AddComponent(make_shared<PlayerAnimation>());
+				
 			}
 
 			scene->AddGameObject(go);
@@ -904,7 +945,20 @@ shared_ptr<class Scene> LoadMainScene()
 
 #pragma region Item
 	{
+
+		/*for (int i = 0; i < 16; ++i) {
+			scene->AddGameObject(GET_SINGLE(Resources)->LoadItemPrefab(i, Vec3(2500.f, 400.f, 3000.f+100.f*i)));
+		}*/
+
+		
 		scene->AddGameObject(GET_SINGLE(Resources)->LoadItemPrefab(0, Vec3(27328, 220, 7446)));
+		
+		
+
+
+
+
+
 		scene->AddGameObject(GET_SINGLE(Resources)->LoadItemPrefab(1, Vec3(16805, 121, 6721)));
 		scene->AddGameObject(GET_SINGLE(Resources)->LoadItemPrefab(1, Vec3(16755, 121, 6721)));
 		scene->AddGameObject(GET_SINGLE(Resources)->LoadItemPrefab(1, Vec3(16835, 121, 6721)));

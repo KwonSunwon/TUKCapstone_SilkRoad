@@ -51,6 +51,7 @@ void Input::Update()
 	GetWindowRect(hwnd, &rcWindow);
 	double centerX = (rcWindow.right - rcWindow.left) / 2 + rcWindow.left;
 	double centerY = (rcWindow.bottom - rcWindow.top) / 2 + rcWindow.top;
+	m_screenCenter = Vec2(centerX, centerY);
 
 	m_mouseDelta.x = (double)(ptCursorPos.x - centerX);
 	m_mouseDelta.y = (double)(ptCursorPos.y - centerY);

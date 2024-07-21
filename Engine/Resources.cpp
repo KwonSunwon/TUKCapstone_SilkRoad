@@ -12,7 +12,8 @@
 #include "Timer.h"
 #include "MeshRenderer.h"
 #include "Bomb.h"
-
+#include "StagePortal.h"
+#include "InteractiveObject.h"
 void Resources::Init()
 {
 	CreateDefaultShader();
@@ -336,6 +337,54 @@ shared_ptr<GameObject> Resources::LoadItemPrefab(int id, Vec3 location)
 		case 4:
 			meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Item_Ham.fbx");
 			break;
+
+		/*case 5:
+			meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Item_Axe.fbx");
+			break;
+
+		case 6:
+			meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Item_Cola_Can.fbx");
+			break;
+
+		case 7:
+			meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Item_Cola_Can.fbx");
+			break;
+
+		case 8:
+			meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Item_Cylinder_02.fbx");
+			break;
+
+		case 9:
+			meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Item_Cylinder_03.fbx");
+			break;
+
+		case 10:
+			meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Item_Fork.fbx");
+			break;
+
+		case 11:
+			meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Item_Knife.fbx");
+			break;
+
+		case 12:
+			meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Item_PDA.fbx");
+			break;
+
+		case 13:
+			meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Item_Scope.fbx");
+			break;
+
+		case 14:
+			meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Item_SwipeCard.fbx");
+			break;
+
+		case 15:
+			meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Item_Sword.fbx");
+			break;*/
+
+		/*case 16:
+			meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Item_TV.fbx");
+			break;*/
 
 		default:
 			break;

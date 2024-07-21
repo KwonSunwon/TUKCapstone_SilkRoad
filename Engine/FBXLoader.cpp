@@ -5,6 +5,7 @@
 #include "Shader.h"
 #include "Material.h"
 #include "AssimpLoader.h"
+#include <fmod.hpp>
 
 
 FBXLoader::FBXLoader()
