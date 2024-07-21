@@ -7,7 +7,7 @@ public:
 	Terrain();
 	virtual ~Terrain();
 
-	void Init(int32 sizeX, int32 sizeZ);
+	void Init(int32 sizeX, int32 sizeZ, int stage = 1);
 
 	virtual void FinalUpdate() override;
 	virtual void Awake() override;

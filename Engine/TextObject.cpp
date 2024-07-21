@@ -351,8 +351,8 @@ void DebugTextObject::Update()
 		debugText += L"Player Velocity : " + to_wstring((int)m_player->GetRigidBody()->GetLinearVelocity().x) + L", "
 			+ to_wstring((int)m_player->GetRigidBody()->GetLinearVelocity().y) + L", " + to_wstring((int)m_player->GetRigidBody()->GetLinearVelocity().z) + L"\n";
 
-		debugText += L"Player Rotation : " + to_wstring((int)m_player->GetTransform()->GetLocalRotation().x) + L", "
-			+ to_wstring((int)m_player->GetTransform()->GetLocalRotation().y) + L", " + to_wstring((int)m_player->GetTransform()->GetLocalRotation().z) + L"\n";
+		debugText += L"Player Rotation : " + to_wstring((int)XMConvertToDegrees(m_player->GetTransform()->GetLocalRotation().x)) + L", "
+			+ to_wstring((int)XMConvertToDegrees(m_player->GetTransform()->GetLocalRotation().y)) + L", " + to_wstring((int)XMConvertToDegrees(m_player->GetTransform()->GetLocalRotation().z)) + L"\n";
 
 	}
 

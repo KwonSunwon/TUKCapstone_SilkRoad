@@ -20,7 +20,7 @@ Terrain::~Terrain()
 {
 }
 
-void Terrain::Init(int32 sizeX, int32 sizeZ)
+void Terrain::Init(int32 sizeX, int32 sizeZ, int stage)
 {
 	
 
@@ -34,9 +34,39 @@ void Terrain::Init(int32 sizeX, int32 sizeZ)
 	m_material->SetInt(2, m_sizeZ);
 	m_material->SetFloat(0, m_maxTesselation);
 
-	m_material->SetTexture(0, GET_SINGLE(Resources)->Load<Texture>(L"Terrain2", L"..\\Resources\\Texture\\Terrain\\terrain.png"));
+	wstring diffuseName, diffusePath, heightMapName, heightMapPath, binPath;
 
-	shared_ptr<Texture> heightMap = GET_SINGLE(Resources)->Load<Texture>(L"HeightMap", L"..\\Resources\\Texture\\Terrain\\height.png");
+	switch (stage)
+	{
+	case 1:
+		diffuseName = L"Terrain";
+		diffusePath = L"..\\Resources\\Texture\\Terrain\\terrain.png";
+		heightMapName = L"HeightMap";
+		heightMapPath = L"..\\Resources\\Texture\\Terrain\\height.png";
+		binPath = L"..\\Resources\\Texture\\Terrain\\pixels.bin";
+		break;
+
+	case 2:
+		diffuseName = L"Terrain2";
+		diffusePath = L"..\\Resources\\Texture\\Terrain\\terrain2.png";
+		heightMapName = L"HeightMap2";
+		heightMapPath = L"..\\Resources\\Texture\\Terrain\\height2.png";
+		binPath = L"..\\Resources\\Texture\\Terrain\\pixels.bin";
+		break;
+
+	default:
+		diffuseName = L"Terrain";
+		diffusePath = L"..\\Resources\\Texture\\Terrain\\terrain.png";
+		heightMapName = L"HeightMap";
+		heightMapPath = L"..\\Resources\\Texture\\Terrain\\height.png";
+		binPath = L"..\\Resources\\Texture\\Terrain\\pixels.bin";
+	}
+
+	shared_ptr<Texture> diffuse = GET_SINGLE(Resources)->Load<Texture>(diffuseName, diffusePath);
+	shared_ptr<Texture> heightMap = GET_SINGLE(Resources)->Load<Texture>(heightMapName, heightMapPath);
+	
+	m_material->SetTexture(0, diffuse);
+	
 	Vec2 v = Vec2(heightMap->GetWidth(), heightMap->GetHeight());
 	m_texSizeX = v.x;
 	m_texSizeZ = v.y;
@@ -54,8 +84,8 @@ void Terrain::Init(int32 sizeX, int32 sizeZ)
 		meshRenderer->SetMaterial(material);
 	}
 
-	//std::ifstream file(L"..\\Resources\\Texture\\Terrain\\height.png", std::ios::binary);
-	std::ifstream file(L"..\\Resources\\Texture\\Terrain\\pixels.bin", std::ios::binary);
+	std::ifstream file(binPath, std::ios::binary);
+	
 	if (!file)
 	{
 		return;
@@ -79,10 +109,6 @@ void Terrain::Init(int32 sizeX, int32 sizeZ)
 		shared_ptr<float> h = make_shared < float >();
 
 	}
-
-
-
-
 
 }
 
