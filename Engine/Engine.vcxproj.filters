@@ -61,13 +61,11 @@
     <Filter Include="Object\UI">
       <UniqueIdentifier>{e482b187-8c87-41d4-9a5b-7984bdc85e7c}</UniqueIdentifier>
     </Filter>
-<<<<<<< HEAD
     <Filter Include="Object\AI">
       <UniqueIdentifier>{2931dd52-52b7-49a7-9a66-ef44d8b8031e}</UniqueIdentifier>
-=======
+    </Filter>
     <Filter Include="Object\InteractiveObject">
-      <UniqueIdentifier>{9dc8b803-4d2b-400b-b8ef-69ade6291832}</UniqueIdentifier>
->>>>>>> origin/client/merge/ui_anim
+      <UniqueIdentifier>{e6d1cae3-32fe-4c5e-96e0-714d2479fc48}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -283,25 +281,23 @@
     <ClCompile Include="CanvasObject.cpp">
       <Filter>Object\UI</Filter>
     </ClCompile>
-<<<<<<< HEAD
     <ClCompile Include="AstarGrid.cpp">
       <Filter>Object\AI</Filter>
     </ClCompile>
     <ClCompile Include="PathFinding.cpp">
       <Filter>Object\AI</Filter>
-=======
+    </ClCompile>
     <ClCompile Include="SoundManager.cpp">
       <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyHP.cpp">
+      <Filter>Object\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="InteractiveObject.cpp">
       <Filter>Object\InteractiveObject</Filter>
     </ClCompile>
     <ClCompile Include="StagePortal.cpp">
       <Filter>Object\InteractiveObject</Filter>
-    </ClCompile>
-    <ClCompile Include="EnemyHP.cpp">
-      <Filter>Object\Enemy</Filter>
->>>>>>> origin/client/merge/ui_anim
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -523,25 +519,23 @@
     <ClInclude Include="CanvasObject.h">
       <Filter>Object\UI</Filter>
     </ClInclude>
-<<<<<<< HEAD
     <ClInclude Include="AstarGrid.h">
       <Filter>Object\AI</Filter>
     </ClInclude>
     <ClInclude Include="PathFinding.h">
       <Filter>Object\AI</Filter>
-=======
+    </ClInclude>
     <ClInclude Include="SoundManager.h">
       <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyHP.h">
+      <Filter>Object\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="InteractiveObject.h">
       <Filter>Object\InteractiveObject</Filter>
     </ClInclude>
     <ClInclude Include="StagePortal.h">
       <Filter>Object\InteractiveObject</Filter>
-    </ClInclude>
-    <ClInclude Include="EnemyHP.h">
-      <Filter>Object\Enemy</Filter>
->>>>>>> origin/client/merge/ui_anim
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
