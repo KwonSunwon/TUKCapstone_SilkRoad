@@ -287,6 +287,9 @@
     <ClCompile Include="StagePortal.cpp">
       <Filter>Object\InteractiveObject</Filter>
     </ClCompile>
+    <ClCompile Include="EnemyHP.cpp">
+      <Filter>Object\Enemy</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -515,6 +518,9 @@
     </ClInclude>
     <ClInclude Include="StagePortal.h">
       <Filter>Object\InteractiveObject</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyHP.h">
+      <Filter>Object\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

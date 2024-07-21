@@ -40,6 +40,7 @@
 #include "CanvasObject.h"
 
 #include "SoundManager.h"
+#include "EnemyHP.h"
 shared_ptr<class Scene> LoadMainScene()
 {
 	GET_SINGLE(SoundManager)->soundPlay(Sounds::BGM_SPACE);
@@ -628,7 +629,44 @@ shared_ptr<class Scene> LoadMainScene()
 				enemyScript->SetNetworkId(i);
 				scene->m_enemies[i] = enemyScript;
 				//go->AddComponent(make_shared<PlayerAnimation>());
+
+
+				//hpbar
+				{
+					shared_ptr<GameObject> obj = make_shared<GameObject>();
+					obj->AddComponent(make_shared<Transform>());
+					obj->GetTransform()->SetLocalScale(Vec3(100.f, 10.f, 100.f));
+
+					shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
+					{
+						shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadRectangleMesh();
+						meshRenderer->SetMesh(mesh);
+					}
+					{
+						shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"Deferred");
+						shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"Hpbar", L"..\\Resources\\Texture\\hpbar.png");
+						shared_ptr<Material> material = make_shared<Material>();
+						material->SetShader(shader);
+						material->SetTexture(0, texture);
+
+						meshRenderer->SetMaterial(material);
+					}
+					obj->AddComponent(meshRenderer);
+					shared_ptr<EnemyHP> enemyHP = make_shared<EnemyHP>();
+					enemyHP->SetParentEnemy(enemyScript);
+					//obj->GetTransform()->SetParent(go->GetTransform());
+					//obj->GetTransform()->SetLocalPosition(Vec3(0.f, 200.f, 0.f));
+					//obj->GetTransform()->SetLocalRotation(Vec3(XMConvertToRadians(0.f), XMConvertToRadians(180.f), XMConvertToRadians(0.f)));
+
+					obj->AddComponent(enemyHP);
+					scene->AddGameObject(obj);
+
+				}
 			}
+
+
+			
+
 
 			scene->AddGameObject(go);
 		}
