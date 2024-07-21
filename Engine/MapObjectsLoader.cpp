@@ -78,8 +78,13 @@ void MapObjectsLoader::Load(const wstring& path)
 			}
 			{
 				shared_ptr<OrientedBoxCollider> collider = make_shared<OrientedBoxCollider>();
-				collider->SetOffset(objInfo->boxColliderCenter);
 				collider->SetExtent(objInfo->boxColliderExtent);
+
+				//collider->SetRotation(objInfo->rotation);
+				Matrix rotationMatrix = XMMatrixRotationX(objInfo->rotation.x) * XMMatrixRotationY(objInfo->rotation.y + 3.141592f) * XMMatrixRotationZ(objInfo->rotation.z);
+				Vec3 center = XMVector3Transform(objInfo->boxColliderCenter, rotationMatrix);
+				collider->SetOffset(center);
+
 				go->AddComponent(collider);
 			}
 			if (DEBUG_MODE)
