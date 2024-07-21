@@ -51,7 +51,7 @@ void Bomb::Update()
 		if (scriptE) {
 			shared_ptr<Enemy> enemyScript = dynamic_pointer_cast<Enemy>(scriptE);
 			enemyScript->GetDamage(100.f*DELTA_TIME);
-			enemyScript->MakeDamageIndicator(100.f*DELTA_TIME, col->m_rb2->GetPosition() + Vec3(0.f, 150.f, 0.f));
+			enemyScript->MakeDamageIndicator(100.f*DELTA_TIME, col->m_rb2->GetPosition() + Vec3(0.f, 150.f, 0.f), false);
 		}
 	}
 

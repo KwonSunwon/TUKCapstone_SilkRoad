@@ -25,6 +25,10 @@ void SoundManager::soundPlay(int _type)
     {
         m_channel[_type]->setVolume(0.5f); // 볼륨을 10%로 설정
     }
+    if (_type == BGM_SPACE)
+    {
+        m_channel[_type]->setVolume(0.7f); // 볼륨을 10%로 설정
+    }
 
     m_soundSystem->update();
 }

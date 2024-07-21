@@ -139,7 +139,7 @@ shared_ptr<class Scene> LoadMainScene()
 		shared_ptr<MapObjectsLoader> loader = make_shared<MapObjectsLoader>();
 		loader->Create(scene);
 
-		loader->Load(L"..\\Resources\\MapData\\ExportedObjectsLobby.json");
+		loader->Load(L"..\\Resources\\MapData\\ExportedObjects.json");
 	}
 #pragma endregion
 
@@ -200,11 +200,6 @@ shared_ptr<class Scene> LoadMainScene()
 	}
 #pragma endregion
 
-#pragma region AstarGrid
-	{
-		scene->GetAstarGrid()->LoadGridFromFile("..\\Resources\\MapData\\AstarNodeData_Stage1.bin");
-	}
-#pragma endregion
 
 #pragma region UI_Test
 	for(int32 i = 0; i < 6; i++)
@@ -252,7 +247,7 @@ shared_ptr<class Scene> LoadMainScene()
 		scene->AddTextObject(loadingText);
 
 		auto debugText = make_shared<DebugTextObject>();
-		scene->AddTextObject(debugText);
+		//scene->AddTextObject(debugText);
 
 	}
 #pragma endregion
@@ -963,7 +958,7 @@ shared_ptr<class Scene> LoadMainScene()
 		scene->AddGameObject(GET_SINGLE(Resources)->LoadItemPrefab(1, Vec3(16755, 121, 6721)));
 		scene->AddGameObject(GET_SINGLE(Resources)->LoadItemPrefab(1, Vec3(16835, 121, 6721)));
 		scene->AddGameObject(GET_SINGLE(Resources)->LoadItemPrefab(1, Vec3(16845, 121, 6721)));
-		scene->AddGameObject(GET_SINGLE(Resources)->LoadItemPrefab(1, Vec3(16855, 121, 6721)));
+		//scene->AddGameObject(GET_SINGLE(Resources)->LoadItemPrefab(1, Vec3(16855, 121, 6721)));
 		scene->AddGameObject(GET_SINGLE(Resources)->LoadItemPrefab(2, Vec3(28623, 128, 15045)));
 		scene->AddGameObject(GET_SINGLE(Resources)->LoadItemPrefab(3, Vec3(25451, 121, 24415)));
 		scene->AddGameObject(GET_SINGLE(Resources)->LoadItemPrefab(4, Vec3(25651, 121, 24415)));

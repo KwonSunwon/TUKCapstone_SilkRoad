@@ -46,7 +46,6 @@ void EnemyIdleState::OnEnter()
 shared_ptr<EnemyState> EnemyWalkState::OnUpdateState()
 {
 	shared_ptr<GameObject> player = m_enemy->GetPlayers()[m_enemy->GetTargetPlayerIndex()];
-	std::list<PathNode> path = m_enemy->GetPath();
 	Vec3 toPlayer = player->GetTransform()->GetLocalPosition() - m_enemy->GetTransform()->GetLocalPosition();
 	/*Vec3 toPath = m_enemy->GetRigidBody()->GetPosition();
 	if (!path.empty())
