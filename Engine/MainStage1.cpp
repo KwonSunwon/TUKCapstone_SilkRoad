@@ -136,7 +136,7 @@ shared_ptr<class Scene> LoadMainScene()
 		shared_ptr<MapObjectsLoader> loader = make_shared<MapObjectsLoader>();
 		loader->Create(scene);
 
-		loader->Load(L"..\\Resources\\MapData\\ExportedObjects.json");
+		loader->Load(L"..\\Resources\\MapData\\ExportedObjectsLobby.json");
 	}
 #pragma endregion
 

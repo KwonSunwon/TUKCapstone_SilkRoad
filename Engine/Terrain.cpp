@@ -34,7 +34,9 @@ void Terrain::Init(int32 sizeX, int32 sizeZ)
 	m_material->SetInt(2, m_sizeZ);
 	m_material->SetFloat(0, m_maxTesselation);
 
-	shared_ptr<Texture> heightMap = GET_SINGLE(Resources)->Load<Texture>(L"HeightMap", L"..\\Resources\\Texture\\Terrain\\height.png");
+	m_material->SetTexture(0, GET_SINGLE(Resources)->Load<Texture>(L"Terrain2", L"..\\Resources\\Texture\\Terrain\\terrain2.png"));
+
+	shared_ptr<Texture> heightMap = GET_SINGLE(Resources)->Load<Texture>(L"HeightMap", L"..\\Resources\\Texture\\Terrain\\height2.png");
 	Vec2 v = Vec2(heightMap->GetWidth(), heightMap->GetHeight());
 	m_texSizeX = v.x;
 	m_texSizeZ = v.y;
@@ -111,23 +113,23 @@ void Terrain::getHeight(float fx, float fz , shared_ptr<float> height, shared_pt
 
 	Vec3 scale = GetTransform()->GetLocalScale();
 
-	//ÀüÃ¼ ÅÍ·¹ÀÎ Å©±â
+	//ì „ì²´ í„°ë ˆì¸ í¬ê¸°
 	float mapSizeX = scale.x * m_sizeX;
 	float mapSizeZ = scale.z * m_sizeZ;
 
-	//³ôÀÌ¸ÊÀÇ ÀÎµ¦½º Á¢±Ù
+	//ë†’ì´ë§µì˜ ì¸ë±ìŠ¤ ì ‘ê·¼
 	int x = int(fx * m_texSizeX / mapSizeX);
 	int z = int(fz * m_texSizeZ / mapSizeZ);
 
-	//³ôÀÌ¸ÊÀÇ ÀÎµ¦½º¿¡¼­ ºñÀ²
+	//ë†’ì´ë§µì˜ ì¸ë±ìŠ¤ì—ì„œ ë¹„ìœ¨
 	fx = fx * m_texSizeX / mapSizeX;
 	fz = fz * m_texSizeZ / mapSizeZ;
 
-	//³ôÀÌ¸ÊÀÇ ÇÑ ÇÈ¼¿ÀÇ ½ÇÁ¦ °ÔÀÓ ¿ùµå¿¡¼­ Å©±â
+	//ë†’ì´ë§µì˜ í•œ í”½ì…€ì˜ ì‹¤ì œ ê²Œì„ ì›”ë“œì—ì„œ í¬ê¸°
 	float blockX = mapSizeX / m_texSizeX;
 	float blockZ = mapSizeZ / m_texSizeZ;
 
-	//¿¹¿ÜÃ³¸®
+	//ì˜ˆì™¸ì²˜ë¦¬
 	int index = x + m_texSizeX * (m_texSizeZ - 1 - z);
 	if (x < 0 || x > m_texSizeX)
 		return;
@@ -137,7 +139,7 @@ void Terrain::getHeight(float fx, float fz , shared_ptr<float> height, shared_pt
 		return;
 
 
-	//ÇØ´ç À§Ä¡¿¡¼­ÀÇ ÁÖº¯ Á¡ ³ôÀÌ ±¸ÇÏ±â
+	//í•´ë‹¹ ìœ„ì¹˜ì—ì„œì˜ ì£¼ë³€ ì  ë†’ì´ êµ¬í•˜ê¸°
 	float fxPercent = fx - x;
 	float fzPercent = fz - z;
 	float fBottomLeft =		(float)(*m_height)[x + m_texSizeX * (m_texSizeZ - 1 - z) + 0];
@@ -145,7 +147,7 @@ void Terrain::getHeight(float fx, float fz , shared_ptr<float> height, shared_pt
 	float fTopLeft =		(float)(*m_height)[x + m_texSizeX * (m_texSizeZ - 2 - z) + 0];
 	float fTopRight =		(float)(*m_height)[x + m_texSizeX * (m_texSizeZ - 2 - z) + 1];
 
-	//¹ı¼±º¤ÅÍ¸¦ Ã£±â À§ÇØ Æ÷ÇÔµÇ´Â »ï°¢Çü Ã£±â
+	//ë²•ì„ ë²¡í„°ë¥¼ ì°¾ê¸° ìœ„í•´ í¬í•¨ë˜ëŠ” ì‚¼ê°í˜• ì°¾ê¸°
 	Vec3 edgeA, edgeB;
 	if (fxPercent + fzPercent < 1) {
 		edgeA = Vec3(blockX, (fBottomRight - fBottomLeft) / 255 * scale.y, 0.f);
@@ -156,22 +158,22 @@ void Terrain::getHeight(float fx, float fz , shared_ptr<float> height, shared_pt
 		edgeB = Vec3(0.f, (fBottomRight - fTopRight) / 255 * scale.y, -blockZ);
 	}
 
-	//¹ı¼±º¤ÅÍ °è»ê
+	//ë²•ì„ ë²¡í„° ê³„ì‚°
 	*terrainNormal = edgeA.Cross(edgeB);
 	if ((*terrainNormal).y < 0.f)
 		(*terrainNormal) = -(*terrainNormal);
 	(*terrainNormal).Normalize();
 
-	//³ôÀÌÀÇ ¼±Çüº¸°£À» À§ÇØ Æ÷ÇÔµÇ´Â »ï°¢Çü Ã£±â
+	//ë†’ì´ì˜ ì„ í˜•ë³´ê°„ì„ ìœ„í•´ í¬í•¨ë˜ëŠ” ì‚¼ê°í˜• ì°¾ê¸°
 	if (fxPercent + fzPercent < 1)fTopRight = fTopLeft + (fBottomRight - fBottomLeft);
 	else fBottomLeft = fTopLeft + (fBottomRight - fTopRight);
 
-	//³ôÀÌ °è»ê
+	//ë†’ì´ ê³„ì‚°
 	float fTopHeight = fTopLeft * (1 - fxPercent) + fTopRight * fxPercent;
 	float fBottomHeight = fBottomLeft * (1 - fxPercent) + fBottomRight * fxPercent;
 	float fHeight = fBottomHeight * (1 - fzPercent) + fTopHeight * fzPercent;
 
-	//³ôÀÌ¸¦ 0~1·Î Á¤±ÔÈ­ ½ÃÄÑÁØµÚ ¸ÊÀÇ Å©±â·Î °öÇØÁØ´Ù.
+	//ë†’ì´ë¥¼ 0~1ë¡œ ì •ê·œí™” ì‹œì¼œì¤€ë’¤ ë§µì˜ í¬ê¸°ë¡œ ê³±í•´ì¤€ë‹¤.
 	*height = (fHeight / 255 * scale.y);
 
 }

@@ -1,0 +1,1474 @@
+{
+    "objects": [
+        {
+            "name": "SM_Prop_Vending_Machine_05",
+            "meshName": "SM_Prop_Vending_Machine_05.fbx",
+            "position": {
+                "x": 8528.33984375,
+                "y": 1944.1025390625,
+                "z": 2209.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 180.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 1,
+            "boxColliderCenter": {
+                "x": -0.15987642109394074,
+                "y": 1.3702472448349,
+                "z": 0.11653238534927368
+            },
+            "boxColliderSize": {
+                "x": 1.2934643030166627,
+                "y": 1.4403817653656006,
+                "z": 0.5582175850868225
+            }
+        },
+        {
+            "name": "SM_Bld_Corp_LandingPad_01",
+            "meshName": "SM_Bld_Corp_LandingPad_01.fbx",
+            "position": {
+                "x": 5212.5,
+                "y": 920.0,
+                "z": 1451.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 270.00018310546877,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 1,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": -5.440000057220459,
+                "z": -7.573488235473633
+            },
+            "boxColliderSize": {
+                "x": 24.183940887451173,
+                "y": 33.369998931884769,
+                "z": 59.205162048339847
+            }
+        },
+        {
+            "name": "SM_Bld_Platform_Barrier_Long_01",
+            "meshName": "SM_Bld_Platform_Barrier_Long_01.fbx",
+            "position": {
+                "x": 8150.0,
+                "y": 2032.499755859375,
+                "z": 626.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 180.00006103515626,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Bld_Light_08 (2)",
+            "meshName": "SM_Bld_Light_08.fbx",
+            "position": {
+                "x": 8850.0,
+                "y": 2032.499755859375,
+                "z": 1926.0
+            },
+            "rotation": {
+                "x": -0.00006099570236983709,
+                "y": 0.0001400188630213961,
+                "z": 180.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Bld_Light_08 (3)",
+            "meshName": "SM_Bld_Light_08.fbx",
+            "position": {
+                "x": 8850.0,
+                "y": 2032.499755859375,
+                "z": 976.0
+            },
+            "rotation": {
+                "x": -0.00006099570236983709,
+                "y": 0.0001400188630213961,
+                "z": 180.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Bld_Platform_Barrier_Short_01 (4)",
+            "meshName": "SM_Bld_Platform_Barrier_Short_01.fbx",
+            "position": {
+                "x": 7412.5,
+                "y": 2032.499755859375,
+                "z": 2301.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 315.0001525878906,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0499999523162842,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 1,
+            "boxColliderCenter": {
+                "x": -1.275056004524231,
+                "y": 0.5028055310249329,
+                "z": 0.23758575320243836
+            },
+            "boxColliderSize": {
+                "x": 2.1014058589935304,
+                "y": 1.0292073488235474,
+                "z": 0.41626524925231936
+            }
+        },
+        {
+            "name": "SM_Bld_Platform_Barrier_Pillar_Middle_01 (2)",
+            "meshName": "SM_Bld_Platform_Barrier_Pillar_Middle_01.fbx",
+            "position": {
+                "x": 7400.0,
+                "y": 2032.499755859375,
+                "z": 626.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 180.00006103515626,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.25,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Bld_Platform_Barrier_Short_01 (5)",
+            "meshName": "SM_Bld_Platform_Barrier_Short_01.fbx",
+            "position": {
+                "x": 8600.0,
+                "y": 2032.499755859375,
+                "z": 601.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 135.0000457763672,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 1,
+            "boxColliderCenter": {
+                "x": -1.2750561237335206,
+                "y": 0.5028055310249329,
+                "z": 0.23758575320243836
+            },
+            "boxColliderSize": {
+                "x": 2.1014060974121095,
+                "y": 1.0292073488235474,
+                "z": 0.41626524925231936
+            }
+        },
+        {
+            "name": "SM_Bld_Platform_Barrier_Long_01 (1)",
+            "meshName": "SM_Bld_Platform_Barrier_Long_01.fbx",
+            "position": {
+                "x": 8650.0,
+                "y": 2032.499755859375,
+                "z": 2276.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.00012635848543141037,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Bld_Core_Antenna_Greeble_02",
+            "meshName": "SM_Bld_Core_Antenna_Greeble_02.fbx",
+            "position": {
+                "x": 8775.0,
+                "y": 2082.499755859375,
+                "z": 2301.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 180.00006103515626,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 0.05999999865889549,
+                "y": 0.05999999865889549,
+                "z": 0.05999999865889549
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Bld_Platform_Barrier_Pillar_Middle_01 (3)",
+            "meshName": "SM_Bld_Platform_Barrier_Pillar_Middle_01.fbx",
+            "position": {
+                "x": 7650.0,
+                "y": 2032.499755859375,
+                "z": 626.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 180.00006103515626,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Bld_Platform_Barrier_Short_01 (6)",
+            "meshName": "SM_Bld_Platform_Barrier_Short_01.fbx",
+            "position": {
+                "x": 8775.0,
+                "y": 2032.499755859375,
+                "z": 2126.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 45.00004959106445,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 1,
+            "boxColliderCenter": {
+                "x": -1.2750561237335206,
+                "y": 0.5028055310249329,
+                "z": 0.23758575320243836
+            },
+            "boxColliderSize": {
+                "x": 2.1014060974121095,
+                "y": 1.0292073488235474,
+                "z": 0.41626524925231936
+            }
+        },
+        {
+            "name": "SM_Bld_Platform_Barrier_Pillar_01 (7)",
+            "meshName": "SM_Bld_Platform_Barrier_Pillar_01.fbx",
+            "position": {
+                "x": 7200.0,
+                "y": 2032.499755859375,
+                "z": 2126.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 90.00006103515625,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Bld_Platform_Barrier_Pillar_01 (8)",
+            "meshName": "SM_Bld_Platform_Barrier_Pillar_01.fbx",
+            "position": {
+                "x": 8750.0,
+                "y": 2032.499755859375,
+                "z": 2176.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 180.00006103515626,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Bld_Platform_Barrier_Long_01 (2)",
+            "meshName": "SM_Bld_Platform_Barrier_Long_01.fbx",
+            "position": {
+                "x": 7650.0,
+                "y": 2032.499755859375,
+                "z": 626.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 180.00006103515626,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 1,
+            "boxColliderCenter": {
+                "x": -2.4999992847442629,
+                "y": 0.5028055310249329,
+                "z": 0.23758575320243836
+            },
+            "boxColliderSize": {
+                "x": 4.551292896270752,
+                "y": 1.0292073488235474,
+                "z": 0.41626524925231936
+            }
+        },
+        {
+            "name": "SM_Bld_Platform_Barrier_Pillar_Middle_01 (4)",
+            "meshName": "SM_Bld_Platform_Barrier_Pillar_Middle_01.fbx",
+            "position": {
+                "x": 8150.0,
+                "y": 2032.499755859375,
+                "z": 626.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 180.00006103515626,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Bld_Platform_Barrier_Long_01 (3)",
+            "meshName": "SM_Bld_Platform_Barrier_Long_01.fbx",
+            "position": {
+                "x": 8750.0,
+                "y": 2032.499755859375,
+                "z": 1201.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 90.0001220703125,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 1,
+            "boxColliderCenter": {
+                "x": -2.499999761581421,
+                "y": 0.5028055310249329,
+                "z": 0.23758581280708314
+            },
+            "boxColliderSize": {
+                "x": 4.551293849945068,
+                "y": 1.0292073488235474,
+                "z": 0.4162653386592865
+            }
+        },
+        {
+            "name": "SM_Bld_Platform_Barrier_Pillar_01 (9)",
+            "meshName": "SM_Bld_Platform_Barrier_Pillar_01.fbx",
+            "position": {
+                "x": 8750.0,
+                "y": 2032.499755859375,
+                "z": 763.5
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 180.00006103515626,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Bld_Platform_Barrier_Long_01 (4)",
+            "meshName": "SM_Bld_Platform_Barrier_Long_01.fbx",
+            "position": {
+                "x": 8150.0,
+                "y": 2032.499755859375,
+                "z": 2276.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.00012635848543141037,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 1,
+            "boxColliderCenter": {
+                "x": -2.4999992847442629,
+                "y": 0.5028055310249329,
+                "z": 0.23758575320243836
+            },
+            "boxColliderSize": {
+                "x": 4.551292896270752,
+                "y": 1.0292073488235474,
+                "z": 0.41626524925231936
+            }
+        },
+        {
+            "name": "SM_Bld_Platform_Barrier_Short_01 (7)",
+            "meshName": "SM_Bld_Platform_Barrier_Short_01.fbx",
+            "position": {
+                "x": 7400.0,
+                "y": 2032.499755859375,
+                "z": 626.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 180.00006103515626,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Bld_Platform_Barrier_Pillar_01 (10)",
+            "meshName": "SM_Bld_Platform_Barrier_Pillar_01.fbx",
+            "position": {
+                "x": 7200.0,
+                "y": 2032.499755859375,
+                "z": 776.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 180.00001525878907,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Bld_Core_Antenna_Greeble_01",
+            "meshName": "SM_Bld_Core_Antenna_Greeble_01.fbx",
+            "position": {
+                "x": 8775.0,
+                "y": 2082.499755859375,
+                "z": 588.5
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 180.00006103515626,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 0.05999999865889549,
+                "y": 0.05999999865889549,
+                "z": 0.05999999865889549
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Bld_Platform_Barrier_Pillar_Middle_01 (5)",
+            "meshName": "SM_Bld_Platform_Barrier_Pillar_Middle_01.fbx",
+            "position": {
+                "x": 7662.5,
+                "y": 2032.499755859375,
+                "z": 2276.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.00012635848543141037,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Bld_Platform_Barrier_Pillar_01 (11)",
+            "meshName": "SM_Bld_Platform_Barrier_Pillar_01.fbx",
+            "position": {
+                "x": 8612.5,
+                "y": 2032.499755859375,
+                "z": 2276.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 90.00006103515625,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Bld_Platform_Barrier_Short_01 (8)",
+            "meshName": "SM_Bld_Platform_Barrier_Short_01.fbx",
+            "position": {
+                "x": 7212.5,
+                "y": 2032.499755859375,
+                "z": 788.5
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 225.00003051757813,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0499999523162842,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 1,
+            "boxColliderCenter": {
+                "x": -1.2750561237335206,
+                "y": 0.5028055310249329,
+                "z": 0.23758578300476075
+            },
+            "boxColliderSize": {
+                "x": 2.1014060974121095,
+                "y": 1.0292073488235474,
+                "z": 0.4162653088569641
+            }
+        },
+        {
+            "name": "SM_Bld_Platform_Barrier_Pillar_Middle_01 (6)",
+            "meshName": "SM_Bld_Platform_Barrier_Pillar_Middle_01.fbx",
+            "position": {
+                "x": 7412.5,
+                "y": 2032.499755859375,
+                "z": 2276.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.00012635848543141037,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.25,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Bld_Platform_Barrier_Pillar_Middle_01 (7)",
+            "meshName": "SM_Bld_Platform_Barrier_Pillar_Middle_01.fbx",
+            "position": {
+                "x": 8150.0,
+                "y": 2032.499755859375,
+                "z": 2276.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.00012635848543141037,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Bld_Platform_Barrier_Short_01 (9)",
+            "meshName": "SM_Bld_Platform_Barrier_Short_01.fbx",
+            "position": {
+                "x": 7662.5,
+                "y": 2032.499755859375,
+                "z": 2276.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.00012635848543141037,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Bld_Platform_Barrier_Long_01 (5)",
+            "meshName": "SM_Bld_Platform_Barrier_Long_01.fbx",
+            "position": {
+                "x": 8750.0,
+                "y": 2032.499755859375,
+                "z": 1676.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 90.0001220703125,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Bld_Platform_Barrier_Long_01 (7)",
+            "meshName": "SM_Bld_Platform_Barrier_Long_01.fbx",
+            "position": {
+                "x": 7189.0,
+                "y": 2032.499755859375,
+                "z": 1201.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 90.0001220703125,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 1,
+            "boxColliderCenter": {
+                "x": -2.499999761581421,
+                "y": 0.5028055310249329,
+                "z": 0.23758581280708314
+            },
+            "boxColliderSize": {
+                "x": 14.319999694824219,
+                "y": 13.0,
+                "z": 0.4162653386592865
+            }
+        },
+        {
+            "name": "SM_Bld_Platform_Barrier_Long_01 (9)",
+            "meshName": "SM_Bld_Platform_Barrier_Long_01.fbx",
+            "position": {
+                "x": 7189.0,
+                "y": 2032.499755859375,
+                "z": 726.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 90.0001220703125,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Bld_Platform_Barrier_Long_01 (8)",
+            "meshName": "SM_Bld_Platform_Barrier_Long_01.fbx",
+            "position": {
+                "x": 7189.0,
+                "y": 2032.499755859375,
+                "z": 1676.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 90.0001220703125,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Bld_Platform_Barrier_Pillar_Middle_01 (11)",
+            "meshName": "SM_Bld_Platform_Barrier_Pillar_Middle_01.fbx",
+            "position": {
+                "x": 7189.0,
+                "y": 2032.499755859375,
+                "z": 1213.5
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 90.0001220703125,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Bld_Platform_Barrier_Pillar_Middle_01 (10)",
+            "meshName": "SM_Bld_Platform_Barrier_Pillar_Middle_01.fbx",
+            "position": {
+                "x": 7189.0,
+                "y": 2032.499755859375,
+                "z": 1688.5
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 90.0001220703125,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Bld_Platform_Barrier_Pillar_01 (12)",
+            "meshName": "SM_Bld_Platform_Barrier_Pillar_01.fbx",
+            "position": {
+                "x": 8612.5,
+                "y": 2032.499755859375,
+                "z": 626.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 180.00006103515626,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Bld_Light_08 (4)",
+            "meshName": "SM_Bld_Light_08.fbx",
+            "position": {
+                "x": 8850.0,
+                "y": 2032.499755859375,
+                "z": 1451.0
+            },
+            "rotation": {
+                "x": -0.00006099570236983709,
+                "y": 0.0001400188630213961,
+                "z": 180.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Bld_Platform_Barrier_Long_01 (6)",
+            "meshName": "SM_Bld_Platform_Barrier_Long_01.fbx",
+            "position": {
+                "x": 8750.0,
+                "y": 2032.499755859375,
+                "z": 726.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 90.0001220703125,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Bld_Platform_Barrier_Pillar_Middle_01 (8)",
+            "meshName": "SM_Bld_Platform_Barrier_Pillar_Middle_01.fbx",
+            "position": {
+                "x": 8750.0,
+                "y": 2032.499755859375,
+                "z": 1688.5
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 90.0001220703125,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Bld_Platform_Barrier_Pillar_Middle_01 (9)",
+            "meshName": "SM_Bld_Platform_Barrier_Pillar_Middle_01.fbx",
+            "position": {
+                "x": 8750.0,
+                "y": 2032.499755859375,
+                "z": 1213.5
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 90.0001220703125,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Prop_Monitor_01 (2)",
+            "meshName": "SM_Prop_Monitor_01.fbx",
+            "position": {
+                "x": 7821.80029296875,
+                "y": 2009.001220703125,
+                "z": 2208.900146484375
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 180.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 1,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.8700000047683716,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.6544132232666016,
+                "y": 1.9900000095367432,
+                "z": 0.6544132232666016
+            }
+        },
+        {
+            "name": "SM_Prop_Projection_Table_01",
+            "meshName": "SM_Prop_Projection_Table_01.fbx",
+            "position": {
+                "x": 7983.99951171875,
+                "y": 2008.097900390625,
+                "z": 1456.2000732421875
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 1,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.5908623337745667,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 3.031752824783325,
+                "y": 1.1817246675491334,
+                "z": 3.031750440597534
+            }
+        },
+        {
+            "name": "SM_Prop_Monitor_03 (12)",
+            "meshName": "SM_Prop_Monitor_03.fbx",
+            "position": {
+                "x": 7276.39990234375,
+                "y": 1993.998779296875,
+                "z": 1436.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 89.99982452392578,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 1,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.856435239315033,
+                "z": -4.4703494239684008e-8
+            },
+            "boxColliderSize": {
+                "x": 1.1132476329803467,
+                "y": 1.712870478630066,
+                "z": 0.9039546251296997
+            }
+        },
+        {
+            "name": "SM_Prop_Banner_01_A",
+            "meshName": "SM_Prop_Banner_01_A.fbx",
+            "position": {
+                "x": 8400.0,
+                "y": 2102.702392578125,
+                "z": 676.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 1,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.9527871608734131,
+                "y": 1.9012279510498047,
+                "z": 0.04803463816642761
+            }
+        },
+        {
+            "name": "SM_Prop_Banner_01_B",
+            "meshName": "SM_Prop_Banner_01_B.fbx",
+            "position": {
+                "x": 8150.0,
+                "y": 2102.702392578125,
+                "z": 676.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 1,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.9527871608734131,
+                "y": 1.9012283086776734,
+                "z": 0.04803463816642761
+            }
+        },
+        {
+            "name": "SM_Prop_Banner_01_C",
+            "meshName": "SM_Prop_Banner_01_C.fbx",
+            "position": {
+                "x": 7900.0,
+                "y": 2102.702392578125,
+                "z": 676.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 1,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.9527861475944519,
+                "y": 1.9012279510498047,
+                "z": 0.04803463816642761
+            }
+        },
+        {
+            "name": "SM_Prop_Banner_01_D",
+            "meshName": "SM_Prop_Banner_01_D.fbx",
+            "position": {
+                "x": 7650.0,
+                "y": 2102.702392578125,
+                "z": 676.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 1,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.9527868628501892,
+                "y": 1.9012278318405152,
+                "z": 0.04803463816642761
+            }
+        },
+        {
+            "name": "SM_Prop_Vending_Machine_01",
+            "meshName": "SM_Prop_Vending_Machine_01.fbx",
+            "position": {
+                "x": 7573.00048828125,
+                "y": 2009.001220703125,
+                "z": 2208.900146484375
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 180.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 1,
+            "boxColliderCenter": {
+                "x": -0.23261168599128724,
+                "y": 1.8797070980072022,
+                "z": -0.0327681303024292
+            },
+            "boxColliderSize": {
+                "x": 1.8976855278015137,
+                "y": 3.7594141960144045,
+                "z": 1.1058956384658814
+            }
+        },
+        {
+            "name": "SM_Prop_Vending_Machine_03",
+            "meshName": "SM_Prop_Vending_Machine_03.fbx",
+            "position": {
+                "x": 8089.34033203125,
+                "y": 2009.001220703125,
+                "z": 2195.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 180.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 1,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 1.7913342714309693,
+                "z": 0.25094684958457949
+            },
+            "boxColliderSize": {
+                "x": 1.6998097896575928,
+                "y": 3.613731622695923,
+                "z": 2.1115238666534426
+            }
+        },
+        {
+            "name": "SM_Prop_Vending_Machine_04",
+            "meshName": "SM_Prop_Vending_Machine_04.fbx",
+            "position": {
+                "x": 8334.0400390625,
+                "y": 2009.001220703125,
+                "z": 2217.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 180.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 1,
+            "boxColliderCenter": {
+                "x": 0.06199365854263306,
+                "y": 1.1862889528274537,
+                "z": 0.11207568645477295
+            },
+            "boxColliderSize": {
+                "x": 1.3175897598266602,
+                "y": 2.2633755207061769,
+                "z": 1.4421008825302125
+            }
+        }
+    ]
+}
