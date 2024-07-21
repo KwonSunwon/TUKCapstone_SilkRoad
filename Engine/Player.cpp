@@ -33,6 +33,16 @@ void Player::Awake()
 	m_fireInfo.bulletType = BulletType::BASIC;
 	m_fireInfo.explosionDamage = 100.f;
 	m_fireInfo.explosionSize = 500.f;
+
+	std::ifstream upgradeFile("upgrade.txt");
+	if (upgradeFile.is_open()) {
+		for (int i = 0; i < 10; ++i) {
+			// 파일에서 정수를 읽어와 배열에 저장
+			upgradeFile >> m_upgradeLevels[i];
+		}
+		upgradeFile.close();
+	}
+
 }
 void Player::Update()
 {

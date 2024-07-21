@@ -891,9 +891,9 @@ shared_ptr<class Scene> LoadMainScene()
 #pragma region Item
 	{
 
-		for (int i = 0; i < 16; ++i) {
+		/*for (int i = 0; i < 16; ++i) {
 			scene->AddGameObject(GET_SINGLE(Resources)->LoadItemPrefab(i, Vec3(2500.f, 400.f, 3000.f+100.f*i)));
-		}
+		}*/
 
 		
 		scene->AddGameObject(GET_SINGLE(Resources)->LoadItemPrefab(0, Vec3(27328, 220, 7446)));

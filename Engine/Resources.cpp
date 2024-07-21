@@ -338,7 +338,7 @@ shared_ptr<GameObject> Resources::LoadItemPrefab(int id, Vec3 location)
 			meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Item_Ham.fbx");
 			break;
 
-		case 5:
+		/*case 5:
 			meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Item_Axe.fbx");
 			break;
 
@@ -380,11 +380,11 @@ shared_ptr<GameObject> Resources::LoadItemPrefab(int id, Vec3 location)
 
 		case 15:
 			meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Item_Sword.fbx");
-			break;
+			break;*/
 
-		case 16:
+		/*case 16:
 			meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Item_TV.fbx");
-			break;
+			break;*/
 
 		default:
 			break;
