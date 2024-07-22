@@ -453,7 +453,23 @@ void Resources::LoadEnemyPrefab(int modelNum, Vec3 Location, Vec3 Scale, float h
 	switch (modelNum)
 	{
 	case 0:
-		meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\BR_Characters.fbx");
+		meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Enemy_Spike.fbx");
+		break;
+
+	case 1:
+		meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Enemy_Ice.fbx");
+		break;
+
+	case 2:
+		meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Enemy_Armor.fbx");
+		break;
+
+	case 3:
+		meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Enemy_Cocker.fbx");
+		break;
+
+	case 4:
+		meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Enemy_Combat.fbx");
 		break;
 
 	default:

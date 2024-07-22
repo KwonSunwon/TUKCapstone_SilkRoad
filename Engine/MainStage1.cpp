@@ -79,7 +79,7 @@ shared_ptr<class Scene> LoadMainScene()
 		camera->SetName(L"Main_Camera");
 		camera->AddComponent(make_shared<Transform>());
 		camera->AddComponent(make_shared<Camera>()); // Near=1, Far=1000, FOV=45��
-		//camera->AddComponent(make_shared<TestCameraScript>());
+		camera->AddComponent(make_shared<TestCameraScript>());
 		camera->GetCamera()->SetFar(100000.f);
 		camera->GetTransform()->SetLocalPosition(Vec3(0.f, 900.f, 0.f));
 		uint8 layerIndex = GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI");
@@ -273,7 +273,7 @@ shared_ptr<class Scene> LoadMainScene()
 #pragma region Characters Setting Example
 	{
 		int idx = 0;
-		shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Characters.fbx");
+		shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\HealerCharacter.fbx");
 		vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
 		shared_ptr<GameObject> go = gameObjects[idx];
 		//Transform 설정
@@ -333,7 +333,7 @@ shared_ptr<class Scene> LoadMainScene()
 		{
 			shared_ptr<Camera> camera = scene->GetMainCamera();
 			camera->GetTransform()->SetParent(go->GetTransform());
-			camera->GetTransform()->SetLocalPosition(Vec3(0.f, 140.f, 40.f));
+			camera->GetTransform()->SetLocalPosition(Vec3(0.f, 170.f, 40.f));
 			camera->GetTransform()->SetLocalRotation(Vec3(XMConvertToRadians(10.f), XMConvertToRadians(0.f), XMConvertToRadians(0.f)));
 		}
 
@@ -568,14 +568,14 @@ shared_ptr<class Scene> LoadMainScene()
 	{
 		for(int i = 0; i < 5; ++i)
 		{
-			GET_SINGLE(Resources)->LoadEnemyPrefab(0, Vec3(10000 + (i / 2) * 1000.f, 1500.f, 6721 + i % 2 * 1000.f), Vec3(1.2f, 1.2f, 1.2f), 100.f, scene);
+			GET_SINGLE(Resources)->LoadEnemyPrefab(i, Vec3(10000 + (i / 2) * 1000.f, 1500.f, 6721 + i % 2 * 1000.f), Vec3(1.2f, 1.2f, 1.2f), 100.f, scene);
 		}
 	}
 
 	{
 		for(int i = 0; i < 5; ++i)
 		{
-			GET_SINGLE(Resources)->LoadEnemyPrefab(0, Vec3(27328 + (i / 2) * 1000.f, 1500.f, 7446 + i % 2 * 1000.f), Vec3(1.2f, 1.2f, 1.2f), 100.f, scene);
+			GET_SINGLE(Resources)->LoadEnemyPrefab(i, Vec3(27328 + (i / 2) * 1000.f, 1500.f, 7446 + i % 2 * 1000.f), Vec3(1.2f, 1.2f, 1.2f), 100.f, scene);
 			
 		}
 	}
@@ -583,7 +583,7 @@ shared_ptr<class Scene> LoadMainScene()
 	{
 		for (int i = 0; i < 5; ++i)
 		{
-			GET_SINGLE(Resources)->LoadEnemyPrefab(0, Vec3(28623 + (i / 2) * 1000.f, 1500.f, 15045 + i % 2 * 1000.f), Vec3(1.2f, 1.2f, 1.2f), 100.f, scene);
+			GET_SINGLE(Resources)->LoadEnemyPrefab(i, Vec3(28623 + (i / 2) * 1000.f, 1500.f, 15045 + i % 2 * 1000.f), Vec3(1.2f, 1.2f, 1.2f), 100.f, scene);
 		}
 	}
 #pragma endregion
@@ -592,7 +592,7 @@ shared_ptr<class Scene> LoadMainScene()
 		for(int i = 0; i < 6; ++i)
 		{
 			int idx = 0;
-			shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\BR_Characters.fbx");
+			shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Enemy_Spike.fbx");
 			vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
 			shared_ptr<GameObject> go = gameObjects[idx];
 			//Transform 설정
