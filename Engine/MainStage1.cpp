@@ -273,7 +273,7 @@ shared_ptr<class Scene> LoadMainScene()
 #pragma region Characters Setting Example
 	{
 		int idx = 0;
-		shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\HealerCharacter.fbx");
+		shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Character_Launcher.fbx");
 		vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
 		shared_ptr<GameObject> go = gameObjects[idx];
 		//Transform 설정
@@ -333,7 +333,7 @@ shared_ptr<class Scene> LoadMainScene()
 		{
 			shared_ptr<Camera> camera = scene->GetMainCamera();
 			camera->GetTransform()->SetParent(go->GetTransform());
-			camera->GetTransform()->SetLocalPosition(Vec3(0.f, 170.f, 40.f));
+			camera->GetTransform()->SetLocalPosition(Vec3(0.f, 195.f, 40.f));
 			camera->GetTransform()->SetLocalRotation(Vec3(XMConvertToRadians(10.f), XMConvertToRadians(0.f), XMConvertToRadians(0.f)));
 		}
 
