@@ -1,3 +1,3 @@
 #pragma once
 
-shared_ptr<class Scene> LoadMainScene();
+shared_ptr<class Scene> LoadMainScene1();

@@ -33,6 +33,7 @@ public:
 	virtual void SetExtent(Vec3 extent) = 0;
 	virtual void SetRotation(Vec3 rotation) = 0;
 	void SetOffset(Vec3 offset) { m_offset = offset; }
+	Vec3 GetOffset() { return m_offset; }
 
 	void setColor(Vec4 color, bool active);
 

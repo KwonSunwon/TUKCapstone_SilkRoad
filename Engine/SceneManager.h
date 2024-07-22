@@ -26,7 +26,9 @@ public:
 	shared_ptr<class GameObject> Pick(int32 screenX, int32 screenY);
 
 
-	bool reset = false;
+	void StartStage(int stage) { s = stage; reset = true; }
+	void StartNextStage() { s++; reset = true; }
+	void ResetStage() { reset = true; }
 public:
 	shared_ptr<Scene> GetActiveScene() { return m_activeScene; }
 
@@ -43,6 +45,7 @@ private:
 	map<wstring, uint8> m_layerIndex;
 
 	int m_iterations = 1;
-	int s = 0;
+	int s = -1;
+	bool reset = false;
 };
 

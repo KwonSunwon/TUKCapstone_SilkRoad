@@ -30,6 +30,9 @@
 #include "PlayerBullet.h"
 #include "Enemy.h"
 #include "MainStage1.h"
+#include "Mainstage2.h"
+#include "MainStage3.h"
+#include "LobbyStage.h"
 #include "Network.h"
 
 #include "UIObject.h"
@@ -52,21 +55,34 @@ void SceneManager::Update()
 		m_activeScene->testCollision();
 	}
 
-	if (reset && s == 1) {
+	if (reset)
+	{
+		switch (s)
+		{
+		case 0:
+			m_activeScene = LoadLobbyScene();
+			m_activeScene->Awake();
+			m_activeScene->Start();
+			break;
+		case 1:
+			m_activeScene = LoadMainScene1();
+			m_activeScene->Awake();
+			m_activeScene->Start();
+			break;
+		case 2:
+			m_activeScene = LoadMainScene2();
+			m_activeScene->Awake();
+			m_activeScene->Start();
+			break;
+		case 3:
+			m_activeScene = LoadMainScene3();
+			m_activeScene->Awake();
+			m_activeScene->Start();
+			break;
+		}
+
 		reset = false;
-		m_activeScene = LoadMainScene();
-		s = 2;
-		m_activeScene->Awake();
-		m_activeScene->Start();
 	}
-
-	if (reset) {
-
-		s = 1;
-	}
-
-
-
 }
 
 // TEMP

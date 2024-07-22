@@ -41,7 +41,7 @@
 
 #include "SoundManager.h"
 #include "EnemyHP.h"
-shared_ptr<class Scene> LoadMainScene()
+shared_ptr<class Scene> LoadMainScene1()
 {
 	GET_SINGLE(SoundManager)->soundPlay(Sounds::BGM_SPACE);
 
@@ -156,7 +156,7 @@ shared_ptr<class Scene> LoadMainScene()
 		obj->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 0.f));
 		obj->SetStatic(true);
 		obj->SetShadow(true);
-		obj->GetTerrain()->Init(64, 64);
+		obj->GetTerrain()->Init(64, 64, 1);
 		obj->SetCheckFrustum(false);
 
 		{
@@ -247,7 +247,7 @@ shared_ptr<class Scene> LoadMainScene()
 		scene->AddTextObject(loadingText);
 
 		auto debugText = make_shared<DebugTextObject>();
-		//scene->AddTextObject(debugText);
+		scene->AddTextObject(debugText);
 
 	}
 #pragma endregion
@@ -279,7 +279,7 @@ shared_ptr<class Scene> LoadMainScene()
 		//Transform 설정
 		{
 			shared_ptr<Transform> transform = go->GetTransform();
-			transform->SetLocalPosition(Vec3(2500.f, 1500.f, 2500.f));
+			transform->SetLocalPosition(Vec3(2500.0f, 1000.f, 2200.f));
 			//transform->SetLocalScale(Vec3(1.f, 1.f, 1.f));
 			//transform->SetLocalRotation(Vec3(XMConvertToRadians(0.f), XMConvertToRadians(0.f), XMConvertToRadians(0.f)));
 		}
@@ -689,7 +689,7 @@ shared_ptr<class Scene> LoadMainScene()
 		scene->AddGameObject(GET_SINGLE(Resources)->LoadItemPrefab(1, Vec3(16755, 121, 6721)));
 		scene->AddGameObject(GET_SINGLE(Resources)->LoadItemPrefab(1, Vec3(16835, 121, 6721)));
 		scene->AddGameObject(GET_SINGLE(Resources)->LoadItemPrefab(1, Vec3(16845, 121, 6721)));
-		//scene->AddGameObject(GET_SINGLE(Resources)->LoadItemPrefab(1, Vec3(16855, 121, 6721)));
+		scene->AddGameObject(GET_SINGLE(Resources)->LoadItemPrefab(1, Vec3(16855, 121, 6721)));
 		scene->AddGameObject(GET_SINGLE(Resources)->LoadItemPrefab(2, Vec3(28623, 128, 15045)));
 		scene->AddGameObject(GET_SINGLE(Resources)->LoadItemPrefab(3, Vec3(25451, 121, 24415)));
 		scene->AddGameObject(GET_SINGLE(Resources)->LoadItemPrefab(4, Vec3(25651, 121, 24415)));
