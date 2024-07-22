@@ -12,6 +12,8 @@
 #include "SceneManager.h"
 #include "Scene.h"
 #include "AstarGrid.h"
+#include "MeshRenderer.h"
+#include "Material.h"
 
 shared_ptr<EnemyState> EnemyState::OnUpdateState()
 {
@@ -120,6 +122,9 @@ void EnemyDieState::OnEnter()
 
 shared_ptr<EnemyState> EnemyDieState::OnLateUpdateState()
 {
+	m_enemy->GetMeshRenderer()->GetMaterial()->SetFloat(3, m_dieTime);
+	m_dieTime += DELTA_TIME;
+
 	if (m_enemy->GetAnimator()->IsAnimationEndOnThisFrame())
 	{
 		m_enemy->GetTransform()->SetLocalPosition(Vec3(0, 0, 0));

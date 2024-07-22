@@ -478,6 +478,10 @@ void Resources::LoadEnemyPrefab(int modelNum, Vec3 Location, Vec3 Scale, float h
 
 	vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
 	shared_ptr<GameObject> go = gameObjects[0];
+
+	shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"Noise", L"..\\Resources\\Texture\\noiseTex2.jpg");
+	go->GetMeshRenderer()->GetMaterial()->SetTexture(2, texture);
+
 	//Transform 설정
 	{
 		shared_ptr<Transform> transform = go->GetTransform();
