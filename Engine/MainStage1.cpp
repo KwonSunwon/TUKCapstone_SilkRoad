@@ -41,6 +41,7 @@
 
 #include "SoundManager.h"
 #include "EnemyHP.h"
+
 shared_ptr<class Scene> LoadMainScene1()
 {
 	GET_SINGLE(SoundManager)->soundPlay(Sounds::BGM_SPACE);
@@ -83,7 +84,7 @@ shared_ptr<class Scene> LoadMainScene1()
 		camera->GetCamera()->SetFar(100000.f);
 		camera->GetTransform()->SetLocalPosition(Vec3(0.f, 900.f, 0.f));
 		uint8 layerIndex = GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI");
-		camera->GetCamera()->SetCullingMaskLayerOnOff(layerIndex, false); // UI�� �� ����
+		camera->GetCamera()->SetCullingMaskLayerOnOff(layerIndex, true); // UI�� �� ����
 		scene->AddGameObject(camera);
 	}
 #pragma endregion
@@ -99,7 +100,7 @@ shared_ptr<class Scene> LoadMainScene1()
 		uint8 layerIndex = GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI");
 		camera->GetCamera()->SetCullingMaskAll(); // �� ����
 		camera->GetCamera()->SetCullingMaskLayerOnOff(layerIndex, false); // UI�� ����
-		//scene->AddGameObject(camera);
+		scene->AddGameObject(camera);
 	}
 #pragma endregion
 
@@ -208,7 +209,7 @@ shared_ptr<class Scene> LoadMainScene1()
 		obj->SetLayerIndex(GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI")); // UI
 		obj->AddComponent(make_shared<Transform>());
 		obj->GetTransform()->SetLocalScale(Vec3(100.f, 100.f, 100.f));
-		obj->GetTransform()->SetLocalPosition(Vec3(3000.f + (i * 120), 250.f, 3000.f));
+		obj->GetTransform()->SetLocalPosition(Vec3(-350.f + (i * 120), 250.f, 500.f));
 		shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
 		{
 			shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadRectangleMesh();
@@ -218,9 +219,9 @@ shared_ptr<class Scene> LoadMainScene1()
 			shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"Texture");
 
 			shared_ptr<Texture> texture;
-			if(i < 3)
+			if (i < 3)
 				texture = GEngine->GetRTGroup(RENDER_TARGET_GROUP_TYPE::G_BUFFER)->GetRTTexture(i);
-			else if(i < 5)
+			else if (i < 5)
 				texture = GEngine->GetRTGroup(RENDER_TARGET_GROUP_TYPE::LIGHTING)->GetRTTexture(i - 3);
 			else
 				texture = GEngine->GetRTGroup(RENDER_TARGET_GROUP_TYPE::SHADOW)->GetRTTexture(0);
@@ -248,6 +249,234 @@ shared_ptr<class Scene> LoadMainScene1()
 
 		auto debugText = make_shared<DebugTextObject>();
 		scene->AddTextObject(debugText);
+
+	}
+#pragma endregion
+
+#pragma region HUD
+	{
+		// HP바 베이스
+		{
+			shared_ptr<GameObject> obj = make_shared<GameObject>();
+			obj->SetLayerIndex(GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI")); // UI
+			obj->AddComponent(make_shared<Transform>());
+			shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
+			{
+				shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadRectangleMesh();
+				meshRenderer->SetMesh(mesh);
+			}
+			{
+				shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"AlphaTexture");
+				shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"PlayerHPBarBase", L"..\\Resources\\Texture\\PlayerHPBarBase.png");
+				shared_ptr<Material> material = make_shared<Material>();
+				material->SetShader(shader);
+				material->SetTexture(0, texture);
+
+				meshRenderer->SetMaterial(material);
+			}
+			shared_ptr<UIObject> uiObject = make_shared<UIObject>();
+			uiObject->SetPivot(ePivot::CENTER);
+			uiObject->SetScreenPivot(ePivot::LEFTBOT);
+			uiObject->SetWidth(150.f);
+			uiObject->SetHeight(20.f);
+			uiObject->SetPosition(Vec2(100.f, 50));
+			uiObject->SetZOrder(500);
+
+			obj->AddComponent(uiObject);
+
+			obj->AddComponent(meshRenderer);
+			scene->AddGameObject(obj);
+		}
+		// HP바
+		{
+			shared_ptr<GameObject> obj = make_shared<GameObject>();
+			obj->SetLayerIndex(GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI")); // UI
+			obj->AddComponent(make_shared<Transform>());
+			shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
+			{
+				shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadRectangleMesh();
+				meshRenderer->SetMesh(mesh);
+			}
+			{
+				shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"AlphaTexture");
+				shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"PlayerHPBar", L"..\\Resources\\Texture\\PlayerHPBar.png");
+				shared_ptr<Material> material = make_shared<Material>();
+				material->SetShader(shader);
+				material->SetTexture(0, texture);
+
+				meshRenderer->SetMaterial(material);
+			}
+			shared_ptr<UIObject> uiObject = make_shared<UIObject>();
+			uiObject->SetPivot(ePivot::CENTER);
+			uiObject->SetScreenPivot(ePivot::LEFTBOT);
+			uiObject->SetWidth(145.f);
+			uiObject->SetHeight(15.f);
+			uiObject->SetPosition(Vec2(100.f, 50));
+			uiObject->SetZOrder(490);
+
+			obj->AddComponent(uiObject);
+
+			obj->AddComponent(meshRenderer);
+			scene->AddGameObject(obj);
+		}
+		// HP 텍스트
+		{
+			auto HPText = make_shared<TextObject>();
+			HPText->SetFormat("24L");
+			HPText->SetBrush("WHITE");
+			HPText->SetText(L"100/100");
+			HPText->SetPivot(ePivot::LEFTBOT);
+			HPText->SetScreenPivot(ePivot::LEFTBOT);
+			HPText->SetPosition(Vec2(25, -60));
+			scene->AddTextObject(HPText);
+		}
+
+		// 스킬 아이콘
+		{
+			shared_ptr<GameObject> obj = make_shared<GameObject>();
+			obj->SetLayerIndex(GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI")); // UI
+			obj->AddComponent(make_shared<Transform>());
+			shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
+			{
+				shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadRectangleMesh();
+				meshRenderer->SetMesh(mesh);
+			}
+			{
+				shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"Texture");
+				shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"SkillIcon1", L"..\\Resources\\Texture\\SkillIcon1.png");
+				shared_ptr<Material> material = make_shared<Material>();
+				material->SetShader(shader);
+				material->SetTexture(0, texture);
+
+				meshRenderer->SetMaterial(material);
+			}
+			shared_ptr<UIObject> uiObject = make_shared<UIObject>();
+			uiObject->SetPivot(ePivot::CENTERBOT);
+			uiObject->SetScreenPivot(ePivot::CENTERBOT);
+			uiObject->SetWidth(80.f);
+			uiObject->SetHeight(80.f);
+			uiObject->SetPosition(Vec2(0, 50));
+			uiObject->SetZOrder(400);
+
+			obj->AddComponent(uiObject);
+
+			obj->AddComponent(meshRenderer);
+			scene->AddGameObject(obj);
+		}
+		// 스킬 키보드 아이콘
+		{
+			shared_ptr<GameObject> obj = make_shared<GameObject>();
+			obj->SetLayerIndex(GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI")); // UI
+			obj->AddComponent(make_shared<Transform>());
+			shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
+			{
+				shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadRectangleMesh();
+				meshRenderer->SetMesh(mesh);
+			}
+			{
+				shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"AlphaTexture");
+				shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"keyboard_key_q", L"..\\Resources\\Texture\\keyboard_key_q.png");
+				shared_ptr<Material> material = make_shared<Material>();
+				material->SetShader(shader);
+				material->SetTexture(0, texture);
+
+				meshRenderer->SetMaterial(material);
+			}
+			shared_ptr<UIObject> uiObject = make_shared<UIObject>();
+			uiObject->SetPivot(ePivot::CENTERBOT);
+			uiObject->SetScreenPivot(ePivot::CENTERBOT);
+			uiObject->SetWidth(40.f);
+			uiObject->SetHeight(40.f);
+			uiObject->SetPosition(Vec2(0, 5));
+			uiObject->SetZOrder(400);
+
+			obj->AddComponent(uiObject);
+
+			obj->AddComponent(meshRenderer);
+			scene->AddGameObject(obj);
+		}
+
+		// 캐릭터 스탯
+		{
+			shared_ptr<GameObject> obj = make_shared<GameObject>();
+			obj->SetLayerIndex(GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI")); // UI
+			obj->AddComponent(make_shared<Transform>());
+			shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
+			{
+				shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadRectangleMesh();
+				meshRenderer->SetMesh(mesh);
+			}
+			{
+				shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"AlphaTexture");
+				shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"PlayerStat", L"..\\Resources\\Texture\\PlayerStatBase.png");
+				shared_ptr<Material> material = make_shared<Material>();
+				material->SetShader(shader);
+				material->SetTexture(0, texture);
+
+				meshRenderer->SetMaterial(material);
+			}
+			shared_ptr<UIObject> uiObject = make_shared<UIObject>();
+			uiObject->SetPivot(ePivot::CENTER);
+			uiObject->SetScreenPivot(ePivot::CENTER);
+			uiObject->SetWidth(1400.f);
+			uiObject->SetHeight(700.f);
+			uiObject->SetPosition(Vec2(0, 0));
+			uiObject->SetZOrder(300);
+
+			obj->AddComponent(uiObject);
+
+			obj->AddComponent(meshRenderer);
+			scene->AddGameObject(obj);
+
+			for (int i = 0; i < 17; ++i)
+			{
+				// 아이템 아이콘
+				{
+					shared_ptr<GameObject> obj = make_shared<GameObject>();
+					obj->SetLayerIndex(GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI")); // UI
+					obj->AddComponent(make_shared<Transform>());
+					shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
+					{
+						shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadRectangleMesh();
+						meshRenderer->SetMesh(mesh);
+					}
+					{
+						shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"AlphaTexture");
+						shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"Item_Icon_Axe", L"..\\Resources\\Texture\\ItemIcon\\Item_Icon_Axe.png");
+						shared_ptr<Material> material = make_shared<Material>();
+						material->SetShader(shader);
+						material->SetTexture(0, texture);
+
+						meshRenderer->SetMaterial(material);
+					}
+					shared_ptr<UIObject> uiObject = make_shared<UIObject>();
+					uiObject->SetPivot(ePivot::LEFTTOP);
+					uiObject->SetScreenPivot(ePivot::CENTER);
+					uiObject->SetWidth(80.f);
+					uiObject->SetHeight(80.f);
+					uiObject->SetPosition(Vec2(-695 + (280 * (i % 5)), 340 - (i / 5) * 100) );
+					uiObject->SetZOrder(200);
+
+					obj->AddComponent(uiObject);
+
+					obj->AddComponent(meshRenderer);
+					scene->AddGameObject(obj);
+				}
+
+				// 아이템 텍스트
+				{
+					auto ItemText = make_shared<TextObject>();
+					ItemText->SetFormat("15L");
+					ItemText->SetBrush("WHITE");
+					ItemText->SetText(L"Brilliant Behemoth\nAdds explosion to bullets.\n\n2");
+					ItemText->SetPivot(ePivot::LEFTTOP);
+					ItemText->SetScreenPivot(ePivot::CENTER);
+					ItemText->SetPosition(Vec2(-610 + (280 * (i % 5)), -340 + (i / 5) * 100) );
+					scene->AddTextObject(ItemText);
+				}
+			}
+
+		}
 
 	}
 #pragma endregion
@@ -941,9 +1170,9 @@ shared_ptr<class Scene> LoadMainScene1()
 #pragma region Item
 	{
 
-		/*for (int i = 0; i < 16; ++i) {
+		for (int i = 0; i < 17; ++i) {
 			scene->AddGameObject(GET_SINGLE(Resources)->LoadItemPrefab(i, Vec3(2500.f, 400.f, 3000.f+100.f*i)));
-		}*/
+		}
 
 		
 		scene->AddGameObject(GET_SINGLE(Resources)->LoadItemPrefab(0, Vec3(27328, 220, 7446)));

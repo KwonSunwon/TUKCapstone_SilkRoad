@@ -6,14 +6,13 @@ class TextObject;
 class CanvasObject : public UIObject
 {
 public:
-	CanvasObject(float width, float height);
-	~CanvasObject() = default;
-
 	void OnResize(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 	virtual void OnMouseEvent(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 	virtual void OnMouseEvent(HWND hWnd);
 
+	virtual void Awake();
 	virtual void Update();
+	virtual void LateUpdate();
 
 	void Render2D(const ComPtr<ID2D1DeviceContext2>& device);
 

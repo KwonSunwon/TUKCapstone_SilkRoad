@@ -3,11 +3,6 @@
 #include "TextObject.h"
 #include "Engine.h"
 
-CanvasObject::CanvasObject(float width, float height) : UIObject{ width, height }
-{
-	
-}
-
 void CanvasObject::OnResize(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	for (auto& ui : m_uiObjects)
@@ -32,12 +27,23 @@ void CanvasObject::OnMouseEvent(HWND hWnd)
 		t->OnMouseEvent(hWnd);
 }
 
+void CanvasObject::Awake()
+{
+	UIObject::Awake();
+}
+
 void CanvasObject::Update()
 {
 	for (auto& ui : m_uiObjects)
 		ui->Update();
 	for (auto& t : m_textObjects)
 		t->Update();
+}
+
+void CanvasObject::LateUpdate()
+{
+	for (auto& ui : m_uiObjects)
+		ui->LateUpdate();
 }
 
 void CanvasObject::Render2D(const ComPtr<ID2D1DeviceContext2>& device)

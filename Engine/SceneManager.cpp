@@ -280,12 +280,12 @@ void SceneManager::LoadTextFormats()
 		DWRITE_FONT_WEIGHT_NORMAL,
 		DWRITE_FONT_STYLE_NORMAL,
 		DWRITE_FONT_STRETCH_NORMAL,
-		30,
+		12,
 		L"ko-kr",
-		&TextObject::s_formats["30L"]
+		&TextObject::s_formats["12L"]
 	);
-	TextObject::s_formats["30L"]->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_LEADING);
-	TextObject::s_formats["30L"]->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_FAR);
+	TextObject::s_formats["12L"]->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_LEADING);
+	TextObject::s_formats["12L"]->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_FAR);
 
 	dwFacory->CreateTextFormat(
 		L"NanumSquareR",
@@ -293,12 +293,38 @@ void SceneManager::LoadTextFormats()
 		DWRITE_FONT_WEIGHT_NORMAL,
 		DWRITE_FONT_STYLE_NORMAL,
 		DWRITE_FONT_STRETCH_NORMAL,
-		30,
+		12,
 		L"ko-kr",
-		&TextObject::s_formats["30R"]
+		&TextObject::s_formats["12R"]
 	);
-	TextObject::s_formats["30R"]->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_TRAILING);
-	TextObject::s_formats["30R"]->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_FAR);
+	TextObject::s_formats["12R"]->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_TRAILING);
+	TextObject::s_formats["12R"]->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_FAR);
+
+	dwFacory->CreateTextFormat(
+		L"NanumSquareR",
+		NULL,
+		DWRITE_FONT_WEIGHT_NORMAL,
+		DWRITE_FONT_STYLE_NORMAL,
+		DWRITE_FONT_STRETCH_NORMAL,
+		15,
+		L"ko-kr",
+		&TextObject::s_formats["15L"]
+	);
+	TextObject::s_formats["15L"]->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_LEADING);
+	TextObject::s_formats["15L"]->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_FAR);
+
+	dwFacory->CreateTextFormat(
+		L"NanumSquareR",
+		NULL,
+		DWRITE_FONT_WEIGHT_NORMAL,
+		DWRITE_FONT_STYLE_NORMAL,
+		DWRITE_FONT_STRETCH_NORMAL,
+		15,
+		L"ko-kr",
+		&TextObject::s_formats["15R"]
+	);
+	TextObject::s_formats["15R"]->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_TRAILING);
+	TextObject::s_formats["15R"]->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_FAR);
 
 	dwFacory->CreateTextFormat(
 		L"NanumSquareR",
@@ -325,6 +351,62 @@ void SceneManager::LoadTextFormats()
 	);
 	TextObject::s_formats["18R"]->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_TRAILING);
 	TextObject::s_formats["18R"]->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_FAR);
+
+	dwFacory->CreateTextFormat(
+		L"NanumSquareR",
+		NULL,
+		DWRITE_FONT_WEIGHT_NORMAL,
+		DWRITE_FONT_STYLE_NORMAL,
+		DWRITE_FONT_STRETCH_NORMAL,
+		24,
+		L"ko-kr",
+		&TextObject::s_formats["24L"]
+	);
+	TextObject::s_formats["24L"]->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_LEADING);
+	TextObject::s_formats["24L"]->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_FAR);
+
+	dwFacory->CreateTextFormat(
+		L"NanumSquareR",
+		NULL,
+		DWRITE_FONT_WEIGHT_NORMAL,
+		DWRITE_FONT_STYLE_NORMAL,
+		DWRITE_FONT_STRETCH_NORMAL,
+		24,
+		L"ko-kr",
+		&TextObject::s_formats["24R"]
+	);
+	TextObject::s_formats["24R"]->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_TRAILING);
+	TextObject::s_formats["24R"]->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_FAR);
+
+
+	dwFacory->CreateTextFormat(
+		L"NanumSquareR",
+		NULL,
+		DWRITE_FONT_WEIGHT_NORMAL,
+		DWRITE_FONT_STYLE_NORMAL,
+		DWRITE_FONT_STRETCH_NORMAL,
+		30,
+		L"ko-kr",
+		&TextObject::s_formats["30L"]
+	);
+	TextObject::s_formats["30L"]->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_LEADING);
+	TextObject::s_formats["30L"]->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_FAR);
+
+	dwFacory->CreateTextFormat(
+		L"NanumSquareR",
+		NULL,
+		DWRITE_FONT_WEIGHT_NORMAL,
+		DWRITE_FONT_STYLE_NORMAL,
+		DWRITE_FONT_STRETCH_NORMAL,
+		30,
+		L"ko-kr",
+		&TextObject::s_formats["30R"]
+	);
+	TextObject::s_formats["30R"]->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_TRAILING);
+	TextObject::s_formats["30R"]->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_FAR);
+
+
+
 
 }
 
@@ -399,7 +481,7 @@ shared_ptr<Scene> SceneManager::LoadL()
 		auto loadingText = make_shared<TextObject>();
 		loadingText->SetFormat("default");
 		loadingText->SetBrush("WHITE");
-		loadingText->SetText(L"press number 4 to start");
+		loadingText->SetText(L"press number 5 to start");
 		loadingText->SetPivot(ePivot::CENTER);
 		loadingText->SetScreenPivot(ePivot::CENTER);
 		loadingText->SetPosition(Vec2(0.f, 0.f));
