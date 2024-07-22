@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "MainStage1.h"
+#include "MainStage2.h"
 #include "Scene.h"
 #include "SceneManager.h"
 #include "Engine.h"
@@ -41,7 +41,7 @@
 
 #include "SoundManager.h"
 #include "EnemyHP.h"
-shared_ptr<class Scene> LoadMainScene1()
+shared_ptr<class Scene> LoadMainScene2()
 {
 	GET_SINGLE(SoundManager)->soundPlay(Sounds::BGM_SPACE);
 
@@ -139,7 +139,7 @@ shared_ptr<class Scene> LoadMainScene1()
 		shared_ptr<MapObjectsLoader> loader = make_shared<MapObjectsLoader>();
 		loader->Create(scene);
 
-		loader->Load(L"..\\Resources\\MapData\\ExportedObjects.json");
+		loader->Load(L"..\\Resources\\MapData\\ExportedObjects2.json");
 	}
 #pragma endregion
 
@@ -156,7 +156,7 @@ shared_ptr<class Scene> LoadMainScene1()
 		obj->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 0.f));
 		obj->SetStatic(true);
 		obj->SetShadow(true);
-		obj->GetTerrain()->Init(64, 64, 1);
+		obj->GetTerrain()->Init(64, 64, 2);
 		obj->SetCheckFrustum(false);
 
 		{
@@ -186,7 +186,7 @@ shared_ptr<class Scene> LoadMainScene1()
 			obj->AddComponent(collider);
 		}
 		//디버그용 콜라이더 매쉬 설정
-		if(DEBUG_MODE)
+		if (DEBUG_MODE)
 		{
 			scene->AddGameObject(obj->GetCollider()->GetDebugCollider());
 		}
@@ -202,7 +202,7 @@ shared_ptr<class Scene> LoadMainScene1()
 
 
 #pragma region UI_Test
-	for(int32 i = 0; i < 6; i++)
+	for (int32 i = 0; i < 6; i++)
 	{
 		shared_ptr<GameObject> obj = make_shared<GameObject>();
 		obj->SetLayerIndex(GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI")); // UI
@@ -218,9 +218,9 @@ shared_ptr<class Scene> LoadMainScene1()
 			shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"Texture");
 
 			shared_ptr<Texture> texture;
-			if(i < 3)
+			if (i < 3)
 				texture = GEngine->GetRTGroup(RENDER_TARGET_GROUP_TYPE::G_BUFFER)->GetRTTexture(i);
-			else if(i < 5)
+			else if (i < 5)
 				texture = GEngine->GetRTGroup(RENDER_TARGET_GROUP_TYPE::LIGHTING)->GetRTTexture(i - 3);
 			else
 				texture = GEngine->GetRTGroup(RENDER_TARGET_GROUP_TYPE::SHADOW)->GetRTTexture(0);
@@ -313,7 +313,7 @@ shared_ptr<class Scene> LoadMainScene1()
 		}
 
 		//디버그용 콜라이더 매쉬 설정
-		if(DEBUG_MODE)
+		if (DEBUG_MODE)
 		{
 			scene->AddGameObject(go->GetCollider()->GetDebugCollider());
 		}
@@ -461,7 +461,7 @@ shared_ptr<class Scene> LoadMainScene1()
 		}
 
 		//디버그용 콜라이더 매쉬 설정
-		if(DEBUG_MODE)
+		if (DEBUG_MODE)
 		{
 			scene->AddGameObject(go->GetCollider()->GetDebugCollider());
 		}
@@ -534,7 +534,7 @@ shared_ptr<class Scene> LoadMainScene1()
 		}
 
 		//디버그용 콜라이더 매쉬 설정
-		if(DEBUG_MODE)
+		if (DEBUG_MODE)
 		{
 			scene->AddGameObject(go->GetCollider()->GetDebugCollider());
 		}
@@ -566,7 +566,7 @@ shared_ptr<class Scene> LoadMainScene1()
 
 #pragma region Enemy
 	{
-		for(int i = 0; i < 5; ++i)
+		for (int i = 0; i < 5; ++i)
 		{
 			int idx = 0;
 			shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\BR_Characters.fbx");
@@ -576,7 +576,7 @@ shared_ptr<class Scene> LoadMainScene1()
 			{
 				shared_ptr<Transform> transform = go->GetTransform();
 				transform->SetLocalPosition(Vec3(10000 + (i / 2) * 1000.f, 1500.f, 6721 + i % 2 * 1000.f));
-				if(i == 5)
+				if (i == 5)
 					transform->SetLocalScale(Vec3(12.f, 12.f, 12.f));
 				else
 					transform->SetLocalScale(Vec3(1.2f, 1.2f, 1.2f));
@@ -589,7 +589,7 @@ shared_ptr<class Scene> LoadMainScene1()
 
 				rb->SetStatic(true);
 				rb->SetMass(15000.f);
-				if(i == 5)
+				if (i == 5)
 					rb->SetMass(100000000.f);
 				rb->SetRestitution(0.f);
 				go->SetCheckFrustum(true);
@@ -601,7 +601,7 @@ shared_ptr<class Scene> LoadMainScene1()
 			{
 				//OBB를 사용할 경우 이곳의 주석을 풀어서 사용
 				shared_ptr<OrientedBoxCollider> collider = make_shared<OrientedBoxCollider>();
-				if(i == 5)
+				if (i == 5)
 					collider->SetExtent(Vec3(500, 1000, 500));
 				else
 					collider->SetExtent(Vec3(50, 100, 50));
@@ -611,7 +611,7 @@ shared_ptr<class Scene> LoadMainScene1()
 				collider->SetRadius(100.f);*/
 
 
-				if(i == 5)
+				if (i == 5)
 					collider->SetOffset(Vec3(0, 1000, 0));
 				else
 					collider->SetOffset(Vec3(0, 100, 0));
@@ -619,7 +619,7 @@ shared_ptr<class Scene> LoadMainScene1()
 			}
 
 			//디버그용 콜라이더 매쉬 설정
-			if(DEBUG_MODE)
+			if (DEBUG_MODE)
 			{
 				scene->AddGameObject(go->GetCollider()->GetDebugCollider());
 			}
@@ -676,7 +676,7 @@ shared_ptr<class Scene> LoadMainScene1()
 			}
 
 
-			
+
 
 
 			scene->AddGameObject(go);
@@ -686,7 +686,7 @@ shared_ptr<class Scene> LoadMainScene1()
 
 #pragma region Enemy
 	{
-		for(int i = 0; i < 5; ++i)
+		for (int i = 0; i < 5; ++i)
 		{
 			int idx = 0;
 			shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\BR_Characters.fbx");
@@ -696,7 +696,7 @@ shared_ptr<class Scene> LoadMainScene1()
 			{
 				shared_ptr<Transform> transform = go->GetTransform();
 				transform->SetLocalPosition(Vec3(27328 + (i / 2) * 1000.f, 1500.f, 7446 + i % 2 * 1000.f));
-				if(i == 5)
+				if (i == 5)
 					transform->SetLocalScale(Vec3(12.f, 12.f, 12.f));
 				else
 					transform->SetLocalScale(Vec3(1.2f, 1.2f, 1.2f));
@@ -709,7 +709,7 @@ shared_ptr<class Scene> LoadMainScene1()
 
 				rb->SetStatic(true);
 				rb->SetMass(15000.f);
-				if(i == 5)
+				if (i == 5)
 					rb->SetMass(100000000.f);
 				rb->SetRestitution(0.f);
 				go->SetCheckFrustum(true);
@@ -721,7 +721,7 @@ shared_ptr<class Scene> LoadMainScene1()
 			{
 				//OBB를 사용할 경우 이곳의 주석을 풀어서 사용
 				shared_ptr<OrientedBoxCollider> collider = make_shared<OrientedBoxCollider>();
-				if(i == 5)
+				if (i == 5)
 					collider->SetExtent(Vec3(500, 1000, 500));
 				else
 					collider->SetExtent(Vec3(50, 100, 50));
@@ -731,7 +731,7 @@ shared_ptr<class Scene> LoadMainScene1()
 				collider->SetRadius(100.f);*/
 
 
-				if(i == 5)
+				if (i == 5)
 					collider->SetOffset(Vec3(0, 1000, 0));
 				else
 					collider->SetOffset(Vec3(0, 100, 0));
@@ -739,7 +739,7 @@ shared_ptr<class Scene> LoadMainScene1()
 			}
 
 			//디버그용 콜라이더 매쉬 설정
-			if(DEBUG_MODE)
+			if (DEBUG_MODE)
 			{
 				scene->AddGameObject(go->GetCollider()->GetDebugCollider());
 			}
@@ -770,7 +770,7 @@ shared_ptr<class Scene> LoadMainScene1()
 
 #pragma region Enemy
 	{
-		for(int i = 0; i < 5; ++i)
+		for (int i = 0; i < 5; ++i)
 		{
 			int idx = 0;
 			shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\BR_Characters.fbx");
@@ -780,7 +780,7 @@ shared_ptr<class Scene> LoadMainScene1()
 			{
 				shared_ptr<Transform> transform = go->GetTransform();
 				transform->SetLocalPosition(Vec3(28623 + (i / 2) * 1000.f, 1500.f, 15045 + i % 2 * 1000.f));
-				if(i == 5)
+				if (i == 5)
 					transform->SetLocalScale(Vec3(12.f, 12.f, 12.f));
 				else
 					transform->SetLocalScale(Vec3(1.2f, 1.2f, 1.2f));
@@ -793,7 +793,7 @@ shared_ptr<class Scene> LoadMainScene1()
 
 				rb->SetStatic(true);
 				rb->SetMass(15000.f);
-				if(i == 5)
+				if (i == 5)
 					rb->SetMass(100000000.f);
 				rb->SetRestitution(0.f);
 				go->SetCheckFrustum(true);
@@ -805,7 +805,7 @@ shared_ptr<class Scene> LoadMainScene1()
 			{
 				//OBB를 사용할 경우 이곳의 주석을 풀어서 사용
 				shared_ptr<OrientedBoxCollider> collider = make_shared<OrientedBoxCollider>();
-				if(i == 5)
+				if (i == 5)
 					collider->SetExtent(Vec3(500, 1000, 500));
 				else
 					collider->SetExtent(Vec3(50, 100, 50));
@@ -815,7 +815,7 @@ shared_ptr<class Scene> LoadMainScene1()
 				collider->SetRadius(100.f);*/
 
 
-				if(i == 5)
+				if (i == 5)
 					collider->SetOffset(Vec3(0, 1000, 0));
 				else
 					collider->SetOffset(Vec3(0, 100, 0));
@@ -823,7 +823,7 @@ shared_ptr<class Scene> LoadMainScene1()
 			}
 
 			//디버그용 콜라이더 매쉬 설정
-			if(DEBUG_MODE)
+			if (DEBUG_MODE)
 			{
 				scene->AddGameObject(go->GetCollider()->GetDebugCollider());
 			}
@@ -843,7 +843,7 @@ shared_ptr<class Scene> LoadMainScene1()
 				go->SetShadow(true);
 				enemyScript->SetNetworkId(i + 10);
 				scene->m_enemies[i + 10] = enemyScript;
-				
+
 			}
 
 			scene->AddGameObject(go);
@@ -852,7 +852,7 @@ shared_ptr<class Scene> LoadMainScene1()
 #pragma endregion
 #pragma region Enemy
 	{
-		for(int i = 0; i < 6; ++i)
+		for (int i = 0; i < 6; ++i)
 		{
 			int idx = 0;
 			shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\BR_Characters.fbx");
@@ -862,7 +862,7 @@ shared_ptr<class Scene> LoadMainScene1()
 			{
 				shared_ptr<Transform> transform = go->GetTransform();
 				transform->SetLocalPosition(Vec3(34418 + (i / 3) * 1000.f, 1500.f, 30000 + i % 3 * 1000.f));
-				if(i == 5)
+				if (i == 5)
 					transform->SetLocalScale(Vec3(12.f, 12.f, 12.f));
 				else
 					transform->SetLocalScale(Vec3(1.2f, 1.2f, 1.2f));
@@ -875,7 +875,7 @@ shared_ptr<class Scene> LoadMainScene1()
 
 				rb->SetStatic(true);
 				rb->SetMass(15000.f);
-				if(i == 5)
+				if (i == 5)
 					rb->SetMass(1000000000.f);
 				rb->SetRestitution(0.f);
 				go->SetCheckFrustum(true);
@@ -887,7 +887,7 @@ shared_ptr<class Scene> LoadMainScene1()
 			{
 				//OBB를 사용할 경우 이곳의 주석을 풀어서 사용
 				shared_ptr<OrientedBoxCollider> collider = make_shared<OrientedBoxCollider>();
-				if(i == 5)
+				if (i == 5)
 					collider->SetExtent(Vec3(500, 1000, 500));
 				else
 					collider->SetExtent(Vec3(50, 100, 50));
@@ -897,7 +897,7 @@ shared_ptr<class Scene> LoadMainScene1()
 				collider->SetRadius(100.f);*/
 
 
-				if(i == 5)
+				if (i == 5)
 					collider->SetOffset(Vec3(0, 1000, 0));
 				else
 					collider->SetOffset(Vec3(0, 100, 0));
@@ -905,7 +905,7 @@ shared_ptr<class Scene> LoadMainScene1()
 			}
 
 			//디버그용 콜라이더 매쉬 설정
-			if(DEBUG_MODE)
+			if (DEBUG_MODE)
 			{
 				scene->AddGameObject(go->GetCollider()->GetDebugCollider());
 			}
@@ -925,7 +925,7 @@ shared_ptr<class Scene> LoadMainScene1()
 				go->SetShadow(true);
 				enemyScript->SetNetworkId(i + 15);
 				scene->m_enemies[i + 15] = enemyScript;
-				if(i == 5) {
+				if (i == 5) {
 					enemyScript->SetHP(500);
 					scene->m_bossMonsterScript = enemyScript;
 				}
@@ -945,10 +945,10 @@ shared_ptr<class Scene> LoadMainScene1()
 			scene->AddGameObject(GET_SINGLE(Resources)->LoadItemPrefab(i, Vec3(2500.f, 400.f, 3000.f+100.f*i)));
 		}*/
 
-		
+
 		scene->AddGameObject(GET_SINGLE(Resources)->LoadItemPrefab(0, Vec3(27328, 220, 7446)));
-		
-		
+
+
 
 
 
@@ -983,13 +983,13 @@ shared_ptr<class Scene> LoadMainScene1()
 			shared_ptr<GameObject> gm = gameObjects[idx];
 
 			gm->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
-			gm->GetTransform()->SetLocalPosition(Vec3(12750 + 100 * i, 1500.f + 400.f * i, 15000+ 100*j));
+			gm->GetTransform()->SetLocalPosition(Vec3(12750 + 100 * i, 1500.f + 400.f * i, 15000 + 100 * j));
 
 
 			gm->AddComponent(make_shared<RigidBody>());
 			//gm->AddComponent(make_shared<TestDragon>());
 
-			if(i & 1) {
+			if (i & 1) {
 				gm->AddComponent(make_shared<OrientedBoxCollider>());
 				gm->GetCollider()->SetExtent(Vec3(50, 50, 50));
 				gm->GetCollider()->SetOffset(Vec3(0, 50, 0));
@@ -1016,7 +1016,7 @@ shared_ptr<class Scene> LoadMainScene1()
 				gm->GetMeshRenderer()->GetMaterial()->SetInt(0, 0);
 			}
 
-			if(gm->GetCollider()->GetDebugCollider() != nullptr)
+			if (gm->GetCollider()->GetDebugCollider() != nullptr)
 				scene->AddGameObject(gm->GetCollider()->GetDebugCollider());
 			gm->SetShadow(true);
 			scene->AddGameObject(gm);

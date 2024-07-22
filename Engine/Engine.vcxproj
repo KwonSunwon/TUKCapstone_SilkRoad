@@ -213,8 +213,10 @@
     <ClInclude Include="Item.h" />
     <ClInclude Include="json.hpp" />
     <ClInclude Include="Light.h" />
+    <ClInclude Include="LobbyStage.h" />
     <ClInclude Include="LockQueue.h" />
     <ClInclude Include="MainStage1.h" />
+    <ClInclude Include="MainStage2.h" />
     <ClInclude Include="Manifold.h" />
     <ClInclude Include="MapObjectsLoader.h" />
     <ClInclude Include="Material.h" />
@@ -294,8 +296,10 @@
     <ClCompile Include="InteractiveObject.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="Light.cpp" />
+    <ClCompile Include="LobbyStage.cpp" />
     <ClCompile Include="LockQueue.cpp" />
     <ClCompile Include="MainStage1.cpp" />
+    <ClCompile Include="MainStage2.cpp" />
     <ClCompile Include="Manifold.cpp" />
     <ClCompile Include="MapObjectsLoader.cpp" />
     <ClCompile Include="Material.cpp" />

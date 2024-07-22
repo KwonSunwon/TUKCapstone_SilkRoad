@@ -24,6 +24,7 @@ enum class KEY_TYPE
 	KEY_2 = '2',
 	KEY_3 = '3',
 	KEY_4 = '4',
+	KEY_5 = '5',
 
 	LBUTTON = VK_LBUTTON,
 	RBUTTON = VK_RBUTTON,
@@ -31,7 +32,7 @@ enum class KEY_TYPE
 	ESC = VK_ESCAPE,
 };
 
-static constexpr int NUM_OF_KEYS = 21;
+static constexpr int NUM_OF_KEYS = 22;
 
 constexpr std::array<KEY_TYPE, NUM_OF_KEYS> ALL_KEYS =
 {
@@ -51,6 +52,7 @@ constexpr std::array<KEY_TYPE, NUM_OF_KEYS> ALL_KEYS =
 	KEY_TYPE::KEY_2,
 	KEY_TYPE::KEY_3,
 	KEY_TYPE::KEY_4,
+	KEY_TYPE::KEY_5,
 	KEY_TYPE::LBUTTON,
 	KEY_TYPE::RBUTTON,
 	KEY_TYPE::SPACE,
