@@ -38,9 +38,15 @@ void Network::Update()
 					player->GetTransform()->SetLocalPosition(reinterpret_pointer_cast<MovePacket>(packet)->m_position);
 				}
 			}*/
-			players[packet->m_targetId]->GetTransform()->SetLocalPosition(reinterpret_pointer_cast<MovePacket>(packet)->m_position);
+			// players[packet->m_targetId]->GetTransform()->SetLocalPosition(reinterpret_pointer_cast<MovePacket>(packet)->m_position);
 			break;
 		case PACKET_TYPE::PT_PLAYER:
+			if(packet->m_targetId != 0 && packet->m_targetId != 1 && packet->m_targetId != 2) {
+				OutputDebugString(L"Invalid PlayerPacket targetId\n");
+				break;
+			}
+			if(m_networkState == NETWORK_STATE::HOST && packet->m_targetId == 1)
+				packet->m_targetId = 0;
 			if(packet->m_targetId == 2)
 				packet->m_targetId = 1;
 			GET_SINGLE(SceneManager)->GetActiveScene()->m_networkPlayers[packet->m_targetId]->ProcessPacket(reinterpret_pointer_cast<PlayerPacket>(packet));
@@ -58,8 +64,7 @@ shared_ptr<Packet> Network::PacketProcess()
 {
 	PACKET_TYPE packetType = static_cast<PACKET_TYPE>(m_buffer.Peek(2));
 	shared_ptr<Packet> packet = nullptr;
-	switch(packetType)
-	{
+	switch(packetType) {
 	case PACKET_TYPE::PT_NONE:
 		packet = make_shared<Packet>();
 		break;
@@ -174,8 +179,8 @@ void Host::WaitLoop()
 
 		DWORD optval = TIMEOUT;
 		setsockopt(tempSocket, SOL_SOCKET, SO_RCVTIMEO, (const char*)&optval, sizeof(optval));
-		optval = TRUE;
-		setsockopt(tempSocket, IPPROTO_TCP, TCP_NODELAY, (const char*)&optval, sizeof(optval));
+		/*optval = TRUE;
+		setsockopt(tempSocket, IPPROTO_TCP, TCP_NODELAY, (const char*)&optval, sizeof(optval));*/
 
 		thread connectionThread = thread{ &Host::Connection, this, guest.id };
 		connectionThread.detach();
@@ -229,6 +234,7 @@ void Host::Connection(ushort id)
 		shared_ptr<Packet> packet = nullptr;
 		shared_ptr<char[]> buffer = make_shared<char[]>(BUFFER_SIZE);
 
+		int otherId = id == 1 ? 1 : 0;
 		// Write received data to buffer
 		retval = recv(socket, buffer.get(), BUFFER_SIZE - m_buffer.Size(), 0);
 		if(retval > 0) {
@@ -237,11 +243,10 @@ void Host::Connection(ushort id)
 			ushort packetSize = m_buffer.Peek();
 			while(packetSize <= m_buffer.Size()) {
 				packet = PacketProcess();
-
 				m_receivedPacketQue.Push(packet);
 
 				if(m_guestInfos.size() > 1 && packet->m_type == PACKET_TYPE::PT_PLAYER) {
-					send(m_guestInfos[(id + 1) % 2].socket, (char*)packet.get(), packet->m_size, 0);
+					send(m_guestInfos[otherId].socket, (char*)packet.get(), packet->m_size, 0);
 				}
 
 				packetSize = 0;
@@ -322,6 +327,8 @@ void Guest::Connect()
 	inet_pton(AF_INET, m_serverIP, &serverAddr.sin_addr);
 	serverAddr.sin_port = htons(SERVER_PORT);
 	int retval = connect(m_socket, (struct sockaddr*)&serverAddr, sizeof(serverAddr));
+	OutputDebugString(L"Retval: ");
+	OutputDebugString(to_wstring(retval).c_str());
 	if(retval == SOCKET_ERROR) {
 		//err_display(retval);
 		throw runtime_error("Fail connect server");
@@ -330,11 +337,14 @@ void Guest::Connect()
 	InitPacket initPacket;
 	recv(m_socket, (char*)&initPacket, sizeof(InitPacket), 0);
 	GET_SINGLE(NetworkManager)->m_networkId = initPacket.m_networkId;
+	OutputDebugString(L"NetworkId: ");
+	OutputDebugString(to_wstring(GET_SINGLE(NetworkManager)->m_networkId).c_str());
 
 	DWORD optval = TIMEOUT;
 	setsockopt(m_socket, SOL_SOCKET, SO_RCVTIMEO, (const char*)&optval, sizeof(optval));
-	optval = TRUE;
-	setsockopt(m_socket, IPPROTO_TCP, TCP_NODELAY, (const char*)&optval, sizeof(optval));
+	/*optval = TRUE;
+	setsockopt(m_socket, IPPROTO_TCP, TCP_NODELAY, (const char*)&optval, sizeof(optval));*/
+
 	GET_SINGLE(SceneManager)->GetActiveScene()->m_networkPlayers[0]->m_myNetworkId = 0;
 	if(initPacket.m_networkId == 1) {
 		GET_SINGLE(SceneManager)->GetActiveScene()->m_networkPlayers[1]->m_myNetworkId = 2;
@@ -414,8 +424,6 @@ void Guest::Receiver()
 			ushort packetSize = m_buffer.Peek();
 			while(packetSize <= m_buffer.Size()) {
 				m_receivedPacketQue.Push(PacketProcess());
-
-				m_receivedPacketQue.Push(packet);
 
 				packetSize = 0;
 				packet.reset();
