@@ -37,7 +37,9 @@ void Item::FloatingItem()
 }
 void Item::RotateItem()
 {
-	GetTransform()->SetLocalRotation(Vec3(0.f, m_radian, 0.f));
+	Vec3 rot = GetTransform()->GetLocalRotation();
+	rot.y = m_radian;
+	GetTransform()->SetLocalRotation(rot);
 }
 
 void Item::AddGetItemText()
