@@ -79,6 +79,8 @@ public:
 	array<shared_ptr<GameObject>, 3> m_players;
 	shared_ptr<Player> m_mainPlayerScript;
 	shared_ptr<Enemy> m_bossMonsterScript;
+
+	int AddNetworkObject() { return m_numOfNetworkObject++; }
 private:
 	vector<shared_ptr<GameObject>>		m_gameObjects;
 	vector<shared_ptr<GameObject>>		m_collidableGameObjects;
@@ -87,7 +89,9 @@ private:
 	vector<shared_ptr<class Camera>>	m_cameras;
 	vector<shared_ptr<class Light>>		m_lights;
 	vector<shared_ptr<class Manifold>>	m_contacts;
+
 private:
+	int m_numOfNetworkObject = 0;
 	shared_ptr<OcTree> m_ocTree = make_shared<OcTree>(100000, 1000);
 	shared_ptr<AstarGrid> m_astarGrid = make_shared<AstarGrid>();
 
