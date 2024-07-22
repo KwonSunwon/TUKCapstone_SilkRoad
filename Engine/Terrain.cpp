@@ -51,7 +51,7 @@ void Terrain::Init(int32 sizeX, int32 sizeZ, int stage)
 		diffusePath = L"..\\Resources\\Texture\\Terrain\\terrain2.png";
 		heightMapName = L"HeightMap2";
 		heightMapPath = L"..\\Resources\\Texture\\Terrain\\height2.png";
-		binPath = L"..\\Resources\\Texture\\Terrain\\pixels.bin";
+		binPath = L"..\\Resources\\Texture\\Terrain\\pixels2.bin";
 		break;
 
 	case 3:
@@ -59,7 +59,7 @@ void Terrain::Init(int32 sizeX, int32 sizeZ, int stage)
 		diffusePath = L"..\\Resources\\Texture\\Terrain\\terrain3.png";
 		heightMapName = L"HeightMap3";
 		heightMapPath = L"..\\Resources\\Texture\\Terrain\\height3.png";
-		binPath = L"..\\Resources\\Texture\\Terrain\\pixels.bin";
+		binPath = L"..\\Resources\\Texture\\Terrain\\pixels3.bin";
 		break;
 
 	default:
