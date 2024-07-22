@@ -305,6 +305,9 @@
     <ClCompile Include="LobbyStage.cpp">
       <Filter>Scenes</Filter>
     </ClCompile>
+    <ClCompile Include="MainStage3.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -547,6 +550,9 @@
       <Filter>Scenes</Filter>
     </ClInclude>
     <ClInclude Include="LobbyStage.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="MainStage3.h">
       <Filter>Scenes</Filter>
     </ClInclude>
   </ItemGroup>

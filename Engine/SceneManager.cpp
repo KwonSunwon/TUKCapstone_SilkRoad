@@ -31,6 +31,7 @@
 #include "Enemy.h"
 #include "MainStage1.h"
 #include "Mainstage2.h"
+#include "MainStage3.h"
 #include "LobbyStage.h"
 #include "Network.h"
 
@@ -70,6 +71,11 @@ void SceneManager::Update()
 			break;
 		case 2:
 			m_activeScene = LoadMainScene2();
+			m_activeScene->Awake();
+			m_activeScene->Start();
+			break;
+		case 3:
+			m_activeScene = LoadMainScene3();
 			m_activeScene->Awake();
 			m_activeScene->Start();
 			break;

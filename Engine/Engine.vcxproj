@@ -215,6 +215,7 @@
     <ClInclude Include="Light.h" />
     <ClInclude Include="LobbyStage.h" />
     <ClInclude Include="LockQueue.h" />
+    <ClInclude Include="MainStage3.h" />
     <ClInclude Include="MainStage1.h" />
     <ClInclude Include="MainStage2.h" />
     <ClInclude Include="Manifold.h" />
@@ -300,6 +301,7 @@
     <ClCompile Include="LockQueue.cpp" />
     <ClCompile Include="MainStage1.cpp" />
     <ClCompile Include="MainStage2.cpp" />
+    <ClCompile Include="MainStage3.cpp" />
     <ClCompile Include="Manifold.cpp" />
     <ClCompile Include="MapObjectsLoader.cpp" />
     <ClCompile Include="Material.cpp" />

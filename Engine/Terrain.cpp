@@ -54,6 +54,14 @@ void Terrain::Init(int32 sizeX, int32 sizeZ, int stage)
 		binPath = L"..\\Resources\\Texture\\Terrain\\pixels.bin";
 		break;
 
+	case 3:
+		diffuseName = L"Terrain3";
+		diffusePath = L"..\\Resources\\Texture\\Terrain\\terrain3.png";
+		heightMapName = L"HeightMap3";
+		heightMapPath = L"..\\Resources\\Texture\\Terrain\\height3.png";
+		binPath = L"..\\Resources\\Texture\\Terrain\\pixels.bin";
+		break;
+
 	default:
 		diffuseName = L"Terrain";
 		diffusePath = L"..\\Resources\\Texture\\Terrain\\terrain.png";
