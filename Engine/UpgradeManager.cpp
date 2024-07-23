@@ -54,19 +54,13 @@ void UpgradeManager::ClassChange(int id)
 	default:
 		break;
 	}
-
+	m_charClass = id;
 	
 	vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
-
-	//mainPlayer->AddComponent(gameObjects[0]->GetTransform());
 	mainPlayer->GetMeshRenderer()->SetMesh(gameObjects[0]->GetMeshRenderer()->GetMesh());
-	//mainPlayer->AddComponent(gameObjects[0]->GetMeshRenderer());
 	mainPlayer->AddComponent(gameObjects[0]->GetAnimator());
 
 
-	
-	/*mainPlayer->GetMeshRenderer() = gameObjects[0]->GetMeshRenderer();
-	mainPlayer->GetAnimator() = gameObjects[0]->GetAnimator();*/
 	
 }
 

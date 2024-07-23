@@ -22,9 +22,10 @@
 #include "BaseCollider.h"
 #include "SoundManager.h"
 #include "InteractiveObject.h"
-
+#include "UpgradeManager.h"
 void Player::Awake()
 {
+	GET_SINGLE(UpgradeManager)->SetClass();
 	SetMonovihaviourName("Player");
 	shared_ptr<RigidBody> rb = GetRigidBody();
 	//rb->SetStatic(true);

@@ -22,6 +22,6 @@ private:
 	uint32	m_frameCount = 0;
 	float	m_frameTime = 0.f;
 	uint32	m_fps = 0;
-	bool	m_isDebugMode = true;
+	bool	m_isDebugMode = false;
 };
 
