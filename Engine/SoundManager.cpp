@@ -4,7 +4,7 @@
 void SoundManager::Init()
 {
     FMOD::System_Create(&m_soundSystem);
-    m_soundSystem->init(SOUND_TYPE_COUNT, FMOD_INIT_NORMAL, 0);
+    m_soundSystem->init(256, FMOD_INIT_NORMAL, 0);
 
 
     m_soundSystem->createSound("..\\Resources\\Sound\\BGM_Space.mp3", FMOD_LOOP_NORMAL, 0, &m_sound[BGM_SPACE]);
