@@ -308,6 +308,9 @@
     <ClCompile Include="MainStage3.cpp">
       <Filter>Scenes</Filter>
     </ClCompile>
+    <ClCompile Include="UpgradeManager.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -554,6 +557,9 @@
     </ClInclude>
     <ClInclude Include="MainStage3.h">
       <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="UpgradeManager.h">
+      <Filter>Manager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -11,6 +11,7 @@
 #include "Scene.h"
 #include "Network.h"
 #include "SoundManager.h"
+#include "UpgradeManager.h"
 
 void Engine::Init(const WindowInfo& info)
 {
@@ -43,6 +44,7 @@ void Engine::Init(const WindowInfo& info)
 	GET_SINGLE(Timer)->Init();
 	GET_SINGLE(Resources)->Init();
 	GET_SINGLE(SoundManager)->Init();
+	GET_SINGLE(UpgradeManager)->Init();
 
 	// 서버 생성
 	GET_SINGLE(NetworkManager)->Initialize();

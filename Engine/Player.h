@@ -3,7 +3,7 @@
 #include "PlayerBullet.h"
 #include "Camera.h"
 static array<int, 17> m_itemLevels;
-static array<int, 10> m_upgradeLevels;
+
 
 struct FireInfo {
 	BulletType bulletType = BulletType::BASIC;

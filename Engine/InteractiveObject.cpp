@@ -9,6 +9,7 @@
 #include "Scene.h"
 #include "SceneManager.h"
 #include "Player.h"
+#include "UpgradeManager.h"
 
 
 InteractiveObject::InteractiveObject(int num):Component(COMPONENT_TYPE::INTERACTIVE_OBJECT)
@@ -42,24 +43,29 @@ void InteractiveObject::InteractiveFunction()
 	switch (m_id)
 	{
 	case UPGRADE_MACHINE1:
+		GET_SINGLE(UpgradeManager)->Upgrade(m_id);
 		text->SetText(L"UPGRADE_MACHINE1");
 		break;
 
 	case UPGRADE_MACHINE2:
+		GET_SINGLE(UpgradeManager)->Upgrade(m_id);
 		text->SetText(L"UPGRADE_MACHINE2");
 		break;
 
 
 	case UPGRADE_MACHINE3:
+		GET_SINGLE(UpgradeManager)->Upgrade(m_id);
 		text->SetText(L"UPGRADE_MACHINE3");
 		break;
 
 
 	case UPGRADE_MACHINE4:
+		GET_SINGLE(UpgradeManager)->Upgrade(m_id);
 		text->SetText(L"UPGRADE_MACHINE4");
 		break;
 
 	case UPGRADE_MACHINE5:
+		GET_SINGLE(UpgradeManager)->Upgrade(m_id);
 		text->SetText(L"UPGRADE_MACHINE5");
 		break;
 
