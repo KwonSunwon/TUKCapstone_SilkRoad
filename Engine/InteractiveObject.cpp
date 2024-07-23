@@ -70,6 +70,7 @@ void InteractiveObject::InteractiveFunction()
 		break;
 
 	case CHARACTER_CHANGER1:
+		GET_SINGLE(UpgradeManager)->ClassChange(m_id);
 		text->SetText(L"CHARACTER_CHANGER1");
 		break;
 

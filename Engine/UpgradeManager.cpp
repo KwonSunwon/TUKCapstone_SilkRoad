@@ -1,6 +1,14 @@
 #include "pch.h"
 #include "UpgradeManager.h"
 #include "SoundManager.h"
+#include "SceneManager.h"
+#include "Scene.h"
+#include "Player.h"
+#include "GameObject.h"
+#include "MeshRenderer.h"
+#include "Resources.h"
+#include "MeshData.h"
+#include "Mesh.h"
 
 void UpgradeManager::Init()
 {
@@ -12,6 +20,16 @@ void UpgradeManager::Init()
 		}
 		upgradeFile.close();
 	}
+	shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Character_Dealer.fbx");
+}
+
+void UpgradeManager::ClassChange(int id)
+{
+	shared_ptr<GameObject> mainPlayer = GET_SINGLE(SceneManager)->GetActiveScene()->m_mainPlayerScript->GetGameObject();
+	shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Character_Dealer.fbx");
+	vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
+	mainPlayer->GetMeshRenderer()->SetMesh(gameObjects[0]->GetMeshRenderer()->GetMesh());
+	
 }
 
 void UpgradeManager::Upgrade(int id)

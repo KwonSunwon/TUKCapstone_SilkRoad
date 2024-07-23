@@ -6,6 +6,7 @@ class UpgradeManager
 public:
     void Upgrade(int id);
     void Init();
+    void ClassChange(int id);
 
 private:
 
