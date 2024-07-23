@@ -43,6 +43,7 @@
 #include "EnemyHP.h"
 shared_ptr<class Scene> LoadLobbyScene()
 {
+	GET_SINGLE(SoundManager)->soundStop(Sounds::BGM_SPACE);
 	GET_SINGLE(SoundManager)->soundPlay(Sounds::BGM_SPACE);
 
 #pragma region LayerMask
@@ -291,6 +292,8 @@ shared_ptr<class Scene> LoadLobbyScene()
 			Vec3 center = XMVector3Transform(gm->GetCollider()->GetOffset(), rotationMatrix);
 			gm->GetCollider()->SetOffset(center);
 
+			gm->AddComponent(make_shared<InteractiveObject>(i));
+
 			scene->AddGameObject(gm);
 		}
 		
@@ -371,7 +374,7 @@ shared_ptr<class Scene> LoadLobbyScene()
 #pragma region Characters Setting Example
 	{
 		int idx = 0;
-		shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Characters.fbx");
+		shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Character_Launcher.fbx");
 		vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
 		shared_ptr<GameObject> go = gameObjects[idx];
 		//Transform 설정
@@ -431,7 +434,7 @@ shared_ptr<class Scene> LoadLobbyScene()
 		{
 			shared_ptr<Camera> camera = scene->GetMainCamera();
 			camera->GetTransform()->SetParent(go->GetTransform());
-			camera->GetTransform()->SetLocalPosition(Vec3(0.f, 140.f, 40.f));
+			camera->GetTransform()->SetLocalPosition(Vec3(0.f, 185.f, 40.f));
 			camera->GetTransform()->SetLocalRotation(Vec3(XMConvertToRadians(10.f), XMConvertToRadians(0.f), XMConvertToRadians(0.f)));
 		}
 

@@ -43,6 +43,7 @@
 #include "EnemyHP.h"
 shared_ptr<class Scene> LoadMainScene1()
 {
+	GET_SINGLE(SoundManager)->soundStop(Sounds::BGM_SPACE);
 	GET_SINGLE(SoundManager)->soundPlay(Sounds::BGM_SPACE);
 
 #pragma region LayerMask

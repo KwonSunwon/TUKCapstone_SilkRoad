@@ -48,6 +48,42 @@ void Player::Update()
 {
 	ProcessGetItem();
 	InteracitveObjectPick();
+	if (INPUT->GetButtonDown(KEY_TYPE::Q))
+	{
+		float minDistance = FLT_MAX;
+		vector<shared_ptr<GameObject>>gameObjects = GET_SINGLE(SceneManager)->GetActiveScene()->GetInteractiveGameObjects();
+		Vec3 cameraPos = m_playerCamera->GetTransform()->GetWorldPosition();
+		Vec3 cameraDir = m_playerCamera->GetTransform()->GetLook();
+		shared_ptr<GameObject> picked;
+
+		Vec4 rayOrigin = Vec4(cameraPos.x, cameraPos.y, cameraPos.z, 1.0f);
+		Vec4 rayDir = Vec4(cameraDir.x, cameraDir.y, cameraDir.z, 0.0f);
+		for (auto& gameObject : gameObjects) {
+
+
+			float distance = 0.f;
+			if (gameObject->GetCollider()->Intersects(rayOrigin, rayDir, OUT distance) == false)
+				continue;
+
+			if (gameObject->GetMonobehaviour("Player"))
+				continue;
+
+			if (distance > 250.f) {
+				continue;
+			}
+
+			if (distance < minDistance)
+			{
+				minDistance = distance;
+				picked = gameObject;
+			}
+		}
+
+		if (picked)
+			picked->GetInteractiveObject()->InteractiveFunction();
+
+		
+	}
 
 	shared_ptr<Transform> transform = GetTransform();
 	shared_ptr<RigidBody> rb = GetRigidBody();
@@ -211,9 +247,11 @@ void Player::InteracitveObjectPick()
 	if (!picked)
 		return;
 
-	shared_ptr<MonoBehaviour> scriptI = picked->GetMonobehaviour("InteractiveObject");
+	picked->GetInteractiveObject()->PrintInteractiveText();
+
+	/*shared_ptr<MonoBehaviour> scriptI = picked->GetMonobehaviour("InteractiveObject");
 	shared_ptr<InteractiveObject> interactiveObjectScript = dynamic_pointer_cast<InteractiveObject>(scriptI);
-	interactiveObjectScript->PrintInteractiveText();
+	interactiveObjectScript->PrintInteractiveText();*/
 
 
 }

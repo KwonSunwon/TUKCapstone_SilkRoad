@@ -43,6 +43,7 @@
 #include "EnemyHP.h"
 shared_ptr<class Scene> LoadMainScene2()
 {
+	GET_SINGLE(SoundManager)->soundStop(Sounds::BGM_SPACE);
 	GET_SINGLE(SoundManager)->soundPlay(Sounds::BGM_SPACE);
 
 #pragma region LayerMask
@@ -273,7 +274,7 @@ shared_ptr<class Scene> LoadMainScene2()
 #pragma region Characters Setting Example
 	{
 		int idx = 0;
-		shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Characters.fbx");
+		shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Character_Launcher.fbx");
 		vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
 		shared_ptr<GameObject> go = gameObjects[idx];
 		//Transform 설정
@@ -569,7 +570,7 @@ shared_ptr<class Scene> LoadMainScene2()
 		for (int i = 0; i < 5; ++i)
 		{
 			int idx = 0;
-			shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\BR_Characters.fbx");
+			shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Enemy_Armor.fbx");
 			vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
 			shared_ptr<GameObject> go = gameObjects[idx];
 			//Transform 설정
@@ -689,7 +690,7 @@ shared_ptr<class Scene> LoadMainScene2()
 		for (int i = 0; i < 5; ++i)
 		{
 			int idx = 0;
-			shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\BR_Characters.fbx");
+			shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Enemy_Armor.fbx");
 			vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
 			shared_ptr<GameObject> go = gameObjects[idx];
 			//Transform 설정
@@ -773,7 +774,7 @@ shared_ptr<class Scene> LoadMainScene2()
 		for (int i = 0; i < 5; ++i)
 		{
 			int idx = 0;
-			shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\BR_Characters.fbx");
+			shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Enemy_Armor.fbx");
 			vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
 			shared_ptr<GameObject> go = gameObjects[idx];
 			//Transform 설정
@@ -855,7 +856,7 @@ shared_ptr<class Scene> LoadMainScene2()
 		for (int i = 0; i < 6; ++i)
 		{
 			int idx = 0;
-			shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\BR_Characters.fbx");
+			shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Enemy_Armor.fbx");
 			vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
 			shared_ptr<GameObject> go = gameObjects[idx];
 			//Transform 설정

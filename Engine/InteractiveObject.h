@@ -6,11 +6,29 @@
 
 #pragma once
 #include "Component.h"
+#include "TextObject.h"
+
+
+enum EnumInteract
+{
+	UPGRADE_MACHINE1,
+	UPGRADE_MACHINE2,
+	UPGRADE_MACHINE3,
+	UPGRADE_MACHINE4,
+	UPGRADE_MACHINE5,
+	CHARACTER_CHANGER1,
+	CHARACTER_CHANGER2,
+	CHARACTER_CHANGER3,
+	CHARACTER_CHANGER4,
+	INTERACT_TYPE_COUNT
+};
+
+
 class InteractiveObject : public Component
 {
 
 public :
-	InteractiveObject();
+	InteractiveObject(int num);
 
 	virtual void Awake() override;
 	//virtual void Update() override;
@@ -22,7 +40,8 @@ public:
 
 private:
 	float m_timer = 0.f;
-
+	shared_ptr<TextObject> m_textObject;
+	int m_id = -1;
 };
 
 
