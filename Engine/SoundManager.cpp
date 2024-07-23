@@ -35,7 +35,8 @@ void SoundManager::soundPlay(int _type)
 
 void SoundManager::soundStop(int _type)
 {
-    //m_channel->stop();
+    m_channel[_type]->stop();
+    m_soundSystem->update();
 }
 
 
