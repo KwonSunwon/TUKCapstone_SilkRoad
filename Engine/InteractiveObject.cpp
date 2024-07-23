@@ -75,14 +75,17 @@ void InteractiveObject::InteractiveFunction()
 		break;
 
 	case CHARACTER_CHANGER2:
+		GET_SINGLE(UpgradeManager)->ClassChange(m_id);
 		text->SetText(L"CHARACTER_CHANGER2");
 		break;
 
 	case CHARACTER_CHANGER3:
+		GET_SINGLE(UpgradeManager)->ClassChange(m_id);
 		text->SetText(L"CHARACTER_CHANGER3");
 		break;
 
 	case CHARACTER_CHANGER4:
+		GET_SINGLE(UpgradeManager)->ClassChange(m_id);
 		text->SetText(L"CHARACTER_CHANGER4");
 		break;
 

@@ -9,7 +9,8 @@
 #include "Resources.h"
 #include "MeshData.h"
 #include "Mesh.h"
-
+#include "InteractiveObject.h"
+#include "Animator.h"
 void UpgradeManager::Init()
 {
 	std::ifstream upgradeFile("upgrade.txt");
@@ -20,15 +21,52 @@ void UpgradeManager::Init()
 		}
 		upgradeFile.close();
 	}
-	shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Character_Dealer.fbx");
+	GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Character_Dealer.fbx");
+	GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Character_Healer.fbx");
+	GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Character_Launcher.fbx");
+	GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Character_Tanker.fbx");
 }
 
 void UpgradeManager::ClassChange(int id)
 {
+	GET_SINGLE(SoundManager)->soundPlay(Sounds::ENV_EAT_ITEM);
 	shared_ptr<GameObject> mainPlayer = GET_SINGLE(SceneManager)->GetActiveScene()->m_mainPlayerScript->GetGameObject();
-	shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Character_Dealer.fbx");
+	shared_ptr<MeshData> meshData;
+
+	switch (id)
+	{
+	case EnumInteract::CHARACTER_CHANGER1:
+		meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Character_Dealer.fbx");
+		break;
+
+	case EnumInteract::CHARACTER_CHANGER2:
+		meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Character_Healer.fbx");
+		break;
+
+	case EnumInteract::CHARACTER_CHANGER3:
+		meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Character_Launcher.fbx");
+		break;
+
+	case EnumInteract::CHARACTER_CHANGER4:
+		meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Character_Tanker.fbx");
+		break;
+
+	default:
+		break;
+	}
+
+	
 	vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
+
+	//mainPlayer->AddComponent(gameObjects[0]->GetTransform());
 	mainPlayer->GetMeshRenderer()->SetMesh(gameObjects[0]->GetMeshRenderer()->GetMesh());
+	//mainPlayer->AddComponent(gameObjects[0]->GetMeshRenderer());
+	mainPlayer->AddComponent(gameObjects[0]->GetAnimator());
+
+
+	
+	/*mainPlayer->GetMeshRenderer() = gameObjects[0]->GetMeshRenderer();
+	mainPlayer->GetAnimator() = gameObjects[0]->GetAnimator();*/
 	
 }
 
