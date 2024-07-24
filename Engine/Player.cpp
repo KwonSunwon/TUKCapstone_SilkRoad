@@ -192,7 +192,9 @@ void Player::Fire()
 
 	}
 
-
+	if (!picked->GetRigidBody()->GetStatic()) {
+		picked->GetRigidBody()->AddForce(Vec3(rayDir) * m_knockBackPower * 1000000.f);
+	}
 	
 	//총알 사용할때 코드
 	//m_bullets[m_bulletPivot++]->Fire(shared_from_this(), m_fireInfo);
