@@ -324,7 +324,7 @@ DebugTextObject::DebugTextObject()
 	m_camera = nullptr;
 
 	SetBrush("WHITE");
-	SetFormat("18L");
+	SetFormat("15L");
 	SetText(L"");
 	SetPivot(ePivot::LEFTTOP);
 	SetScreenPivot(ePivot::LEFTTOP);

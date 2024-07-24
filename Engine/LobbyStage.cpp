@@ -84,7 +84,7 @@ shared_ptr<class Scene> LoadLobbyScene()
 		camera->GetCamera()->SetFar(100000.f);
 		camera->GetTransform()->SetLocalPosition(Vec3(0.f, 900.f, 0.f));
 		uint8 layerIndex = GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI");
-		camera->GetCamera()->SetCullingMaskLayerOnOff(layerIndex, false); // UI�� �� ����
+		camera->GetCamera()->SetCullingMaskLayerOnOff(layerIndex, true); // UI�� �� ����
 		scene->AddGameObject(camera);
 	}
 #pragma endregion
@@ -100,7 +100,7 @@ shared_ptr<class Scene> LoadLobbyScene()
 		uint8 layerIndex = GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI");
 		camera->GetCamera()->SetCullingMaskAll(); // �� ����
 		camera->GetCamera()->SetCullingMaskLayerOnOff(layerIndex, false); // UI�� ����
-		//scene->AddGameObject(camera);
+		scene->AddGameObject(camera);
 	}
 #pragma endregion
 
@@ -309,7 +309,7 @@ shared_ptr<class Scene> LoadLobbyScene()
 		obj->SetLayerIndex(GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI")); // UI
 		obj->AddComponent(make_shared<Transform>());
 		obj->GetTransform()->SetLocalScale(Vec3(100.f, 100.f, 100.f));
-		obj->GetTransform()->SetLocalPosition(Vec3(3000.f + (i * 120), 250.f, 3000.f));
+		obj->GetTransform()->SetLocalPosition(Vec3(-350.f + (i * 120), 250.f, 500.f));
 		shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
 		{
 			shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadRectangleMesh();

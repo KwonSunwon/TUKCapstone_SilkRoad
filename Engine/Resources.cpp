@@ -320,6 +320,8 @@ shared_ptr<GameObject> Resources::LoadItemPrefab(int id, Vec3 location)
 	{
 		int idx = 0;
 		shared_ptr<MeshData> meshData = make_shared<MeshData>();
+		Vec3 scale = Vec3(1.f, 1.f, 1.f);
+		Vec3 rotation = Vec3(0.f, 0.f, 0.f);
 		switch (id) {
 		case 0:
 			 meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Item_Bomb.fbx");
@@ -331,6 +333,7 @@ shared_ptr<GameObject> Resources::LoadItemPrefab(int id, Vec3 location)
 
 		case 2:
 			meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Item_Cylinder.fbx");
+			scale = Vec3(2, 2, 2);
 			break;
 
 		case 3:
@@ -341,53 +344,68 @@ shared_ptr<GameObject> Resources::LoadItemPrefab(int id, Vec3 location)
 			meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Item_Ham.fbx");
 			break;
 
-		/*case 5:
+		case 5:
 			meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Item_Axe.fbx");
+			scale = Vec3(1.5f, 1.5f, 1.5f);
 			break;
 
 		case 6:
 			meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Item_Cola_Can.fbx");
+			scale = Vec3(4, 4, 4);
 			break;
 
 		case 7:
-			meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Item_Cola_Can.fbx");
+			meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Item_Food.fbx");
+			scale = Vec3(3, 3, 3);
 			break;
 
 		case 8:
-			meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Item_Cylinder_02.fbx");
+			meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Item_Hammer.fbx");
+			scale = Vec3(1.5f, 1.5f, 1.5f);
 			break;
 
 		case 9:
-			meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Item_Cylinder_03.fbx");
+			meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Item_Pouch.fbx");
+			scale = Vec3(4, 4, 4);
 			break;
 
 		case 10:
 			meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Item_Fork.fbx");
+			scale = Vec3(4, 4, 4);
+			rotation = Vec3(3.14 / 2, 0, 0);
 			break;
 
 		case 11:
 			meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Item_Knife.fbx");
+			scale = Vec3(3, 3, 3);
+			rotation = Vec3(3.14 / 2, 0, 0);
 			break;
 
 		case 12:
 			meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Item_PDA.fbx");
+			scale = Vec3(3, 3, 3);
+			rotation = Vec3(3.14 / 2, 0, 0);
 			break;
 
 		case 13:
 			meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Item_Scope.fbx");
+			scale = Vec3(4, 4, 4);
 			break;
 
 		case 14:
 			meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Item_SwipeCard.fbx");
+			scale = Vec3(7, 7, 7);
 			break;
 
 		case 15:
 			meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Item_Sword.fbx");
-			break;*/
+			scale = Vec3(1.5f, 1.5f, 1.5f);
+			break;
 
-		/*case 16:
-			meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Item_TV.fbx");
-			break;*/
+		case 16:
+			meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Item_Helmet.fbx");
+			scale = Vec3(2, 2, 2);
+			break;
 
 		default:
 			break;
@@ -400,6 +418,8 @@ shared_ptr<GameObject> Resources::LoadItemPrefab(int id, Vec3 location)
 		{
 			shared_ptr<Transform> transform = go->GetTransform();
 			transform->SetLocalPosition(location);
+			transform->SetLocalScale(scale);
+			transform->SetLocalRotation(rotation);
 		}
 
 		//강체 설정
@@ -724,7 +744,7 @@ void Resources::CreateDefaultShader()
 		{
 			SHADER_TYPE::FORWARD,
 			RASTERIZER_TYPE::CULL_NONE,
-			DEPTH_STENCIL_TYPE::NO_DEPTH_TEST_NO_WRITE
+			DEPTH_STENCIL_TYPE::NO_DEPTH_TEST_NO_WRITE,
 		};
 
 		ShaderArg arg =
@@ -739,6 +759,30 @@ void Resources::CreateDefaultShader()
 		shared_ptr<Shader> shader = make_shared<Shader>();
 		shader->CreateGraphicsShader(L"..\\Resources\\Shader\\forward.fx", info, arg);
 		Add<Shader>(L"Texture", shader);
+	}
+
+	// Alpha Texture (Forward)
+	{
+		ShaderInfo info =
+		{
+			SHADER_TYPE::FORWARD,
+			RASTERIZER_TYPE::CULL_NONE,
+			DEPTH_STENCIL_TYPE::NO_DEPTH_TEST_NO_WRITE,
+			BLEND_TYPE::ALPHA_BLEND
+		};
+
+		ShaderArg arg =
+		{
+			"VS_Tex",
+			"",
+			"",
+			"",
+			"PS_Tex"
+		};
+
+		shared_ptr<Shader> shader = make_shared<Shader>();
+		shader->CreateGraphicsShader(L"..\\Resources\\Shader\\forward.fx", info, arg);
+		Add<Shader>(L"AlphaTexture", shader);
 	}
 
 	// DirLight

@@ -1,17 +1,10 @@
 #include "pch.h"
 #include "UIObject.h"
 #include "Engine.h"
+#include "MonoBehaviour.h"
+#include "GameObject.h"
+#include "Transform.h"
 
-UIObject::UIObject(float width, float height)
-{
-	m_width = width;
-	m_height = height;
-	m_isFitToScreen = false;
-	m_pivot = ePivot::CENTER;
-	m_screenPivot = ePivot::CENTER;
-	m_pivotPosition = Vec2(0.0f, 0.0f);
-	m_scale = Vec2(1.0f, 1.0f);
-}
 
 void UIObject::OnMouseEvent(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) { }
 void UIObject::OnMouseEvent(HWND hWnd) { }
@@ -21,6 +14,17 @@ void UIObject::Update()
 
 }
 
+void UIObject::Awake()
+{
+
+}
+
+
+void UIObject::LateUpdate()
+{
+	m_gameObject.lock()->GetTransform()->SetLocalPosition(Vec3(m_position.x, m_position.y, static_cast<float>(m_zOrder)));
+	m_gameObject.lock()->GetTransform()->SetLocalScale(Vec3(m_scale.x, m_scale.y, 1.0f));
+}
 
 void UIObject::SetFitToScreen(bool fitToScreen)
 {
@@ -126,6 +130,7 @@ void UIObject::SetWidth(float width)
 {
 	float deltaWidth{ width - m_width };
 	m_width = width;
+	m_scale.x = m_width;
 
 	switch (m_pivot)
 	{
@@ -146,6 +151,7 @@ void UIObject::SetHeight(float height)
 {
 	float deltaHeight{ height - m_height };
 	m_height = height;
+	m_scale.y = m_height;
 
 	switch (m_pivot)
 	{
@@ -160,6 +166,11 @@ void UIObject::SetHeight(float height)
 		m_position.y -= deltaHeight / 2.0f;
 		break;
 	}
+}
+
+void UIObject::SetZOrder(int zOrder)
+{
+	m_zOrder = zOrder;
 }
 
 
@@ -191,4 +202,9 @@ float UIObject::GetHeight() const
 Vec2 UIObject::GetPosition() const
 {
 	return m_position;
+}
+
+Vec2 UIObject::GetScale() const
+{
+	return m_scale;
 }
