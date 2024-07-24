@@ -12,6 +12,7 @@
 #include "Transform.h"
 #include "Light.h"
 #include "GameObject.h"
+#include "Input.h"
 
 unordered_map<string, ComPtr<ID2D1SolidColorBrush>>	TextObject::s_brushes;
 unordered_map<string, ComPtr<IDWriteTextFormat>>	TextObject::s_formats;
@@ -318,11 +319,31 @@ void DamageIndicatorTextObject::Update()
 	}
 }
 
+TextToggleObject::TextToggleObject()
+{
+	m_toggle = false;
+}
+
+void TextToggleObject::Update()
+{
+	if (GET_SINGLE(Input)->GetButtonDown(m_toggleKey))
+	{
+		m_toggle = !m_toggle;
+	}
+}
+
+void TextToggleObject::Render(const ComPtr<ID2D1DeviceContext2>& device)
+{
+	if (m_toggle)
+		TextObject::Render(device);
+}
+
 DebugTextObject::DebugTextObject()
 {
 	m_player = nullptr;
 	m_camera = nullptr;
 
+	SetToggleKey(KEY_TYPE::F1);
 	SetBrush("WHITE");
 	SetFormat("15L");
 	SetText(L"");
@@ -333,6 +354,7 @@ DebugTextObject::DebugTextObject()
 
 void DebugTextObject::Update()
 {
+	TextToggleObject::Update();
 	m_player = GET_SINGLE(SceneManager)->GetActiveScene()->GetMainPlayerScript();
 	m_camera = GET_SINGLE(SceneManager)->GetActiveScene()->GetMainCamera();
 	m_light = GET_SINGLE(SceneManager)->GetActiveScene()->GetMainLight();

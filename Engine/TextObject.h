@@ -1,6 +1,7 @@
 #pragma once
 
 enum class ePivot;
+enum class KEY_TYPE;
 
 class Camera;
 class Player;
@@ -99,7 +100,26 @@ private:
 	bool m_isOnScreen;
 };
 
-class DebugTextObject : public TextObject
+class TextToggleObject : public TextObject
+{
+public:
+	TextToggleObject();
+	~TextToggleObject() = default;
+
+	virtual void Update() override;
+	virtual void Render(const ComPtr<ID2D1DeviceContext2>& device) override;
+
+	void SetToggle(bool toggle) { m_toggle = toggle; }
+	bool GetToggle() { return m_toggle; }
+	void SetToggleKey(KEY_TYPE key) { m_toggleKey = key; }
+
+private:
+	bool m_toggle;
+	KEY_TYPE m_toggleKey;
+
+};
+
+class DebugTextObject : public TextToggleObject
 {
 public:
 	DebugTextObject();

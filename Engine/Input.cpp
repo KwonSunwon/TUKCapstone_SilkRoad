@@ -58,3 +58,13 @@ void Input::Update()
 
 	SetCursorPos(centerX, centerY);
 }
+
+bool Input::GetAnyButtonDown()
+{
+	for (const KEY_TYPE key : ALL_KEYS)
+	{
+		if (GetButtonDown(key))
+			return true;
+	}
+	return false;
+}

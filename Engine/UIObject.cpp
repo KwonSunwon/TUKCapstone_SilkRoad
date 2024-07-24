@@ -4,6 +4,9 @@
 #include "MonoBehaviour.h"
 #include "GameObject.h"
 #include "Transform.h"
+#include "Input.h"
+#include "Player.h"
+#include "TextObject.h"
 
 
 void UIObject::OnMouseEvent(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) { }
@@ -207,4 +210,62 @@ Vec2 UIObject::GetPosition() const
 Vec2 UIObject::GetScale() const
 {
 	return m_scale;
+}
+
+void UIToggleObject::Update()
+{
+	if (GET_SINGLE(Input)->GetButtonDown(m_toggleKey))
+	{
+		m_toggle = !m_toggle;
+	}
+	UIObject::Update();
+}
+
+void UIToggleObject::LateUpdate()
+{
+	if (m_toggle)
+	{
+		UIObject::LateUpdate();
+	}
+	else
+	{
+		m_gameObject.lock()->GetTransform()->SetLocalPosition(Vec3(m_position.x, m_position.y, -999.f));
+		m_gameObject.lock()->GetTransform()->SetLocalScale(Vec3(m_scale.x, m_scale.y, 1.0f));
+	}
+}
+
+void PlayerStatUI::Update()
+{
+	UIToggleObject::Update();
+
+	int slotIdx = 0;
+	if (this->GetToggle())
+	{
+		for (int i = 0; i < 17; ++i)
+		{
+			if (m_itemLevels[i] >= 1)
+			{
+				m_itemSlots[i]->SetToggle(true);
+				++slotIdx;
+			}
+			else
+			{
+				m_itemSlots[i]->SetToggle(false);
+			}
+		}
+	}
+	else
+	{
+		for (int i = 0; i < 17; ++i)
+		{
+			m_itemSlots[i]->SetToggle(false);
+		}
+	}
+	
+}
+
+void PlayerStatUI::LateUpdate()
+{
+	UIToggleObject::LateUpdate();
+
 }

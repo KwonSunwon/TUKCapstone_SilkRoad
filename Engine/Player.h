@@ -31,6 +31,12 @@ public:
 	float GetHP() { return m_hp; }
 	float GetMaxHP() { return m_maxHP; }
 	float GetDefense() { return m_defense; }
+	float GetHPRegen() { return m_hpRegen; }
+	float GetKnockBackPower() { return m_knockBackPower; }
+	float GetCriticalPercentage() { return m_criticalPercentage; }
+	float GetCriticalDamage() { return m_criticalDamage; }
+	float GetMinusDamage() { return m_minusDamage; }
+	float GetPlusDamage() { return m_plusDamage; }
 
 	float GetMaxWalkSpeed() { return m_maxWalkSpeed; }
 	float GetMaxJumpSpeed() { return m_maxJumpSpeed; }

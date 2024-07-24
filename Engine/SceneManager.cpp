@@ -262,117 +262,117 @@ void SceneManager::LoadTextFormats()
 	auto dwFacory = GEngine->GetD3D11On12Device()->GetDWriteFactory();
 
 	dwFacory->CreateTextFormat(
-		L"NanumSquareR",
+		TEXT("나눔스퀘어OTF"),
 		NULL,
 		DWRITE_FONT_WEIGHT_NORMAL,
 		DWRITE_FONT_STYLE_NORMAL,
 		DWRITE_FONT_STRETCH_NORMAL,
 		30,
-		L"ko-kr",
+		TEXT("ko-kr"),
 		&TextObject::s_formats["default"]
 	);
 	TextObject::s_formats["default"]->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
 	TextObject::s_formats["default"]->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
 
 	dwFacory->CreateTextFormat(
-		L"NanumSquareR",
+		TEXT("나눔스퀘어OTF"),
 		NULL,
 		DWRITE_FONT_WEIGHT_NORMAL,
 		DWRITE_FONT_STYLE_NORMAL,
 		DWRITE_FONT_STRETCH_NORMAL,
 		12,
-		L"ko-kr",
+		TEXT("ko-kr"),
 		&TextObject::s_formats["12L"]
 	);
 	TextObject::s_formats["12L"]->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_LEADING);
 	TextObject::s_formats["12L"]->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_FAR);
 
 	dwFacory->CreateTextFormat(
-		L"NanumSquareR",
+		TEXT("나눔스퀘어OTF"),
 		NULL,
 		DWRITE_FONT_WEIGHT_NORMAL,
 		DWRITE_FONT_STYLE_NORMAL,
 		DWRITE_FONT_STRETCH_NORMAL,
 		12,
-		L"ko-kr",
+		TEXT("ko-kr"),
 		&TextObject::s_formats["12R"]
 	);
 	TextObject::s_formats["12R"]->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_TRAILING);
 	TextObject::s_formats["12R"]->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_FAR);
 
 	dwFacory->CreateTextFormat(
-		L"NanumSquareR",
+		TEXT("나눔스퀘어OTF"),
 		NULL,
 		DWRITE_FONT_WEIGHT_NORMAL,
 		DWRITE_FONT_STYLE_NORMAL,
 		DWRITE_FONT_STRETCH_NORMAL,
 		15,
-		L"ko-kr",
+		TEXT("ko-kr"),
 		&TextObject::s_formats["15L"]
 	);
 	TextObject::s_formats["15L"]->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_LEADING);
 	TextObject::s_formats["15L"]->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_FAR);
 
 	dwFacory->CreateTextFormat(
-		L"NanumSquareR",
+		TEXT("나눔스퀘어OTF"),
 		NULL,
 		DWRITE_FONT_WEIGHT_NORMAL,
 		DWRITE_FONT_STYLE_NORMAL,
 		DWRITE_FONT_STRETCH_NORMAL,
 		15,
-		L"ko-kr",
+		TEXT("ko-kr"),
 		&TextObject::s_formats["15R"]
 	);
 	TextObject::s_formats["15R"]->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_TRAILING);
 	TextObject::s_formats["15R"]->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_FAR);
 
 	dwFacory->CreateTextFormat(
-		L"NanumSquareR",
+		TEXT("나눔스퀘어OTF"),
 		NULL,
 		DWRITE_FONT_WEIGHT_NORMAL,
 		DWRITE_FONT_STYLE_NORMAL,
 		DWRITE_FONT_STRETCH_NORMAL,
 		18,
-		L"ko-kr",
+		TEXT("ko-kr"),
 		&TextObject::s_formats["18L"]
 	);
 	TextObject::s_formats["18L"]->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_LEADING);
 	TextObject::s_formats["18L"]->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_FAR);
 
 	dwFacory->CreateTextFormat(
-		L"NanumSquareR",
+		TEXT("나눔스퀘어OTF"),
 		NULL,
 		DWRITE_FONT_WEIGHT_NORMAL,
 		DWRITE_FONT_STYLE_NORMAL,
 		DWRITE_FONT_STRETCH_NORMAL,
 		18,
-		L"ko-kr",
+		TEXT("ko-kr"),
 		&TextObject::s_formats["18R"]
 	);
 	TextObject::s_formats["18R"]->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_TRAILING);
 	TextObject::s_formats["18R"]->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_FAR);
 
 	dwFacory->CreateTextFormat(
-		L"NanumSquareR",
+		TEXT("나눔스퀘어OTF"),
 		NULL,
 		DWRITE_FONT_WEIGHT_NORMAL,
 		DWRITE_FONT_STYLE_NORMAL,
 		DWRITE_FONT_STRETCH_NORMAL,
 		24,
-		L"ko-kr",
+		TEXT("ko-kr"),
 		&TextObject::s_formats["24L"]
 	);
 	TextObject::s_formats["24L"]->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_LEADING);
 	TextObject::s_formats["24L"]->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_FAR);
 
 	dwFacory->CreateTextFormat(
-		L"NanumSquareR",
+		TEXT("나눔스퀘어OTF"),
 		NULL,
 		DWRITE_FONT_WEIGHT_NORMAL,
 		DWRITE_FONT_STYLE_NORMAL,
 		DWRITE_FONT_STRETCH_NORMAL,
 		24,
-		L"ko-kr",
+		TEXT("ko-kr"),
 		&TextObject::s_formats["24R"]
 	);
 	TextObject::s_formats["24R"]->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_TRAILING);
@@ -380,26 +380,26 @@ void SceneManager::LoadTextFormats()
 
 
 	dwFacory->CreateTextFormat(
-		L"NanumSquareR",
+		TEXT("나눔스퀘어OTF"),
 		NULL,
 		DWRITE_FONT_WEIGHT_NORMAL,
 		DWRITE_FONT_STYLE_NORMAL,
 		DWRITE_FONT_STRETCH_NORMAL,
 		30,
-		L"ko-kr",
+		TEXT("ko-kr"),
 		&TextObject::s_formats["30L"]
 	);
 	TextObject::s_formats["30L"]->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_LEADING);
 	TextObject::s_formats["30L"]->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_FAR);
 
 	dwFacory->CreateTextFormat(
-		L"NanumSquareR",
+		TEXT("나눔스퀘어OTF"),
 		NULL,
 		DWRITE_FONT_WEIGHT_NORMAL,
 		DWRITE_FONT_STYLE_NORMAL,
 		DWRITE_FONT_STRETCH_NORMAL,
 		30,
-		L"ko-kr",
+		TEXT("ko-kr"),
 		&TextObject::s_formats["30R"]
 	);
 	TextObject::s_formats["30R"]->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_TRAILING);
@@ -481,7 +481,7 @@ shared_ptr<Scene> SceneManager::LoadL()
 		auto loadingText = make_shared<TextObject>();
 		loadingText->SetFormat("default");
 		loadingText->SetBrush("WHITE");
-		loadingText->SetText(L"press number 5 to start");
+		loadingText->SetText(TEXT("Press 5 To Start"));
 		loadingText->SetPivot(ePivot::CENTER);
 		loadingText->SetScreenPivot(ePivot::CENTER);
 		loadingText->SetPosition(Vec2(0.f, 0.f));

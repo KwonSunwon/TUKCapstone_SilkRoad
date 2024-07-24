@@ -42,6 +42,8 @@
 #include "SoundManager.h"
 #include "EnemyHP.h"
 
+#include "Input.h"
+
 shared_ptr<class Scene> LoadMainScene1()
 {
 	GET_SINGLE(SoundManager)->soundPlay(Sounds::BGM_SPACE);
@@ -415,15 +417,16 @@ shared_ptr<class Scene> LoadMainScene1()
 
 				meshRenderer->SetMaterial(material);
 			}
-			shared_ptr<UIObject> uiObject = make_shared<UIObject>();
-			uiObject->SetPivot(ePivot::CENTER);
-			uiObject->SetScreenPivot(ePivot::CENTER);
-			uiObject->SetWidth(1400.f);
-			uiObject->SetHeight(700.f);
-			uiObject->SetPosition(Vec2(0, 0));
-			uiObject->SetZOrder(300);
+			shared_ptr<PlayerStatUI> statUI = make_shared<PlayerStatUI>();
+			statUI->SetPivot(ePivot::CENTER);
+			statUI->SetToggleKey(KEY_TYPE::TAB);
+			statUI->SetScreenPivot(ePivot::CENTER);
+			statUI->SetWidth(1400.f);
+			statUI->SetHeight(700.f);
+			statUI->SetPosition(Vec2(0, 0));
+			statUI->SetZOrder(300);
 
-			obj->AddComponent(uiObject);
+			obj->AddComponent(statUI);
 
 			obj->AddComponent(meshRenderer);
 			scene->AddGameObject(obj);
@@ -442,14 +445,14 @@ shared_ptr<class Scene> LoadMainScene1()
 					}
 					{
 						shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"AlphaTexture");
-						shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"Item_Icon_Axe", L"..\\Resources\\Texture\\ItemIcon\\Item_Icon_Axe.png");
+						shared_ptr<Texture> texture = GET_SINGLE(Resources)->LoadItemIconTexture(i);
 						shared_ptr<Material> material = make_shared<Material>();
 						material->SetShader(shader);
 						material->SetTexture(0, texture);
 
 						meshRenderer->SetMaterial(material);
 					}
-					shared_ptr<UIObject> uiObject = make_shared<UIObject>();
+					shared_ptr<UIToggleObject> uiObject = make_shared<UIToggleObject>();
 					uiObject->SetPivot(ePivot::LEFTTOP);
 					uiObject->SetScreenPivot(ePivot::CENTER);
 					uiObject->SetWidth(80.f);
@@ -457,8 +460,8 @@ shared_ptr<class Scene> LoadMainScene1()
 					uiObject->SetPosition(Vec2(-695 + (280 * (i % 5)), 340 - (i / 5) * 100) );
 					uiObject->SetZOrder(200);
 
+					statUI->AddItemSlot(uiObject, i);
 					obj->AddComponent(uiObject);
-
 					obj->AddComponent(meshRenderer);
 					scene->AddGameObject(obj);
 				}

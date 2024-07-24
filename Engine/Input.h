@@ -29,10 +29,17 @@ enum class KEY_TYPE
 	LBUTTON = VK_LBUTTON,
 	RBUTTON = VK_RBUTTON,
 
+	TAB = VK_TAB,
+
+	F1 = VK_F1,
+	F2 = VK_F2,
+	F3 = VK_F3,
+
+
 	ESC = VK_ESCAPE,
 };
 
-static constexpr int NUM_OF_KEYS = 22;
+static constexpr int NUM_OF_KEYS = 26;
 
 constexpr std::array<KEY_TYPE, NUM_OF_KEYS> ALL_KEYS =
 {
@@ -48,6 +55,7 @@ constexpr std::array<KEY_TYPE, NUM_OF_KEYS> ALL_KEYS =
 	KEY_TYPE::E,
 	KEY_TYPE::Z,
 	KEY_TYPE::C,
+	KEY_TYPE::P,
 	KEY_TYPE::KEY_1,
 	KEY_TYPE::KEY_2,
 	KEY_TYPE::KEY_3,
@@ -56,8 +64,11 @@ constexpr std::array<KEY_TYPE, NUM_OF_KEYS> ALL_KEYS =
 	KEY_TYPE::LBUTTON,
 	KEY_TYPE::RBUTTON,
 	KEY_TYPE::SPACE,
+	KEY_TYPE::TAB,
+	KEY_TYPE::F1,
+	KEY_TYPE::F2,
+	KEY_TYPE::F3,
 	KEY_TYPE::ESC,
-	KEY_TYPE::P,
 
 };
 
@@ -90,6 +101,8 @@ public:
 	bool GetButtonDown(KEY_TYPE key) { return GetState(key) == KEY_STATE::DOWN; }
 	// 맨 처음 눌렀다 뗐을 때
 	bool GetButtonUp(KEY_TYPE key) { return GetState(key) == KEY_STATE::UP; }
+
+	bool GetAnyButtonDown();
 
 	const POINT& GetMousePos() { return m_mousePos; }
 	const POINT& GetMouseDelta() { return m_mouseDelta; }

@@ -7,6 +7,12 @@ enum class ePivot
 	LEFTBOT, CENTERBOT, RIGHTBOT
 };
 
+enum class KEY_TYPE;
+
+
+class Player;
+class TextToggleObject;
+
 class UIObject : public MonoBehaviour
 {
 public:
@@ -43,4 +49,33 @@ protected:
 	float		m_width = 100.f;
 	float		m_height = 100.f;
 	int			m_zOrder = 10;
+};
+
+class UIToggleObject : public UIObject
+{
+public:
+	virtual void Update() override;
+	virtual void LateUpdate() override;
+
+	void SetToggleKey(KEY_TYPE key) { m_toggleKey = key; }
+	
+	void SetToggle(bool toggle) { m_toggle = toggle; }
+	bool GetToggle() { return m_toggle; }
+
+private:
+	KEY_TYPE m_toggleKey;
+	bool m_toggle = false;
+};
+
+class PlayerStatUI : public UIToggleObject
+{
+public:
+	virtual void Update() override;
+	virtual void LateUpdate() override;
+
+	void AddItemSlot(shared_ptr<UIToggleObject> itemSlot, int index) { m_itemSlots[index] = itemSlot; }
+
+private:
+	array<shared_ptr<UIToggleObject>, 17> m_itemSlots;
+
 };

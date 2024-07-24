@@ -14,6 +14,7 @@
 #include "Bomb.h"
 #include "StagePortal.h"
 #include "InteractiveObject.h"
+#include "Texture.h"
 void Resources::Init()
 {
 	CreateDefaultShader();
@@ -309,6 +310,91 @@ shared_ptr<Mesh> Resources::LoadTerrainMesh(int32 sizeX, int32 sizeZ)
 	mesh->Create(vec, idx);
 	Add(L"Terrain", mesh);
 	return mesh;
+}
+
+shared_ptr<Texture> Resources::LoadItemIconTexture(int id)
+{
+	shared_ptr<Texture> texture = make_shared<Texture>();
+
+	switch (id) {
+	case 0:
+		texture = GET_SINGLE(Resources)->Load<Texture>(L"Item_Icon_Bomb", L"..\\Resources\\Texture\\ItemIcon\\Item_Icon_Bomb.png");
+		break;
+
+	case 1:
+		texture = GET_SINGLE(Resources)->Load<Texture>(L"Item_Icon_BatteryPack", L"..\\Resources\\Texture\\ItemIcon\\Item_Icon_BatteryPack.png");
+		break;
+
+	case 2:
+		texture = GET_SINGLE(Resources)->Load<Texture>(L"Item_Icon_Cylinder", L"..\\Resources\\Texture\\ItemIcon\\Item_Icon_Cylinder.png");
+		break;
+
+	case 3:
+		texture = GET_SINGLE(Resources)->Load<Texture>(L"Item_Icon_Box", L"..\\Resources\\Texture\\ItemIcon\\Item_Icon_Box.png");
+		break;
+
+	case 4:
+		texture = GET_SINGLE(Resources)->Load<Texture>(L"Item_Icon_Ham", L"..\\Resources\\Texture\\ItemIcon\\Item_Icon_Ham.png");
+		break;
+
+	case 5:
+		texture = GET_SINGLE(Resources)->Load<Texture>(L"Item_Icon_Axe", L"..\\Resources\\Texture\\ItemIcon\\Item_Icon_Axe.png");
+		break;
+
+	case 6:
+		texture = GET_SINGLE(Resources)->Load<Texture>(L"Item_Icon_Cola_Can", L"..\\Resources\\Texture\\ItemIcon\\Item_Icon_Cola_Can.png");
+		break;
+
+	case 7:
+		texture = GET_SINGLE(Resources)->Load<Texture>(L"Item_Icon_Food", L"..\\Resources\\Texture\\ItemIcon\\Item_Icon_Food.png");
+		break;
+
+	case 8:
+		texture = GET_SINGLE(Resources)->Load<Texture>(L"Item_Icon_Hammer", L"..\\Resources\\Texture\\ItemIcon\\Item_Icon_Hammer.png");
+		break;
+
+	case 9:
+		texture = GET_SINGLE(Resources)->Load<Texture>(L"Item_Icon_Pouch", L"..\\Resources\\Texture\\ItemIcon\\Item_Icon_Pouch.png");
+		break;
+
+	case 10:
+		texture = GET_SINGLE(Resources)->Load<Texture>(L"Item_Icon_Fork", L"..\\Resources\\Texture\\ItemIcon\\Item_Icon_Fork.png");
+		break;
+
+	case 11:
+		texture = GET_SINGLE(Resources)->Load<Texture>(L"Item_Icon_Knife", L"..\\Resources\\Texture\\ItemIcon\\Item_Icon_Knife.png");
+		break;
+
+	case 12:
+		texture = GET_SINGLE(Resources)->Load<Texture>(L"Item_Icon_PDA", L"..\\Resources\\Texture\\ItemIcon\\Item_Icon_PDA.png");
+		break;
+
+	case 13:
+		texture = GET_SINGLE(Resources)->Load<Texture>(L"Item_Icon_Scope", L"..\\Resources\\Texture\\ItemIcon\\Item_Icon_Scope.png");
+		break;
+
+	case 14:
+		texture = GET_SINGLE(Resources)->Load<Texture>(L"Item_Icon_SwipeCard", L"..\\Resources\\Texture\\ItemIcon\\Item_Icon_SwipeCard.png");
+		break;
+
+	case 15:
+		texture = GET_SINGLE(Resources)->Load<Texture>(L"Item_Icon_Sword", L"..\\Resources\\Texture\\ItemIcon\\Item_Icon_Sword.png");
+		break;
+
+	case 16:
+		texture = GET_SINGLE(Resources)->Load<Texture>(L"Item_Icon_Helmet", L"..\\Resources\\Texture\\ItemIcon\\Item_Icon_Helmet.png");
+		break;
+
+	default:
+		break;
+	}
+
+	return texture;
+}
+
+const wstring& Resources::GetItemDesc(int id)
+{
+	return L"";
 }
 
 shared_ptr<GameObject> Resources::LoadItemPrefab(int id, Vec3 location)
