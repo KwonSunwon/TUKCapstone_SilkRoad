@@ -26,6 +26,8 @@
 void Player::Awake()
 {
 	GET_SINGLE(UpgradeManager)->SetClass();
+	GET_SINGLE(UpgradeManager)->SetStat();
+
 	SetMonovihaviourName("Player");
 	shared_ptr<RigidBody> rb = GetRigidBody();
 	//rb->SetStatic(true);
@@ -263,75 +265,11 @@ void Player::ProcessGetItem()
 			GET_SINGLE(SoundManager)->soundPlay(Sounds::ENV_EAT_ITEM);
 
 			col->m_rb2->MoveTo(Vec3(0, 1000000, 0));
-			ApplyItem(itemScript->GetItemID());
+			GET_SINGLE(UpgradeManager) -> ApplyItem(itemScript->GetItemID());
 		}
 	}
 }
 
-
-
-void Player::ApplyItem(int id)
-{
-	switch (id) {
-	case 0:
-		break;
-	case 1:
-		m_fireRate += 3;
-		break;
-
-	case 2:
-		m_fireInfo.bulletDamage += 4;
-		break;
-
-	case 3:
-		m_fireInfo.explosionDamage += 20;
-		break;
-
-	case 4:
-		m_fireInfo.explosionSize += 200;
-		break;
-
-	case 5:
-		m_maxHP += 20;
-		break;
-
-	case 6:
-		m_maxWalkSpeed += 200;
-		break;
-
-	case 7:
-		m_maxJumpSpeed += 150;
-		break;
-
-	case 8:
-		m_maxAimSpeed += 150;
-		break;
-
-	case 9:
-		m_minusDamage -= 0.01f;
-		break;
-
-	case 10:
-		m_plusDamage += 0.02f;
-		break;
-
-	case 11:
-		m_criticalPercentage += 0.05f;
-		break;
-
-	case 12:
-		m_criticalDamage += 0.2f;
-		break;
-
-	case 13:
-		m_knockBackPower += 5;
-		break;
-
-	default:
-		break;
-
-	}
-}
 
 float Player::CalcDamage()
 {
