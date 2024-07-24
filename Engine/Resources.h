@@ -5,6 +5,7 @@
 #include "Mesh.h"
 #include "Shader.h"
 #include "Texture.h"
+#include "Scene.h"
 
 class Resources
 {
@@ -36,6 +37,7 @@ public:
 
 	//Prefabs
 	shared_ptr<GameObject> LoadItemPrefab(int id, Vec3 Location);
+	void LoadEnemyPrefab(int modelNum, Vec3 Location, Vec3 Scale, float hp, shared_ptr<Scene> scene);
 	shared_ptr<GameObject> LoadBombPrefab(Vec3 Location);
 
 	shared_ptr<Texture> CreateTexture(const wstring& name, DXGI_FORMAT format, uint32 width, uint32 height,

@@ -65,4 +65,6 @@ public:
 	virtual shared_ptr<EnemyState> OnUpdateState() override;
 	virtual void OnEnter() override;
 	virtual shared_ptr<EnemyState> OnLateUpdateState() override;
+
+	float m_dieTime = -2.0f;
 };

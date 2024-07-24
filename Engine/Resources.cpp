@@ -15,6 +15,9 @@
 #include "StagePortal.h"
 #include "InteractiveObject.h"
 #include "Texture.h"
+#include "Enemy.h"
+#include "EnemyHP.h"
+#include "Scene.h"
 void Resources::Init()
 {
 	CreateDefaultShader();
@@ -547,6 +550,126 @@ shared_ptr<GameObject> Resources::LoadItemPrefab(int id, Vec3 location)
 
 
 #pragma endregion
+}
+
+void Resources::LoadEnemyPrefab(int modelNum, Vec3 Location, Vec3 Scale, float hp, shared_ptr<Scene> scene)
+{
+	int idx = 0;
+	shared_ptr<MeshData> meshData;
+	switch (modelNum)
+	{
+	case 0:
+		meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Enemy_Spike.fbx");
+		break;
+
+	case 1:
+		meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Enemy_Ice.fbx");
+		break;
+
+	case 2:
+		meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Enemy_Armor.fbx");
+		break;
+
+	case 3:
+		meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Enemy_Cocker.fbx");
+		break;
+
+	case 4:
+		meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Enemy_Combat.fbx");
+		break;
+
+	default:
+		break;
+	}
+
+	vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
+	shared_ptr<GameObject> go = gameObjects[0];
+
+	shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"Noise", L"..\\Resources\\Texture\\noiseTex2.jpg");
+	go->GetMeshRenderer()->GetMaterial()->SetTexture(2, texture);
+
+	//Transform 설정
+	{
+		shared_ptr<Transform> transform = go->GetTransform();
+		transform->SetLocalPosition(Location);
+		transform->SetLocalScale(Scale);
+	}
+
+	//강체 설정
+	{
+		shared_ptr<RigidBody> rb = make_shared<RigidBody>();
+
+		rb->SetStatic(false);
+		rb->SetMass(15000.f);
+		rb->SetRestitution(0.f);
+		go->SetCheckFrustum(true);
+		go->AddComponent(rb);
+	}
+
+	//콜라이더 설정 
+	//콜라이더의 위치,회전은 Gameobject의 Transform을 사용
+	{
+		//OBB를 사용할 경우 이곳의 주석을 풀어서 사용
+		shared_ptr<OrientedBoxCollider> collider = make_shared<OrientedBoxCollider>();
+		collider->SetExtent(Vec3(50, 100, 50));
+		collider->SetOffset(Vec3(0, 100, 0));
+		go->AddComponent(collider);
+	}
+
+	//디버그용 콜라이더 매쉬 설정
+	/*if (DEBUG_MODE)
+	{
+		scene->AddGameObject(go->GetCollider()->GetDebugCollider());
+	}*/
+
+	//Instancing 유무 설정(사용:0,0  미사용:0,1)
+	{
+		go->GetMeshRenderer()->GetMaterial()->SetInt(0, 0);
+	}
+
+	//추가적인 컴포넌트 부착
+	{
+		shared_ptr<Enemy> enemyScript = make_shared<Enemy>();
+		enemyScript->AddPlayer(scene->GetPlayers()[0]);
+		enemyScript->AddPlayer(scene->GetPlayers()[GUEST_PLAYER1]);
+		enemyScript->AddPlayer(scene->GetPlayers()[GUEST_PLAYER2]);
+		go->AddComponent(enemyScript);
+		go->SetShadow(true);
+		int networkId = scene->AddNetworkObject();
+		enemyScript->SetNetworkId(networkId);
+		scene->m_enemies[networkId] = enemyScript;
+
+		//hpbar
+		{
+			shared_ptr<GameObject> obj = make_shared<GameObject>();
+			obj->AddComponent(make_shared<Transform>());
+			obj->GetTransform()->SetLocalScale(Vec3(100.f, 10.f, 100.f));
+
+			shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
+			{
+				shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadRectangleMesh();
+				meshRenderer->SetMesh(mesh);
+			}
+			{
+				shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"Deferred");
+				shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"Hpbar", L"..\\Resources\\Texture\\hpbar.png");
+				shared_ptr<Material> material = make_shared<Material>();
+				material->SetShader(shader);
+				material->SetTexture(0, texture);
+
+				meshRenderer->SetMaterial(material);
+			}
+			obj->AddComponent(meshRenderer);
+			shared_ptr<EnemyHP> enemyHP = make_shared<EnemyHP>();
+			enemyHP->SetParentEnemy(enemyScript);
+			
+			obj->AddComponent(enemyHP);
+			scene->AddGameObject(obj);
+
+		}
+	}
+	scene->AddGameObject(go);
+
 }
 
 shared_ptr<GameObject> Resources::LoadBombPrefab(Vec3 Location)

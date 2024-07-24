@@ -22,9 +22,12 @@
 #include "BaseCollider.h"
 #include "SoundManager.h"
 #include "InteractiveObject.h"
-
+#include "UpgradeManager.h"
 void Player::Awake()
 {
+	GET_SINGLE(UpgradeManager)->SetClass();
+	GET_SINGLE(UpgradeManager)->SetStat();
+
 	SetMonovihaviourName("Player");
 	shared_ptr<RigidBody> rb = GetRigidBody();
 	//rb->SetStatic(true);
@@ -34,20 +37,49 @@ void Player::Awake()
 	m_fireInfo.explosionDamage = 100.f;
 	m_fireInfo.explosionSize = 500.f;
 
-	std::ifstream upgradeFile("upgrade.txt");
-	if (upgradeFile.is_open()) {
-		for (int i = 0; i < 10; ++i) {
-			// 파일에서 정수를 읽어와 배열에 저장
-			upgradeFile >> m_upgradeLevels[i];
-		}
-		upgradeFile.close();
-	}
+	
 
 }
 void Player::Update()
 {
 	ProcessGetItem();
 	InteracitveObjectPick();
+	if (INPUT->GetButtonDown(KEY_TYPE::Q))
+	{
+		float minDistance = FLT_MAX;
+		vector<shared_ptr<GameObject>>gameObjects = GET_SINGLE(SceneManager)->GetActiveScene()->GetInteractiveGameObjects();
+		Vec3 cameraPos = m_playerCamera->GetTransform()->GetWorldPosition();
+		Vec3 cameraDir = m_playerCamera->GetTransform()->GetLook();
+		shared_ptr<GameObject> picked;
+
+		Vec4 rayOrigin = Vec4(cameraPos.x, cameraPos.y, cameraPos.z, 1.0f);
+		Vec4 rayDir = Vec4(cameraDir.x, cameraDir.y, cameraDir.z, 0.0f);
+		for (auto& gameObject : gameObjects) {
+
+
+			float distance = 0.f;
+			if (gameObject->GetCollider()->Intersects(rayOrigin, rayDir, OUT distance) == false)
+				continue;
+
+			if (gameObject->GetMonobehaviour("Player"))
+				continue;
+
+			if (distance > 250.f) {
+				continue;
+			}
+
+			if (distance < minDistance)
+			{
+				minDistance = distance;
+				picked = gameObject;
+			}
+		}
+
+		if (picked)
+			picked->GetInteractiveObject()->InteractiveFunction();
+
+		
+	}
 
 	shared_ptr<Transform> transform = GetTransform();
 	shared_ptr<RigidBody> rb = GetRigidBody();
@@ -160,7 +192,9 @@ void Player::Fire()
 
 	}
 
-
+	if (!picked->GetRigidBody()->GetStatic()) {
+		picked->GetRigidBody()->AddForce(Vec3(rayDir) * m_knockBackPower * 1000000.f);
+	}
 	
 	//총알 사용할때 코드
 	//m_bullets[m_bulletPivot++]->Fire(shared_from_this(), m_fireInfo);
@@ -211,9 +245,11 @@ void Player::InteracitveObjectPick()
 	if (!picked)
 		return;
 
-	shared_ptr<MonoBehaviour> scriptI = picked->GetMonobehaviour("InteractiveObject");
+	picked->GetInteractiveObject()->PrintInteractiveText();
+
+	/*shared_ptr<MonoBehaviour> scriptI = picked->GetMonobehaviour("InteractiveObject");
 	shared_ptr<InteractiveObject> interactiveObjectScript = dynamic_pointer_cast<InteractiveObject>(scriptI);
-	interactiveObjectScript->PrintInteractiveText();
+	interactiveObjectScript->PrintInteractiveText();*/
 
 
 }
@@ -231,75 +267,11 @@ void Player::ProcessGetItem()
 			GET_SINGLE(SoundManager)->soundPlay(Sounds::ENV_EAT_ITEM);
 
 			col->m_rb2->MoveTo(Vec3(0, 1000000, 0));
-			ApplyItem(itemScript->GetItemID());
+			GET_SINGLE(UpgradeManager) -> ApplyItem(itemScript->GetItemID());
 		}
 	}
 }
 
-
-
-void Player::ApplyItem(int id)
-{
-	switch (id) {
-	case 0:
-		break;
-	case 1:
-		m_fireRate += 3;
-		break;
-
-	case 2:
-		m_fireInfo.bulletDamage += 4;
-		break;
-
-	case 3:
-		m_fireInfo.explosionDamage += 20;
-		break;
-
-	case 4:
-		m_fireInfo.explosionSize += 200;
-		break;
-
-	case 5:
-		m_maxHP += 20;
-		break;
-
-	case 6:
-		m_maxWalkSpeed += 200;
-		break;
-
-	case 7:
-		m_maxJumpSpeed += 150;
-		break;
-
-	case 8:
-		m_maxAimSpeed += 150;
-		break;
-
-	case 9:
-		m_minusDamage -= 0.01f;
-		break;
-
-	case 10:
-		m_plusDamage += 0.02f;
-		break;
-
-	case 11:
-		m_criticalPercentage += 0.05f;
-		break;
-
-	case 12:
-		m_criticalDamage += 0.2f;
-		break;
-
-	case 13:
-		m_knockBackPower += 5;
-		break;
-
-	default:
-		break;
-
-	}
-}
 
 float Player::CalcDamage()
 {

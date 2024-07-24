@@ -3,7 +3,7 @@
 #include "PlayerBullet.h"
 #include "Camera.h"
 static array<int, 17> m_itemLevels;
-static array<int, 10> m_upgradeLevels;
+
 
 struct FireInfo {
 	BulletType bulletType = BulletType::BASIC;
@@ -29,7 +29,11 @@ public:
 
 public:
 	float GetHP() { return m_hp; }
+	void SetHP(float hp) { m_hp = hp; }
+
 	float GetMaxHP() { return m_maxHP; }
+	void SetMaxHP(float maxHP) { m_maxHP = maxHP; }
+
 	float GetDefense() { return m_defense; }
 	float GetHPRegen() { return m_hpRegen; }
 	float GetKnockBackPower() { return m_knockBackPower; }
@@ -37,13 +41,38 @@ public:
 	float GetCriticalDamage() { return m_criticalDamage; }
 	float GetMinusDamage() { return m_minusDamage; }
 	float GetPlusDamage() { return m_plusDamage; }
+	void SetDefense(float defense) { m_defense = defense; }
+
+	float GetHpRegen() { return m_hpRegen; }
+	void SetHpRegen(float hpRegen) { m_hpRegen = hpRegen; }
 
 	float GetMaxWalkSpeed() { return m_maxWalkSpeed; }
+	void SetMaxWalkSpeed(float maxWalkSpeed) { m_maxWalkSpeed = maxWalkSpeed; }
+
 	float GetMaxJumpSpeed() { return m_maxJumpSpeed; }
+	void SetMaxJumpSpeed(float maxJumpSpeed) { m_maxJumpSpeed = maxJumpSpeed; }
+
 	float GetMaxAimSpeed() { return m_maxAimSpeed; }
+	void SetMaxAimSpeed(float maxAimSpeed) { m_maxAimSpeed = maxAimSpeed; }
+
+	float GetCriPercent() { return m_criticalPercentage; }
+	void SetCriPercent(float criticalPercentage) { m_criticalPercentage = criticalPercentage; }
+
+	float GetCriDamage() { return m_criticalDamage; }
+	void SetCriDamage(float criDamage) { m_criticalDamage = criDamage; }
+
+	float GetFireRate() { return m_fireRate; }
+	void SetFireRate(float fireRate) { m_fireRate = fireRate; }
+
+	float GetBulletDamage() { return m_bulletDamage; }
+	void SetBulletDamage(float bulletDamage) { m_bulletDamage = bulletDamage; }
+
+	float GetMinusDamage() { return m_minusDamage; }
+	void SetMinusDamage(float minusDamage) { m_minusDamage = minusDamage; }
 
 
-	
+	float GetPlusDamage() { return m_plusDamage; }
+	void SetPlusDamage(float plusDamage) { m_plusDamage = plusDamage; }
 private:
 	shared_ptr<class PlayerState> m_curState;
 	shared_ptr<Camera> m_playerCamera;
@@ -76,6 +105,7 @@ private:
 	float m_criticalDamage		= 1.7f;
 
 	float m_knockBackPower		= 10.f;
+	float m_bulletDamage		= 20.f;
 
 	bool m_isCritical = false;
 
@@ -85,7 +115,6 @@ private:
 private:
 	void InteracitveObjectPick();
 	void ProcessGetItem();
-	void ApplyItem(int id);
 	float CalcDamage();
 	BulletType CalcBulletType();
 };

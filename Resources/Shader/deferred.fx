@@ -89,31 +89,49 @@ PS_OUT PS_Main(VS_OUT input)
         viewNormal = normalize(mul(tangentSpaceNormal, matTBN));
     }
     
-    if (g_tex_on_2 == 1)
-    {
-        // [0,255] 범위에서 [0,1]로 변환
-        float3 tangentSpaceNormal = g_tex_2.Sample(g_sam_0, input.uv).xyz;
-        // [0,1] 범위에서 [-1,1]로 변환
-        tangentSpaceNormal = (tangentSpaceNormal - 0.5f) * 2.f;
-        float3x3 matTBN = { input.viewTangent, input.viewBinormal, input.viewNormal };
-        viewNormal = normalize(mul(tangentSpaceNormal, matTBN));
-    }
+    //if (g_tex_on_2 == 1)
+    //{
+    //    // [0,255] 범위에서 [0,1]로 변환
+    //    float3 tangentSpaceNormal = g_tex_2.Sample(g_sam_0, input.uv).xyz;
+    //    // [0,1] 범위에서 [-1,1]로 변환
+    //    tangentSpaceNormal = (tangentSpaceNormal - 0.5f) * 2.f;
+    //    float3x3 matTBN = { input.viewTangent, input.viewBinormal, input.viewNormal };
+    //    viewNormal = normalize(mul(tangentSpaceNormal, matTBN));
+    //}
     
-    if (g_tex_on_3 == 1)
-    {
-
-    }
+    
 
     output.position = float4(input.viewPos.xyz, 0.f);
     output.normal = float4(viewNormal.xyz, 0.f);
     output.color = color;
+
+    
+
     
     if(g_int_3 == 1)
     {
         output.color = g_vec4_3;
+        
 
     }
 
+    if (g_float_3 > 0.001f)
+    {
+        float alpha = g_tex_1.Sample(g_sam_0, input.uv).x;
+        
+
+        
+        if (alpha < g_float_3 - 0.2f)
+        {
+            output.color = float4(0.3f, 0.f, 0.f, 1.f);
+
+        }
+        
+        if (input.viewNormal.y < g_float_3 - 0.3f)
+        {
+            clip(-1);
+        }
+    }
     return output;
 }
 
