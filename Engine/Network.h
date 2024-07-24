@@ -8,7 +8,7 @@ static const int MAX_PLAYER = 2;
 static const int SERVER_PORT = 9000;
 static const int TIMEOUT = 5;
 
-#define SEND_PACKET_PER_SEC 1.f / 60.f
+#define SEND_PACKET_PER_SEC 1.f / 30.f
 
 // Packet Type
 //enum class PACKET_TYPE {
@@ -77,7 +77,7 @@ public:
 	//virtual Packet Recv();
 	virtual bool Recv(shared_ptr<Packet> packet) { return false; }
 
-	shared_ptr<Packet> PacketProcess();
+	shared_ptr<Packet> PacketProcess(int bufferIdx);
 
 	NETWORK_STATE GetState() { return m_networkState; }
 	void SetState(NETWORK_STATE state) { m_networkState = state; }
@@ -93,7 +93,7 @@ private:
 	Packet m_packetBuffer;
 
 protected:
-	Buffer m_buffer;
+	Buffer m_buffer[2];
 
 public:
 	SOCKET m_socket;
@@ -186,7 +186,11 @@ public:
 	unique_ptr<Network> m_network;
 
 	atomic<int> m_displayVar = 0;
+
+	bool m_isSend = false;
 private:
+	chrono::system_clock::time_point m_prevTime;
+	double m_remainTime;
 };
 
 class NetworkScript : public MonoBehaviour {

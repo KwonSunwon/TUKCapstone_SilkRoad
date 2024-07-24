@@ -30,6 +30,8 @@ void Network::Update()
 	//while(Recv(m_packetBuffer)) {
 	while(m_receivedPacketQue.TryPop(packet)) {
 		switch(packet->m_type) {
+		case PACKET_TYPE::PT_NONE:
+			break;
 		case PACKET_TYPE::PT_MOVE:
 			/*for(auto& player : players) {
 				if(!player)
@@ -60,14 +62,13 @@ void Network::Update()
 	}
 }
 
-shared_ptr<Packet> Network::PacketProcess()
+shared_ptr<Packet> Network::PacketProcess(int idx)
 {
-	PACKET_TYPE packetType = static_cast<PACKET_TYPE>(m_buffer.Peek(2));
+	PACKET_TYPE packetType = static_cast<PACKET_TYPE>(m_buffer[idx].Peek(2));
 	shared_ptr<Packet> packet = nullptr;
 	switch(packetType) {
 	case PACKET_TYPE::PT_NONE:
-		packet = make_shared<Packet>();
-		break;
+		return nullptr;
 	case PACKET_TYPE::PT_INIT:
 		packet = make_shared<InitPacket>();
 		break;
@@ -82,7 +83,10 @@ shared_ptr<Packet> Network::PacketProcess()
 		break;
 	}
 
-	m_buffer.Read(reinterpret_cast<char*>(packet.get()), packet->m_size);
+	if(!m_buffer[idx].Read(reinterpret_cast<char*>(packet.get()), packet->m_size)) {
+		OutputDebugString(L"(PacketProcess)Fail read buffer - required size > m_size\n");
+		return nullptr;
+	}
 
 	return packet;
 }
@@ -206,6 +210,8 @@ void Host::Connection(ushort id)
 		}
 	}
 
+	int bufferIdx = id == 1 ? 0 : 1;
+
 	chrono::steady_clock::time_point startTime;
 	chrono::steady_clock::time_point endTime;
 	float elapsedTime;
@@ -236,26 +242,33 @@ void Host::Connection(ushort id)
 
 		int otherId = id == 1 ? 1 : 0;
 		// Write received data to buffer
-		retval = recv(socket, buffer.get(), BUFFER_SIZE - m_buffer.Size(), 0);
+		retval = recv(socket, buffer.get(), BUFFER_SIZE - m_buffer[bufferIdx].Size(), 0);
 		if(retval > 0) {
-			m_buffer.Write(buffer.get(), retval);
+			m_buffer[bufferIdx].Write(buffer.get(), retval);
 
-			ushort packetSize = m_buffer.Peek();
-			while(packetSize <= m_buffer.Size()) {
-				packet = PacketProcess();
-				m_receivedPacketQue.Push(packet);
+			ushort packetSize = m_buffer[bufferIdx].Peek();
+			while(packetSize <= m_buffer[bufferIdx].Size()) {
+				if(packetSize == -1)
+					break;
+
+				packet = PacketProcess(bufferIdx);
+				if(packet == nullptr) {
+					OutputDebugString(L"Fail PacketProcess\n");
+					break;
+				}
 
 				if(m_guestInfos.size() > 1 && packet->m_type == PACKET_TYPE::PT_PLAYER) {
 					send(m_guestInfos[otherId].socket, (char*)packet.get(), packet->m_size, 0);
 				}
+				m_receivedPacketQue.Push(packet);
 
 				packetSize = 0;
 				packet.reset();
 
-				if(m_buffer.Empty())
+				if(m_buffer[bufferIdx].Empty())
 					break;
 
-				packetSize = m_buffer.Peek();
+				packetSize = m_buffer[bufferIdx].Peek();
 			}
 		}
 		endTime = chrono::steady_clock::now();
@@ -417,21 +430,29 @@ void Guest::Receiver()
 		shared_ptr<char[]> buffer = make_shared<char[]>(BUFFER_SIZE);
 
 		// Write received data to buffer
-		retval = recv(m_socket, buffer.get(), BUFFER_SIZE - m_buffer.Size(), 0);
+		retval = recv(m_socket, buffer.get(), BUFFER_SIZE - m_buffer[0].Size(), 0);
 		if(retval > 0) {
-			m_buffer.Write(buffer.get(), retval);
+			m_buffer[0].Write(buffer.get(), retval);
 
-			ushort packetSize = m_buffer.Peek();
-			while(packetSize <= m_buffer.Size()) {
-				m_receivedPacketQue.Push(PacketProcess());
+			ushort packetSize = m_buffer[0].Peek();
+			while(packetSize <= m_buffer[0].Size()) {
+				if(packetSize == -1)
+					break;
+
+				packet = PacketProcess(0);
+				if(packet == nullptr) {
+					OutputDebugString(L"Fail PacketProcess\n");
+					break;
+				}
+				m_receivedPacketQue.Push(packet);
 
 				packetSize = 0;
 				packet.reset();
 
-				if(m_buffer.Empty())
+				if(m_buffer[0].Empty())
 					break;
 
-				packetSize = m_buffer.Peek();
+				packetSize = m_buffer[0].Peek();
 			}
 		}
 		endTime = chrono::steady_clock::now();
@@ -482,12 +503,25 @@ bool Guest::Recv(shared_ptr<Packet> packet)
 void NetworkManager::Initialize()
 {
 	m_network = make_unique<Network>();
+
+	m_prevTime = chrono::system_clock::now();
+	m_remainTime = SEND_PACKET_PER_SEC;
 }
 
 void NetworkManager::Update()
 {
 	if(GetNetworkState() != NETWORK_STATE::SINGLE)
 		m_network->Update();
+
+	m_isSend = false;
+
+	auto elapsedTime = chrono::duration<double>(chrono::system_clock::now() - m_prevTime).count();
+	m_remainTime -= elapsedTime;
+	if(m_remainTime <= 0) {
+		m_prevTime = chrono::system_clock::now();
+		m_remainTime = SEND_PACKET_PER_SEC;
+		m_isSend = true;
+	}
 }
 
 void NetworkManager::MakeCorrectPacket()

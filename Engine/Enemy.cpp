@@ -50,14 +50,16 @@ void Enemy::LateUpdate()
 		return;
 	}
 	else if(GET_SINGLE(NetworkManager)->GetNetworkState() == NETWORK_STATE::HOST) {
-		shared_ptr<EnemyPacket> packet = make_shared<EnemyPacket>();
-		packet->m_targetId = m_networkId;
-		packet->m_position = GetTransform()->GetLocalPosition();
-		packet->m_velocity = GetRigidBody()->GetLinearVelocity();
-		packet->m_rotation = GetTransform()->GetLocalRotation();
-		packet->m_targetPlayerId = GetTargetPlayerIndex();
-		packet->m_animationIndex = GetAnimator()->GetCurrentClipIndex();
-		SEND(packet);
+		if(GET_SINGLE(NetworkManager)->m_isSend) {
+			shared_ptr<EnemyPacket> packet = make_shared<EnemyPacket>();
+			packet->m_targetId = m_networkId;
+			packet->m_position = GetTransform()->GetLocalPosition();
+			packet->m_velocity = GetRigidBody()->GetLinearVelocity();
+			packet->m_rotation = GetTransform()->GetLocalRotation();
+			packet->m_targetPlayerId = GetTargetPlayerIndex();
+			packet->m_animationIndex = GetAnimator()->GetCurrentClipIndex();
+			SEND(packet);
+		}
 	}
 
 	shared_ptr<EnemyState> nextState = m_curState->OnLateUpdateState();
