@@ -395,9 +395,66 @@ shared_ptr<Texture> Resources::LoadItemIconTexture(int id)
 	return texture;
 }
 
-const wstring& Resources::GetItemDesc(int id)
+wstring Resources::GetItemDesc(int id)
 {
-	return L"";
+	wstring desc{};
+	switch (id) {
+	case 0:
+		desc = L"Brilliant Behemoth\nAdds explosion to bullets.";
+		break;
+	case 1:
+		desc = L"Battery Pack\nIncrease Attack Speed.";
+		break;
+	case 2:
+		desc = L"Fat Bullet\nIncrease Bullet Damage.";
+		break;
+	case 3:
+		desc = L"Gunpowder Pack\nIncrease explosion Damage.";
+		break;
+	case 4:
+		desc = L"Ham\nIncrease Explosion Range.";
+		break;
+	case 5:
+		desc = L"Big Axe\nMax HP UP!";
+		break;
+	case 6:
+		desc = L"Can Cola\nWalk Speed UP!";
+		break;
+	case 7:
+		desc = L"Cylinder\nJump Power UP!";
+		break;
+	case 8:
+		desc = L"Hammer\nAim Speed UP!";
+		break;
+	case 9:
+		desc = L"Pouch\nattack stability UP!";
+		break;
+	case 10:
+		desc = L"Fork\nMax Damage UP!";
+		break;
+	case 11:
+		desc = L"Knife\nCritical Chace UP!";
+		break;
+	case 12:
+		desc = L"PDA\nCritical DMG UP!";
+		break;
+	case 13:
+		desc = L"Scope\nThis is Item13";
+		break;
+	case 14:
+		desc = L"SwipeCard\nThis is Item14";
+		break;
+	case 15:
+		desc = L"Sword\nThis is Item15";
+		break;
+	case 16:
+		desc = L"Helmet\nThis is Item16";
+		break;
+	default:
+		break;
+
+	}
+	return desc;
 }
 
 shared_ptr<GameObject> Resources::LoadItemPrefab(int id, Vec3 location)

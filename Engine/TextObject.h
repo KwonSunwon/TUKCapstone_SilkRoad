@@ -135,3 +135,20 @@ private:
 	shared_ptr<Camera> m_camera;
 	shared_ptr<Light> m_light;
 };
+
+class HPTextObject : public TextObject
+{
+public:
+	HPTextObject();
+	~HPTextObject() = default;
+
+	virtual void Update() override;
+	virtual void Render(const ComPtr<ID2D1DeviceContext2>& device) override;
+
+private:
+	float m_displayHP;
+	bool m_timerOn;
+	float m_timer;
+	float m_scale;
+
+};

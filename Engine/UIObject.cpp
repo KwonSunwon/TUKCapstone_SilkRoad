@@ -7,7 +7,13 @@
 #include "Input.h"
 #include "Player.h"
 #include "TextObject.h"
-
+#include "UpgradeManager.h"
+#include "Resources.h"
+#include "MeshRenderer.h"
+#include "Material.h"
+#include "SceneManager.h"
+#include "Player.h"
+#include "Timer.h"
 
 void UIObject::OnMouseEvent(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) { }
 void UIObject::OnMouseEvent(HWND hWnd) { }
@@ -212,6 +218,30 @@ Vec2 UIObject::GetScale() const
 	return m_scale;
 }
 
+void PlayerHPBar::Update()
+{
+	auto player = GET_SINGLE(SceneManager)->GetActiveScene()->GetMainPlayerScript();
+
+	float hp = player->GetHP();
+	float maxHp = player->GetMaxHP();
+	float ratio = hp / maxHp;
+
+	if ( abs(m_displayHPRatio - ratio) <= 0.0001f )
+	{
+		m_displayHPRatio = ratio;
+	}
+	else
+	{
+		m_displayHPRatio = m_displayHPRatio + (ratio - m_displayHPRatio) * 4 * DELTA_TIME;
+		if (abs(m_displayHPRatio - ratio) <= 0.005f)
+		{
+			m_displayHPRatio = ratio;
+		}
+	}
+	SetWidth(max(m_displayHPRatio * 145.f, 0.0f));
+	UIObject::Update();
+}
+
 void UIToggleObject::Update()
 {
 	if (GET_SINGLE(Input)->GetButtonDown(m_toggleKey))
@@ -234,34 +264,48 @@ void UIToggleObject::LateUpdate()
 	}
 }
 
+void PlayerStatUI::AddItemSlot(shared_ptr<UIToggleObject> itemSlot, int index)
+{
+	m_itemSlots[index] = itemSlot;
+}
+
+void PlayerStatUI::AddItemDesc(shared_ptr<TextToggleObject> itemDesc, int index)
+{
+	m_itemDescs[index] = itemDesc;
+}
+
 void PlayerStatUI::Update()
 {
 	UIToggleObject::Update();
 
 	int slotIdx = 0;
+
+	for (int i = 0; i < 17; ++i)
+	{
+		m_itemSlots[i]->SetToggle(false);
+		m_itemDescs[i]->SetToggle(false);
+	}
+
 	if (this->GetToggle())
 	{
 		for (int i = 0; i < 17; ++i)
 		{
-			if (m_itemLevels[i] >= 1)
+			int itemLevel = GET_SINGLE(UpgradeManager)->GetItemLevel(i);
+			if (itemLevel > 0)
 			{
-				m_itemSlots[i]->SetToggle(true);
+				m_itemSlots[slotIdx]->SetToggle(true);
+				m_itemDescs[slotIdx]->SetToggle(true);
+				m_itemSlots[slotIdx]->GetGameObject()->GetMeshRenderer()->GetMaterial()->SetTexture(0, GET_SINGLE(Resources)->LoadItemIconTexture(i));
+				m_itemDescs[slotIdx]->SetText(GET_SINGLE(Resources)->GetItemDesc(i) + L"\n\nx " + to_wstring(itemLevel));
 				++slotIdx;
 			}
 			else
 			{
 				m_itemSlots[i]->SetToggle(false);
+				m_itemDescs[i]->SetToggle(false);
 			}
 		}
 	}
-	else
-	{
-		for (int i = 0; i < 17; ++i)
-		{
-			m_itemSlots[i]->SetToggle(false);
-		}
-	}
-	
 }
 
 void PlayerStatUI::LateUpdate()

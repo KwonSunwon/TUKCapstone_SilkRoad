@@ -309,12 +309,12 @@ shared_ptr<class Scene> LoadMainScene1()
 
 				meshRenderer->SetMaterial(material);
 			}
-			shared_ptr<UIObject> uiObject = make_shared<UIObject>();
-			uiObject->SetPivot(ePivot::CENTER);
+			shared_ptr<UIObject> uiObject = make_shared<PlayerHPBar>();
+			uiObject->SetPivot(ePivot::LEFTCENTER);
 			uiObject->SetScreenPivot(ePivot::LEFTBOT);
 			uiObject->SetWidth(145.f);
 			uiObject->SetHeight(15.f);
-			uiObject->SetPosition(Vec2(100.f, 50));
+			uiObject->SetPosition(Vec2(27.5f, 50));
 			uiObject->SetZOrder(490);
 
 			obj->AddComponent(uiObject);
@@ -324,13 +324,9 @@ shared_ptr<class Scene> LoadMainScene1()
 		}
 		// HP 텍스트
 		{
-			auto HPText = make_shared<TextObject>();
-			HPText->SetFormat("24L");
-			HPText->SetBrush("WHITE");
-			HPText->SetText(L"100/100");
-			HPText->SetPivot(ePivot::LEFTBOT);
+			auto HPText = make_shared<HPTextObject>();
 			HPText->SetScreenPivot(ePivot::LEFTBOT);
-			HPText->SetPosition(Vec2(25, -60));
+			HPText->SetPosition(Vec2(25, -100));
 			scene->AddTextObject(HPText);
 		}
 
@@ -469,13 +465,14 @@ shared_ptr<class Scene> LoadMainScene1()
 
 				// 아이템 텍스트
 				{
-					auto ItemText = make_shared<TextObject>();
+					auto ItemText = make_shared<TextToggleObject>();
 					ItemText->SetFormat("15L");
 					ItemText->SetBrush("WHITE");
 					ItemText->SetText(L"Brilliant Behemoth\nAdds explosion to bullets.\n\n2");
 					ItemText->SetPivot(ePivot::LEFTTOP);
 					ItemText->SetScreenPivot(ePivot::CENTER);
 					ItemText->SetPosition(Vec2(-610 + (280 * (i % 5)), -340 + (i / 5) * 100) );
+					statUI->AddItemDesc(ItemText, i);
 					scene->AddTextObject(ItemText);
 				}
 			}

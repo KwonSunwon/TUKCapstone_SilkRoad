@@ -7,6 +7,7 @@
 #include "UIObject.h"
 #include "Scene.h"
 #include "SceneManager.h"
+#include "Resources.h"
 
 
 void Item::Awake()
@@ -52,7 +53,7 @@ void Item::AddGetItemText()
 
 	auto text = make_shared<GettingItemTextObject>(L"Brilliant Behemoth\nAdds explosion to bullets.");
 
-	switch (m_itemId)
+	/*switch (m_itemId)
 	{
 	case 0:
 		text->SetText(L"Brilliant Behemoth\nAdds explosion to bullets.");
@@ -69,8 +70,9 @@ void Item::AddGetItemText()
 	case 4:
 		text->SetText(L"Ham\nIncrease Explosion Range.");
 		break;
-	}
+	}*/
 
+	text->SetText(GET_SINGLE(Resources)->GetItemDesc(m_itemId));
 	text->SetPivot(ePivot::CENTER);
 	text->SetScreenPivot(ePivot::CENTER);
 	float yOffset = text->getNum() * 90.f;

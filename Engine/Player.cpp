@@ -100,6 +100,10 @@ void Player::Update()
 	GetTransform()->SetLocalRotation(rot);
 
 
+	if (GET_SINGLE(Input)->GetButtonDown(KEY_TYPE::KEY_1))
+		m_hp -= 30.f;
+
+
 	shared_ptr<PlayerState> nextState = m_curState->OnUpdateState();
 	if (nextState)
 	{

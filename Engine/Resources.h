@@ -33,7 +33,7 @@ public:
 	shared_ptr<Mesh> LoadTerrainMesh(int32 sizeX = 15, int32 sizeZ = 15);
 
 	shared_ptr<Texture> LoadItemIconTexture(int id);
-	const wstring& GetItemDesc(int id);
+	wstring GetItemDesc(int id);
 
 	//Prefabs
 	shared_ptr<GameObject> LoadItemPrefab(int id, Vec3 Location);

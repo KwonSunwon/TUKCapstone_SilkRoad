@@ -13,6 +13,7 @@
 #include "Light.h"
 #include "GameObject.h"
 #include "Input.h"
+#include "Player.h"
 
 unordered_map<string, ComPtr<ID2D1SolidColorBrush>>	TextObject::s_brushes;
 unordered_map<string, ComPtr<IDWriteTextFormat>>	TextObject::s_formats;
@@ -311,6 +312,13 @@ void DamageIndicatorTextObject::Update()
 
 	m_alpha = min(1.0f, lifeTime - m_timer);
 
+	float angle{ 30.0f + 150.0f * (m_timer / 0.2f) };
+	m_scale = 1.0f + sinf(XMConvertToRadians(angle)) * 0.5f;
+	if (m_timer >= 0.2f)
+		m_scale = 1.0f;
+	if (m_brush == "YELLOW")
+		m_scale += 0.3f;
+
 	m_timer += DELTA_TIME;
 
 	if (m_timer > lifeTime)
@@ -390,4 +398,64 @@ void DebugTextObject::Update()
 	}
 
 	SetText(debugText);
+}
+
+HPTextObject::HPTextObject()
+{
+	m_displayHP = 0.0f;
+	m_scale = 1.0f;
+	m_timerOn = false;
+	m_timer = 0.0f;
+	m_rect = { 0.0f, 0.0f, 100.0f, 0.0f };
+}
+
+void HPTextObject::Render(const ComPtr<ID2D1DeviceContext2>& device)
+{
+	auto player = GET_SINGLE(SceneManager)->GetActiveScene()->GetMainPlayerScript();
+	wstring hpText{ to_wstring(static_cast<int>(m_displayHP) <= 0 ? 0 : static_cast<int>(m_displayHP)) };
+	m_text = hpText;
+	SetFormat("30L");
+	CalcWidthHeight();
+	float hpWidth = m_width;
+
+	D2D1::Matrix3x2F matrix{};
+	matrix.SetProduct(D2D1::Matrix3x2F::Scale(m_scale, m_scale, {hpWidth, m_rect.bottom}), D2D1::Matrix3x2F::Translation(m_position.x, m_position.y));
+	device->SetTransform(matrix);
+	device->DrawText(hpText.c_str(), static_cast<UINT32>(hpText.size()), s_formats["30L"].Get(), &m_rect, s_brushes["WHITE"].Get());
+
+	wstring slash{ TEXT("/") };
+	device->SetTransform(D2D1::Matrix3x2F::Translation(m_position.x + hpWidth, m_position.y));
+	device->DrawText(slash.c_str(), static_cast<UINT32>(slash.size()), s_formats["24L"].Get(), &m_rect, s_brushes["WHITE"].Get());
+
+	m_text = slash;
+	m_format = "24L";
+	CalcWidthHeight();
+	float slashWidth{ m_width };
+
+	wstring maxHpText{ to_wstring(static_cast<int>(player->GetMaxHP()))};
+	device->SetTransform(D2D1::Matrix3x2F::Translation(m_position.x + hpWidth + slashWidth, m_position.y));
+	device->DrawText(maxHpText.c_str(), static_cast<UINT32>(maxHpText.size()), s_formats["24L"].Get(), &m_rect, s_brushes["WHITE"].Get());
+}
+
+void HPTextObject::Update()
+{
+	auto player = GET_SINGLE(SceneManager)->GetActiveScene()->GetMainPlayerScript();
+	if (abs(m_displayHP - player->GetHP()) > 0.0001f)
+	{
+		m_displayHP = player->GetHP();
+		m_timer = 0.0f;
+		m_timerOn = true;
+	}
+
+	m_text = to_wstring(static_cast<int>(player->GetHP()));
+	m_format = "30R";
+	CalcWidthHeight();
+	float hpWidth = m_width;
+	m_rect.bottom = m_height;
+
+	float angle{ 30.0f + 150.0f * (m_timer / 0.2f) };
+	m_scale = 1.0f + sinf(XMConvertToRadians(angle)) * 0.2f;
+
+	if (m_timerOn) m_timer += DELTA_TIME;
+	if (m_timer > 0.2f) m_timerOn = false;
 }

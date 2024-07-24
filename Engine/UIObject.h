@@ -51,6 +51,16 @@ protected:
 	int			m_zOrder = 10;
 };
 
+class PlayerHPBar : public UIObject
+{
+public:
+	virtual void Update() override;
+
+private:
+	float m_displayHPRatio = 1.f;
+
+};
+
 class UIToggleObject : public UIObject
 {
 public:
@@ -73,9 +83,11 @@ public:
 	virtual void Update() override;
 	virtual void LateUpdate() override;
 
-	void AddItemSlot(shared_ptr<UIToggleObject> itemSlot, int index) { m_itemSlots[index] = itemSlot; }
+	void AddItemSlot(shared_ptr<UIToggleObject> itemSlot, int index);
+	void AddItemDesc(shared_ptr<TextToggleObject> itemDesc, int index);
 
 private:
 	array<shared_ptr<UIToggleObject>, 17> m_itemSlots;
+	array<shared_ptr<TextToggleObject>, 17> m_itemDescs;
 
 };

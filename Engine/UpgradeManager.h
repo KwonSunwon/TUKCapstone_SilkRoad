@@ -12,6 +12,8 @@ public:
     void SetClass();
     void SetStat();
 
+	int GetItemLevel(int id) { return m_itemLevels[id]; }
+
 private:
 
     array<int, 5> m_upgradeLevels;
