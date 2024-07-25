@@ -258,6 +258,7 @@
     <ClInclude Include="StructuredBuffer.h" />
     <ClInclude Include="SwapChain.h" />
     <ClInclude Include="TableDescriptorHeap.h" />
+    <ClInclude Include="TankerSkill.h" />
     <ClInclude Include="Terrain.h" />
     <ClInclude Include="TestCameraScript.h" />
     <ClInclude Include="TestDragon.h" />
@@ -348,6 +349,7 @@
     <ClCompile Include="StructuredBuffer.cpp" />
     <ClCompile Include="SwapChain.cpp" />
     <ClCompile Include="TableDescriptorHeap.cpp" />
+    <ClCompile Include="TankerSkill.cpp" />
     <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="TestCameraScript.cpp" />
     <ClCompile Include="TestDragon.cpp" />

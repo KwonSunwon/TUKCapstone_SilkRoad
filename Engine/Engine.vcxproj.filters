@@ -67,6 +67,9 @@
     <Filter Include="Object\InteractiveObject">
       <UniqueIdentifier>{e6d1cae3-32fe-4c5e-96e0-714d2479fc48}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Object\Player\Skill">
+      <UniqueIdentifier>{aa9cbfb3-79ed-466f-bd6c-22fd3e1e33de}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -310,6 +313,9 @@
     </ClCompile>
     <ClCompile Include="UpgradeManager.cpp">
       <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="TankerSkill.cpp">
+      <Filter>Object\Player\Skill</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -560,6 +566,9 @@
     </ClInclude>
     <ClInclude Include="UpgradeManager.h">
       <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="TankerSkill.h">
+      <Filter>Object\Player\Skill</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

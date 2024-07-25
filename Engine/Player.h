@@ -2,8 +2,6 @@
 #include "MonoBehaviour.h"
 #include "PlayerBullet.h"
 #include "Camera.h"
-static array<int, 17> m_itemLevels;
-
 
 struct FireInfo {
 	BulletType bulletType = BulletType::BASIC;
@@ -67,6 +65,8 @@ public:
 
 	float GetPlusDamage() { return m_plusDamage; }
 	void SetPlusDamage(float plusDamage) { m_plusDamage = plusDamage; }
+
+	void SetSkillObject(int id, shared_ptr<GameObject> gm);
 private:
 	shared_ptr<class PlayerState> m_curState;
 	shared_ptr<Camera> m_playerCamera;
@@ -111,5 +111,14 @@ private:
 	void ProcessGetItem();
 	float CalcDamage();
 	BulletType CalcBulletType();
+
+private:
+
+	void Skill();
+	shared_ptr<GameObject> m_guardObject;
+	shared_ptr<GameObject> m_healObject;
+	shared_ptr<GameObject> m_bombObject;
+	shared_ptr<GameObject> m_dealObject;
+
 };
 

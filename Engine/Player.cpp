@@ -46,6 +46,8 @@ void Player::Update()
 	InteracitveObjectPick();
 	if (INPUT->GetButtonDown(KEY_TYPE::Q))
 	{
+		Skill();
+
 		float minDistance = FLT_MAX;
 		vector<shared_ptr<GameObject>>gameObjects = GET_SINGLE(SceneManager)->GetActiveScene()->GetInteractiveGameObjects();
 		Vec3 cameraPos = m_playerCamera->GetTransform()->GetWorldPosition();
@@ -211,6 +213,34 @@ void Player::AddBullet(shared_ptr<class PlayerBullet> bullet)
 }
 
 
+void Player::SetSkillObject(int id , shared_ptr<GameObject> gm)
+{
+	switch (id)
+	{
+	case 0:
+		m_guardObject = gm;
+		break;
+
+	case 1:
+		m_healObject = gm;
+		break;
+
+	case 2:
+		m_bombObject = gm;
+		break;
+
+	case 3:
+		m_dealObject = gm;
+		break;
+
+		
+		
+
+	default:
+		break;
+	}
+}
+
 void Player::InteracitveObjectPick()
 {
 	float minDistance = FLT_MAX;
@@ -261,7 +291,6 @@ void Player::ProcessGetItem()
 		shared_ptr<MonoBehaviour> scriptI = col->m_rb2->GetGameObject()->GetMonobehaviour("Item");
 		if (scriptI) {
 			shared_ptr<Item> itemScript = dynamic_pointer_cast<Item>(scriptI);
-			m_itemLevels[itemScript->GetItemID()]++;
 
 			itemScript->AddGetItemText();
 			GET_SINGLE(SoundManager)->soundPlay(Sounds::ENV_EAT_ITEM);
@@ -275,15 +304,15 @@ void Player::ProcessGetItem()
 
 float Player::CalcDamage()
 {
-	// Randomly determine if this hit is a critical hit
+	
 	bool isCriticalHit = (static_cast<float>(rand()) / RAND_MAX) < m_criticalPercentage;
 
-	// Calculate base damage
-	int minDamage = m_fireInfo.bulletDamage * (1.f - m_minusDamage);
-	int maxDamage = m_fireInfo.bulletDamage * (1.f + m_plusDamage);
+	
+	int minDamage = m_bulletDamage * (1.f - m_minusDamage);
+	int maxDamage = m_bulletDamage * (1.f + m_plusDamage);
 	int baseDamage = minDamage + rand() % (maxDamage - minDamage + 1);
 
-	// Apply critical damage if it's a critical hit
+	
 	if (isCriticalHit) {
 		m_isCritical = true;
 		return baseDamage * m_criticalDamage;
@@ -296,11 +325,27 @@ float Player::CalcDamage()
 
 BulletType Player::CalcBulletType()
 {
-	if (m_itemLevels[0] == 0)
+	/*if (m_itemLevels[0] == 0)
 		return BulletType::BASIC;
 
 	if (m_fireTime % (5 - m_itemLevels[0]) == 0)
-		return BulletType::EXPLOSIVE;
+		return BulletType::EXPLOSIVE;*/
 
 	return BulletType::BASIC;
+}
+
+void Player::Skill()
+{
+	if (!m_guardObject)
+		return;
+
+	shared_ptr<Transform> transform = GetTransform();
+	Vec3 pos = transform->GetLocalPosition();
+	Vec3 look = transform->GetLook();
+	Vec3 dropPos = pos + look*500.f + Vec3(0.f, 300.f, 0.f);
+
+	m_guardObject->GetRigidBody()->SetStatic(false);
+	m_guardObject->GetRigidBody()->MoveTo(dropPos);
+	m_guardObject->GetTransform()->LookAt(look);
+
 }
