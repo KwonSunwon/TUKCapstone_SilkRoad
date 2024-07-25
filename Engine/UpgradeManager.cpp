@@ -12,6 +12,9 @@
 #include "InteractiveObject.h"
 #include "Animator.h"
 #include "Transform.h"
+#include "Packet.h"
+#include "Network.h"
+
 void UpgradeManager::Init()
 {//hp,maxHp,bulletDamage, hpregen, maxwalkSpeed, maxJumpSpeed, maxAimSpeed, cri percent, cri damage, m_fireRate
 	m_stat = { {
@@ -22,8 +25,8 @@ void UpgradeManager::Init()
 	} };
 
 	std::ifstream upgradeFile("upgrade.txt");
-	if (upgradeFile.is_open()) {
-		for (int i = 0; i < 5; ++i) {
+	if(upgradeFile.is_open()) {
+		for(int i = 0; i < 5; ++i) {
 			// 파일에서 정수를 읽어와 배열에 저장
 			upgradeFile >> m_upgradeLevels[i];
 		}
@@ -41,7 +44,7 @@ void UpgradeManager::ClassChange(int id)
 	shared_ptr<GameObject> mainPlayer = GET_SINGLE(SceneManager)->GetActiveScene()->m_mainPlayerScript->GetGameObject();
 	shared_ptr<MeshData> meshData;
 
-	switch (id)
+	switch(id)
 	{
 	case EnumInteract::CHARACTER_CHANGER1:
 		meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Character_Dealer.fbx");
@@ -72,7 +75,13 @@ void UpgradeManager::ClassChange(int id)
 	mainPlayer->AddComponent(gameObjects[0]->GetAnimator());
 
 	SetStat();
-	
+
+	if(GET_SINGLE(NetworkManager)->GetNetworkState() != NETWORK_STATE::SINGLE) {
+		shared_ptr<PlayerClassChangePacket> packet = make_shared<PlayerClassChangePacket>();
+		packet->m_targetId = GET_SINGLE(NetworkManager)->m_networkId;
+		packet->m_classIndex = id;
+		SEND(packet);
+	}
 }
 
 void UpgradeManager::SetClass()
@@ -80,7 +89,7 @@ void UpgradeManager::SetClass()
 	shared_ptr<GameObject> mainPlayer = GET_SINGLE(SceneManager)->GetActiveScene()->m_mainPlayerScript->GetGameObject();
 	shared_ptr<MeshData> meshData;
 
-	switch (m_charClass)
+	switch(m_charClass)
 	{
 	case EnumInteract::CHARACTER_CHANGER1:
 		meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Character_Dealer.fbx");
@@ -111,23 +120,30 @@ void UpgradeManager::SetClass()
 	mainPlayer->AddComponent(gameObjects[0]->GetAnimator());
 
 	SetStat();
+
+	if(GET_SINGLE(NetworkManager)->GetNetworkState() != NETWORK_STATE::SINGLE) {
+		shared_ptr<PlayerClassChangePacket> packet = make_shared<PlayerClassChangePacket>();
+		packet->m_targetId = GET_SINGLE(NetworkManager)->m_networkId;
+		packet->m_classIndex = m_charClass;
+		SEND(packet);
+	}
 }
 //hp,maxHp,bulletDamage, hpregen, maxwalkSpeed, maxJumpSpeed, maxAimSpeed, cri percent, cri damage, m_fireRate
 void UpgradeManager::SetStat()
 {
 	shared_ptr<Player> mainPlayer = GET_SINGLE(SceneManager)->GetActiveScene()->m_mainPlayerScript;
 
-	float maxHP			= m_stat[m_charClass - 5][1];
-	float bulletDamage	= m_stat[m_charClass - 5][2];
-	float hpRegen		= m_stat[m_charClass - 5][3];
-	float maxWalkSpeed	= m_stat[m_charClass - 5][4];
-	float maxJumpSpeed	= m_stat[m_charClass - 5][5];
-	float maxAimSpeed	= m_stat[m_charClass - 5][6];
-	float criPercent	= m_stat[m_charClass - 5][7];
-	float criDamage		= m_stat[m_charClass - 5][8];
-	float fireRate		= m_stat[m_charClass - 5][9];
-	float minusDamage	= 0.2f;
-	float plusDamage	= 0.2f;
+	float maxHP = m_stat[m_charClass - 5][1];
+	float bulletDamage = m_stat[m_charClass - 5][2];
+	float hpRegen = m_stat[m_charClass - 5][3];
+	float maxWalkSpeed = m_stat[m_charClass - 5][4];
+	float maxJumpSpeed = m_stat[m_charClass - 5][5];
+	float maxAimSpeed = m_stat[m_charClass - 5][6];
+	float criPercent = m_stat[m_charClass - 5][7];
+	float criDamage = m_stat[m_charClass - 5][8];
+	float fireRate = m_stat[m_charClass - 5][9];
+	float minusDamage = 0.2f;
+	float plusDamage = 0.2f;
 
 	//m_itemLevels[0]  
 	fireRate += m_itemLevels[1] * 1.f;
@@ -150,30 +166,30 @@ void UpgradeManager::SetStat()
 
 
 
-	mainPlayer->SetMaxHP		(maxHP);
-	mainPlayer->SetBulletDamage	(bulletDamage);
-	mainPlayer->SetHpRegen		(hpRegen);
-	mainPlayer->SetMaxWalkSpeed	(maxWalkSpeed);
-	mainPlayer->SetMaxJumpSpeed	(maxJumpSpeed);
-	mainPlayer->SetMaxAimSpeed	(maxAimSpeed);
-	mainPlayer->SetCriPercent	(criPercent);
-	mainPlayer->SetCriDamage	(criDamage);
-	mainPlayer->SetFireRate		(fireRate);
-	mainPlayer->SetMinusDamage	(minusDamage);
-	mainPlayer->SetPlusDamage	(plusDamage);
+	mainPlayer->SetMaxHP(maxHP);
+	mainPlayer->SetBulletDamage(bulletDamage);
+	mainPlayer->SetHpRegen(hpRegen);
+	mainPlayer->SetMaxWalkSpeed(maxWalkSpeed);
+	mainPlayer->SetMaxJumpSpeed(maxJumpSpeed);
+	mainPlayer->SetMaxAimSpeed(maxAimSpeed);
+	mainPlayer->SetCriPercent(criPercent);
+	mainPlayer->SetCriDamage(criDamage);
+	mainPlayer->SetFireRate(fireRate);
+	mainPlayer->SetMinusDamage(minusDamage);
+	mainPlayer->SetPlusDamage(plusDamage);
 
 }
 
 void UpgradeManager::Upgrade(int id)
 {	//돈이 있다면
-	if (1) {
+	if(1) {
 		//테이블에 따라 돈을 줄이고,
 
 		GET_SINGLE(SoundManager)->soundPlay(Sounds::ENV_EAT_ITEM);
 		m_upgradeLevels[id]++;
 		ofstream upgradeFile("upgrade.txt");
-		if (upgradeFile.is_open()) {
-			for (int i = 0; i < 5; ++i) {
+		if(upgradeFile.is_open()) {
+			for(int i = 0; i < 5; ++i) {
 				upgradeFile << m_upgradeLevels[i] << std::endl;
 			}
 			upgradeFile.close();

@@ -159,3 +159,10 @@ StageChangePacket::StageChangePacket()
 	m_targetId = -1;
 	m_type = PACKET_TYPE::PT_STAGE_CHANGE;
 }
+
+PlayerClassChangePacket::PlayerClassChangePacket()
+{
+	m_size = sizeof(PlayerClassChangePacket);
+	m_targetId = -1;
+	m_type = PACKET_TYPE::PT_PLAYER_CLASS_CHANGE;
+}

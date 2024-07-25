@@ -40,6 +40,7 @@ enum class PACKET_TYPE : BYTE {
 	PT_INIT = 1,
 	PT_MOVE,
 	PT_PLAYER,
+	PT_PLAYER_CLASS_CHANGE,
 	PT_ENEMY,
 	PT_ENEMY_HIT,
 	PT_STAGE_CHANGE,
@@ -86,6 +87,15 @@ public:
 	Vec3 m_velocity;
 	Vec3 m_rotation;
 	uint32 m_animationIndex;
+};
+
+class PlayerClassChangePacket : public Packet {
+public:
+	PlayerClassChangePacket();
+	~PlayerClassChangePacket() {}
+
+public:
+	int32 m_classIndex;
 };
 
 class EnemyPacket : public Packet {
