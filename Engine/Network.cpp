@@ -9,6 +9,8 @@
 #include "Timer.h"
 #include "NetworkPlayer.h"
 #include "Enemy.h"
+#include "NetworkObject.h"
+#include "NetworkPlayer.h"
 
 Network::Network()
 {
@@ -23,8 +25,8 @@ Network::Network()
 */
 void Network::Update()
 {
-	auto objects = GET_SINGLE(SceneManager)->GetActiveScene()->GetGameObjects();
-	auto players = GET_SINGLE(SceneManager)->GetActiveScene()->GetPlayers();
+	auto objects = GET_SINGLE(SceneManager)->GetActiveScene()->GetNetworkObjects();
+	auto players = GET_SINGLE(SceneManager)->GetActiveScene()->GetNetworkPlayers();
 
 	shared_ptr<Packet> packet;
 	//while(Recv(m_packetBuffer)) {
@@ -51,10 +53,13 @@ void Network::Update()
 				packet->m_targetId = 0;
 			if(packet->m_targetId == 2)
 				packet->m_targetId = 1;
-			GET_SINGLE(SceneManager)->GetActiveScene()->m_networkPlayers[packet->m_targetId]->ProcessPacket(reinterpret_pointer_cast<PlayerPacket>(packet));
+			players[packet->m_targetId]->ProcessPacket(reinterpret_pointer_cast<PlayerPacket>(packet));
 			break;
+			/*case PACKET_TYPE::PT_ENEMY:
+				GET_SINGLE(SceneManager)->GetActiveScene()->m_enemies[packet->m_targetId]->ProcessPacket(reinterpret_pointer_cast<EnemyPacket>(packet));
+				break;*/
 		case PACKET_TYPE::PT_ENEMY:
-			GET_SINGLE(SceneManager)->GetActiveScene()->m_enemies[packet->m_targetId]->ProcessPacket(reinterpret_pointer_cast<EnemyPacket>(packet));
+			objects[packet->m_targetId]->ProcessPacket(packet);
 			break;
 		default:
 			break;

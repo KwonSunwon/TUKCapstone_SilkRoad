@@ -319,6 +319,9 @@
     <ClCompile Include="Packet.cpp">
       <Filter>Server</Filter>
     </ClCompile>
+    <ClCompile Include="NetworkObject.cpp">
+      <Filter>Object\Component</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -573,6 +576,9 @@
     </ClInclude>
     <ClInclude Include="Packet.h">
       <Filter>Server</Filter>
+    </ClInclude>
+    <ClInclude Include="NetworkObject.h">
+      <Filter>Object\Component</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
