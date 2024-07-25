@@ -80,12 +80,6 @@ void Enemy::LateUpdate()
 void Enemy::GetDamage(float damage, bool isPacket)
 {
 	m_HP -= damage;
-	if(!isPacket) {
-		shared_ptr<EnemyHitPacket> packet = make_shared<EnemyHitPacket>();
-		packet->m_targetId = GetNetworkObject()->GetNetworkId();
-		packet->m_damage = damage;
-		SEND(packet);
-	}
 }
 
 void Enemy::MakeDamageIndicator(float damage, Vec3 originPos, bool isCri)

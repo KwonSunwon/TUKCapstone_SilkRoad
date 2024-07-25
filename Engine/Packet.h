@@ -110,6 +110,8 @@ public:
 
 public:
 	float m_damage;
+	Vec3 m_rayDir;
+	float m_knockBackPower;
 };
 
 class StageChangePacket : public Packet {

@@ -5,6 +5,7 @@
 #include "Network.h"
 #include "GameObject.h"
 #include "Enemy.h"
+#include "RigidBody.h"
 
 NetworkObject::NetworkObject() : Component(COMPONENT_TYPE::NETWORK)
 {
@@ -26,8 +27,11 @@ void NetworkObject::ProcessPacket(shared_ptr<Packet> packet)
 		shared_ptr<Enemy> enemy = dynamic_pointer_cast<Enemy>(scriptE);
 		if(packet->m_type == PACKET_TYPE::PT_ENEMY)
 			enemy->ProcessPacket(reinterpret_pointer_cast<EnemyPacket>(packet));
-		else
+		else {
 			enemy->GetDamage(reinterpret_pointer_cast<EnemyHitPacket>(packet)->m_damage, true);
+			if(!enemy->GetRigidBody()->GetStatic())
+				enemy->GetRigidBody()->AddForce(reinterpret_pointer_cast<EnemyHitPacket>(packet)->m_rayDir * reinterpret_pointer_cast<EnemyHitPacket>(packet)->m_knockBackPower * 1000000.f);
+		}
 		break;
 	}
 	default:
