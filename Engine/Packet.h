@@ -41,6 +41,7 @@ enum class PACKET_TYPE : BYTE {
 	PT_MOVE,
 	PT_PLAYER,
 	PT_ENEMY,
+	PT_ENEMY_HIT,
 	PT_STAGE_CHANGE,
 	PT_MAX,
 };
@@ -100,6 +101,15 @@ public:
 
 	uint32 m_targetPlayerId;
 	float m_hp;
+};
+
+class EnemyHitPacket : public Packet {
+public:
+	EnemyHitPacket();
+	~EnemyHitPacket() {}
+
+public:
+	float m_damage;
 };
 
 class StageChangePacket : public Packet {

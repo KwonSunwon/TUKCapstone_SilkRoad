@@ -20,12 +20,14 @@ void NetworkObject::ProcessPacket(shared_ptr<Packet> packet)
 {
 	shared_ptr<MonoBehaviour> scriptE = GetGameObject()->GetMonobehaviour("Enemy");
 
-	switch(packet->m_type)
-	{
+	switch(packet->m_type) {
 	case PACKET_TYPE::PT_ENEMY:
-	{
+	case PACKET_TYPE::PT_ENEMY_HIT: {
 		shared_ptr<Enemy> enemy = dynamic_pointer_cast<Enemy>(scriptE);
-		enemy->ProcessPacket(reinterpret_pointer_cast<EnemyPacket>(packet));
+		if(packet->m_type == PACKET_TYPE::PT_ENEMY)
+			enemy->ProcessPacket(reinterpret_pointer_cast<EnemyPacket>(packet));
+		else
+			enemy->GetDamage(reinterpret_pointer_cast<EnemyHitPacket>(packet)->m_damage, true);
 		break;
 	}
 	default:

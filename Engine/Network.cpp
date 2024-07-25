@@ -59,6 +59,7 @@ void Network::Update()
 				GET_SINGLE(SceneManager)->GetActiveScene()->m_enemies[packet->m_targetId]->ProcessPacket(reinterpret_pointer_cast<EnemyPacket>(packet));
 				break;*/
 		case PACKET_TYPE::PT_ENEMY:
+		case PACKET_TYPE::PT_ENEMY_HIT:
 			objects[packet->m_targetId]->ProcessPacket(packet);
 			break;
 		case PACKET_TYPE::PT_STAGE_CHANGE:
@@ -91,6 +92,9 @@ shared_ptr<Packet> Network::PacketProcess(int idx)
 		break;
 	case PACKET_TYPE::PT_ENEMY:
 		packet = make_shared<EnemyPacket>();
+		break;
+	case PACKET_TYPE::PT_ENEMY_HIT:
+		packet = make_shared<EnemyHitPacket>();
 		break;
 	case PACKET_TYPE::PT_STAGE_CHANGE:
 		packet = make_shared<StageChangePacket>();

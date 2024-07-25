@@ -33,7 +33,7 @@ public:
 	void SetMaxHP(float maxHP) { m_MaxHP = maxHP; }
 	float GetMaxHP() { return m_MaxHP; }
 
-	void GetDamage(float damage);
+	void GetDamage(float damage, bool isPacket = false);
 	void MakeDamageIndicator(float damage, Vec3 originPos, bool isCri);
 
 	void ProcessPacket(shared_ptr<class EnemyPacket> packet);
@@ -55,7 +55,7 @@ private:
 	float m_MaxHP = 100.f;
 	float m_HP = 100.f;
 	bool m_isDie = false;
-	
+
 
 	vector<shared_ptr<class GameObject>> m_players;
 	shared_ptr<class PathFinding> m_pathFinding;
