@@ -145,3 +145,10 @@ EnemyPacket::EnemyPacket()
 	m_targetId = -1;
 	m_type = PACKET_TYPE::PT_ENEMY;
 }
+
+StageChangePacket::StageChangePacket()
+{
+	m_size = sizeof(StageChangePacket);
+	m_targetId = -1;
+	m_type = PACKET_TYPE::PT_STAGE_CHANGE;
+}

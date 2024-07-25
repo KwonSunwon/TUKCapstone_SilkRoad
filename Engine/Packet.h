@@ -41,6 +41,7 @@ enum class PACKET_TYPE : BYTE {
 	PT_MOVE,
 	PT_PLAYER,
 	PT_ENEMY,
+	PT_STAGE_CHANGE,
 	PT_MAX,
 };
 
@@ -99,6 +100,15 @@ public:
 
 	uint32 m_targetPlayerId;
 	float m_hp;
+};
+
+class StageChangePacket : public Packet {
+public:
+	StageChangePacket();
+	~StageChangePacket() {}
+
+public:
+	uint32 m_stageIndex;
 };
 
 #pragma pack(pop)

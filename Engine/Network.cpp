@@ -61,6 +61,12 @@ void Network::Update()
 		case PACKET_TYPE::PT_ENEMY:
 			objects[packet->m_targetId]->ProcessPacket(packet);
 			break;
+		case PACKET_TYPE::PT_STAGE_CHANGE:
+			if(m_networkState == NETWORK_STATE::GUEST) {
+				m_receivedPacketQue.Clear();
+				GET_SINGLE(SceneManager)->StartNextStage();
+			}
+			break;
 		default:
 			break;
 		}
@@ -85,6 +91,9 @@ shared_ptr<Packet> Network::PacketProcess(int idx)
 		break;
 	case PACKET_TYPE::PT_ENEMY:
 		packet = make_shared<EnemyPacket>();
+		break;
+	case PACKET_TYPE::PT_STAGE_CHANGE:
+		packet = make_shared<StageChangePacket>();
 		break;
 	}
 

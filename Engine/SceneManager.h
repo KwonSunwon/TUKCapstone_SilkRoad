@@ -29,6 +29,9 @@ public:
 	void StartStage(int stage) { s = stage; reset = true; }
 	void StartNextStage() { s++; reset = true; }
 	void ResetStage() { reset = true; }
+
+	int GetStageIndex() { return s; }
+
 public:
 	shared_ptr<Scene> GetActiveScene() { return m_activeScene; }
 
