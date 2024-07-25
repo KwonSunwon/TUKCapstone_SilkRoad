@@ -12,6 +12,9 @@ enum class KEY_TYPE;
 
 class Player;
 class TextToggleObject;
+class PlayerStatTextObject;
+class PlayerClassTextObject;
+class OutgameUpgradeTextObject;
 
 class UIObject : public MonoBehaviour
 {
@@ -85,9 +88,15 @@ public:
 
 	void AddItemSlot(shared_ptr<UIToggleObject> itemSlot, int index);
 	void AddItemDesc(shared_ptr<TextToggleObject> itemDesc, int index);
+	void SetPlayerStatText(shared_ptr<PlayerStatTextObject> playerStatText);
+	void SetPlayerClassText(shared_ptr<PlayerClassTextObject> playerClassText);
+	void SetOutgameUpgradeText(shared_ptr<OutgameUpgradeTextObject> outgameUpgradeText);
 
 private:
 	array<shared_ptr<UIToggleObject>, 17> m_itemSlots;
 	array<shared_ptr<TextToggleObject>, 17> m_itemDescs;
+	shared_ptr<PlayerStatTextObject> m_playerStatText;
+	shared_ptr<PlayerClassTextObject> m_playerClassText;
+	shared_ptr<OutgameUpgradeTextObject> m_outgameUpgradeText;
 
 };

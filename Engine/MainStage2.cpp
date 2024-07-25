@@ -250,6 +250,16 @@ shared_ptr<class Scene> LoadMainScene2()
 		auto debugText = make_shared<DebugTextObject>();
 		scene->AddTextObject(debugText);
 
+		auto interact = make_shared<InteractiveObjectText>();
+		interact->SetFormat("24L");
+		interact->SetBrush("WHITE");
+		interact->SetText(L"+");
+		interact->SetPivot(ePivot::CENTERBOT);
+		interact->SetScreenPivot(ePivot::CENTER);
+		interact->SetPosition(Vec2(0.f, -50.f));
+		scene->AddTextObject(interact);
+		scene->SetInteractiveObjectText(interact);
+
 	}
 #pragma endregion
 

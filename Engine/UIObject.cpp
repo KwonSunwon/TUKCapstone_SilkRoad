@@ -274,6 +274,21 @@ void PlayerStatUI::AddItemDesc(shared_ptr<TextToggleObject> itemDesc, int index)
 	m_itemDescs[index] = itemDesc;
 }
 
+void PlayerStatUI::SetPlayerStatText(shared_ptr<PlayerStatTextObject> playerStatText)
+{
+	m_playerStatText = playerStatText;
+}
+
+void PlayerStatUI::SetPlayerClassText(shared_ptr<PlayerClassTextObject> playerClassText)
+{
+	m_playerClassText = playerClassText;
+}
+
+void PlayerStatUI::SetOutgameUpgradeText(shared_ptr<OutgameUpgradeTextObject> outgameUpgradeText)
+{
+	m_outgameUpgradeText = outgameUpgradeText;
+}
+
 void PlayerStatUI::Update()
 {
 	UIToggleObject::Update();
@@ -285,6 +300,9 @@ void PlayerStatUI::Update()
 		m_itemSlots[i]->SetToggle(false);
 		m_itemDescs[i]->SetToggle(false);
 	}
+	m_playerStatText->SetToggle(this->GetToggle());
+	m_playerClassText->SetToggle(this->GetToggle());
+	m_outgameUpgradeText->SetToggle(this->GetToggle());
 
 	if (this->GetToggle())
 	{

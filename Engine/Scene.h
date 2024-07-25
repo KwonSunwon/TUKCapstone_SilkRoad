@@ -15,6 +15,7 @@ class Player;
 class Enemy;
 class TextObject;
 class AstarGrid;
+class InteractiveObjectText;
 
 class Scene
 {
@@ -56,6 +57,9 @@ public:
 	void SetMainPlayerScript(shared_ptr<Player> player) { m_mainPlayerScript = player; }
 	shared_ptr<Player> GetMainPlayerScript() { return m_mainPlayerScript; }
 
+	void SetInteractiveObjectText(shared_ptr<InteractiveObjectText> textObject) { m_interactiveObjectText = textObject; }
+	shared_ptr<InteractiveObjectText> GetInteractiveObjectText() { return m_interactiveObjectText; }
+
 	void AddGameObject(shared_ptr<GameObject> gameObject);
 	void RemoveGameObject(shared_ptr<GameObject> gameObject);
 
@@ -79,6 +83,7 @@ public:
 	array<shared_ptr<GameObject>, 3> m_players;
 	shared_ptr<Player> m_mainPlayerScript;
 	shared_ptr<Enemy> m_bossMonsterScript;
+	shared_ptr<InteractiveObjectText> m_interactiveObjectText;
 
 	int AddNetworkObject() { return m_numOfNetworkObject++; }
 private:

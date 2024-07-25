@@ -247,7 +247,10 @@ void Player::InteracitveObjectPick()
 	}
 
 	if (!picked)
+	{
+		GET_SINGLE(SceneManager)->GetActiveScene()->GetInteractiveObjectText()->SetVisible(false);
 		return;
+	}
 
 	picked->GetInteractiveObject()->PrintInteractiveText();
 

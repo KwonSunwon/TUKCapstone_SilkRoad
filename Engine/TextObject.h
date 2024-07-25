@@ -152,3 +152,46 @@ private:
 	float m_scale;
 
 };
+
+class PlayerStatTextObject : public TextToggleObject
+{
+public:
+	PlayerStatTextObject();
+	~PlayerStatTextObject() = default;
+
+	virtual void Update() override;
+};
+
+class PlayerClassTextObject : public TextToggleObject
+{
+public:
+	PlayerClassTextObject();
+	~PlayerClassTextObject() = default;
+
+	virtual void Update() override;
+};
+
+class OutgameUpgradeTextObject : public TextToggleObject
+{
+public:
+	OutgameUpgradeTextObject();
+	~OutgameUpgradeTextObject() = default;
+
+	virtual void Update() override;
+};
+
+class InteractiveObjectText : public TextObject
+{
+public:
+	InteractiveObjectText();
+	~InteractiveObjectText() = default;
+
+	virtual void Render(const ComPtr<ID2D1DeviceContext2>& device) override;
+
+	void SetVisible(bool visible) { m_isVisible = visible; }
+	void SetInteractType(int type) { m_interactType = type; }
+
+private:
+	bool m_isVisible = false;
+	int m_interactType;
+};

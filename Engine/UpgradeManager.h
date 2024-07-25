@@ -13,6 +13,8 @@ public:
     void SetStat();
 
 	int GetItemLevel(int id) { return m_itemLevels[id]; }
+	int GetUpgradeLevel(int id) { return m_upgradeLevels[id]; }
+	int GetClass() { return m_charClass; }
 
 private:
 

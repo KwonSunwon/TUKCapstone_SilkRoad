@@ -14,6 +14,9 @@
 #include "GameObject.h"
 #include "Input.h"
 #include "Player.h"
+#include "UpgradeManager.h"
+#include "InteractiveObject.h"
+
 
 unordered_map<string, ComPtr<ID2D1SolidColorBrush>>	TextObject::s_brushes;
 unordered_map<string, ComPtr<IDWriteTextFormat>>	TextObject::s_formats;
@@ -458,4 +461,87 @@ void HPTextObject::Update()
 
 	if (m_timerOn) m_timer += DELTA_TIME;
 	if (m_timer > 0.2f) m_timerOn = false;
+}
+
+PlayerStatTextObject::PlayerStatTextObject()
+{
+	SetBrush("WHITE");
+	SetFormat("15L");
+}
+
+void PlayerStatTextObject::Update()
+{
+	auto player = GET_SINGLE(SceneManager)->GetActiveScene()->GetMainPlayerScript();
+	wstring statText{};
+	statText += L"Max HP : " + to_wstring(static_cast<int>(player->GetMaxHP())) + L"\n";
+	statText += L"HP Regen : " + to_wstring(static_cast<int>(player->GetHpRegen())) + L"\n";
+	statText += L"Min Damage : " + to_wstring(static_cast<int>(player->GetMinusDamage() * 100)) + L"%\n";
+	statText += L"Max Damage : " + to_wstring(static_cast<int>(player->GetPlusDamage() * 100)) + L"%\n";
+	statText += L"Fire Rate : " + to_wstring(static_cast<int>(player->GetFireRate())) + L"\n";
+	statText += L"Walk Speed : " + to_wstring(static_cast<int>(player->GetMaxWalkSpeed())) + L"\n";
+	statText += L"Jump Power : " + to_wstring(static_cast<int>(player->GetMaxJumpSpeed())) + L"\n";
+	statText += L"Critical Chance : " + to_wstring(static_cast<int>(player->GetCriPercent() * 100)) + L"%\n";
+	statText += L"Critical Damage : " + to_wstring(static_cast<int>(player->GetCriDamage() * 100)) + L"%\n";
+	SetText(statText);
+}
+
+PlayerClassTextObject::PlayerClassTextObject()
+{
+	SetBrush("WHITE");
+	SetFormat("15L");
+}
+
+void PlayerClassTextObject::Update()
+{
+	auto um = GET_SINGLE(UpgradeManager);
+	wstring classText{};
+	switch (um->GetClass())
+	{
+	case 5:
+		classText += L"Dealer\nSkill : Hyper-Focus";
+		break;
+	case 6:
+		classText += L"Healer\nSkill : Recovery nanomachine";
+		break;
+	case 7:
+		classText += L"Class Launcher\nSkill : Air Raid";
+		break;
+	case 8:
+		classText += L"Class : Tanker\nSkill : Iron Wall";
+		break;
+	}
+	
+	SetText(classText);
+}
+
+OutgameUpgradeTextObject::OutgameUpgradeTextObject()
+{
+	SetBrush("WHITE");
+	SetFormat("15L");
+}
+
+void OutgameUpgradeTextObject::Update()
+{
+	auto um = GET_SINGLE(UpgradeManager);
+	wstring upgradeText{};
+	upgradeText += L"Upgrade 1 LV." + to_wstring(um->GetUpgradeLevel(0)) + L"\n";
+	upgradeText += L"Upgrade 2 LV." + to_wstring(um->GetUpgradeLevel(1)) + L"\n";
+	upgradeText += L"Upgrade 3 LV." + to_wstring(um->GetUpgradeLevel(2)) + L"\n";
+	upgradeText += L"Upgrade 4 LV." + to_wstring(um->GetUpgradeLevel(3)) + L"\n";
+	upgradeText += L"Upgrade 5 LV." + to_wstring(um->GetUpgradeLevel(4)) + L"\n";
+	SetText(upgradeText);
+}
+
+InteractiveObjectText::InteractiveObjectText()
+{
+	SetBrush("WHITE");
+	SetFormat("24L");
+}
+
+void InteractiveObjectText::Render(const ComPtr<ID2D1DeviceContext2>& device)
+{
+	if (m_isVisible)
+	{
+		TextObject::Render(device);
+	}
 }

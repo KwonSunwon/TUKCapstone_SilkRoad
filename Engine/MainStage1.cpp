@@ -253,6 +253,16 @@ shared_ptr<class Scene> LoadMainScene1()
 		auto debugText = make_shared<DebugTextObject>();
 		scene->AddTextObject(debugText);
 
+		auto interact = make_shared<InteractiveObjectText>();
+		interact->SetFormat("24L");
+		interact->SetBrush("WHITE");
+		interact->SetText(L"+");
+		interact->SetPivot(ePivot::CENTERBOT);
+		interact->SetScreenPivot(ePivot::CENTER);
+		interact->SetPosition(Vec2(0.f, -50.f));
+		scene->AddTextObject(interact);
+		scene->SetInteractiveObjectText(interact);
+
 	}
 #pragma endregion
 
@@ -428,6 +438,47 @@ shared_ptr<class Scene> LoadMainScene1()
 			obj->AddComponent(meshRenderer);
 			scene->AddGameObject(obj);
 
+			// 캐릭터 능력치 텍스트
+			{
+				auto statText = make_shared<PlayerStatTextObject>();
+				statText->SetFormat("18L");
+				statText->SetToggleKey(KEY_TYPE::F12);
+				statText->SetBrush("WHITE");
+				//statText->SetText(L"Player Stat\nMax HP : 100\nHP Regen L 10\nMin Damage : 100\nMax Damage : 120\nWalkSpeed : 100\nJumpPower : 100\nCritical Chance : 50 %\nCritical Damage : 200%\nFire Rate : 2");
+				statText->SetPivot(ePivot::LEFTTOP);
+				statText->SetScreenPivot(ePivot::CENTER);
+				statText->SetPosition(Vec2(-695, 65));
+				statUI->SetPlayerStatText(statText);
+				scene->AddTextObject(statText);
+			}
+
+			// 캐릭터 클래스 정보 텍스트
+			{
+				auto classText = make_shared<PlayerClassTextObject>();
+				classText->SetFormat("24L");
+				classText->SetToggleKey(KEY_TYPE::F12);
+				classText->SetBrush("WHITE");
+				classText->SetPivot(ePivot::LEFTTOP);
+				classText->SetScreenPivot(ePivot::CENTER);
+				classText->SetPosition(Vec2(-230, 65));
+				statUI->SetPlayerClassText(classText);
+				scene->AddTextObject(classText);
+			}
+
+			// 캐릭터 아웃게임 업그레이드 텍스트
+
+			{
+				auto outgameUpgradeText = make_shared<OutgameUpgradeTextObject>();
+				outgameUpgradeText->SetFormat("24L");
+				outgameUpgradeText->SetToggleKey(KEY_TYPE::F12);
+				outgameUpgradeText->SetBrush("WHITE");
+				outgameUpgradeText->SetPivot(ePivot::LEFTTOP);
+				outgameUpgradeText->SetScreenPivot(ePivot::CENTER);
+				outgameUpgradeText->SetPosition(Vec2(237, 65));
+				statUI->SetOutgameUpgradeText(outgameUpgradeText);
+				scene->AddTextObject(outgameUpgradeText);
+			}
+
 			for (int i = 0; i < 17; ++i)
 			{
 				// 아이템 아이콘
@@ -451,6 +502,7 @@ shared_ptr<class Scene> LoadMainScene1()
 					}
 					shared_ptr<UIToggleObject> uiObject = make_shared<UIToggleObject>();
 					uiObject->SetPivot(ePivot::LEFTTOP);
+					uiObject->SetToggleKey(KEY_TYPE::F12);
 					uiObject->SetScreenPivot(ePivot::CENTER);
 					uiObject->SetWidth(80.f);
 					uiObject->SetHeight(80.f);
@@ -467,6 +519,7 @@ shared_ptr<class Scene> LoadMainScene1()
 				{
 					auto ItemText = make_shared<TextToggleObject>();
 					ItemText->SetFormat("15L");
+					ItemText->SetToggleKey(KEY_TYPE::F12);
 					ItemText->SetBrush("WHITE");
 					ItemText->SetText(L"Brilliant Behemoth\nAdds explosion to bullets.\n\n2");
 					ItemText->SetPivot(ePivot::LEFTTOP);
@@ -985,6 +1038,17 @@ shared_ptr<class Scene> LoadMainScene1()
 	}
 
 #pragma endregion 
+
+#pragma region ParticleSystem
+	{
+		shared_ptr<GameObject> particle = make_shared<GameObject>();
+		particle->AddComponent(make_shared<Transform>());
+		particle->AddComponent(make_shared<ParticleSystem>());
+		particle->SetCheckFrustum(false);
+		particle->GetTransform()->SetLocalPosition(Vec3(3000.f, 300.f, 3000.f));
+		scene->AddGameObject(particle);
+	}
+#pragma endregion
 
 
 #pragma region Network
