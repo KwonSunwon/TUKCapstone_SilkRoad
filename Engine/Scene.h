@@ -71,6 +71,9 @@ public:
 	const vector<shared_ptr<GameObject>>& GetInteractiveGameObjects() { return m_interactiveGameObjects; }
 	const vector<shared_ptr<TextObject>>& GetTextObjects() { return m_textObjects; }
 
+	const vector<shared_ptr<class NetworkObject>>& GetNetworkObjects() { return m_networkObjects; }
+	const array<shared_ptr<class NetworkPlayer>, 2>& GetNetworkPlayers() { return m_networkPlayers; }
+
 	void IntersectColliders(shared_ptr<BaseCollider> collider1, shared_ptr<BaseCollider> collider2);
 	void testCollision();
 	void PhysicsStep(int iterations);
@@ -94,6 +97,8 @@ private:
 	vector<shared_ptr<class Camera>>	m_cameras;
 	vector<shared_ptr<class Light>>		m_lights;
 	vector<shared_ptr<class Manifold>>	m_contacts;
+	// 네트워크 객체 목록 추가
+	vector<shared_ptr<class NetworkObject>> m_networkObjects;
 
 private:
 	int m_numOfNetworkObject = 0;

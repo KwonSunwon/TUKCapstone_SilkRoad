@@ -1,6 +1,6 @@
 #pragma once
 
-static constexpr size_t BUFFER_SIZE = 2048;
+static constexpr size_t BUFFER_SIZE = 4096;
 
 class Packet;
 
@@ -17,7 +17,7 @@ public:
 	char Peek(int index) const;
 
 	char Read();
-	void Read(char* data, size_t size);
+	bool Read(char* data, size_t size);
 	void Read(shared_ptr<Packet>& packet);
 
 	bool Empty() const;
@@ -41,6 +41,8 @@ enum class PACKET_TYPE : BYTE {
 	PT_MOVE,
 	PT_PLAYER,
 	PT_ENEMY,
+	PT_ENEMY_HIT,
+	PT_STAGE_CHANGE,
 	PT_MAX,
 };
 
@@ -98,6 +100,27 @@ public:
 	uint32 m_animationIndex;
 
 	uint32 m_targetPlayerId;
+	float m_hp;
+};
+
+class EnemyHitPacket : public Packet {
+public:
+	EnemyHitPacket();
+	~EnemyHitPacket() {}
+
+public:
+	float m_damage;
+	Vec3 m_rayDir;
+	float m_knockBackPower;
+};
+
+class StageChangePacket : public Packet {
+public:
+	StageChangePacket();
+	~StageChangePacket() {}
+
+public:
+	uint32 m_stageIndex;
 };
 
 #pragma pack(pop)

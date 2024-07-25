@@ -67,6 +67,9 @@
     <Filter Include="Object\InteractiveObject">
       <UniqueIdentifier>{e6d1cae3-32fe-4c5e-96e0-714d2479fc48}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Object\Player\Skill">
+      <UniqueIdentifier>{aa9cbfb3-79ed-466f-bd6c-22fd3e1e33de}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -263,7 +266,6 @@
     <ClCompile Include="EnemyState.cpp">
       <Filter>Object\Enemy\EnemyState</Filter>
     </ClCompile>
-    <ClCompile Include="Packet.cpp" />
     <ClCompile Include="NetworkPlayer.cpp">
       <Filter>Object\Player</Filter>
     </ClCompile>
@@ -310,6 +312,15 @@
     </ClCompile>
     <ClCompile Include="UpgradeManager.cpp">
       <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="TankerSkill.cpp">
+      <Filter>Object\Player\Skill</Filter>
+    </ClCompile>
+    <ClCompile Include="Packet.cpp">
+      <Filter>Server</Filter>
+    </ClCompile>
+    <ClCompile Include="NetworkObject.cpp">
+      <Filter>Object\Component</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -513,7 +524,6 @@
     <ClInclude Include="EnemyState.h">
       <Filter>Object\Enemy\EnemyState</Filter>
     </ClInclude>
-    <ClInclude Include="Packet.h" />
     <ClInclude Include="NetworkPlayer.h">
       <Filter>Object\Player</Filter>
     </ClInclude>
@@ -560,6 +570,15 @@
     </ClInclude>
     <ClInclude Include="UpgradeManager.h">
       <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="TankerSkill.h">
+      <Filter>Object\Player\Skill</Filter>
+    </ClInclude>
+    <ClInclude Include="Packet.h">
+      <Filter>Server</Filter>
+    </ClInclude>
+    <ClInclude Include="NetworkObject.h">
+      <Filter>Object\Component</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

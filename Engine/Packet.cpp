@@ -66,13 +66,13 @@ char Buffer::Read()
 	return data;
 }
 
-void Buffer::Read(char* data, size_t size)
+bool Buffer::Read(char* data, size_t size)
 {
 	if(Empty())
-		return;
+		return false;
 
 	if(size > m_size)
-		size = m_size;
+		return false;
 
 	for(size_t i = 0; i < size; i++) {
 		data[i] = m_buffer[m_readIndex];
@@ -80,6 +80,7 @@ void Buffer::Read(char* data, size_t size)
 	}
 
 	m_size -= size;
+	return true;
 }
 
 void Buffer::Read(shared_ptr<Packet>& packet)
@@ -143,4 +144,18 @@ EnemyPacket::EnemyPacket()
 	m_size = sizeof(EnemyPacket);
 	m_targetId = -1;
 	m_type = PACKET_TYPE::PT_ENEMY;
+}
+
+EnemyHitPacket::EnemyHitPacket()
+{
+	m_size = sizeof(EnemyHitPacket);
+	m_targetId = -1;
+	m_type = PACKET_TYPE::PT_ENEMY_HIT;
+}
+
+StageChangePacket::StageChangePacket()
+{
+	m_size = sizeof(StageChangePacket);
+	m_targetId = -1;
+	m_type = PACKET_TYPE::PT_STAGE_CHANGE;
 }

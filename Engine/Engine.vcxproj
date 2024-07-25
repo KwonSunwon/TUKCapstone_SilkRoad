@@ -226,6 +226,7 @@
     <ClInclude Include="MeshRenderer.h" />
     <ClInclude Include="MonoBehaviour.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="NetworkObject.h" />
     <ClInclude Include="NetworkPlayer.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="OcNode.h" />
@@ -258,6 +259,7 @@
     <ClInclude Include="StructuredBuffer.h" />
     <ClInclude Include="SwapChain.h" />
     <ClInclude Include="TableDescriptorHeap.h" />
+    <ClInclude Include="TankerSkill.h" />
     <ClInclude Include="Terrain.h" />
     <ClInclude Include="TestCameraScript.h" />
     <ClInclude Include="TestDragon.h" />
@@ -311,6 +313,7 @@
     <ClCompile Include="MeshRenderer.cpp" />
     <ClCompile Include="MonoBehaviour.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="NetworkObject.cpp" />
     <ClCompile Include="NetworkPlayer.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="OcNode.cpp" />
@@ -348,6 +351,7 @@
     <ClCompile Include="StructuredBuffer.cpp" />
     <ClCompile Include="SwapChain.cpp" />
     <ClCompile Include="TableDescriptorHeap.cpp" />
+    <ClCompile Include="TankerSkill.cpp" />
     <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="TestCameraScript.cpp" />
     <ClCompile Include="TestDragon.cpp" />
