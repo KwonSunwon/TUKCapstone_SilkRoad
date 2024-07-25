@@ -266,7 +266,6 @@
     <ClCompile Include="EnemyState.cpp">
       <Filter>Object\Enemy\EnemyState</Filter>
     </ClCompile>
-    <ClCompile Include="Packet.cpp" />
     <ClCompile Include="NetworkPlayer.cpp">
       <Filter>Object\Player</Filter>
     </ClCompile>
@@ -316,6 +315,9 @@
     </ClCompile>
     <ClCompile Include="TankerSkill.cpp">
       <Filter>Object\Player\Skill</Filter>
+    </ClCompile>
+    <ClCompile Include="Packet.cpp">
+      <Filter>Server</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -519,7 +521,6 @@
     <ClInclude Include="EnemyState.h">
       <Filter>Object\Enemy\EnemyState</Filter>
     </ClInclude>
-    <ClInclude Include="Packet.h" />
     <ClInclude Include="NetworkPlayer.h">
       <Filter>Object\Player</Filter>
     </ClInclude>
@@ -569,6 +570,9 @@
     </ClInclude>
     <ClInclude Include="TankerSkill.h">
       <Filter>Object\Player\Skill</Filter>
+    </ClInclude>
+    <ClInclude Include="Packet.h">
+      <Filter>Server</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
