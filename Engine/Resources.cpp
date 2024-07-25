@@ -317,6 +317,33 @@ shared_ptr<Mesh> Resources::LoadTerrainMesh(int32 sizeX, int32 sizeZ)
 	return mesh;
 }
 
+
+shared_ptr<Texture> Resources::LoadSkillIconTexture(int id)
+{
+	shared_ptr<Texture> texture = make_shared<Texture>();
+
+	switch (id)
+	{
+	case 5:
+		texture = GET_SINGLE(Resources)->Load<Texture>(L"Skill_Icon_1", L"..\\Resources\\Texture\\SkillIcon_Dealer.png");
+		break;
+	case 6:
+		texture = GET_SINGLE(Resources)->Load<Texture>(L"Skill_Icon_2", L"..\\Resources\\Texture\\SkillIcon_Healer.png");
+		break;
+	case 7:
+		texture = GET_SINGLE(Resources)->Load<Texture>(L"Skill_Icon_3", L"..\\Resources\\Texture\\SkillIcon_Launcher.png");
+		break;
+	case 8:
+		texture = GET_SINGLE(Resources)->Load<Texture>(L"Skill_Icon_4", L"..\\Resources\\Texture\\SkillIcon_Tanker.png");
+		break;
+
+	default:
+		break;
+	}
+
+	return texture;
+}
+
 shared_ptr<Texture> Resources::LoadItemIconTexture(int id)
 {
 	shared_ptr<Texture> texture = make_shared<Texture>();

@@ -333,6 +333,7 @@ void DamageIndicatorTextObject::Update()
 TextToggleObject::TextToggleObject()
 {
 	m_toggle = false;
+	m_toggleKey = KEY_TYPE::F12;
 }
 
 void TextToggleObject::Update()
@@ -555,15 +556,25 @@ SkillCoolTimeTextObject::SkillCoolTimeTextObject()
 void SkillCoolTimeTextObject::Update()
 {
 	auto player = GET_SINGLE(SceneManager)->GetActiveScene()->GetMainPlayerScript();
-	wstring coolTimeText{};
-	coolTimeText += to_wstring(static_cast<int>(player->GetSkillRemainingTime()));
+	m_skillReamainText = to_wstring(static_cast<int>(player->GetSkillRemainingTime()));
 	
-	SetText(coolTimeText);
+	SetText(m_skillReamainText);
 	SetPosition(Vec2(0, -90));
 }
 
 void SkillCoolTimeTextObject::Render(const ComPtr<ID2D1DeviceContext2>& device)
 {
 	if (GET_SINGLE(SceneManager)->GetActiveScene()->GetMainPlayerScript()->GetSkillRemainingTime() > 0.0f)
+	{
+		m_brush = "BLACK";
+		m_format = "34L";
+		SetText(m_skillReamainText);
+		SetPosition(Vec2(0, -90));
 		TextObject::Render(device);
+		m_brush = "WHITE";
+		m_format = "30L";
+		SetText(m_skillReamainText);
+		SetPosition(Vec2(0, -90));
+		TextObject::Render(device);
+	}
 }

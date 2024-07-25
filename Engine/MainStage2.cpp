@@ -44,6 +44,7 @@
 #include "TankerSkill.h"
 
 #include "Input.h"
+#include "UpgradeManager.h"
 shared_ptr<class Scene> LoadMainScene2()
 {
 	GET_SINGLE(SoundManager)->soundStop(Sounds::BGM_SPACE);
@@ -353,7 +354,7 @@ shared_ptr<class Scene> LoadMainScene2()
 			}
 			{
 				shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"Texture");
-				shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"SkillIcon1", L"..\\Resources\\Texture\\SkillIcon1.png");
+				shared_ptr<Texture> texture = GET_SINGLE(Resources)->LoadSkillIconTexture(GET_SINGLE(UpgradeManager)->GetClass());
 				shared_ptr<Material> material = make_shared<Material>();
 				material->SetShader(shader);
 				material->SetTexture(0, texture);
@@ -408,7 +409,7 @@ shared_ptr<class Scene> LoadMainScene2()
 		// 스킬 쿨타임 텍스트
 		{
 			auto skillCoolTimeText = make_shared<SkillCoolTimeTextObject>();
-			skillCoolTimeText->SetBrush("WHITE");
+			skillCoolTimeText->SetBrush("BLACK");
 			skillCoolTimeText->SetFormat("30L");
 			skillCoolTimeText->SetScreenPivot(ePivot::CENTERBOT);
 			skillCoolTimeText->SetPivot(ePivot::CENTER);

@@ -32,6 +32,7 @@ public:
 	shared_ptr<Mesh> LoadSphereMesh();
 	shared_ptr<Mesh> LoadTerrainMesh(int32 sizeX = 15, int32 sizeZ = 15);
 
+	shared_ptr<Texture> LoadSkillIconTexture(int id);
 	shared_ptr<Texture> LoadItemIconTexture(int id);
 	wstring GetItemDesc(int id);
 

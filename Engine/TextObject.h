@@ -204,4 +204,7 @@ public:
 
 	virtual void Update() override;
 	virtual void Render(const ComPtr<ID2D1DeviceContext2>& device) override;
+
+private:
+	wstring m_skillReamainText;
 };

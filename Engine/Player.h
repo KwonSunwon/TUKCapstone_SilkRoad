@@ -83,7 +83,7 @@ private:
 	uint32 m_bulletPivot = 0;
 	vector<shared_ptr<PlayerBullet>> m_bullets;
 
-	float m_skillCoolTime = 10.f;
+	float m_skillCoolTime = 12.f;
 	float m_skillRemainingTime = 0.f;
 
 

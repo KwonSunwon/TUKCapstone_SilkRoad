@@ -264,7 +264,7 @@ void SceneManager::LoadTextFormats()
 	dwFacory->CreateTextFormat(
 		TEXT("나눔스퀘어OTF"),
 		NULL,
-		DWRITE_FONT_WEIGHT_NORMAL,
+		DWRITE_FONT_WEIGHT_EXTRA_BOLD,
 		DWRITE_FONT_STYLE_NORMAL,
 		DWRITE_FONT_STRETCH_NORMAL,
 		30,
@@ -277,7 +277,7 @@ void SceneManager::LoadTextFormats()
 	dwFacory->CreateTextFormat(
 		TEXT("나눔스퀘어OTF"),
 		NULL,
-		DWRITE_FONT_WEIGHT_NORMAL,
+		DWRITE_FONT_WEIGHT_EXTRA_BOLD,
 		DWRITE_FONT_STYLE_NORMAL,
 		DWRITE_FONT_STRETCH_NORMAL,
 		12,
@@ -290,7 +290,7 @@ void SceneManager::LoadTextFormats()
 	dwFacory->CreateTextFormat(
 		TEXT("나눔스퀘어OTF"),
 		NULL,
-		DWRITE_FONT_WEIGHT_NORMAL,
+		DWRITE_FONT_WEIGHT_EXTRA_BOLD,
 		DWRITE_FONT_STYLE_NORMAL,
 		DWRITE_FONT_STRETCH_NORMAL,
 		12,
@@ -303,7 +303,7 @@ void SceneManager::LoadTextFormats()
 	dwFacory->CreateTextFormat(
 		TEXT("나눔스퀘어OTF"),
 		NULL,
-		DWRITE_FONT_WEIGHT_NORMAL,
+		DWRITE_FONT_WEIGHT_EXTRA_BOLD,
 		DWRITE_FONT_STYLE_NORMAL,
 		DWRITE_FONT_STRETCH_NORMAL,
 		15,
@@ -316,7 +316,7 @@ void SceneManager::LoadTextFormats()
 	dwFacory->CreateTextFormat(
 		TEXT("나눔스퀘어OTF"),
 		NULL,
-		DWRITE_FONT_WEIGHT_NORMAL,
+		DWRITE_FONT_WEIGHT_EXTRA_BOLD,
 		DWRITE_FONT_STYLE_NORMAL,
 		DWRITE_FONT_STRETCH_NORMAL,
 		15,
@@ -329,7 +329,7 @@ void SceneManager::LoadTextFormats()
 	dwFacory->CreateTextFormat(
 		TEXT("나눔스퀘어OTF"),
 		NULL,
-		DWRITE_FONT_WEIGHT_NORMAL,
+		DWRITE_FONT_WEIGHT_EXTRA_BOLD,
 		DWRITE_FONT_STYLE_NORMAL,
 		DWRITE_FONT_STRETCH_NORMAL,
 		18,
@@ -342,7 +342,7 @@ void SceneManager::LoadTextFormats()
 	dwFacory->CreateTextFormat(
 		TEXT("나눔스퀘어OTF"),
 		NULL,
-		DWRITE_FONT_WEIGHT_NORMAL,
+		DWRITE_FONT_WEIGHT_EXTRA_BOLD,
 		DWRITE_FONT_STYLE_NORMAL,
 		DWRITE_FONT_STRETCH_NORMAL,
 		18,
@@ -355,7 +355,7 @@ void SceneManager::LoadTextFormats()
 	dwFacory->CreateTextFormat(
 		TEXT("나눔스퀘어OTF"),
 		NULL,
-		DWRITE_FONT_WEIGHT_NORMAL,
+		DWRITE_FONT_WEIGHT_EXTRA_BOLD,
 		DWRITE_FONT_STYLE_NORMAL,
 		DWRITE_FONT_STRETCH_NORMAL,
 		24,
@@ -368,7 +368,7 @@ void SceneManager::LoadTextFormats()
 	dwFacory->CreateTextFormat(
 		TEXT("나눔스퀘어OTF"),
 		NULL,
-		DWRITE_FONT_WEIGHT_NORMAL,
+		DWRITE_FONT_WEIGHT_EXTRA_BOLD,
 		DWRITE_FONT_STYLE_NORMAL,
 		DWRITE_FONT_STRETCH_NORMAL,
 		24,
@@ -382,7 +382,7 @@ void SceneManager::LoadTextFormats()
 	dwFacory->CreateTextFormat(
 		TEXT("나눔스퀘어OTF"),
 		NULL,
-		DWRITE_FONT_WEIGHT_NORMAL,
+		DWRITE_FONT_WEIGHT_EXTRA_BOLD,
 		DWRITE_FONT_STYLE_NORMAL,
 		DWRITE_FONT_STRETCH_NORMAL,
 		30,
@@ -395,7 +395,7 @@ void SceneManager::LoadTextFormats()
 	dwFacory->CreateTextFormat(
 		TEXT("나눔스퀘어OTF"),
 		NULL,
-		DWRITE_FONT_WEIGHT_NORMAL,
+		DWRITE_FONT_WEIGHT_EXTRA_BOLD,
 		DWRITE_FONT_STYLE_NORMAL,
 		DWRITE_FONT_STRETCH_NORMAL,
 		30,
@@ -404,6 +404,58 @@ void SceneManager::LoadTextFormats()
 	);
 	TextObject::s_formats["30R"]->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_TRAILING);
 	TextObject::s_formats["30R"]->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_FAR);
+
+	dwFacory->CreateTextFormat(
+		TEXT("나눔스퀘어OTF"),
+		NULL,
+		DWRITE_FONT_WEIGHT_EXTRA_BOLD,
+		DWRITE_FONT_STYLE_NORMAL,
+		DWRITE_FONT_STRETCH_NORMAL,
+		32,
+		TEXT("ko-kr"),
+		&TextObject::s_formats["32L"]
+	);
+	TextObject::s_formats["32L"]->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_LEADING);
+	TextObject::s_formats["32L"]->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_FAR);
+
+	dwFacory->CreateTextFormat(
+		TEXT("나눔스퀘어OTF"),
+		NULL,
+		DWRITE_FONT_WEIGHT_EXTRA_BOLD,
+		DWRITE_FONT_STYLE_NORMAL,
+		DWRITE_FONT_STRETCH_NORMAL,
+		32,
+		TEXT("ko-kr"),
+		&TextObject::s_formats["32R"]
+	);
+	TextObject::s_formats["32R"]->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_TRAILING);
+	TextObject::s_formats["32R"]->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_FAR);
+
+	dwFacory->CreateTextFormat(
+		TEXT("나눔스퀘어OTF"),
+		NULL,
+		DWRITE_FONT_WEIGHT_EXTRA_BOLD,
+		DWRITE_FONT_STYLE_NORMAL,
+		DWRITE_FONT_STRETCH_NORMAL,
+		34,
+		TEXT("ko-kr"),
+		&TextObject::s_formats["34L"]
+	);
+	TextObject::s_formats["34L"]->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_LEADING);
+	TextObject::s_formats["34L"]->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_FAR);
+
+	dwFacory->CreateTextFormat(
+		TEXT("나눔스퀘어OTF"),
+		NULL,
+		DWRITE_FONT_WEIGHT_EXTRA_BOLD,
+		DWRITE_FONT_STYLE_NORMAL,
+		DWRITE_FONT_STRETCH_NORMAL,
+		34,
+		TEXT("ko-kr"),
+		&TextObject::s_formats["34R"]
+	);
+	TextObject::s_formats["34R"]->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_TRAILING);
+	TextObject::s_formats["34R"]->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_FAR);
 
 
 
