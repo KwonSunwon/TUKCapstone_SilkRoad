@@ -407,21 +407,21 @@ shared_ptr<class Scene> LoadMainScene1()
 		}
 
 		// 캐릭터 스탯
-		//{
-		//	shared_ptr<GameObject> obj = make_shared<GameObject>();
-		//	obj->SetLayerIndex(GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI")); // UI
-		//	obj->AddComponent(make_shared<Transform>());
-		//	shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
-		//	{
-		//		shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadRectangleMesh();
-		//		meshRenderer->SetMesh(mesh);
-		//	}
-		//	{
-		//		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"AlphaTexture");
-		//		shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"PlayerStat", L"..\\Resources\\Texture\\PlayerStatBase.png");
-		//		shared_ptr<Material> material = make_shared<Material>();
-		//		material->SetShader(shader);
-		//		material->SetTexture(0, texture);
+		{
+			shared_ptr<GameObject> obj = make_shared<GameObject>();
+			obj->SetLayerIndex(GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI")); // UI
+			obj->AddComponent(make_shared<Transform>());
+			shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
+			{
+				shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadRectangleMesh();
+				meshRenderer->SetMesh(mesh);
+			}
+			{
+				shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"AlphaTexture");
+				shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"PlayerStat", L"..\\Resources\\Texture\\PlayerStatBase.png");
+				shared_ptr<Material> material = make_shared<Material>();
+				material->SetShader(shader);
+				material->SetTexture(0, texture);
 
 				meshRenderer->SetMaterial(material);
 			}
@@ -436,8 +436,8 @@ shared_ptr<class Scene> LoadMainScene1()
 
 			obj->AddComponent(statUI);
 
-		//	obj->AddComponent(meshRenderer);
-		//	scene->AddGameObject(obj);
+			obj->AddComponent(meshRenderer);
+			scene->AddGameObject(obj);
 
 			// 캐릭터 능력치 텍스트
 			{
@@ -531,7 +531,7 @@ shared_ptr<class Scene> LoadMainScene1()
 				}
 			}
 
-		//}
+		}
 
 	}
 #pragma endregion
