@@ -98,6 +98,7 @@ public:
 	uint32 m_animationIndex;
 
 	uint32 m_targetPlayerId;
+	float m_hp;
 };
 
 #pragma pack(pop)

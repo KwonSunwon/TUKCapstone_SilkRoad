@@ -33,7 +33,8 @@ void NetworkPlayer::ProcessPacket(shared_ptr<PlayerPacket> packet)
 	shared_ptr<Transform> transform = GetTransform();
 	rb->MoveTo(packet->m_position);
 	rb->SetLinearVelocity(packet->m_velocity);
-	transform->SetLocalRotation(packet->m_rotation);
+	auto rotation = Vec3(0, packet->m_rotation.y, 0);
+	transform->SetLocalRotation(rotation);
 	//rb->SetRotation(packet->m_rotation);
 	if(GetAnimator()->GetCurrentClipIndex() != packet->m_animationIndex)
 		GetAnimator()->Play(packet->m_animationIndex);
