@@ -373,6 +373,48 @@ shared_ptr<class Scene> LoadMainScene1()
 			obj->AddComponent(meshRenderer);
 			scene->AddGameObject(obj);
 		}
+		// 스킬 쿨타임 
+		{
+			shared_ptr<GameObject> obj = make_shared<GameObject>();
+			obj->SetLayerIndex(GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI")); // UI
+			obj->AddComponent(make_shared<Transform>());
+			shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
+			{
+				shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadRectangleMesh();
+				meshRenderer->SetMesh(mesh);
+			}
+			{
+				shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"AlphaTexture");
+				shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"SkillCoolTime", L"..\\Resources\\Texture\\SkillCool.png");
+				shared_ptr<Material> material = make_shared<Material>();
+				material->SetShader(shader);
+				material->SetTexture(0, texture);
+
+				meshRenderer->SetMaterial(material);
+			}
+			shared_ptr<PlayerSkillCoolTimeUI> uiObject = make_shared<PlayerSkillCoolTimeUI>();
+			uiObject->SetPivot(ePivot::CENTERTOP);
+			uiObject->SetScreenPivot(ePivot::CENTERBOT);
+			uiObject->SetWidth(80.f);
+			uiObject->SetHeight(0.f);
+			uiObject->SetPosition(Vec2(0, 50));
+			uiObject->SetZOrder(300);
+
+			obj->AddComponent(uiObject);
+
+			obj->AddComponent(meshRenderer);
+			scene->AddGameObject(obj);
+		}
+		// 스킬 쿨타임 텍스트
+		{
+			auto skillCoolTimeText = make_shared<SkillCoolTimeTextObject>();
+			skillCoolTimeText->SetBrush("WHITE");
+			skillCoolTimeText->SetFormat("30L");
+			skillCoolTimeText->SetScreenPivot(ePivot::CENTERBOT);
+			skillCoolTimeText->SetPivot(ePivot::CENTER);
+			skillCoolTimeText->SetPosition(Vec2(0, -90));
+			scene->AddTextObject(skillCoolTimeText);
+		}
 		// 스킬 키보드 아이콘
 		{
 			shared_ptr<GameObject> obj = make_shared<GameObject>();

@@ -262,6 +262,7 @@
     <ClInclude Include="TankerSkill.h" />
     <ClInclude Include="Terrain.h" />
     <ClInclude Include="TestCameraScript.h" />
+    <ClInclude Include="TestController.h" />
     <ClInclude Include="TestDragon.h" />
     <ClInclude Include="TestPlayer.h" />
     <ClInclude Include="TextObject.h" />
@@ -354,6 +355,7 @@
     <ClCompile Include="TankerSkill.cpp" />
     <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="TestCameraScript.cpp" />
+    <ClCompile Include="TestController.cpp" />
     <ClCompile Include="TestDragon.cpp" />
     <ClCompile Include="TestPlayer.cpp" />
     <ClCompile Include="TextObject.cpp" />

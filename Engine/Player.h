@@ -66,6 +66,9 @@ public:
 	float GetPlusDamage() { return m_plusDamage; }
 	void SetPlusDamage(float plusDamage) { m_plusDamage = plusDamage; }
 
+	float GetSkillCoolTime() { return m_skillCoolTime; }
+	float GetSkillRemainingTime() { return m_skillRemainingTime; }
+
 	void SetSkillObject(int id, shared_ptr<GameObject> gm);
 private:
 	shared_ptr<class PlayerState> m_curState;
@@ -79,6 +82,10 @@ private:
 
 	uint32 m_bulletPivot = 0;
 	vector<shared_ptr<PlayerBullet>> m_bullets;
+
+	float m_skillCoolTime = 10.f;
+	float m_skillRemainingTime = 0.f;
+
 
 	
 private:

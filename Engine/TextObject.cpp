@@ -545,3 +545,25 @@ void InteractiveObjectText::Render(const ComPtr<ID2D1DeviceContext2>& device)
 		TextObject::Render(device);
 	}
 }
+
+SkillCoolTimeTextObject::SkillCoolTimeTextObject()
+{
+	SetBrush("WHITE");
+	SetFormat("24L");
+}
+
+void SkillCoolTimeTextObject::Update()
+{
+	auto player = GET_SINGLE(SceneManager)->GetActiveScene()->GetMainPlayerScript();
+	wstring coolTimeText{};
+	coolTimeText += to_wstring(static_cast<int>(player->GetSkillRemainingTime()));
+	
+	SetText(coolTimeText);
+	SetPosition(Vec2(0, -90));
+}
+
+void SkillCoolTimeTextObject::Render(const ComPtr<ID2D1DeviceContext2>& device)
+{
+	if (GET_SINGLE(SceneManager)->GetActiveScene()->GetMainPlayerScript()->GetSkillRemainingTime() > 0.0f)
+		TextObject::Render(device);
+}

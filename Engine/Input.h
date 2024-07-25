@@ -19,6 +19,7 @@ enum class KEY_TYPE
 	Z = 'Z',
 	C = 'C',
 	P = 'P',
+	F = 'F',
 
 	KEY_1 = '1',
 	KEY_2 = '2',
@@ -40,7 +41,7 @@ enum class KEY_TYPE
 	ESC = VK_ESCAPE,
 };
 
-static constexpr int NUM_OF_KEYS = 27;
+static constexpr int NUM_OF_KEYS = 28;
 
 constexpr std::array<KEY_TYPE, NUM_OF_KEYS> ALL_KEYS =
 {
@@ -57,6 +58,7 @@ constexpr std::array<KEY_TYPE, NUM_OF_KEYS> ALL_KEYS =
 	KEY_TYPE::Z,
 	KEY_TYPE::C,
 	KEY_TYPE::P,
+	KEY_TYPE::F,
 	KEY_TYPE::KEY_1,
 	KEY_TYPE::KEY_2,
 	KEY_TYPE::KEY_3,

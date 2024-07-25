@@ -329,5 +329,15 @@ void PlayerStatUI::Update()
 void PlayerStatUI::LateUpdate()
 {
 	UIToggleObject::LateUpdate();
+}
 
+void PlayerSkillCoolTimeUI::Update()
+{
+	auto player = GET_SINGLE(SceneManager)->GetActiveScene()->GetMainPlayerScript();
+	float reamain = player->GetSkillRemainingTime();
+	float CoolTime = player->GetSkillCoolTime();
+	float coolratio = reamain / CoolTime;
+	SetHeight(coolratio * 80.f);
+
+	UIObject::Update();
 }

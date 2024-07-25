@@ -100,3 +100,9 @@ private:
 	shared_ptr<OutgameUpgradeTextObject> m_outgameUpgradeText;
 
 };
+
+class PlayerSkillCoolTimeUI : public UIObject
+{
+public:
+	virtual void Update() override;
+};

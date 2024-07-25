@@ -41,6 +41,7 @@
 
 #include "SoundManager.h"
 #include "EnemyHP.h"
+#include "Input.h"
 shared_ptr<class Scene> LoadLobbyScene()
 {
 	GET_SINGLE(SoundManager)->soundStop(Sounds::BGM_SPACE);
@@ -378,6 +379,138 @@ shared_ptr<class Scene> LoadLobbyScene()
 		light->AddComponent(make_shared<TestCameraScript>());
 
 		scene->AddGameObject(light);
+	}
+#pragma endregion
+
+#pragma region HUD
+	{
+		// 캐릭터 스탯
+		{
+			shared_ptr<GameObject> obj = make_shared<GameObject>();
+			obj->SetLayerIndex(GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI")); // UI
+			obj->AddComponent(make_shared<Transform>());
+			shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
+			{
+				shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadRectangleMesh();
+				meshRenderer->SetMesh(mesh);
+			}
+			{
+				shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"AlphaTexture");
+				shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"PlayerStat", L"..\\Resources\\Texture\\PlayerStatBase.png");
+				shared_ptr<Material> material = make_shared<Material>();
+				material->SetShader(shader);
+				material->SetTexture(0, texture);
+
+				meshRenderer->SetMaterial(material);
+			}
+			shared_ptr<PlayerStatUI> statUI = make_shared<PlayerStatUI>();
+			statUI->SetPivot(ePivot::CENTER);
+			statUI->SetToggleKey(KEY_TYPE::TAB);
+			statUI->SetScreenPivot(ePivot::CENTER);
+			statUI->SetWidth(1400.f);
+			statUI->SetHeight(700.f);
+			statUI->SetPosition(Vec2(0, 0));
+			statUI->SetZOrder(300);
+
+			obj->AddComponent(statUI);
+
+			obj->AddComponent(meshRenderer);
+			scene->AddGameObject(obj);
+
+			// 캐릭터 능력치 텍스트
+			{
+				auto statText = make_shared<PlayerStatTextObject>();
+				statText->SetFormat("18L");
+				statText->SetToggleKey(KEY_TYPE::F12);
+				statText->SetBrush("WHITE");
+				//statText->SetText(L"Player Stat\nMax HP : 100\nHP Regen L 10\nMin Damage : 100\nMax Damage : 120\nWalkSpeed : 100\nJumpPower : 100\nCritical Chance : 50 %\nCritical Damage : 200%\nFire Rate : 2");
+				statText->SetPivot(ePivot::LEFTTOP);
+				statText->SetScreenPivot(ePivot::CENTER);
+				statText->SetPosition(Vec2(-695, 65));
+				statUI->SetPlayerStatText(statText);
+				scene->AddTextObject(statText);
+			}
+
+			// 캐릭터 클래스 정보 텍스트
+			{
+				auto classText = make_shared<PlayerClassTextObject>();
+				classText->SetFormat("24L");
+				classText->SetToggleKey(KEY_TYPE::F12);
+				classText->SetBrush("WHITE");
+				classText->SetPivot(ePivot::LEFTTOP);
+				classText->SetScreenPivot(ePivot::CENTER);
+				classText->SetPosition(Vec2(-230, 65));
+				statUI->SetPlayerClassText(classText);
+				scene->AddTextObject(classText);
+			}
+
+			// 캐릭터 아웃게임 업그레이드 텍스트
+
+			{
+				auto outgameUpgradeText = make_shared<OutgameUpgradeTextObject>();
+				outgameUpgradeText->SetFormat("24L");
+				outgameUpgradeText->SetToggleKey(KEY_TYPE::F12);
+				outgameUpgradeText->SetBrush("WHITE");
+				outgameUpgradeText->SetPivot(ePivot::LEFTTOP);
+				outgameUpgradeText->SetScreenPivot(ePivot::CENTER);
+				outgameUpgradeText->SetPosition(Vec2(237, 65));
+				statUI->SetOutgameUpgradeText(outgameUpgradeText);
+				scene->AddTextObject(outgameUpgradeText);
+			}
+
+			for (int i = 0; i < 17; ++i)
+			{
+				// 아이템 아이콘
+				{
+					shared_ptr<GameObject> obj = make_shared<GameObject>();
+					obj->SetLayerIndex(GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI")); // UI
+					obj->AddComponent(make_shared<Transform>());
+					shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
+					{
+						shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadRectangleMesh();
+						meshRenderer->SetMesh(mesh);
+					}
+					{
+						shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"AlphaTexture");
+						shared_ptr<Texture> texture = GET_SINGLE(Resources)->LoadItemIconTexture(i);
+						shared_ptr<Material> material = make_shared<Material>();
+						material->SetShader(shader);
+						material->SetTexture(0, texture);
+
+						meshRenderer->SetMaterial(material);
+					}
+					shared_ptr<UIToggleObject> uiObject = make_shared<UIToggleObject>();
+					uiObject->SetPivot(ePivot::LEFTTOP);
+					uiObject->SetToggleKey(KEY_TYPE::F12);
+					uiObject->SetScreenPivot(ePivot::CENTER);
+					uiObject->SetWidth(80.f);
+					uiObject->SetHeight(80.f);
+					uiObject->SetPosition(Vec2(-695 + (280 * (i % 5)), 340 - (i / 5) * 100));
+					uiObject->SetZOrder(200);
+
+					statUI->AddItemSlot(uiObject, i);
+					obj->AddComponent(uiObject);
+					obj->AddComponent(meshRenderer);
+					scene->AddGameObject(obj);
+				}
+
+				// 아이템 텍스트
+				{
+					auto ItemText = make_shared<TextToggleObject>();
+					ItemText->SetFormat("15L");
+					ItemText->SetToggleKey(KEY_TYPE::F12);
+					ItemText->SetBrush("WHITE");
+					ItemText->SetText(L"Brilliant Behemoth\nAdds explosion to bullets.\n\n2");
+					ItemText->SetPivot(ePivot::LEFTTOP);
+					ItemText->SetScreenPivot(ePivot::CENTER);
+					ItemText->SetPosition(Vec2(-610 + (280 * (i % 5)), -340 + (i / 5) * 100));
+					statUI->AddItemDesc(ItemText, i);
+					scene->AddTextObject(ItemText);
+				}
+			}
+
+		}
+
 	}
 #pragma endregion
 

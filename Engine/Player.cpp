@@ -91,6 +91,9 @@ void Player::Update()
 	if(m_fireElapsedTime > 0)
 		m_fireElapsedTime -= DELTA_TIME;
 
+	if(m_skillRemainingTime > 0)
+		m_skillRemainingTime -= DELTA_TIME;
+
 	Vec3 rot = GetTransform()->GetLocalRotation();
 	const POINT& mouseDelta = INPUT->GetMouseDelta();
 
@@ -104,7 +107,7 @@ void Player::Update()
 	GetTransform()->SetLocalRotation(rot);
 
 
-	if (GET_SINGLE(Input)->GetButtonDown(KEY_TYPE::KEY_1))
+	if (GET_SINGLE(Input)->GetButtonDown(KEY_TYPE::KEY_3))
 		m_hp -= 30.f;
 
 
@@ -359,6 +362,10 @@ void Player::Skill()
 {
 	if(!m_guardObject)
 		return;
+	if (m_skillRemainingTime > 0)
+		return;
+
+	m_skillRemainingTime = m_skillCoolTime;
 
 	shared_ptr<Transform> transform = GetTransform();
 	Vec3 pos = transform->GetLocalPosition();

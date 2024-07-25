@@ -195,3 +195,13 @@ private:
 	bool m_isVisible = false;
 	int m_interactType;
 };
+
+class SkillCoolTimeTextObject : public TextObject
+{
+public:
+	SkillCoolTimeTextObject();
+	~SkillCoolTimeTextObject() = default;
+
+	virtual void Update() override;
+	virtual void Render(const ComPtr<ID2D1DeviceContext2>& device) override;
+};

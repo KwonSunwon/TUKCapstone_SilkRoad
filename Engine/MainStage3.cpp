@@ -41,6 +41,9 @@
 
 #include "SoundManager.h"
 #include "EnemyHP.h"
+#include "TankerSkill.h"
+
+#include "Input.h"
 shared_ptr<class Scene> LoadMainScene3()
 {
 	GET_SINGLE(SoundManager)->soundStop(Sounds::BGM_SPACE);
@@ -80,11 +83,11 @@ shared_ptr<class Scene> LoadMainScene3()
 		camera->SetName(L"Main_Camera");
 		camera->AddComponent(make_shared<Transform>());
 		camera->AddComponent(make_shared<Camera>()); // Near=1, Far=1000, FOV=45��
-		//camera->AddComponent(make_shared<TestCameraScript>());
+		camera->AddComponent(make_shared<TestCameraScript>());
 		camera->GetCamera()->SetFar(100000.f);
 		camera->GetTransform()->SetLocalPosition(Vec3(0.f, 900.f, 0.f));
 		uint8 layerIndex = GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI");
-		camera->GetCamera()->SetCullingMaskLayerOnOff(layerIndex, false); // UI�� �� ����
+		camera->GetCamera()->SetCullingMaskLayerOnOff(layerIndex, true); // UI�� �� ����
 		scene->AddGameObject(camera);
 	}
 #pragma endregion
@@ -100,7 +103,7 @@ shared_ptr<class Scene> LoadMainScene3()
 		uint8 layerIndex = GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI");
 		camera->GetCamera()->SetCullingMaskAll(); // �� ����
 		camera->GetCamera()->SetCullingMaskLayerOnOff(layerIndex, false); // UI�� ����
-		//scene->AddGameObject(camera);
+		scene->AddGameObject(camera);
 	}
 #pragma endregion
 
@@ -278,6 +281,317 @@ shared_ptr<class Scene> LoadMainScene3()
 		light->AddComponent(make_shared<TestCameraScript>());
 
 		scene->AddGameObject(light);
+	}
+#pragma endregion
+
+#pragma region HUD
+	{
+		// HP바 베이스
+		{
+			shared_ptr<GameObject> obj = make_shared<GameObject>();
+			obj->SetLayerIndex(GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI")); // UI
+			obj->AddComponent(make_shared<Transform>());
+			shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
+			{
+				shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadRectangleMesh();
+				meshRenderer->SetMesh(mesh);
+			}
+			{
+				shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"AlphaTexture");
+				shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"PlayerHPBarBase", L"..\\Resources\\Texture\\PlayerHPBarBase.png");
+				shared_ptr<Material> material = make_shared<Material>();
+				material->SetShader(shader);
+				material->SetTexture(0, texture);
+
+				meshRenderer->SetMaterial(material);
+			}
+			shared_ptr<UIObject> uiObject = make_shared<UIObject>();
+			uiObject->SetPivot(ePivot::CENTER);
+			uiObject->SetScreenPivot(ePivot::LEFTBOT);
+			uiObject->SetWidth(150.f);
+			uiObject->SetHeight(20.f);
+			uiObject->SetPosition(Vec2(100.f, 50));
+			uiObject->SetZOrder(500);
+
+			obj->AddComponent(uiObject);
+
+			obj->AddComponent(meshRenderer);
+			scene->AddGameObject(obj);
+		}
+		// HP바
+		{
+			shared_ptr<GameObject> obj = make_shared<GameObject>();
+			obj->SetLayerIndex(GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI")); // UI
+			obj->AddComponent(make_shared<Transform>());
+			shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
+			{
+				shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadRectangleMesh();
+				meshRenderer->SetMesh(mesh);
+			}
+			{
+				shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"AlphaTexture");
+				shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"PlayerHPBar", L"..\\Resources\\Texture\\PlayerHPBar.png");
+				shared_ptr<Material> material = make_shared<Material>();
+				material->SetShader(shader);
+				material->SetTexture(0, texture);
+
+				meshRenderer->SetMaterial(material);
+			}
+			shared_ptr<UIObject> uiObject = make_shared<PlayerHPBar>();
+			uiObject->SetPivot(ePivot::LEFTCENTER);
+			uiObject->SetScreenPivot(ePivot::LEFTBOT);
+			uiObject->SetWidth(145.f);
+			uiObject->SetHeight(15.f);
+			uiObject->SetPosition(Vec2(27.5f, 50));
+			uiObject->SetZOrder(490);
+
+			obj->AddComponent(uiObject);
+
+			obj->AddComponent(meshRenderer);
+			scene->AddGameObject(obj);
+		}
+		// HP 텍스트
+		{
+			auto HPText = make_shared<HPTextObject>();
+			HPText->SetScreenPivot(ePivot::LEFTBOT);
+			HPText->SetPosition(Vec2(25, -100));
+			scene->AddTextObject(HPText);
+		}
+
+		// 스킬 아이콘
+		{
+			shared_ptr<GameObject> obj = make_shared<GameObject>();
+			obj->SetLayerIndex(GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI")); // UI
+			obj->AddComponent(make_shared<Transform>());
+			shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
+			{
+				shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadRectangleMesh();
+				meshRenderer->SetMesh(mesh);
+			}
+			{
+				shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"Texture");
+				shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"SkillIcon1", L"..\\Resources\\Texture\\SkillIcon1.png");
+				shared_ptr<Material> material = make_shared<Material>();
+				material->SetShader(shader);
+				material->SetTexture(0, texture);
+
+				meshRenderer->SetMaterial(material);
+			}
+			shared_ptr<UIObject> uiObject = make_shared<UIObject>();
+			uiObject->SetPivot(ePivot::CENTERBOT);
+			uiObject->SetScreenPivot(ePivot::CENTERBOT);
+			uiObject->SetWidth(80.f);
+			uiObject->SetHeight(80.f);
+			uiObject->SetPosition(Vec2(0, 50));
+			uiObject->SetZOrder(400);
+
+			obj->AddComponent(uiObject);
+
+			obj->AddComponent(meshRenderer);
+			scene->AddGameObject(obj);
+		}
+		// 스킬 쿨타임 
+		{
+			shared_ptr<GameObject> obj = make_shared<GameObject>();
+			obj->SetLayerIndex(GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI")); // UI
+			obj->AddComponent(make_shared<Transform>());
+			shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
+			{
+				shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadRectangleMesh();
+				meshRenderer->SetMesh(mesh);
+			}
+			{
+				shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"AlphaTexture");
+				shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"SkillCoolTime", L"..\\Resources\\Texture\\SkillCool.png");
+				shared_ptr<Material> material = make_shared<Material>();
+				material->SetShader(shader);
+				material->SetTexture(0, texture);
+
+				meshRenderer->SetMaterial(material);
+			}
+			shared_ptr<PlayerSkillCoolTimeUI> uiObject = make_shared<PlayerSkillCoolTimeUI>();
+			uiObject->SetPivot(ePivot::CENTERTOP);
+			uiObject->SetScreenPivot(ePivot::CENTERBOT);
+			uiObject->SetWidth(80.f);
+			uiObject->SetHeight(0.f);
+			uiObject->SetPosition(Vec2(0, 50));
+			uiObject->SetZOrder(300);
+
+			obj->AddComponent(uiObject);
+
+			obj->AddComponent(meshRenderer);
+			scene->AddGameObject(obj);
+		}
+		// 스킬 쿨타임 텍스트
+		{
+			auto skillCoolTimeText = make_shared<SkillCoolTimeTextObject>();
+			skillCoolTimeText->SetBrush("WHITE");
+			skillCoolTimeText->SetFormat("30L");
+			skillCoolTimeText->SetScreenPivot(ePivot::CENTERBOT);
+			skillCoolTimeText->SetPivot(ePivot::CENTER);
+			skillCoolTimeText->SetPosition(Vec2(0, -90));
+			scene->AddTextObject(skillCoolTimeText);
+		}
+		// 스킬 키보드 아이콘
+		{
+			shared_ptr<GameObject> obj = make_shared<GameObject>();
+			obj->SetLayerIndex(GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI")); // UI
+			obj->AddComponent(make_shared<Transform>());
+			shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
+			{
+				shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadRectangleMesh();
+				meshRenderer->SetMesh(mesh);
+			}
+			{
+				shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"AlphaTexture");
+				shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"keyboard_key_q", L"..\\Resources\\Texture\\keyboard_key_q.png");
+				shared_ptr<Material> material = make_shared<Material>();
+				material->SetShader(shader);
+				material->SetTexture(0, texture);
+
+				meshRenderer->SetMaterial(material);
+			}
+			shared_ptr<UIObject> uiObject = make_shared<UIObject>();
+			uiObject->SetPivot(ePivot::CENTERBOT);
+			uiObject->SetScreenPivot(ePivot::CENTERBOT);
+			uiObject->SetWidth(40.f);
+			uiObject->SetHeight(40.f);
+			uiObject->SetPosition(Vec2(0, 5));
+			uiObject->SetZOrder(400);
+
+			obj->AddComponent(uiObject);
+
+			obj->AddComponent(meshRenderer);
+			scene->AddGameObject(obj);
+		}
+
+		// 캐릭터 스탯
+		{
+			shared_ptr<GameObject> obj = make_shared<GameObject>();
+			obj->SetLayerIndex(GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI")); // UI
+			obj->AddComponent(make_shared<Transform>());
+			shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
+			{
+				shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadRectangleMesh();
+				meshRenderer->SetMesh(mesh);
+			}
+			{
+				shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"AlphaTexture");
+				shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"PlayerStat", L"..\\Resources\\Texture\\PlayerStatBase.png");
+				shared_ptr<Material> material = make_shared<Material>();
+				material->SetShader(shader);
+				material->SetTexture(0, texture);
+
+				meshRenderer->SetMaterial(material);
+			}
+			shared_ptr<PlayerStatUI> statUI = make_shared<PlayerStatUI>();
+			statUI->SetPivot(ePivot::CENTER);
+			statUI->SetToggleKey(KEY_TYPE::TAB);
+			statUI->SetScreenPivot(ePivot::CENTER);
+			statUI->SetWidth(1400.f);
+			statUI->SetHeight(700.f);
+			statUI->SetPosition(Vec2(0, 0));
+			statUI->SetZOrder(300);
+
+			obj->AddComponent(statUI);
+
+			obj->AddComponent(meshRenderer);
+			scene->AddGameObject(obj);
+
+			// 캐릭터 능력치 텍스트
+			{
+				auto statText = make_shared<PlayerStatTextObject>();
+				statText->SetFormat("18L");
+				statText->SetToggleKey(KEY_TYPE::F12);
+				statText->SetBrush("WHITE");
+				//statText->SetText(L"Player Stat\nMax HP : 100\nHP Regen L 10\nMin Damage : 100\nMax Damage : 120\nWalkSpeed : 100\nJumpPower : 100\nCritical Chance : 50 %\nCritical Damage : 200%\nFire Rate : 2");
+				statText->SetPivot(ePivot::LEFTTOP);
+				statText->SetScreenPivot(ePivot::CENTER);
+				statText->SetPosition(Vec2(-695, 65));
+				statUI->SetPlayerStatText(statText);
+				scene->AddTextObject(statText);
+			}
+
+			// 캐릭터 클래스 정보 텍스트
+			{
+				auto classText = make_shared<PlayerClassTextObject>();
+				classText->SetFormat("24L");
+				classText->SetToggleKey(KEY_TYPE::F12);
+				classText->SetBrush("WHITE");
+				classText->SetPivot(ePivot::LEFTTOP);
+				classText->SetScreenPivot(ePivot::CENTER);
+				classText->SetPosition(Vec2(-230, 65));
+				statUI->SetPlayerClassText(classText);
+				scene->AddTextObject(classText);
+			}
+
+			// 캐릭터 아웃게임 업그레이드 텍스트
+
+			{
+				auto outgameUpgradeText = make_shared<OutgameUpgradeTextObject>();
+				outgameUpgradeText->SetFormat("24L");
+				outgameUpgradeText->SetToggleKey(KEY_TYPE::F12);
+				outgameUpgradeText->SetBrush("WHITE");
+				outgameUpgradeText->SetPivot(ePivot::LEFTTOP);
+				outgameUpgradeText->SetScreenPivot(ePivot::CENTER);
+				outgameUpgradeText->SetPosition(Vec2(237, 65));
+				statUI->SetOutgameUpgradeText(outgameUpgradeText);
+				scene->AddTextObject(outgameUpgradeText);
+			}
+
+			for (int i = 0; i < 17; ++i)
+			{
+				// 아이템 아이콘
+				{
+					shared_ptr<GameObject> obj = make_shared<GameObject>();
+					obj->SetLayerIndex(GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI")); // UI
+					obj->AddComponent(make_shared<Transform>());
+					shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
+					{
+						shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadRectangleMesh();
+						meshRenderer->SetMesh(mesh);
+					}
+					{
+						shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"AlphaTexture");
+						shared_ptr<Texture> texture = GET_SINGLE(Resources)->LoadItemIconTexture(i);
+						shared_ptr<Material> material = make_shared<Material>();
+						material->SetShader(shader);
+						material->SetTexture(0, texture);
+
+						meshRenderer->SetMaterial(material);
+					}
+					shared_ptr<UIToggleObject> uiObject = make_shared<UIToggleObject>();
+					uiObject->SetPivot(ePivot::LEFTTOP);
+					uiObject->SetToggleKey(KEY_TYPE::F12);
+					uiObject->SetScreenPivot(ePivot::CENTER);
+					uiObject->SetWidth(80.f);
+					uiObject->SetHeight(80.f);
+					uiObject->SetPosition(Vec2(-695 + (280 * (i % 5)), 340 - (i / 5) * 100));
+					uiObject->SetZOrder(200);
+
+					statUI->AddItemSlot(uiObject, i);
+					obj->AddComponent(uiObject);
+					obj->AddComponent(meshRenderer);
+					scene->AddGameObject(obj);
+				}
+
+				// 아이템 텍스트
+				{
+					auto ItemText = make_shared<TextToggleObject>();
+					ItemText->SetFormat("15L");
+					ItemText->SetToggleKey(KEY_TYPE::F12);
+					ItemText->SetBrush("WHITE");
+					ItemText->SetText(L"Brilliant Behemoth\nAdds explosion to bullets.\n\n2");
+					ItemText->SetPivot(ePivot::LEFTTOP);
+					ItemText->SetScreenPivot(ePivot::CENTER);
+					ItemText->SetPosition(Vec2(-610 + (280 * (i % 5)), -340 + (i / 5) * 100));
+					statUI->AddItemDesc(ItemText, i);
+					scene->AddTextObject(ItemText);
+				}
+			}
+
+		}
+
 	}
 #pragma endregion
 
