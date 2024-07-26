@@ -89,10 +89,10 @@ void Player::Update()
 	}
 
 
-	if (INPUT->GetButtonDown(KEY_TYPE::E))
+	if(INPUT->GetButtonDown(KEY_TYPE::E))
 	{
 		int chaClass = GET_SINGLE(UpgradeManager)->GetClass() + 1;
-		if (chaClass == 9) chaClass = 5;
+		if(chaClass == 9) chaClass = 5;
 
 		GET_SINGLE(UpgradeManager)->ClassChange(chaClass);
 	}
@@ -172,10 +172,10 @@ void Player::Fire()
 		if(gameObject->GetMonobehaviour("Player"))
 			continue;
 
-		if (gameObject->GetMonobehaviour("Bomb"))
+		if(gameObject->GetMonobehaviour("Bomb"))
 			continue;
 
-		if (distance < minDistance)
+		if(distance < minDistance)
 		{
 			minDistance = distance;
 			picked = gameObject;
@@ -190,7 +190,7 @@ void Player::Fire()
 	float finalDamage = 0.f;
 
 
-	switch (m_fireInfo.bulletType) {
+	switch(m_fireInfo.bulletType) {
 	case BulletType::BASIC:
 		if(scriptE) {
 			shared_ptr<Enemy> enemyScript = dynamic_pointer_cast<Enemy>(scriptE);
@@ -207,11 +207,11 @@ void Player::Fire()
 	case BulletType::EXPLOSIVE:
 		if(scriptE) {
 			shared_ptr<Enemy> enemyScript = dynamic_pointer_cast<Enemy>(scriptE);
-			if (enemyScript->IsDie()) return;
+			if(enemyScript->IsDie()) return;
 
 
 			m_fireInfo.bulletType = BASIC;
-			
+
 			m_bomb->SetBombSize(500.f);
 			m_bomb->SetBombPosition(damagePos);
 			m_bomb->SetBombActive();
@@ -374,10 +374,10 @@ BulletType Player::CalcBulletType()
 
 void Player::Skill()
 {
-	if (GET_SINGLE(SceneManager)->GetActiveScene()->GetSceneName() == "Lobby")
+	if(GET_SINGLE(SceneManager)->GetActiveScene()->GetSceneName() == "Lobby")
 		return;
 
-	switch (GET_SINGLE(UpgradeManager)->GetClass()) {
+	switch(GET_SINGLE(UpgradeManager)->GetClass()) {
 	case CharacterClass::DEALER:
 		SkillDealer();
 		break;
@@ -398,8 +398,15 @@ void Player::Skill()
 		break;
 	}
 
-	
-
+	if(GET_SINGLE(NetworkManager)->GetNetworkState() != NETWORK_STATE::SINGLE) {
+		shared_ptr<SkillPacket> packet = make_shared<SkillPacket>();
+		packet->m_skillType = GET_SINGLE(UpgradeManager)->GetClass();
+		auto transform = GetTransform();
+		packet->m_pos = transform->GetLocalPosition();
+		packet->m_look = transform->GetLook();
+		packet->m_dropPos = packet->m_pos + packet->m_look * 700.f + Vec3(0.f, 1000.f, 0.f);
+		SEND(packet);
+	}
 }
 
 void Player::SkillDealer()
@@ -411,7 +418,7 @@ void Player::SkillDealer()
 
 void Player::SkillHealer()
 {
-	if (!m_healObject)
+	if(!m_healObject)
 		return;
 
 	shared_ptr<Transform> transform = GetTransform();
@@ -433,7 +440,7 @@ void Player::SkillLauncher()
 
 void Player::SkillTanker()
 {
-	if (!m_guardObject)
+	if(!m_guardObject)
 		return;
 
 	shared_ptr<Transform> transform = GetTransform();
@@ -450,7 +457,7 @@ void Player::SkillManage()
 {
 
 
-	if (m_isRage) {
+	if(m_isRage) {
 		GET_SINGLE(UpgradeManager)->SetStat();
 		m_bulletDamage *= 1.5f;
 		m_fireRate *= 1.5f;
@@ -461,10 +468,28 @@ void Player::SkillManage()
 		GET_SINGLE(Resources)->Get<Material>(L"Final")->SetFloat(0, dist);
 
 	}
-	if (m_rageTime > 5.f) {
+	if(m_rageTime > 5.f) {
 		GET_SINGLE(UpgradeManager)->SetStat();
 		m_isRage = false;
 		m_rageTime = 0.f;
 		GET_SINGLE(Resources)->Get<Material>(L"Final")->SetInt(0, 0);
+	}
+}
+
+void Player::NetworkSkill(shared_ptr<SkillPacket> packet)
+{
+	switch(packet->m_skillType) {
+	case CharacterClass::HEALER:
+		if(!m_healObject)
+			return;
+		m_healObject->GetRigidBody()->MoveTo(packet->m_pos);
+		break;
+	case CharacterClass::TANKER:
+		if(!m_guardObject)
+			return;
+		m_guardObject->GetRigidBody()->SetStatic(false);
+		m_guardObject->GetRigidBody()->MoveTo(packet->m_dropPos);
+		m_guardObject->GetTransform()->LookAt(packet->m_look);
+		break;
 	}
 }

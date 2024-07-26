@@ -7,10 +7,10 @@
 #include "GameObject.h"
 #include "Transform.h"
 #include "Timer.h"
-#include "NetworkPlayer.h"
 #include "Enemy.h"
 #include "NetworkObject.h"
 #include "NetworkPlayer.h"
+#include "Player.h"
 
 Network::Network()
 {
@@ -69,6 +69,9 @@ void Network::Update()
 				packet->m_targetId = 1;
 			players[packet->m_targetId]->ChangeClass(reinterpret_pointer_cast<PlayerClassChangePacket>(packet));
 			break;
+		case PACKET_TYPE::PT_SKILL:
+			GET_SINGLE(SceneManager)->GetActiveScene()->m_mainPlayerScript->NetworkSkill(reinterpret_pointer_cast<SkillPacket>(packet));
+			break;
 		case PACKET_TYPE::PT_ENEMY:
 		case PACKET_TYPE::PT_ENEMY_HIT:
 			objects[packet->m_targetId]->ProcessPacket(packet);
@@ -112,6 +115,9 @@ shared_ptr<Packet> Network::PacketProcess(int idx)
 		break;
 	case PACKET_TYPE::PT_PLAYER_CLASS_CHANGE:
 		packet = make_shared<PlayerClassChangePacket>();
+		break;
+	case PACKET_TYPE::PT_SKILL:
+		packet = make_shared<SkillPacket>();
 		break;
 	}
 
@@ -347,6 +353,8 @@ bool Host::IsThroughPacket(PACKET_TYPE type)
 	if(type == PACKET_TYPE::PT_PLAYER_CLASS_CHANGE)
 		return true;
 	if(type == PACKET_TYPE::PT_ENEMY_HIT)
+		return true;
+	if(type == PACKET_TYPE::PT_SKILL)
 		return true;
 	return false;
 }

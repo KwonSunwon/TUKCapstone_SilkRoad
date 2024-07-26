@@ -44,6 +44,7 @@ enum class PACKET_TYPE : BYTE {
 	PT_ENEMY,
 	PT_ENEMY_HIT,
 	PT_STAGE_CHANGE,
+	PT_SKILL,
 	PT_MAX,
 };
 
@@ -131,6 +132,19 @@ public:
 
 public:
 	uint32 m_stageIndex;
+};
+
+class SkillPacket : public Packet {
+public:
+	SkillPacket();
+	~SkillPacket() {}
+
+public:
+	uint8 m_skillType;
+
+	Vec3 m_pos;
+	Vec3 m_look;
+	Vec3 m_dropPos;
 };
 
 #pragma pack(pop)

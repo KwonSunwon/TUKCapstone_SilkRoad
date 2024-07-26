@@ -166,3 +166,10 @@ PlayerClassChangePacket::PlayerClassChangePacket()
 	m_targetId = -1;
 	m_type = PACKET_TYPE::PT_PLAYER_CLASS_CHANGE;
 }
+
+SkillPacket::SkillPacket()
+{
+	m_size = sizeof(SkillPacket);
+	m_targetId = -1;
+	m_type = PACKET_TYPE::PT_SKILL;
+}

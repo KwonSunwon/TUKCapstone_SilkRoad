@@ -118,6 +118,9 @@ private:
 	float CalcDamage();
 	BulletType CalcBulletType();
 
+public:
+	void NetworkSkill(shared_ptr<class SkillPacket> packet);
+
 private:
 
 	void Skill();
