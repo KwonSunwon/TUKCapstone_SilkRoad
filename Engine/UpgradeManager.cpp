@@ -168,6 +168,11 @@ void UpgradeManager::SetStat()
 
 
 	//업그레이드 스탯
+	maxHP += m_upgradeLevels[0] * 10.f;
+	bulletDamage += m_upgradeLevels[1] * 2.f;
+	fireRate += m_upgradeLevels[2] * 0.2f;
+	criDamage += m_upgradeLevels[3] * 0.05f;
+	hpRegen += m_upgradeLevels[4] * 0.4f;
 
 
 
@@ -203,6 +208,7 @@ void UpgradeManager::Upgrade(int id)
 			upgradeFile.close();
 		}
 	}
+	SetStat();
 }
 
 void UpgradeManager::ApplyItem(int id)
