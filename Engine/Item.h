@@ -13,11 +13,14 @@ public:
 	void SetItemId(int id) { m_itemId = id; }
 	int GetItemID() { return m_itemId; }
 	void AddGetItemText();
+
+	void ProcessPacket(shared_ptr<class ItemPacket> packet);
+
 private:
 	void FloatingItem();
 	void RotateItem();
-	
-	
+
+
 
 private:
 	string	m_itemName;

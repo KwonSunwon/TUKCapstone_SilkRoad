@@ -711,7 +711,7 @@ shared_ptr<class Scene> LoadMainScene1()
 			gm->GetMeshRenderer()->GetMaterial()->SetInt(0, 0);
 		}
 
-		if (gm->GetCollider()->GetDebugCollider() != nullptr)
+		if(gm->GetCollider()->GetDebugCollider() != nullptr)
 			scene->AddGameObject(gm->GetCollider()->GetDebugCollider());
 		gm->SetShadow(true);
 		scene->AddGameObject(gm);
@@ -990,20 +990,20 @@ shared_ptr<class Scene> LoadMainScene1()
 	{
 
 		for(int i = 0; i < 17; ++i) {
-			scene->AddGameObject(GET_SINGLE(Resources)->LoadItemPrefab(i, Vec3(2500.f, 400.f, 3000.f + 100.f * i)));
+			GET_SINGLE(Resources)->LoadItemPrefab(i, Vec3(2500.f, 400.f, 3000.f + 100.f * i), scene);
 		}
 
 
-		scene->AddGameObject(GET_SINGLE(Resources)->LoadItemPrefab(0, Vec3(27328, 220, 7446)));
+		GET_SINGLE(Resources)->LoadItemPrefab(0, Vec3(27328, 220, 7446), scene);
 
-		scene->AddGameObject(GET_SINGLE(Resources)->LoadItemPrefab(1, Vec3(16805, 121, 6721)));
-		scene->AddGameObject(GET_SINGLE(Resources)->LoadItemPrefab(1, Vec3(16755, 121, 6721)));
-		scene->AddGameObject(GET_SINGLE(Resources)->LoadItemPrefab(1, Vec3(16835, 121, 6721)));
-		scene->AddGameObject(GET_SINGLE(Resources)->LoadItemPrefab(1, Vec3(16845, 121, 6721)));
-		scene->AddGameObject(GET_SINGLE(Resources)->LoadItemPrefab(1, Vec3(16855, 121, 6721)));
-		scene->AddGameObject(GET_SINGLE(Resources)->LoadItemPrefab(2, Vec3(28623, 128, 15045)));
-		scene->AddGameObject(GET_SINGLE(Resources)->LoadItemPrefab(3, Vec3(25451, 121, 24415)));
-		scene->AddGameObject(GET_SINGLE(Resources)->LoadItemPrefab(4, Vec3(25651, 121, 24415)));
+		GET_SINGLE(Resources)->LoadItemPrefab(1, Vec3(16805, 121, 6721), scene);
+		GET_SINGLE(Resources)->LoadItemPrefab(1, Vec3(16755, 121, 6721), scene);
+		GET_SINGLE(Resources)->LoadItemPrefab(1, Vec3(16835, 121, 6721), scene);
+		GET_SINGLE(Resources)->LoadItemPrefab(1, Vec3(16845, 121, 6721), scene);
+		GET_SINGLE(Resources)->LoadItemPrefab(1, Vec3(16855, 121, 6721), scene);
+		GET_SINGLE(Resources)->LoadItemPrefab(2, Vec3(28623, 128, 15045), scene);
+		GET_SINGLE(Resources)->LoadItemPrefab(3, Vec3(25451, 121, 24415), scene);
+		GET_SINGLE(Resources)->LoadItemPrefab(4, Vec3(25651, 121, 24415), scene);
 	}
 
 

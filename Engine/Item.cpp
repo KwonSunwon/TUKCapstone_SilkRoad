@@ -7,13 +7,15 @@
 #include "UIObject.h"
 #include "Scene.h"
 #include "SceneManager.h"
-
+#include "Network.h"
+#include "Packet.h"
+#include "NetworkObject.h"
 
 void Item::Awake()
 {
 	SetMonovihaviourName("Item");
 	m_startHeight = GetTransform()->GetLocalPosition().y;
-	
+
 
 }
 void Item::Update()
@@ -24,7 +26,7 @@ void Item::Update()
 
 void Item::LateUpdate()
 {
-	
+
 }
 
 void Item::FloatingItem()
@@ -45,14 +47,14 @@ void Item::RotateItem()
 void Item::AddGetItemText()
 {
 
-	if (m_itemId == -1)
+	if(m_itemId == -1)
 	{
 		return;
 	}
 
 	auto text = make_shared<GettingItemTextObject>(L"Brilliant Behemoth\nAdds explosion to bullets.");
 
-	switch (m_itemId)
+	switch(m_itemId)
 	{
 	case 0:
 		text->SetText(L"Brilliant Behemoth\nAdds explosion to bullets.");
@@ -75,6 +77,18 @@ void Item::AddGetItemText()
 	text->SetScreenPivot(ePivot::CENTER);
 	float yOffset = text->getNum() * 90.f;
 	text->SetPosition(Vec2(0.f, yOffset));
-	
+
 	GET_SINGLE(SceneManager)->GetActiveScene()->AddTextObject(text);
+
+	if(GET_SINGLE(NetworkManager)->GetNetworkState() != NETWORK_STATE::SINGLE) {
+		shared_ptr<ItemPacket> packet = make_shared<ItemPacket>();
+		packet->m_targetId = GetNetworkObject()->GetNetworkId();
+		packet->m_pos = Vec3(0, 1000000, 0);
+		SEND(packet);
+	}
+}
+
+void Item::ProcessPacket(shared_ptr<class ItemPacket> packet)
+{
+	GetRigidBody()->MoveTo(Vec3(0, 1'000'000, 0));
 }

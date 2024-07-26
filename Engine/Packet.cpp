@@ -173,3 +173,10 @@ SkillPacket::SkillPacket()
 	m_targetId = -1;
 	m_type = PACKET_TYPE::PT_SKILL;
 }
+
+ItemPacket::ItemPacket()
+{
+	m_size = sizeof(ItemPacket);
+	m_targetId = -1;
+	m_type = PACKET_TYPE::PT_ITEM;
+}

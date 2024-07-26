@@ -45,6 +45,7 @@ enum class PACKET_TYPE : BYTE {
 	PT_ENEMY_HIT,
 	PT_STAGE_CHANGE,
 	PT_SKILL,
+	PT_ITEM,
 	PT_MAX,
 };
 
@@ -147,6 +148,15 @@ public:
 	Vec3 m_dropPos;
 
 	bool m_isBomb;
+};
+
+class ItemPacket : public Packet {
+public:
+	ItemPacket();
+	~ItemPacket() {}
+
+public:
+	Vec3 m_pos;
 };
 
 #pragma pack(pop)

@@ -34,7 +34,7 @@ public:
 
 
 	//Prefabs
-	shared_ptr<GameObject> LoadItemPrefab(int id, Vec3 Location);
+	shared_ptr<GameObject> LoadItemPrefab(int id, Vec3 Location, shared_ptr<Scene>  scene);
 	void LoadEnemyPrefab(int modelNum, Vec3 Location, Vec3 Scale, float hp, shared_ptr<Scene> scene);
 	shared_ptr<GameObject> LoadBombPrefab(Vec3 Location);
 
@@ -63,7 +63,7 @@ inline shared_ptr<T> Resources::Load(const wstring& key, const wstring& path)
 	KeyObjMap& keyObjMap = m_resources[static_cast<uint8>(objectType)];
 
 	auto findIt = keyObjMap.find(key);
-	if (findIt != keyObjMap.end())
+	if(findIt != keyObjMap.end())
 		return static_pointer_cast<T>(findIt->second);
 
 	shared_ptr<T> object = make_shared<T>();
@@ -80,7 +80,7 @@ bool Resources::Add(const wstring& key, shared_ptr<T> object)
 	KeyObjMap& keyObjMap = m_resources[static_cast<uint8>(objectType)];
 
 	auto findIt = keyObjMap.find(key);
-	if (findIt != keyObjMap.end())
+	if(findIt != keyObjMap.end())
 		return false;
 
 	keyObjMap[key] = object;
@@ -95,7 +95,7 @@ shared_ptr<T> Resources::Get(const wstring& key)
 	KeyObjMap& keyObjMap = m_resources[static_cast<uint8>(objectType)];
 
 	auto findIt = keyObjMap.find(key);
-	if (findIt != keyObjMap.end())
+	if(findIt != keyObjMap.end())
 		return static_pointer_cast<T>(findIt->second);
 
 	return nullptr;
@@ -104,17 +104,17 @@ shared_ptr<T> Resources::Get(const wstring& key)
 template<typename T>
 inline OBJECT_TYPE Resources::GetObjectType()
 {
-	if (std::is_same_v<T, GameObject>)
+	if(std::is_same_v<T, GameObject>)
 		return OBJECT_TYPE::GAMEOBJECT;
-	else if (std::is_same_v<T, Material>)
+	else if(std::is_same_v<T, Material>)
 		return OBJECT_TYPE::MATERIAL;
-	else if (std::is_same_v<T, Mesh>)
+	else if(std::is_same_v<T, Mesh>)
 		return OBJECT_TYPE::MESH;
-	else if (std::is_same_v<T, Shader>)
+	else if(std::is_same_v<T, Shader>)
 		return OBJECT_TYPE::SHADER;
-	else if (std::is_same_v<T, Texture>)
+	else if(std::is_same_v<T, Texture>)
 		return OBJECT_TYPE::TEXTURE;
-	else if (std::is_convertible_v<T, Component>)
+	else if(std::is_convertible_v<T, Component>)
 		return OBJECT_TYPE::COMPONENT;
 	else
 		return OBJECT_TYPE::NONE;
