@@ -26,7 +26,7 @@ void UpgradeManager::Init()
 
 	std::ifstream upgradeFile("upgrade.txt");
 	if(upgradeFile.is_open()) {
-		for(int i = 0; i < 5; ++i) {
+		for(int i = 0; i < 6; ++i) {
 			// 파일에서 정수를 읽어와 배열에 저장
 			upgradeFile >> m_upgradeLevels[i];
 		}
@@ -133,6 +133,7 @@ void UpgradeManager::SetStat()
 {
 	shared_ptr<Player> mainPlayer = GET_SINGLE(SceneManager)->GetActiveScene()->m_mainPlayerScript;
 
+	//기본 스탯
 	float maxHP = m_stat[m_charClass - 5][1];
 	float bulletDamage = m_stat[m_charClass - 5][2];
 	float hpRegen = m_stat[m_charClass - 5][3];
@@ -145,6 +146,8 @@ void UpgradeManager::SetStat()
 	float minusDamage = 0.2f;
 	float plusDamage = 0.2f;
 
+
+	//아이템 스탯
 	//m_itemLevels[0]  
 	fireRate += m_itemLevels[1] * 1.f;
 	bulletDamage += m_itemLevels[2] * 4.f;
@@ -164,6 +167,8 @@ void UpgradeManager::SetStat()
 	//m_itemLevels[16]
 
 
+	//업그레이드 스탯
+
 
 
 	mainPlayer->SetMaxHP(maxHP);
@@ -181,15 +186,18 @@ void UpgradeManager::SetStat()
 }
 
 void UpgradeManager::Upgrade(int id)
-{	//돈이 있다면
-	if(1) {
-		//테이블에 따라 돈을 줄이고,
+{	
+	int necessaryGold = (m_upgradeLevels[id] + 1) * 20;
+	bool haveEnoughGold = GetGold() >= necessaryGold;
+
+	if(haveEnoughGold) {
+		UseGold(necessaryGold);
 
 		GET_SINGLE(SoundManager)->soundPlay(Sounds::ENV_EAT_ITEM);
 		m_upgradeLevels[id]++;
 		ofstream upgradeFile("upgrade.txt");
 		if(upgradeFile.is_open()) {
-			for(int i = 0; i < 5; ++i) {
+			for(int i = 0; i < 6; ++i) {
 				upgradeFile << m_upgradeLevels[i] << std::endl;
 			}
 			upgradeFile.close();
