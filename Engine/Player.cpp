@@ -86,6 +86,15 @@ void Player::Update()
 		
 	}
 
+
+	if (INPUT->GetButtonDown(KEY_TYPE::E))
+	{
+		int chaClass = GET_SINGLE(UpgradeManager)->GetClass() + 1;
+		if (chaClass == 9) chaClass = 5;
+
+		GET_SINGLE(UpgradeManager)->ClassChange(chaClass);
+	}
+
 	shared_ptr<Transform> transform = GetTransform();
 	shared_ptr<RigidBody> rb = GetRigidBody();
 
@@ -390,7 +399,7 @@ void Player::SkillDealer()
 
 void Player::SkillHealer()
 {
-	if (!m_guardObject)
+	if (!m_healObject)
 		return;
 
 	shared_ptr<Transform> transform = GetTransform();
@@ -399,7 +408,7 @@ void Player::SkillHealer()
 	Vec3 dropPos = pos + look * 700.f + Vec3(0.f, 1000.f, 0.f);
 
 	//m_guardObject->GetRigidBody()->SetStatic(false);
-	m_guardObject->GetRigidBody()->MoveTo(pos);
+	m_healObject->GetRigidBody()->MoveTo(pos);
 	//m_guardObject->GetTransform()->LookAt(look);
 }
 
