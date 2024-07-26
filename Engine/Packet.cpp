@@ -180,3 +180,10 @@ ItemPacket::ItemPacket()
 	m_targetId = -1;
 	m_type = PACKET_TYPE::PT_ITEM;
 }
+
+GuestInitPacket::GuestInitPacket()
+{
+	m_size = sizeof(GuestInitPacket);
+	m_targetId = -1;
+	m_type = PACKET_TYPE::PT_GUEST_INIT;
+}

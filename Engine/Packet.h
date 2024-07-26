@@ -38,6 +38,7 @@ private:
 enum class PACKET_TYPE : BYTE {
 	PT_NONE = 0,
 	PT_INIT = 1,
+	PT_GUEST_INIT,
 	PT_MOVE,
 	PT_PLAYER,
 	PT_PLAYER_CLASS_CHANGE,
@@ -68,6 +69,17 @@ public:
 
 public:
 	BYTE m_networkId;
+	int16 m_classIndex;
+	int16 m_classIndexGuest;
+};
+
+class GuestInitPacket : public Packet {
+public:
+	GuestInitPacket();
+	~GuestInitPacket() {}
+
+public:
+	int16 m_classIndex;
 };
 
 class MovePacket : public Packet {

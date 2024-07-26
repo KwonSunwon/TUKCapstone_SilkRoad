@@ -11,6 +11,7 @@
 #include "NetworkObject.h"
 #include "NetworkPlayer.h"
 #include "Player.h"
+#include "UpgradeManager.h"
 
 Network::Network()
 {
@@ -29,6 +30,7 @@ void Network::Update()
 	auto players = GET_SINGLE(SceneManager)->GetActiveScene()->GetNetworkPlayers();
 
 	shared_ptr<Packet> packet;
+	int id;
 	//while(Recv(m_packetBuffer)) {
 	while(m_receivedPacketQue.TryPop(packet)) {
 		switch(packet->m_type) {
@@ -44,30 +46,20 @@ void Network::Update()
 			}*/
 			// players[packet->m_targetId]->GetTransform()->SetLocalPosition(reinterpret_pointer_cast<MovePacket>(packet)->m_position);
 			break;
-		case PACKET_TYPE::PT_PLAYER:
-			if(packet->m_targetId != 0 && packet->m_targetId != 1 && packet->m_targetId != 2) {
-				OutputDebugString(L"Invalid PlayerPacket targetId\n");
-				break;
-			}
-			if(m_networkState == NETWORK_STATE::HOST && packet->m_targetId == 1)
-				packet->m_targetId = 0;
-			if(packet->m_targetId == 2)
-				packet->m_targetId = 1;
-			players[packet->m_targetId]->ProcessPacket(reinterpret_pointer_cast<PlayerPacket>(packet));
+		case PACKET_TYPE::PT_GUEST_INIT:
+			id = ProcessPlayerID(packet->m_targetId);
+			if(id != -1)
+				players[id]->ChangeClass(reinterpret_pointer_cast<GuestInitPacket>(packet)->m_classIndex);
 			break;
-			/*case PACKET_TYPE::PT_ENEMY:
-				GET_SINGLE(SceneManager)->GetActiveScene()->m_enemies[packet->m_targetId]->ProcessPacket(reinterpret_pointer_cast<EnemyPacket>(packet));
-				break;*/
+		case PACKET_TYPE::PT_PLAYER:
+			id = ProcessPlayerID(packet->m_targetId);
+			if(id != -1)
+				players[id]->ProcessPacket(reinterpret_pointer_cast<PlayerPacket>(packet));
+			break;
 		case PACKET_TYPE::PT_PLAYER_CLASS_CHANGE:
-			if(packet->m_targetId != 0 && packet->m_targetId != 1 && packet->m_targetId != 2) {
-				OutputDebugString(L"Invalid PlayerPacket targetId\n");
-				break;
-			}
-			if(m_networkState == NETWORK_STATE::HOST && packet->m_targetId == 1)
-				packet->m_targetId = 0;
-			if(packet->m_targetId == 2)
-				packet->m_targetId = 1;
-			players[packet->m_targetId]->ChangeClass(reinterpret_pointer_cast<PlayerClassChangePacket>(packet));
+			id = ProcessPlayerID(packet->m_targetId);
+			if(id != -1)
+				players[id]->ChangeClass(reinterpret_pointer_cast<PlayerClassChangePacket>(packet)->m_classIndex);
 			break;
 		case PACKET_TYPE::PT_SKILL:
 			GET_SINGLE(SceneManager)->GetActiveScene()->m_mainPlayerScript->NetworkSkill(reinterpret_pointer_cast<SkillPacket>(packet));
@@ -123,6 +115,9 @@ shared_ptr<Packet> Network::PacketProcess(int idx)
 	case PACKET_TYPE::PT_ITEM:
 		packet = make_shared<ItemPacket>();
 		break;
+	case PACKET_TYPE::PT_GUEST_INIT:
+		packet = make_shared<GuestInitPacket>();
+		break;
 	}
 
 	if(!m_buffer[idx].Read(reinterpret_cast<char*>(packet.get()), packet->m_size)) {
@@ -131,6 +126,19 @@ shared_ptr<Packet> Network::PacketProcess(int idx)
 	}
 
 	return packet;
+}
+
+int Network::ProcessPlayerID(int id)
+{
+	if(id != 0 && id != 1 && id != 2) {
+		OutputDebugString(L"Invalid PlayerPacket targetId\n");
+		return -1;
+	}
+	if(m_networkState == NETWORK_STATE::HOST && id == 1)
+		return 0;
+	if(id == 2)
+		return 1;
+	return id;
 }
 
 #pragma region Host
@@ -221,6 +229,11 @@ void Host::WaitLoop()
 
 		InitPacket initPacket;
 		initPacket.m_networkId = guest.id;
+		initPacket.m_classIndex = GET_SINGLE(UpgradeManager)->GetClass();
+		if(playerCount == 2)
+			initPacket.m_classIndexGuest = GET_SINGLE(SceneManager)->GetActiveScene()->m_networkPlayers[0]->GetClassIndex();
+		else
+			initPacket.m_classIndexGuest = -1;
 		send(guest.socket, (char*)&initPacket, sizeof(InitPacket), 0);
 
 		DWORD optval = TIMEOUT;
@@ -352,16 +365,15 @@ bool Host::Recv(shared_ptr<Packet> packet)
 }
 bool Host::IsThroughPacket(PACKET_TYPE type)
 {
-	if(type == PACKET_TYPE::PT_PLAYER)
+	switch(type) {
+	case PACKET_TYPE::PT_PLAYER:
+	case PACKET_TYPE::PT_PLAYER_CLASS_CHANGE:
+	case PACKET_TYPE::PT_ENEMY_HIT:
+	case PACKET_TYPE::PT_SKILL:
+	case PACKET_TYPE::PT_ITEM:
+	case PACKET_TYPE::PT_GUEST_INIT:
 		return true;
-	if(type == PACKET_TYPE::PT_PLAYER_CLASS_CHANGE)
-		return true;
-	if(type == PACKET_TYPE::PT_ENEMY_HIT)
-		return true;
-	if(type == PACKET_TYPE::PT_SKILL)
-		return true;
-	if(type == PACKET_TYPE::PT_ITEM)
-		return true;
+	}
 	return false;
 }
 #pragma endregion
@@ -406,8 +418,16 @@ void Guest::Connect()
 	InitPacket initPacket;
 	recv(m_socket, (char*)&initPacket, sizeof(InitPacket), 0);
 	GET_SINGLE(NetworkManager)->m_networkId = initPacket.m_networkId;
-	OutputDebugString(L"NetworkId: ");
+	GET_SINGLE(SceneManager)->GetActiveScene()->m_networkPlayers[0]->ChangeClass(initPacket.m_classIndex);
+	OutputDebugString(L"\nm_classIndexGuest: ");
+	OutputDebugString(to_wstring(initPacket.m_classIndexGuest).c_str());
+	if(initPacket.m_classIndexGuest != -1) {
+		GET_SINGLE(SceneManager)->GetActiveScene()->m_networkPlayers[1]->ChangeClass(initPacket.m_classIndexGuest);
+	}
+
+	OutputDebugString(L"\nNetworkId: ");
 	OutputDebugString(to_wstring(GET_SINGLE(NetworkManager)->m_networkId).c_str());
+	OutputDebugString(L"\n");
 
 	DWORD optval = TIMEOUT;
 	setsockopt(m_socket, SOL_SOCKET, SO_RCVTIMEO, (const char*)&optval, sizeof(optval));
@@ -428,6 +448,11 @@ void Guest::Connect()
 	receiverThread.detach();
 
 	OutputDebugString(L"Connect Host\n");
+
+	shared_ptr<GuestInitPacket> packet = make_shared<GuestInitPacket>();
+	packet->m_targetId = initPacket.m_networkId;
+	packet->m_classIndex = GET_SINGLE(UpgradeManager)->GetClass();
+	SEND(packet);
 }
 
 void Guest::Sender()

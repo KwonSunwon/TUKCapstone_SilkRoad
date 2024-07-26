@@ -44,12 +44,11 @@ void NetworkPlayer::ProcessPacket(shared_ptr<PlayerPacket> packet)
 	m_hp = packet->m_hp;
 }
 
-void NetworkPlayer::ChangeClass(shared_ptr<PlayerClassChangePacket> packet)
+void NetworkPlayer::ChangeClass(int classIndex)
 {
-	int id = packet->m_classIndex;
+	m_classIndex = classIndex;
 	shared_ptr<MeshData> meshData;
-
-	switch(id) {
+	switch(m_classIndex) {
 	case EnumInteract::CHARACTER_CHANGER1:
 		meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Character_Dealer.fbx");
 		break;
