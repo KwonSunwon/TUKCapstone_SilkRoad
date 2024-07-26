@@ -25,6 +25,8 @@
 #include "UpgradeManager.h"
 #include "Resources.h"
 #include "Bomb.h"
+#include "NetworkObject.h"
+
 void Player::Awake()
 {
 	GET_SINGLE(UpgradeManager)->SetClass();
@@ -39,7 +41,7 @@ void Player::Awake()
 	m_fireInfo.explosionDamage = 100.f;
 	m_fireInfo.explosionSize = 500.f;
 
-	
+
 
 }
 void Player::Update()
@@ -47,7 +49,7 @@ void Player::Update()
 	SkillManage();
 	ProcessGetItem();
 	InteracitveObjectPick();
-	if (INPUT->GetButtonDown(KEY_TYPE::Q))
+	if(INPUT->GetButtonDown(KEY_TYPE::Q))
 	{
 		Skill();
 
@@ -59,31 +61,31 @@ void Player::Update()
 
 		Vec4 rayOrigin = Vec4(cameraPos.x, cameraPos.y, cameraPos.z, 1.0f);
 		Vec4 rayDir = Vec4(cameraDir.x, cameraDir.y, cameraDir.z, 0.0f);
-		for (auto& gameObject : gameObjects) {
+		for(auto& gameObject : gameObjects) {
 
 
 			float distance = 0.f;
-			if (gameObject->GetCollider()->Intersects(rayOrigin, rayDir, OUT distance) == false)
+			if(gameObject->GetCollider()->Intersects(rayOrigin, rayDir, OUT distance) == false)
 				continue;
 
-			if (gameObject->GetMonobehaviour("Player"))
+			if(gameObject->GetMonobehaviour("Player"))
 				continue;
 
-			if (distance > 250.f) {
+			if(distance > 250.f) {
 				continue;
 			}
 
-			if (distance < minDistance)
+			if(distance < minDistance)
 			{
 				minDistance = distance;
 				picked = gameObject;
 			}
 		}
 
-		if (picked)
+		if(picked)
 			picked->GetInteractiveObject()->InteractiveFunction();
 
-		
+
 	}
 
 
@@ -161,13 +163,13 @@ void Player::Fire()
 	Vec4 rayOrigin = Vec4(cameraPos.x, cameraPos.y, cameraPos.z, 1.0f);
 	Vec4 rayDir = Vec4(cameraDir.x, cameraDir.y, cameraDir.z, 0.0f);
 
-	for (auto& gameObject : gameObjects) {
-		
+	for(auto& gameObject : gameObjects) {
+
 		float distance = 0.f;
-		if (gameObject->GetCollider()->Intersects(rayOrigin, rayDir, OUT distance) == false)
+		if(gameObject->GetCollider()->Intersects(rayOrigin, rayDir, OUT distance) == false)
 			continue;
 
-		if (gameObject->GetMonobehaviour("Player"))
+		if(gameObject->GetMonobehaviour("Player"))
 			continue;
 
 		if (gameObject->GetMonobehaviour("Bomb"))
@@ -179,21 +181,22 @@ void Player::Fire()
 			picked = gameObject;
 		}
 	}
-	
-	if (!picked)
+
+	if(!picked)
 		return;
 
 	shared_ptr<MonoBehaviour> scriptE = picked->GetMonobehaviour("Enemy");
 	Vec3 damagePos = cameraPos + cameraDir * minDistance;
+	float finalDamage = 0.f;
 
 
 	switch (m_fireInfo.bulletType) {
 	case BulletType::BASIC:
-		if (scriptE) {
+		if(scriptE) {
 			shared_ptr<Enemy> enemyScript = dynamic_pointer_cast<Enemy>(scriptE);
-			if (enemyScript->IsDie()) return;
+			if(enemyScript->IsDie()) return;
 
-			float finalDamage = CalcDamage();
+			finalDamage = CalcDamage();
 
 			enemyScript->GetDamage(finalDamage);
 			enemyScript->MakeDamageIndicator(finalDamage, damagePos, m_isCritical);
@@ -202,7 +205,7 @@ void Player::Fire()
 		break;
 
 	case BulletType::EXPLOSIVE:
-		if (scriptE) {
+		if(scriptE) {
 			shared_ptr<Enemy> enemyScript = dynamic_pointer_cast<Enemy>(scriptE);
 			if (enemyScript->IsDie()) return;
 
@@ -220,10 +223,19 @@ void Player::Fire()
 
 	}
 
-	if (!picked->GetRigidBody()->GetStatic()) {
+	if(!picked->GetRigidBody()->GetStatic()) {
 		picked->GetRigidBody()->AddForce(Vec3(rayDir) * m_knockBackPower * 1000000.f);
 	}
-	
+
+	if(!picked->GetNetworkObject())
+		return;
+	shared_ptr<EnemyHitPacket> packet = make_shared<EnemyHitPacket>();
+	packet->m_targetId = picked->GetNetworkObject()->GetNetworkId();
+	packet->m_damage = finalDamage;
+	packet->m_rayDir = Vec3(rayDir);
+	packet->m_knockBackPower = m_knockBackPower;
+	SEND(packet);
+
 	//총알 사용할때 코드
 	//m_bullets[m_bulletPivot++]->Fire(shared_from_this(), m_fireInfo);
 	//m_fireTime++;
@@ -239,9 +251,9 @@ void Player::AddBullet(shared_ptr<class PlayerBullet> bullet)
 }
 
 
-void Player::SetSkillObject(int id , shared_ptr<GameObject> gm)
+void Player::SetSkillObject(int id, shared_ptr<GameObject> gm)
 {
-	switch (id)
+	switch(id)
 	{
 	case 0:
 		m_guardObject = gm;
@@ -259,8 +271,8 @@ void Player::SetSkillObject(int id , shared_ptr<GameObject> gm)
 		m_dealObject = gm;
 		break;
 
-		
-		
+
+
 
 	default:
 		break;
@@ -277,28 +289,28 @@ void Player::InteracitveObjectPick()
 
 	Vec4 rayOrigin = Vec4(cameraPos.x, cameraPos.y, cameraPos.z, 1.0f);
 	Vec4 rayDir = Vec4(cameraDir.x, cameraDir.y, cameraDir.z, 0.0f);
-	for (auto& gameObject : gameObjects) {
-		
+	for(auto& gameObject : gameObjects) {
+
 
 		float distance = 0.f;
-		if (gameObject->GetCollider()->Intersects(rayOrigin, rayDir, OUT distance) == false)
+		if(gameObject->GetCollider()->Intersects(rayOrigin, rayDir, OUT distance) == false)
 			continue;
 
-		if (gameObject->GetMonobehaviour("Player"))
+		if(gameObject->GetMonobehaviour("Player"))
 			continue;
 
-		if (distance > 250.f) {
+		if(distance > 250.f) {
 			continue;
 		}
 
-		if (distance < minDistance )
+		if(distance < minDistance)
 		{
 			minDistance = distance;
 			picked = gameObject;
 		}
 	}
 
-	if (!picked)
+	if(!picked)
 		return;
 
 	picked->GetInteractiveObject()->PrintInteractiveText();
@@ -322,7 +334,7 @@ void Player::ProcessGetItem()
 			GET_SINGLE(SoundManager)->soundPlay(Sounds::ENV_EAT_ITEM);
 
 			col->m_rb2->MoveTo(Vec3(0, 1000000, 0));
-			GET_SINGLE(UpgradeManager) -> ApplyItem(itemScript->GetItemID());
+			GET_SINGLE(UpgradeManager)->ApplyItem(itemScript->GetItemID());
 		}
 	}
 }
@@ -330,16 +342,16 @@ void Player::ProcessGetItem()
 
 float Player::CalcDamage()
 {
-	
+
 	bool isCriticalHit = (static_cast<float>(rand()) / RAND_MAX) < m_criticalPercentage;
 
-	
+
 	int minDamage = m_bulletDamage * (1.f - m_minusDamage);
 	int maxDamage = m_bulletDamage * (1.f + m_plusDamage);
 	int baseDamage = minDamage + rand() % (maxDamage - minDamage + 1);
 
-	
-	if (isCriticalHit) {
+
+	if(isCriticalHit) {
 		m_isCritical = true;
 		return baseDamage * m_criticalDamage;
 	}

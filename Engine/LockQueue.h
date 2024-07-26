@@ -19,7 +19,7 @@ public:
 	bool TryPop(T& value)
 	{
 		lock_guard<mutex> lock(_mutex);
-		if (_queue.empty())
+		if(_queue.empty())
 			return false;
 
 		value = std::move(_queue.front());
@@ -40,6 +40,13 @@ public:
 	{
 		lock_guard<mutex> lock(_mutex);
 		return _queue.size();
+	}
+
+	void Clear()
+	{
+		lock_guard<mutex> lock(_mutex);
+		while(_queue.empty() == false)
+			_queue.pop();
 	}
 
 private:

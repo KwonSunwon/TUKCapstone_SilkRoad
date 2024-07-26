@@ -13,6 +13,7 @@
 #include "SceneManager.h"
 #include "TextObject.h"
 #include "PathFinding.h"
+#include "NetworkObject.h"
 
 void Enemy::Awake()
 {
@@ -56,13 +57,13 @@ void Enemy::LateUpdate()
 	else if(GET_SINGLE(NetworkManager)->GetNetworkState() == NETWORK_STATE::HOST) {
 		if(GET_SINGLE(NetworkManager)->m_isSend) {
 			shared_ptr<EnemyPacket> packet = make_shared<EnemyPacket>();
-			packet->m_targetId = m_networkId;
+			packet->m_targetId = GetNetworkObject()->GetNetworkId();
 			packet->m_position = GetTransform()->GetLocalPosition();
 			packet->m_velocity = GetRigidBody()->GetLinearVelocity();
 			packet->m_rotation = GetTransform()->GetLocalRotation();
 			packet->m_targetPlayerId = GetTargetPlayerIndex();
 			packet->m_animationIndex = GetAnimator()->GetCurrentClipIndex();
-			packet->m_hp = m_HP;
+			//packet->m_hp = m_HP;
 			SEND(packet);
 		}
 	}
@@ -76,7 +77,7 @@ void Enemy::LateUpdate()
 	}
 }
 
-void Enemy::GetDamage(float damage)
+void Enemy::GetDamage(float damage, bool isPacket)
 {
 	m_HP -= damage;
 }
@@ -102,7 +103,7 @@ void Enemy::ProcessPacket(shared_ptr<EnemyPacket> packet)
 	SetTargetPlayerIndex(packet->m_targetPlayerId);
 	if(GetAnimator()->GetCurrentClipIndex() != packet->m_animationIndex)
 		GetAnimator()->Play(packet->m_animationIndex);
-	SetHP(packet->m_hp);
+	//SetHP(packet->m_hp);
 }
 
 void Enemy::Fire()

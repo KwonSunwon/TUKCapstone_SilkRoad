@@ -322,6 +322,9 @@
     <ClCompile Include="HealerSkill.cpp">
       <Filter>Object\Player\Skill</Filter>
     </ClCompile>
+    <ClCompile Include="NetworkObject.cpp">
+      <Filter>Object\Component</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -579,6 +582,9 @@
     </ClInclude>
     <ClInclude Include="HealerSkill.h">
       <Filter>Object\Player\Skill</Filter>
+    </ClInclude>
+    <ClInclude Include="NetworkObject.h">
+      <Filter>Object\Component</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -59,7 +59,7 @@ void Scene::Update()
 	}
 
 	erase_if(m_textObjects, [](shared_ptr<TextObject>& object) { return !object->isValid(); });
-	for (const shared_ptr<TextObject>& textObject : m_textObjects)
+	for(const shared_ptr<TextObject>& textObject : m_textObjects)
 	{
 		textObject->Update();
 	}
@@ -93,7 +93,7 @@ shared_ptr<Camera> Scene::GetMainCamera()
 
 shared_ptr<Light> Scene::GetMainLight()
 {
-	if (m_lights.empty())
+	if(m_lights.empty())
 		return nullptr;
 
 	return m_lights[0];
@@ -193,7 +193,7 @@ void Scene::RenderForward()
 
 void Scene::RenderUI()
 {
-	for (const auto& t : m_textObjects)
+	for(const auto& t : m_textObjects)
 		t->Render(GEngine->GetD3D11On12Device()->GetD2DDeviceContext());
 }
 
@@ -223,7 +223,7 @@ void Scene::AddGameObject(shared_ptr<GameObject> gameObject)
 		m_ocTree->InsertObjectCollider(gameObject->GetCollider());
 	}
 
-	if (gameObject->GetInteractiveObject() != nullptr)
+	if(gameObject->GetInteractiveObject() != nullptr)
 	{
 		m_interactiveGameObjects.push_back(gameObject);
 	}
@@ -235,6 +235,11 @@ void Scene::AddGameObject(shared_ptr<GameObject> gameObject)
 	else if(gameObject->GetLight() != nullptr)
 	{
 		m_lights.push_back(gameObject->GetLight());
+	}
+	
+	if(gameObject->GetNetworkObject() != nullptr)
+	{
+		m_networkObjects.push_back(gameObject->GetNetworkObject());
 	}
 
 	m_gameObjects.push_back(gameObject);
@@ -276,7 +281,7 @@ void Scene::AddTextObject(shared_ptr<TextObject> textObject)
 void Scene::RemoveTextObject(shared_ptr<TextObject> textObject)
 {
 	auto findIt = std::find(m_textObjects.begin(), m_textObjects.end(), textObject);
-	if (findIt != m_textObjects.end())
+	if(findIt != m_textObjects.end())
 		m_textObjects.erase(findIt);
 }
 
@@ -285,7 +290,7 @@ void Scene::IntersectColliders(shared_ptr<BaseCollider> bs, shared_ptr<BaseColli
 {
 	shared_ptr<RigidBody> rb1 = bs->GetRigidBody();
 	shared_ptr<RigidBody> rb2 = bsDst->GetRigidBody();
-	if (rb1->GetStatic() && rb2->GetStatic())
+	if(rb1->GetStatic() && rb2->GetStatic())
 		return;
 
 
@@ -295,61 +300,61 @@ void Scene::IntersectColliders(shared_ptr<BaseCollider> bs, shared_ptr<BaseColli
 
 	*normal = { 0,0,0 };
 	*depth = 0.f;
-	
+
 
 	//if (bs->GetColliderId() > bsDst->GetColliderId())
 		//return;
 
 	shared_ptr<Vec3> norm = make_shared<Vec3>();
-	if (bs->GetGameObject()->GetTerrain())
+	if(bs->GetGameObject()->GetTerrain())
 	{
 		Vec3 pos = bsDst->GetRigidBody()->GetPosition();
-		
+
 		shared_ptr<float> h = make_shared < float >();
 		m_terrain->getHeight(pos.x, pos.z, h, norm);
-		
+
 
 		bs->SetCenter(Vec3(pos.x, *h - 100, pos.z));
 	}
 
-	if (bs->GetColliderType() == ColliderType::Sphere) {
+	if(bs->GetColliderType() == ColliderType::Sphere) {
 		shared_ptr<BoundingSphere> boundingSphereSrc = dynamic_pointer_cast<SphereCollider>(bs)->GetBoundingSphere();
 
 
-		if (bsDst->GetColliderType() == ColliderType::Sphere) {
+		if(bsDst->GetColliderType() == ColliderType::Sphere) {
 			shared_ptr<BoundingSphere> boundingSphereDst = dynamic_pointer_cast<SphereCollider>(bsDst)->GetBoundingSphere();
 
-			if (!CollisionSphere(boundingSphereSrc, boundingSphereDst, normal, depth))
+			if(!CollisionSphere(boundingSphereSrc, boundingSphereDst, normal, depth))
 				return;
 		}
 
 
-		else if (bsDst->GetColliderType() == ColliderType::OrientedBox) {
+		else if(bsDst->GetColliderType() == ColliderType::OrientedBox) {
 			shared_ptr<BoundingOrientedBox> boundingOrientedBoxDst = dynamic_pointer_cast<OrientedBoxCollider>(bsDst)->GetBoundingOrientedBox();
 
-			if (!CollisionSphereBox(boundingSphereSrc, boundingOrientedBoxDst, normal, depth, false))
+			if(!CollisionSphereBox(boundingSphereSrc, boundingOrientedBoxDst, normal, depth, false))
 				return;
 		}
 
 	}
 
 
-	else if (bs->GetColliderType() == ColliderType::OrientedBox) {
+	else if(bs->GetColliderType() == ColliderType::OrientedBox) {
 		shared_ptr<BoundingOrientedBox> boundingOrientedBoxSrc = dynamic_pointer_cast<OrientedBoxCollider>(bs)->GetBoundingOrientedBox();
 
 
-		if (bsDst->GetColliderType() == ColliderType::OrientedBox) {
+		if(bsDst->GetColliderType() == ColliderType::OrientedBox) {
 			shared_ptr<BoundingOrientedBox> boundingOrientedBoxDst = dynamic_pointer_cast<OrientedBoxCollider>(bsDst)->GetBoundingOrientedBox();
 
-			if (!CollisionBox(boundingOrientedBoxSrc, boundingOrientedBoxDst, normal, depth))
+			if(!CollisionBox(boundingOrientedBoxSrc, boundingOrientedBoxDst, normal, depth))
 				return;
 		}
 
 
-		else if (bsDst->GetColliderType() == ColliderType::Sphere) {
+		else if(bsDst->GetColliderType() == ColliderType::Sphere) {
 			shared_ptr<BoundingSphere> boundingSphereDst = dynamic_pointer_cast<SphereCollider>(bsDst)->GetBoundingSphere();
 
-			if (!CollisionSphereBox(boundingSphereDst, boundingOrientedBoxSrc, normal, depth, true))
+			if(!CollisionSphereBox(boundingSphereDst, boundingOrientedBoxSrc, normal, depth, true))
 				return;
 		}
 	}
@@ -357,7 +362,7 @@ void Scene::IntersectColliders(shared_ptr<BaseCollider> bs, shared_ptr<BaseColli
 
 	bs->setColor(Vec4(1, 0, 0, 0), true);
 	bsDst->setColor(Vec4(1, 0, 0, 0), true);
-	if (bs->GetGameObject()->GetTerrain())
+	if(bs->GetGameObject()->GetTerrain())
 	{
 		rb2->Move(*norm * (*depth));
 		shared_ptr<Manifold> contact = make_shared<Manifold>(rb1, rb2, norm, *depth, make_shared<vector<Vec3>>(), make_shared<int>());
@@ -371,13 +376,13 @@ void Scene::IntersectColliders(shared_ptr<BaseCollider> bs, shared_ptr<BaseColli
 		return;
 	}
 
-	if (rb1->GetIsBlockBody() && rb2->GetIsBlockBody()) {
+	if(rb1->GetIsBlockBody() && rb2->GetIsBlockBody()) {
 
-		if (rb1->GetStatic()) {
+		if(rb1->GetStatic()) {
 			rb2->Move(*normal * (*depth));
 		}
 
-		else if (rb2->GetStatic()) {
+		else if(rb2->GetStatic()) {
 			rb1->Move(-(*normal) * (*depth));
 		}
 		else {
@@ -396,16 +401,16 @@ void Scene::IntersectColliders(shared_ptr<BaseCollider> bs, shared_ptr<BaseColli
 	rb2->AddCollideEvent(contact2);
 	m_contacts.push_back(contact);
 
-	
+
 
 }
 
 void Scene::testCollision()
 {
 	m_contacts.clear();
-	for (auto& cgo : m_collidableGameObjects)
+	for(auto& cgo : m_collidableGameObjects)
 	{
-		cgo->GetCollider()->setColor(Vec4(0,0,0,0),false);
+		cgo->GetCollider()->setColor(Vec4(0, 0, 0, 0), false);
 		cgo->GetRigidBody()->GetCollideEvent()->clear();
 	}
 
@@ -414,8 +419,8 @@ void Scene::testCollision()
 		m_ocTree->CollisionInspection(cgo->GetCollider());
 	}*/
 
-	for (int i = 0; i < m_collidableGameObjects.size(); ++i) {
-		for (int j = i + 1; j < m_collidableGameObjects.size(); ++j) {
+	for(int i = 0; i < m_collidableGameObjects.size(); ++i) {
+		for(int j = i + 1; j < m_collidableGameObjects.size(); ++j) {
 			IntersectColliders(m_collidableGameObjects[i]->GetCollider(), m_collidableGameObjects[j]->GetCollider());
 		}
 	}
@@ -426,19 +431,19 @@ void Scene::testCollision()
 
 void Scene::PhysicsStep(int iterations)
 {
-	for (const shared_ptr<GameObject>& gameObject : m_gameObjects)
+	for(const shared_ptr<GameObject>& gameObject : m_gameObjects)
 	{
-		if (gameObject->GetRigidBody())
+		if(gameObject->GetRigidBody())
 			gameObject->GetRigidBody()->MovementStep(iterations);
 	}
 }
 
 void Scene::Resolution()
 {
-	for (shared_ptr<Manifold> contact : m_contacts) {
+	for(shared_ptr<Manifold> contact : m_contacts) {
 		shared_ptr<RigidBody> rb1 = contact->m_rb1;
 		shared_ptr<RigidBody> rb2 = contact->m_rb2;
-		if (!rb1->GetIsBlockBody() || !rb2->GetIsBlockBody())
+		if(!rb1->GetIsBlockBody() || !rb2->GetIsBlockBody())
 			continue;
 
 
@@ -446,7 +451,7 @@ void Scene::Resolution()
 
 
 		Vec3 relativeVelocity = rb2->GetLinearVelocity() - rb1->GetLinearVelocity();
-		if (relativeVelocity.Dot(normal) > 0.f) {
+		if(relativeVelocity.Dot(normal) > 0.f) {
 			continue;
 		}
 

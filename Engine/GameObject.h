@@ -13,6 +13,7 @@ class BaseCollider;
 class Animator;
 class RigidBody;
 class InteractiveObject;
+class NetworkObject;
 
 class GameObject : public Object, public enable_shared_from_this<GameObject>
 {
@@ -39,6 +40,7 @@ public:
 	shared_ptr<RigidBody> GetRigidBody();
 
 	shared_ptr<InteractiveObject> GetInteractiveObject();
+	shared_ptr<NetworkObject> GetNetworkObject();
 
 	void AddComponent(shared_ptr<Component> component);
 

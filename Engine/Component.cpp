@@ -44,3 +44,8 @@ shared_ptr<InteractiveObject> Component::GetInteractiveObject()
 {
 	return m_gameObject.lock()->GetInteractiveObject();
 }
+
+shared_ptr<NetworkObject> Component::GetNetworkObject()
+{
+	return m_gameObject.lock()->GetNetworkObject();
+}

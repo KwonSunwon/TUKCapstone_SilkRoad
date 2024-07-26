@@ -13,6 +13,7 @@ public:
 	virtual void LateUpdate();
 
 	void ProcessPacket(shared_ptr<PlayerPacket> packet);
+	void ChangeClass(shared_ptr<PlayerClassChangePacket> packet);
 
 	uint32 m_myNetworkId = -1;
 

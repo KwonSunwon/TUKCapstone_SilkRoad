@@ -11,6 +11,7 @@
 #include "Animator.h"
 #include "RigidBody.h"
 #include "InteractiveObject.h"
+#include "NetworkObject.h"
 
 GameObject::GameObject() : Object(OBJECT_TYPE::GAMEOBJECT)
 {
@@ -24,13 +25,13 @@ GameObject::~GameObject()
 
 void GameObject::Awake()
 {
-	for (shared_ptr<Component>& component : m_components)
+	for(shared_ptr<Component>& component : m_components)
 	{
-		if (component)
+		if(component)
 			component->Awake();
 	}
 
-	for (shared_ptr<MonoBehaviour>& script : m_scripts)
+	for(shared_ptr<MonoBehaviour>& script : m_scripts)
 	{
 		script->Awake();
 	}
@@ -38,13 +39,13 @@ void GameObject::Awake()
 
 void GameObject::Start()
 {
-	for (shared_ptr<Component>& component : m_components)
+	for(shared_ptr<Component>& component : m_components)
 	{
-		if (component)
+		if(component)
 			component->Start();
 	}
 
-	for (shared_ptr<MonoBehaviour>& script : m_scripts)
+	for(shared_ptr<MonoBehaviour>& script : m_scripts)
 	{
 		script->Start();
 	}
@@ -52,15 +53,15 @@ void GameObject::Start()
 
 void GameObject::Update()
 {
-	if (IsActive() == false)
+	if(IsActive() == false)
 		return;
-	for (shared_ptr<Component>& component : m_components)
+	for(shared_ptr<Component>& component : m_components)
 	{
-		if (component)
+		if(component)
 			component->Update();
 	}
 
-	for (shared_ptr<MonoBehaviour>& script : m_scripts)
+	for(shared_ptr<MonoBehaviour>& script : m_scripts)
 	{
 		script->Update();
 	}
@@ -68,15 +69,15 @@ void GameObject::Update()
 
 void GameObject::LateUpdate()
 {
-	if (IsActive() == false)
+	if(IsActive() == false)
 		return;
-	for (shared_ptr<Component>& component : m_components)
+	for(shared_ptr<Component>& component : m_components)
 	{
-		if (component)
+		if(component)
 			component->LateUpdate();
 	}
 
-	for (shared_ptr<MonoBehaviour>& script : m_scripts)
+	for(shared_ptr<MonoBehaviour>& script : m_scripts)
 	{
 		script->LateUpdate();
 	}
@@ -84,11 +85,11 @@ void GameObject::LateUpdate()
 
 void GameObject::FinalUpdate()
 {
-	if (IsActive() == false)
+	if(IsActive() == false)
 		return;
-	for (shared_ptr<Component>& component : m_components)
+	for(shared_ptr<Component>& component : m_components)
 	{
-		if (component)
+		if(component)
 			component->FinalUpdate();
 	}
 }
@@ -160,12 +161,18 @@ shared_ptr<InteractiveObject> GameObject::GetInteractiveObject()
 	return static_pointer_cast<InteractiveObject>(component);
 }
 
+shared_ptr<NetworkObject> GameObject::GetNetworkObject()
+{
+	shared_ptr<Component> component = GetFixedComponent(COMPONENT_TYPE::NETWORK);
+	return static_pointer_cast<NetworkObject>(component);
+}
+
 void GameObject::AddComponent(shared_ptr<Component> component)
 {
 	component->SetGameObject(shared_from_this());
 
 	uint8 index = static_cast<uint8>(component->GetType());
-	if (index < FIXED_COMPONENT_COUNT)
+	if(index < FIXED_COMPONENT_COUNT)
 	{
 		m_components[index] = component;
 	}
@@ -177,8 +184,8 @@ void GameObject::AddComponent(shared_ptr<Component> component)
 
 shared_ptr<MonoBehaviour> GameObject::GetMonobehaviour(string name)
 {
-	for (auto script : m_scripts) {
-		if (script->GetMonovihaviourName() == name) {
+	for(auto script : m_scripts) {
+		if(script->GetMonovihaviourName() == name) {
 			return script;
 		}
 	}

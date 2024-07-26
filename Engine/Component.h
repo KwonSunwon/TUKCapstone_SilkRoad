@@ -13,6 +13,7 @@ enum class COMPONENT_TYPE : uint8
 	ANIMATOR,
 	RIGIDBODY,
 	INTERACTIVE_OBJECT,
+	NETWORK,
 	// ...
 	MONO_BEHAVIOUR,
 	END,
@@ -29,6 +30,7 @@ class MeshRenderer;
 class Animator;
 class RigidBody;
 class InteractiveObject;
+class NetworkObject;
 
 class Component : public Object
 {
@@ -53,6 +55,7 @@ public:
 	shared_ptr<Animator> GetAnimator();
 	shared_ptr<RigidBody> GetRigidBody();
 	shared_ptr<InteractiveObject> GetInteractiveObject();
+	shared_ptr<NetworkObject> GetNetworkObject();
 
 private:
 	friend class GameObject;

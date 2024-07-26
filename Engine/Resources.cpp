@@ -17,6 +17,8 @@
 #include "Enemy.h"
 #include "EnemyHP.h"
 #include "Scene.h"
+#include "NetworkObject.h"
+
 void Resources::Init()
 {
 	CreateDefaultShader();
@@ -27,7 +29,7 @@ void Resources::Init()
 shared_ptr<Mesh> Resources::LoadPointMesh()
 {
 	shared_ptr<Mesh> findMesh = Get<Mesh>(L"Point");
-	if (findMesh)
+	if(findMesh)
 		return findMesh;
 
 	vector<Vertex> vec(1);
@@ -46,7 +48,7 @@ shared_ptr<Mesh> Resources::LoadPointMesh()
 shared_ptr<Mesh> Resources::LoadRectangleMesh()
 {
 	shared_ptr<Mesh> findMesh = Get<Mesh>(L"Rectangle");
-	if (findMesh)
+	if(findMesh)
 		return findMesh;
 
 	float w2 = 0.5f;
@@ -76,7 +78,7 @@ shared_ptr<Mesh> Resources::LoadRectangleMesh()
 shared_ptr<Mesh> Resources::LoadCubeMesh()
 {
 	shared_ptr<Mesh> findMesh = Get<Mesh>(L"Cube");
-	if (findMesh)
+	if(findMesh)
 		return findMesh;
 
 	float w2 = 0.5f;
@@ -173,12 +175,12 @@ shared_ptr<Mesh> Resources::LoadSphereMesh()
 	float deltaV = 1.f / static_cast<float>(stackCount);
 
 	// 고리마다 돌면서 정점을 계산한다 (북극/남극 단일점은 고리가 X)
-	for (uint32 y = 1; y <= stackCount - 1; ++y)
+	for(uint32 y = 1; y <= stackCount - 1; ++y)
 	{
 		float phi = y * stackAngle;
 
 		// 고리에 위치한 정점
-		for (uint32 x = 0; x <= sliceCount; ++x)
+		for(uint32 x = 0; x <= sliceCount; ++x)
 		{
 			float theta = x * sliceAngle;
 
@@ -211,7 +213,7 @@ shared_ptr<Mesh> Resources::LoadSphereMesh()
 	vector<uint32> idx(36);
 
 	// 북극 인덱스
-	for (uint32 i = 0; i <= sliceCount; ++i)
+	for(uint32 i = 0; i <= sliceCount; ++i)
 	{
 		//  [0]
 		//   |  \
@@ -223,21 +225,21 @@ shared_ptr<Mesh> Resources::LoadSphereMesh()
 
 	// 몸통 인덱스
 	uint32 ringVertexCount = sliceCount + 1;
-	for (uint32 y = 0; y < stackCount - 2; ++y)
+	for(uint32 y = 0; y < stackCount - 2; ++y)
 	{
-		for (uint32 x = 0; x < sliceCount; ++x)
+		for(uint32 x = 0; x < sliceCount; ++x)
 		{
 			//  [y, x]-[y, x+1]
 			//  |		/
 			//  [y+1, x]
-			idx.push_back(1 + (y) * ringVertexCount + (x));
-			idx.push_back(1 + (y) * ringVertexCount + (x + 1));
+			idx.push_back(1 + (y)*ringVertexCount + (x));
+			idx.push_back(1 + (y)*ringVertexCount + (x + 1));
 			idx.push_back(1 + (y + 1) * ringVertexCount + (x));
 			//		 [y, x+1]
 			//		 /	  |
 			//  [y+1, x]-[y+1, x+1]
 			idx.push_back(1 + (y + 1) * ringVertexCount + (x));
-			idx.push_back(1 + (y) * ringVertexCount + (x + 1));
+			idx.push_back(1 + (y)*ringVertexCount + (x + 1));
 			idx.push_back(1 + (y + 1) * ringVertexCount + (x + 1));
 		}
 	}
@@ -245,7 +247,7 @@ shared_ptr<Mesh> Resources::LoadSphereMesh()
 	// 남극 인덱스
 	uint32 bottomIndex = static_cast<uint32>(vec.size()) - 1;
 	uint32 lastRingStartIndex = bottomIndex - ringVertexCount;
-	for (uint32 i = 0; i < sliceCount; ++i)
+	for(uint32 i = 0; i < sliceCount; ++i)
 	{
 		//  [last+i]-[last+i+1]
 		//  |      /
@@ -266,9 +268,9 @@ shared_ptr<Mesh> Resources::LoadTerrainMesh(int32 sizeX, int32 sizeZ)
 {
 	vector<Vertex> vec;
 
-	for (int32 z = 0; z < sizeZ + 1; z++)
+	for(int32 z = 0; z < sizeZ + 1; z++)
 	{
-		for (int32 x = 0; x < sizeX + 1; x++)
+		for(int32 x = 0; x < sizeX + 1; x++)
 		{
 			Vertex vtx;
 			vtx.pos = Vec3(static_cast<float>(x), 0, static_cast<float>(z));
@@ -282,9 +284,9 @@ shared_ptr<Mesh> Resources::LoadTerrainMesh(int32 sizeX, int32 sizeZ)
 
 	vector<uint32> idx;
 
-	for (int32 z = 0; z < sizeZ; z++)
+	for(int32 z = 0; z < sizeZ; z++)
 	{
-		for (int32 x = 0; x < sizeX; x++)
+		for(int32 x = 0; x < sizeX; x++)
 		{
 			//  [0]
 			//   |	\
@@ -302,7 +304,7 @@ shared_ptr<Mesh> Resources::LoadTerrainMesh(int32 sizeX, int32 sizeZ)
 	}
 
 	shared_ptr<Mesh> findMesh = Get<Mesh>(L"Terrain");
-	if (findMesh)
+	if(findMesh)
 	{
 		findMesh->Create(vec, idx);
 		return findMesh;
@@ -322,10 +324,10 @@ shared_ptr<GameObject> Resources::LoadItemPrefab(int id, Vec3 location)
 		shared_ptr<MeshData> meshData = make_shared<MeshData>();
 		Vec3 scale = Vec3(1.f, 1.f, 1.f);
 		Vec3 rotation = Vec3(0.f, 0.f, 0.f);
-		switch (id) {
+		switch(id) {
 		case 0:
-			 meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Item_Bomb.fbx");
-			 break;
+			meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Item_Bomb.fbx");
+			break;
 
 		case 1:
 			meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Item_BatteryPack_02.fbx");
@@ -410,7 +412,7 @@ shared_ptr<GameObject> Resources::LoadItemPrefab(int id, Vec3 location)
 		default:
 			break;
 		}
-		
+
 		vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
 		shared_ptr<GameObject> go = gameObjects[idx];
 
@@ -456,7 +458,7 @@ shared_ptr<GameObject> Resources::LoadItemPrefab(int id, Vec3 location)
 			item->SetItemId(id);
 			go->AddComponent(item);
 			go->SetShadow(true);
-			
+
 		}
 		return go;
 	}
@@ -470,7 +472,7 @@ void Resources::LoadEnemyPrefab(int modelNum, Vec3 Location, Vec3 Scale, float h
 {
 	int idx = 0;
 	shared_ptr<MeshData> meshData;
-	switch (modelNum)
+	switch(modelNum)
 	{
 	case 0:
 		meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Enemy_Spike.fbx");
@@ -549,10 +551,16 @@ void Resources::LoadEnemyPrefab(int modelNum, Vec3 Location, Vec3 Scale, float h
 		enemyScript->AddPlayer(scene->GetPlayers()[GUEST_PLAYER2]);
 		go->AddComponent(enemyScript);
 		go->SetShadow(true);
-		int networkId = scene->AddNetworkObject();
-		enemyScript->SetNetworkId(networkId);
-		scene->m_enemies[networkId] = enemyScript;
+		//networkObject
+		{
+			shared_ptr<NetworkObject> networkObject = make_shared<NetworkObject>();
+			int networkId = scene->AddNetworkObject();
+			enemyScript->SetNetworkId(networkId);
+			//scene->m_enemies[networkId] = enemyScript;
 
+			networkObject->SetNetworkId(networkId);
+			go->AddComponent(networkObject);
+		}
 		//hpbar
 		{
 			shared_ptr<GameObject> obj = make_shared<GameObject>();
@@ -576,7 +584,7 @@ void Resources::LoadEnemyPrefab(int modelNum, Vec3 Location, Vec3 Scale, float h
 			obj->AddComponent(meshRenderer);
 			shared_ptr<EnemyHP> enemyHP = make_shared<EnemyHP>();
 			enemyHP->SetParentEnemy(enemyScript);
-			
+
 			obj->AddComponent(enemyHP);
 			scene->AddGameObject(obj);
 
@@ -674,9 +682,9 @@ shared_ptr<MeshData> Resources::LoadFBX(const wstring& path)
 	wstring key = path;
 
 	shared_ptr<MeshData> meshData = Get<MeshData>(key);
-	if (meshData)
+	if(meshData)
 		return meshData->Clone();
-		//return meshData;
+	//return meshData;
 
 	meshData = MeshData::LoadFromFBX(path);
 	meshData->SetName(key);

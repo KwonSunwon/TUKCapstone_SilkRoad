@@ -9,6 +9,8 @@
 #include "Timer.h"
 #include "NetworkPlayer.h"
 #include "Enemy.h"
+#include "NetworkObject.h"
+#include "NetworkPlayer.h"
 
 Network::Network()
 {
@@ -23,8 +25,8 @@ Network::Network()
 */
 void Network::Update()
 {
-	auto objects = GET_SINGLE(SceneManager)->GetActiveScene()->GetGameObjects();
-	auto players = GET_SINGLE(SceneManager)->GetActiveScene()->GetPlayers();
+	auto objects = GET_SINGLE(SceneManager)->GetActiveScene()->GetNetworkObjects();
+	auto players = GET_SINGLE(SceneManager)->GetActiveScene()->GetNetworkPlayers();
 
 	shared_ptr<Packet> packet;
 	//while(Recv(m_packetBuffer)) {
@@ -51,10 +53,31 @@ void Network::Update()
 				packet->m_targetId = 0;
 			if(packet->m_targetId == 2)
 				packet->m_targetId = 1;
-			GET_SINGLE(SceneManager)->GetActiveScene()->m_networkPlayers[packet->m_targetId]->ProcessPacket(reinterpret_pointer_cast<PlayerPacket>(packet));
+			players[packet->m_targetId]->ProcessPacket(reinterpret_pointer_cast<PlayerPacket>(packet));
+			break;
+			/*case PACKET_TYPE::PT_ENEMY:
+				GET_SINGLE(SceneManager)->GetActiveScene()->m_enemies[packet->m_targetId]->ProcessPacket(reinterpret_pointer_cast<EnemyPacket>(packet));
+				break;*/
+		case PACKET_TYPE::PT_PLAYER_CLASS_CHANGE:
+			if(packet->m_targetId != 0 && packet->m_targetId != 1 && packet->m_targetId != 2) {
+				OutputDebugString(L"Invalid PlayerPacket targetId\n");
+				break;
+			}
+			if(m_networkState == NETWORK_STATE::HOST && packet->m_targetId == 1)
+				packet->m_targetId = 0;
+			if(packet->m_targetId == 2)
+				packet->m_targetId = 1;
+			players[packet->m_targetId]->ChangeClass(reinterpret_pointer_cast<PlayerClassChangePacket>(packet));
 			break;
 		case PACKET_TYPE::PT_ENEMY:
-			GET_SINGLE(SceneManager)->GetActiveScene()->m_enemies[packet->m_targetId]->ProcessPacket(reinterpret_pointer_cast<EnemyPacket>(packet));
+		case PACKET_TYPE::PT_ENEMY_HIT:
+			objects[packet->m_targetId]->ProcessPacket(packet);
+			break;
+		case PACKET_TYPE::PT_STAGE_CHANGE:
+			if(m_networkState == NETWORK_STATE::GUEST) {
+				m_receivedPacketQue.Clear();
+				GET_SINGLE(SceneManager)->StartNextStage();
+			}
 			break;
 		default:
 			break;
@@ -80,6 +103,15 @@ shared_ptr<Packet> Network::PacketProcess(int idx)
 		break;
 	case PACKET_TYPE::PT_ENEMY:
 		packet = make_shared<EnemyPacket>();
+		break;
+	case PACKET_TYPE::PT_ENEMY_HIT:
+		packet = make_shared<EnemyHitPacket>();
+		break;
+	case PACKET_TYPE::PT_STAGE_CHANGE:
+		packet = make_shared<StageChangePacket>();
+		break;
+	case PACKET_TYPE::PT_PLAYER_CLASS_CHANGE:
+		packet = make_shared<PlayerClassChangePacket>();
 		break;
 	}
 
@@ -257,7 +289,7 @@ void Host::Connection(ushort id)
 					break;
 				}
 
-				if(m_guestInfos.size() > 1 && packet->m_type == PACKET_TYPE::PT_PLAYER) {
+				if(m_guestInfos.size() > 1 && IsThroughPacket(packet->m_type)) {
 					send(m_guestInfos[otherId].socket, (char*)packet.get(), packet->m_size, 0);
 				}
 				m_receivedPacketQue.Push(packet);
@@ -305,6 +337,16 @@ bool Host::Recv(shared_ptr<Packet> packet)
 	return false;*/
 
 	if(m_eventQue.toServer.TryPop(*packet))
+		return true;
+	return false;
+}
+bool Host::IsThroughPacket(PACKET_TYPE type)
+{
+	if(type == PACKET_TYPE::PT_PLAYER)
+		return true;
+	if(type == PACKET_TYPE::PT_PLAYER_CLASS_CHANGE)
+		return true;
+	if(type == PACKET_TYPE::PT_ENEMY_HIT)
 		return true;
 	return false;
 }

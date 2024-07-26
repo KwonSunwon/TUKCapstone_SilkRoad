@@ -120,6 +120,8 @@ public:
 	void Send(shared_ptr<char[]> data, int size) override;
 	bool Recv(shared_ptr<Packet> packet) override;
 
+	bool IsThroughPacket(PACKET_TYPE type);
+
 	char* m_myIP;
 
 private:

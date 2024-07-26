@@ -145,3 +145,24 @@ EnemyPacket::EnemyPacket()
 	m_targetId = -1;
 	m_type = PACKET_TYPE::PT_ENEMY;
 }
+
+EnemyHitPacket::EnemyHitPacket()
+{
+	m_size = sizeof(EnemyHitPacket);
+	m_targetId = -1;
+	m_type = PACKET_TYPE::PT_ENEMY_HIT;
+}
+
+StageChangePacket::StageChangePacket()
+{
+	m_size = sizeof(StageChangePacket);
+	m_targetId = -1;
+	m_type = PACKET_TYPE::PT_STAGE_CHANGE;
+}
+
+PlayerClassChangePacket::PlayerClassChangePacket()
+{
+	m_size = sizeof(PlayerClassChangePacket);
+	m_targetId = -1;
+	m_type = PACKET_TYPE::PT_PLAYER_CLASS_CHANGE;
+}
