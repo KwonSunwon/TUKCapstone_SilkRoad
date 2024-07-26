@@ -158,6 +158,18 @@ float4 PS_Final(VS_OUT input) : SV_Target
     float4 specular = g_tex_2.Sample(g_sam_0, input.uv);
 
     output = (color * lightPower) + specular;
+    if (g_int_0 == 1)
+    {
+        float2 center = float2(0.5f, 1.0f);
+        float2 diff = input.uv - center;
+        float distance = sqrt(diff.x * diff.x + diff.y * diff.y);
+        
+        
+        if (distance < g_float_0)
+            output = output * float4(1.f, 0.5f, 0.5f, 1.f);
+
+    }
+    
     return output;
 }
 

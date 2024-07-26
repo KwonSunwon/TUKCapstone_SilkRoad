@@ -1,5 +1,13 @@
 #pragma once
 
+enum CharacterClass
+{
+    DEALER = 5,
+    HEALER = 6,
+    LAUNCHER = 7,
+    TANKER = 8
+};
+
 class UpgradeManager
 {
     DECLARE_SINGLE(UpgradeManager);
@@ -11,6 +19,7 @@ public:
     void ClassChange(int id);
     void SetClass();
     void SetStat();
+    int GetClass() { return m_charClass; }
 
 	int GetItemLevel(int id) { return m_itemLevels[id]; }
 	int GetUpgradeLevel(int id) { return m_upgradeLevels[id]; }

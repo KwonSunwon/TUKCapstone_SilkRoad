@@ -42,6 +42,7 @@
 #include "SoundManager.h"
 #include "EnemyHP.h"
 #include "TankerSkill.h"
+#include "HealerSkill.h"
 #include "UpgradeManager.h"
 
 #include "Input.h"
@@ -85,7 +86,7 @@ shared_ptr<class Scene> LoadMainScene1()
 		camera->SetName(L"Main_Camera");
 		camera->AddComponent(make_shared<Transform>());
 		camera->AddComponent(make_shared<Camera>()); // Near=1, Far=1000, FOV=45��
-		camera->AddComponent(make_shared<TestCameraScript>());
+		//camera->AddComponent(make_shared<TestCameraScript>());
 		camera->GetCamera()->SetFar(100000.f);
 		camera->GetTransform()->SetLocalPosition(Vec3(0.f, 900.f, 0.f));
 		uint8 layerIndex = GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI");
@@ -844,6 +845,50 @@ shared_ptr<class Scene> LoadMainScene1()
 
 	}
 
+	{
+		int idx = 0;
+		shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Bld_Bridge_01.fbx");
+		vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
+		shared_ptr<GameObject> gm = gameObjects[idx];
+
+		gm->GetTransform()->SetLocalScale(Vec3(10.f, 0.1f, 10.f));
+		gm->GetTransform()->SetLocalPosition(Vec3(500, 500.f, 500.f));
+
+		shared_ptr<RigidBody> rbb = make_shared<RigidBody>();
+		rbb->SetStatic(true);
+		rbb->SetMass(1000000.f);
+		rbb->SetOverlap();
+		gm->AddComponent(rbb);
+		gm->AddComponent(make_shared<HealerSkill>());
+
+		gm->AddComponent(make_shared<OrientedBoxCollider>());
+		gm->GetCollider()->SetExtent(Vec3(500, 5, 500));
+		gm->GetCollider()->SetOffset(Vec3(0, 5, 0));
+
+
+
+		//Instancing 유무 설정(사용:0,0  미사용:0,1)
+		{
+			gm->GetMeshRenderer()->GetMaterial()->SetInt(0, 0);
+		}
+
+		if(gm->GetCollider()->GetDebugCollider() != nullptr)
+			scene->AddGameObject(gm->GetCollider()->GetDebugCollider());
+		gm->SetShadow(true);
+		scene->AddGameObject(gm);
+
+		scene->GetMainPlayerScript()->SetSkillObject(1, gm);
+
+	}
+
+	{
+		shared_ptr<GameObject> bomb = GET_SINGLE(Resources)->LoadBombPrefab(Vec3(0, 0, 0));
+		bomb->GetRigidBody()->SetOverlap();
+		shared_ptr<Bomb> bombScript = dynamic_pointer_cast<Bomb>(bomb->GetMonobehaviour("Bomb"));
+		scene->GetMainPlayerScript()->SetBomb(bombScript);
+		scene->AddGameObject(bomb);
+	}
+
 
 #pragma region First Network Characters Setting Example
 	{
@@ -927,7 +972,7 @@ shared_ptr<class Scene> LoadMainScene1()
 		//Transform 설정
 		{
 			shared_ptr<Transform> transform = go->GetTransform();
-			transform->SetLocalPosition(Vec3(4500.f, 1500.f, 2500.f));
+			transform->SetLocalPosition(Vec3(-4500.f, 1500.f, 2500.f));
 			//transform->SetLocalScale(Vec3(1.f, 1.f, 1.f));
 			//transform->SetLocalRotation(Vec3(XMConvertToRadians(0.f), XMConvertToRadians(0.f), XMConvertToRadians(0.f)));
 		}
@@ -1106,20 +1151,20 @@ shared_ptr<class Scene> LoadMainScene1()
 	{
 
 		for(int i = 0; i < 17; ++i) {
-			scene->AddGameObject(GET_SINGLE(Resources)->LoadItemPrefab(i, Vec3(2500.f, 400.f, 3000.f + 100.f * i)));
+			GET_SINGLE(Resources)->LoadItemPrefab(i, Vec3(2500.f, 400.f, 3000.f + 100.f * i), scene);
 		}
 
 
-		scene->AddGameObject(GET_SINGLE(Resources)->LoadItemPrefab(0, Vec3(27328, 220, 7446)));
+		GET_SINGLE(Resources)->LoadItemPrefab(0, Vec3(27328, 220, 7446), scene);
 
-		scene->AddGameObject(GET_SINGLE(Resources)->LoadItemPrefab(1, Vec3(16805, 121, 6721)));
-		scene->AddGameObject(GET_SINGLE(Resources)->LoadItemPrefab(1, Vec3(16755, 121, 6721)));
-		scene->AddGameObject(GET_SINGLE(Resources)->LoadItemPrefab(1, Vec3(16835, 121, 6721)));
-		scene->AddGameObject(GET_SINGLE(Resources)->LoadItemPrefab(1, Vec3(16845, 121, 6721)));
-		scene->AddGameObject(GET_SINGLE(Resources)->LoadItemPrefab(1, Vec3(16855, 121, 6721)));
-		scene->AddGameObject(GET_SINGLE(Resources)->LoadItemPrefab(2, Vec3(28623, 128, 15045)));
-		scene->AddGameObject(GET_SINGLE(Resources)->LoadItemPrefab(3, Vec3(25451, 121, 24415)));
-		scene->AddGameObject(GET_SINGLE(Resources)->LoadItemPrefab(4, Vec3(25651, 121, 24415)));
+		GET_SINGLE(Resources)->LoadItemPrefab(1, Vec3(16805, 121, 6721), scene);
+		GET_SINGLE(Resources)->LoadItemPrefab(1, Vec3(16755, 121, 6721), scene);
+		GET_SINGLE(Resources)->LoadItemPrefab(1, Vec3(16835, 121, 6721), scene);
+		GET_SINGLE(Resources)->LoadItemPrefab(1, Vec3(16845, 121, 6721), scene);
+		GET_SINGLE(Resources)->LoadItemPrefab(1, Vec3(16855, 121, 6721), scene);
+		GET_SINGLE(Resources)->LoadItemPrefab(2, Vec3(28623, 128, 15045), scene);
+		GET_SINGLE(Resources)->LoadItemPrefab(3, Vec3(25451, 121, 24415), scene);
+		GET_SINGLE(Resources)->LoadItemPrefab(4, Vec3(25651, 121, 24415), scene);
 	}
 
 

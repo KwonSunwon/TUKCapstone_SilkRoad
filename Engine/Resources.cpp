@@ -19,6 +19,7 @@
 #include "EnemyHP.h"
 #include "Scene.h"
 #include "NetworkObject.h"
+#include "SceneManager.h"
 
 void Resources::Init()
 {
@@ -487,6 +488,7 @@ wstring Resources::GetItemDesc(int id)
 }
 
 shared_ptr<GameObject> Resources::LoadItemPrefab(int id, Vec3 location)
+shared_ptr<GameObject> Resources::LoadItemPrefab(int id, Vec3 location, shared_ptr<Scene> scene)
 {
 #pragma region Item
 	{
@@ -630,11 +632,19 @@ shared_ptr<GameObject> Resources::LoadItemPrefab(int id, Vec3 location)
 			go->SetShadow(true);
 
 		}
+
+		//네트워크 컴포넌트 부착
+		{
+			shared_ptr<NetworkObject> networkObject = make_shared<NetworkObject>();
+			int networkId = scene->AddNetworkObject();
+			networkObject->SetNetworkId(networkId);
+			OutputDebugString((L"Item Network Id : " + to_wstring(networkId) + L"\n").c_str());
+			go->AddComponent(networkObject);
+		}
+
+		scene->AddGameObject(go);
 		return go;
 	}
-
-
-
 #pragma endregion
 }
 

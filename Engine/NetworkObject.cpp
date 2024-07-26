@@ -6,6 +6,7 @@
 #include "GameObject.h"
 #include "Enemy.h"
 #include "RigidBody.h"
+#include "Item.h"
 
 NetworkObject::NetworkObject() : Component(COMPONENT_TYPE::NETWORK)
 {
@@ -20,6 +21,7 @@ NetworkObject::~NetworkObject()
 void NetworkObject::ProcessPacket(shared_ptr<Packet> packet)
 {
 	shared_ptr<MonoBehaviour> scriptE = GetGameObject()->GetMonobehaviour("Enemy");
+	shared_ptr<MonoBehaviour> scriptI = GetGameObject()->GetMonobehaviour("Item");
 
 	switch(packet->m_type) {
 	case PACKET_TYPE::PT_ENEMY:
@@ -34,7 +36,16 @@ void NetworkObject::ProcessPacket(shared_ptr<Packet> packet)
 		}
 		break;
 	}
-	default:
+	case PACKET_TYPE::PT_ITEM: {
+		if(!scriptI) {
+			OutputDebugString(L"Item Script is Null - NetworkID: ");
+			OutputDebugString(to_wstring(GetNetworkId()).c_str());
+			OutputDebugString(L"\n");
+			return;
+		}
+		shared_ptr<Item> item = dynamic_pointer_cast<Item>(scriptI);
+		item->GetRigidBody()->MoveTo(reinterpret_pointer_cast<ItemPacket>(packet)->m_pos);
 		break;
+	}
 	}
 }

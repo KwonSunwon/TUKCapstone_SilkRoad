@@ -29,7 +29,12 @@ void Enemy::Awake()
 }
 void Enemy::Update()
 {
-	if(GET_SINGLE(NetworkManager)->GetNetworkState() == NETWORK_STATE::GUEST) {
+	if(m_isDie) {
+		// 적이 죽으면 게스트에서도 Update를 진행해
+		// DieState로 변경, 디졸브 효과가 적용되도록 함
+		// "으앙 쥬금"
+	}
+	else if(GET_SINGLE(NetworkManager)->GetNetworkState() == NETWORK_STATE::GUEST) {
 		return;
 	}
 
@@ -51,7 +56,12 @@ void Enemy::Update()
 
 void Enemy::LateUpdate()
 {
-	if(GET_SINGLE(NetworkManager)->GetNetworkState() == NETWORK_STATE::GUEST) {
+	if(m_isDie) {
+		// 적이 죽으면 게스트에서도 Update를 진행해
+		// DieState로 변경, 디졸브 효과가 적용되도록 함
+		// "으앙 쥬금"
+	}
+	else if(GET_SINGLE(NetworkManager)->GetNetworkState() == NETWORK_STATE::GUEST) {
 		return;
 	}
 	else if(GET_SINGLE(NetworkManager)->GetNetworkState() == NETWORK_STATE::HOST) {
@@ -80,6 +90,9 @@ void Enemy::LateUpdate()
 void Enemy::GetDamage(float damage, bool isPacket)
 {
 	m_HP -= damage;
+	if(m_HP <= 0.f) {
+		SetDie(true);
+	}
 }
 
 void Enemy::MakeDamageIndicator(float damage, Vec3 originPos, bool isCri)
@@ -95,6 +108,9 @@ void Enemy::MakeDamageIndicator(float damage, Vec3 originPos, bool isCri)
 
 void Enemy::ProcessPacket(shared_ptr<EnemyPacket> packet)
 {
+	if(m_isDie) {
+		return;
+	}
 	shared_ptr<RigidBody> rb = GetRigidBody();
 	shared_ptr<Transform> transform = GetTransform();
 	rb->MoveTo(packet->m_position);

@@ -40,9 +40,12 @@ enum class PACKET_TYPE : BYTE {
 	PT_INIT = 1,
 	PT_MOVE,
 	PT_PLAYER,
+	PT_PLAYER_CLASS_CHANGE,
 	PT_ENEMY,
 	PT_ENEMY_HIT,
 	PT_STAGE_CHANGE,
+	PT_SKILL,
+	PT_ITEM,
 	PT_MAX,
 };
 
@@ -88,6 +91,15 @@ public:
 	uint32 m_animationIndex;
 };
 
+class PlayerClassChangePacket : public Packet {
+public:
+	PlayerClassChangePacket();
+	~PlayerClassChangePacket() {}
+
+public:
+	int32 m_classIndex;
+};
+
 class EnemyPacket : public Packet {
 public:
 	EnemyPacket();
@@ -121,6 +133,30 @@ public:
 
 public:
 	uint32 m_stageIndex;
+};
+
+class SkillPacket : public Packet {
+public:
+	SkillPacket();
+	~SkillPacket() {}
+
+public:
+	uint8 m_skillType;
+
+	Vec3 m_pos;
+	Vec3 m_look;
+	Vec3 m_dropPos;
+
+	bool m_isBomb;
+};
+
+class ItemPacket : public Packet {
+public:
+	ItemPacket();
+	~ItemPacket() {}
+
+public:
+	Vec3 m_pos;
 };
 
 #pragma pack(pop)

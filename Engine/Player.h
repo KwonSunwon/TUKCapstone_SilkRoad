@@ -11,6 +11,7 @@ struct FireInfo {
 	float explosionSize = 0.f;
 };
 
+class Bomb;
 
 class Player : public MonoBehaviour, public std::enable_shared_from_this<Player>
 {
@@ -70,6 +71,7 @@ public:
 	float GetSkillRemainingTime() { return m_skillRemainingTime; }
 
 	void SetSkillObject(int id, shared_ptr<GameObject> gm);
+	void SetBomb(shared_ptr<Bomb> bomb) { m_bomb = bomb; }
 private:
 	shared_ptr<class PlayerState> m_curState;
 	shared_ptr<Camera> m_playerCamera;
@@ -111,7 +113,11 @@ private:
 	bool m_isCritical = false;
 
 	
-	
+	float m_rageTime = 0.f;
+	float m_bombTime = 0.f;
+	bool m_isRage = false;
+	bool m_isBombTime = false;
+	shared_ptr<Bomb> m_bomb;
 
 private:
 	void InteracitveObjectPick();
@@ -119,9 +125,18 @@ private:
 	float CalcDamage();
 	BulletType CalcBulletType();
 
+public:
+	void NetworkSkill(shared_ptr<class SkillPacket> packet);
+
 private:
 
 	void Skill();
+	void SkillDealer();
+	void SkillHealer();
+	void SkillLauncher();
+	void SkillTanker();
+
+	void SkillManage();
 	shared_ptr<GameObject> m_guardObject;
 	shared_ptr<GameObject> m_healObject;
 	shared_ptr<GameObject> m_bombObject;

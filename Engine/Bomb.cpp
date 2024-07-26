@@ -17,10 +17,10 @@ void Bomb::Awake()
 }
 void Bomb::Update()
 {
-	if (INPUT->GetButtonDown(KEY_TYPE::RBUTTON))
+	/*if (INPUT->GetButtonDown(KEY_TYPE::RBUTTON))
 	{
 		m_isBombActivate = true;
-	}
+	}*/
 
 	explosion();
 
