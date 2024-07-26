@@ -30,8 +30,6 @@ void NetworkPlayer::LateUpdate()
 
 void NetworkPlayer::ProcessPacket(shared_ptr<PlayerPacket> packet)
 {
-	m_isActivated = true;
-
 	shared_ptr<RigidBody> rb = GetRigidBody();
 	shared_ptr<Transform> transform = GetTransform();
 	rb->MoveTo(packet->m_position);

@@ -38,8 +38,10 @@ void Network::Update()
 			break;
 		case PACKET_TYPE::PT_GUEST_INIT:
 			id = ProcessPlayerID(packet->m_targetId);
-			if(id != -1)
+			if(id != -1) {
 				players[id]->ChangeClass(reinterpret_pointer_cast<GuestInitPacket>(packet)->m_classIndex);
+				players[id]->SetActivated(true);
+			}
 			break;
 		case PACKET_TYPE::PT_PLAYER:
 			id = ProcessPlayerID(packet->m_targetId);
@@ -406,10 +408,10 @@ void Guest::Connect()
 	recv(m_socket, (char*)&initPacket, sizeof(InitPacket), 0);
 	GET_SINGLE(NetworkManager)->m_networkId = initPacket.m_networkId;
 	GET_SINGLE(SceneManager)->GetActiveScene()->m_networkPlayers[0]->ChangeClass(initPacket.m_classIndex);
-	OutputDebugString(L"\nm_classIndexGuest: ");
-	OutputDebugString(to_wstring(initPacket.m_classIndexGuest).c_str());
+	GET_SINGLE(SceneManager)->GetActiveScene()->m_networkPlayers[0]->SetActivated(true);
 	if(initPacket.m_classIndexGuest != -1) {
 		GET_SINGLE(SceneManager)->GetActiveScene()->m_networkPlayers[1]->ChangeClass(initPacket.m_classIndexGuest);
+		GET_SINGLE(SceneManager)->GetActiveScene()->m_networkPlayers[1]->SetActivated(true);
 	}
 
 	OutputDebugString(L"\nNetworkId: ");
