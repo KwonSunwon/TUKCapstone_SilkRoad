@@ -487,7 +487,6 @@ wstring Resources::GetItemDesc(int id)
 	return desc;
 }
 
-shared_ptr<GameObject> Resources::LoadItemPrefab(int id, Vec3 location)
 shared_ptr<GameObject> Resources::LoadItemPrefab(int id, Vec3 location, shared_ptr<Scene> scene)
 {
 #pragma region Item

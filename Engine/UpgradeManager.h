@@ -19,7 +19,6 @@ public:
     void ClassChange(int id);
     void SetClass();
     void SetStat();
-    int GetClass() { return m_charClass; }
 
 	int GetItemLevel(int id) { return m_itemLevels[id]; }
 	int GetUpgradeLevel(int id) { return m_upgradeLevels[id]; }

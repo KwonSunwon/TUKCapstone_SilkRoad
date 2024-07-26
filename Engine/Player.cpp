@@ -395,6 +395,11 @@ void Player::Skill()
 	if(GET_SINGLE(SceneManager)->GetActiveScene()->GetSceneName() == "Lobby")
 		return;
 
+	if (m_skillRemainingTime > 0)
+		return;
+
+	m_skillRemainingTime = m_skillCoolTime;
+
 	switch(GET_SINGLE(UpgradeManager)->GetClass()) {
 	case CharacterClass::DEALER:
 		SkillDealer();
@@ -461,10 +466,6 @@ void Player::SkillTanker()
 {
 	if(!m_guardObject)
 		return;
-	if (m_skillRemainingTime > 0)
-		return;
-
-	m_skillRemainingTime = m_skillCoolTime;
 
 	shared_ptr<Transform> transform = GetTransform();
 	Vec3 pos = transform->GetLocalPosition();
