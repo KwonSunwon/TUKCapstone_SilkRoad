@@ -43,22 +43,22 @@ void UpgradeManager::ClassChange(int id)
 
 	switch (id)
 	{
-	case EnumInteract::CHARACTER_CHANGER1:
+	case DEALER:
 		meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Character_Dealer.fbx");
 		GET_SINGLE(SceneManager)->GetActiveScene()->GetMainCamera()->GetTransform()->SetLocalPosition(Vec3(0.f, 180.f, 40.f));
 		break;
 
-	case EnumInteract::CHARACTER_CHANGER2:
+	case HEALER:
 		meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Character_Healer.fbx");
 		GET_SINGLE(SceneManager)->GetActiveScene()->GetMainCamera()->GetTransform()->SetLocalPosition(Vec3(0.f, 170.f, 40.f));
 		break;
 
-	case EnumInteract::CHARACTER_CHANGER3:
+	case LAUNCHER:
 		meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Character_Launcher.fbx");
 		GET_SINGLE(SceneManager)->GetActiveScene()->GetMainCamera()->GetTransform()->SetLocalPosition(Vec3(0.f, 190.f, 40.f));
 		break;
 
-	case EnumInteract::CHARACTER_CHANGER4:
+	case TANKER:
 		meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Character_Tanker.fbx");
 		GET_SINGLE(SceneManager)->GetActiveScene()->GetMainCamera()->GetTransform()->SetLocalPosition(Vec3(0.f, 165.f, 40.f));
 		break;
@@ -82,22 +82,22 @@ void UpgradeManager::SetClass()
 
 	switch (m_charClass)
 	{
-	case EnumInteract::CHARACTER_CHANGER1:
+	case DEALER:
 		meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Character_Dealer.fbx");
 		GET_SINGLE(SceneManager)->GetActiveScene()->GetMainCamera()->GetTransform()->SetLocalPosition(Vec3(0.f, 180.f, 40.f));
 		break;
 
-	case EnumInteract::CHARACTER_CHANGER2:
+	case HEALER:
 		meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Character_Healer.fbx");
 		GET_SINGLE(SceneManager)->GetActiveScene()->GetMainCamera()->GetTransform()->SetLocalPosition(Vec3(0.f, 170.f, 40.f));
 		break;
 
-	case EnumInteract::CHARACTER_CHANGER3:
+	case LAUNCHER:
 		meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Character_Launcher.fbx");
 		GET_SINGLE(SceneManager)->GetActiveScene()->GetMainCamera()->GetTransform()->SetLocalPosition(Vec3(0.f, 190.f, 40.f));
 		break;
 
-	case EnumInteract::CHARACTER_CHANGER4:
+	case TANKER:
 		meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Character_Tanker.fbx");
 		GET_SINGLE(SceneManager)->GetActiveScene()->GetMainCamera()->GetTransform()->SetLocalPosition(Vec3(0.f, 165.f, 40.f));
 		break;

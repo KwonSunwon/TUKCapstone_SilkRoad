@@ -104,7 +104,8 @@ private:
 	bool m_isCritical = false;
 
 	
-	
+	float m_rageTime = 0.f;
+	bool m_isRage = false;
 
 private:
 	void InteracitveObjectPick();
@@ -115,6 +116,12 @@ private:
 private:
 
 	void Skill();
+	void SkillDealer();
+	void SkillHealer();
+	void SkillLauncher();
+	void SkillTanker();
+
+	void SkillManage();
 	shared_ptr<GameObject> m_guardObject;
 	shared_ptr<GameObject> m_healObject;
 	shared_ptr<GameObject> m_bombObject;

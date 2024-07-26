@@ -23,6 +23,7 @@
 #include "SoundManager.h"
 #include "InteractiveObject.h"
 #include "UpgradeManager.h"
+#include "Resources.h"
 void Player::Awake()
 {
 	GET_SINGLE(UpgradeManager)->SetClass();
@@ -42,6 +43,7 @@ void Player::Awake()
 }
 void Player::Update()
 {
+	SkillManage();
 	ProcessGetItem();
 	InteracitveObjectPick();
 	if (INPUT->GetButtonDown(KEY_TYPE::Q))
@@ -336,16 +338,82 @@ BulletType Player::CalcBulletType()
 
 void Player::Skill()
 {
+	switch (GET_SINGLE(UpgradeManager)->GetClass()) {
+	case CharacterClass::DEALER:
+		SkillDealer();
+		break;
+
+	case CharacterClass::HEALER:
+		SkillHealer();
+		break;
+
+	case CharacterClass::LAUNCHER:
+		SkillLauncher();
+		break;
+
+	case CharacterClass::TANKER:
+		SkillTanker();
+		break;
+
+	default:
+		break;
+	}
+
+	
+
+}
+
+void Player::SkillDealer()
+{
+	GET_SINGLE(Resources)->Get<Material>(L"Final")->SetInt(0, 1);
+	m_isRage = true;
+}
+
+
+void Player::SkillHealer()
+{
+
+}
+
+void Player::SkillLauncher()
+{
+
+}
+
+
+
+void Player::SkillTanker()
+{
 	if (!m_guardObject)
 		return;
 
 	shared_ptr<Transform> transform = GetTransform();
 	Vec3 pos = transform->GetLocalPosition();
 	Vec3 look = transform->GetLook();
-	Vec3 dropPos = pos + look*500.f + Vec3(0.f, 300.f, 0.f);
+	Vec3 dropPos = pos + look * 700.f + Vec3(0.f, 1000.f, 0.f);
 
 	m_guardObject->GetRigidBody()->SetStatic(false);
 	m_guardObject->GetRigidBody()->MoveTo(dropPos);
 	m_guardObject->GetTransform()->LookAt(look);
+}
 
+void Player::SkillManage()
+{
+	if (m_isRage) {
+		GET_SINGLE(UpgradeManager)->SetStat();
+		m_bulletDamage *= 1.5f;
+		m_fireRate *= 1.5f;
+		m_criticalPercentage = 1.f;
+
+		m_rageTime += DELTA_TIME;
+		float dist = sin(m_rageTime * 3.14f / 5.f) * 3.f;
+		GET_SINGLE(Resources)->Get<Material>(L"Final")->SetFloat(0, dist);
+
+	}
+	if (m_rageTime > 5.f) {
+		GET_SINGLE(UpgradeManager)->SetStat();
+		m_isRage = false;
+		m_rageTime = 0.f;
+		GET_SINGLE(Resources)->Get<Material>(L"Final")->SetInt(0, 0);
+	}
 }
