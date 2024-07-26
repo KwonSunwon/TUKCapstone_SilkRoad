@@ -106,3 +106,9 @@ class PlayerSkillCoolTimeUI : public UIObject
 public:
 	virtual void Update() override;
 };
+
+class MiniMapUI : public UIObject
+{
+public:
+	virtual void Update() override;
+};

@@ -550,7 +550,7 @@ shared_ptr<class Scene> LoadMainScene1()
 					uiObject->SetScreenPivot(ePivot::CENTER);
 					uiObject->SetWidth(80.f);
 					uiObject->SetHeight(80.f);
-					uiObject->SetPosition(Vec2(-695 + (280 * (i % 5)), 340 - (i / 5) * 100) );
+					uiObject->SetPosition(Vec2(-695 + (280 * (i % 5)), 340 - (i / 5) * 100));
 					uiObject->SetZOrder(200);
 
 					statUI->AddItemSlot(uiObject, i);
@@ -568,12 +568,76 @@ shared_ptr<class Scene> LoadMainScene1()
 					ItemText->SetText(L"Brilliant Behemoth\nAdds explosion to bullets.\n\n2");
 					ItemText->SetPivot(ePivot::LEFTTOP);
 					ItemText->SetScreenPivot(ePivot::CENTER);
-					ItemText->SetPosition(Vec2(-610 + (280 * (i % 5)), -340 + (i / 5) * 100) );
+					ItemText->SetPosition(Vec2(-610 + (280 * (i % 5)), -340 + (i / 5) * 100));
 					statUI->AddItemDesc(ItemText, i);
 					scene->AddTextObject(ItemText);
 				}
 			}
 
+		}
+
+		// 미니맵
+		{
+			shared_ptr<GameObject> obj = make_shared<GameObject>();
+			obj->SetLayerIndex(GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI")); // UI
+			obj->AddComponent(make_shared<Transform>());
+			shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
+			{
+				shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadRectangleMesh();
+				meshRenderer->SetMesh(mesh);
+			}
+			{
+				shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"AlphaTexture");
+				shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"MiniMapBase1", L"..\\Resources\\Texture\\minimap_base.png");
+				shared_ptr<Material> material = make_shared<Material>();
+				material->SetShader(shader);
+				material->SetTexture(0, texture);
+
+				meshRenderer->SetMaterial(material);
+			}
+			shared_ptr<MiniMapUI> uiObject = make_shared<MiniMapUI>();
+			uiObject->SetPivot(ePivot::RIGHTTOP);
+			uiObject->SetScreenPivot(ePivot::RIGHTTOP);
+			uiObject->SetWidth(200.f);
+			uiObject->SetHeight(200.f);
+			uiObject->SetPosition(Vec2(0, 0));
+			uiObject->SetZOrder(500);
+
+			obj->AddComponent(uiObject);
+
+			obj->AddComponent(meshRenderer);
+			scene->AddGameObject(obj);
+		}
+		{
+			shared_ptr<GameObject> obj = make_shared<GameObject>();
+			obj->SetLayerIndex(GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI")); // UI
+			obj->AddComponent(make_shared<Transform>());
+			shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
+			{
+				shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadRectangleMesh();
+				meshRenderer->SetMesh(mesh);
+			}
+			{
+				shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"AlphaTexture");
+				shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"MiniMapBase2", L"..\\Resources\\Texture\\minimap_base_2.png");
+				shared_ptr<Material> material = make_shared<Material>();
+				material->SetShader(shader);
+				material->SetTexture(0, texture);
+
+				meshRenderer->SetMaterial(material);
+			}
+			shared_ptr<UIObject> uiObject = make_shared<UIObject>();
+			uiObject->SetPivot(ePivot::RIGHTTOP);
+			uiObject->SetScreenPivot(ePivot::RIGHTTOP);
+			uiObject->SetWidth(200.f);
+			uiObject->SetHeight(200.f);
+			uiObject->SetPosition(Vec2(0, 0));
+			uiObject->SetZOrder(490);
+
+			obj->AddComponent(uiObject);
+
+			obj->AddComponent(meshRenderer);
+			scene->AddGameObject(obj);
 		}
 
 	}

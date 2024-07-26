@@ -341,3 +341,13 @@ void PlayerSkillCoolTimeUI::Update()
 
 	UIObject::Update();
 }
+
+void MiniMapUI::Update()
+{
+	auto player = GET_SINGLE(SceneManager)->GetActiveScene()->GetMainPlayerScript();
+	auto playerRot = player->GetTransform()->GetLocalRotation();
+
+	GetTransform()->SetLocalRotation(Vec3(0, 0, playerRot.y));
+
+	UIObject::Update();
+}
