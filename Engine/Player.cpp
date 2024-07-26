@@ -353,6 +353,9 @@ BulletType Player::CalcBulletType()
 
 void Player::Skill()
 {
+	if (GET_SINGLE(SceneManager)->GetActiveScene()->GetSceneName() == "Lobby")
+		return;
+
 	switch (GET_SINGLE(UpgradeManager)->GetClass()) {
 	case CharacterClass::DEALER:
 		SkillDealer();

@@ -43,6 +43,7 @@
 #include "EnemyHP.h"
 shared_ptr<class Scene> LoadLobbyScene()
 {
+
 	GET_SINGLE(SoundManager)->soundStop(Sounds::BGM_SPACE);
 	GET_SINGLE(SoundManager)->soundPlay(Sounds::BGM_SPACE);
 
@@ -73,6 +74,7 @@ shared_ptr<class Scene> LoadLobbyScene()
 #pragma endregion
 
 	shared_ptr<Scene> scene = make_shared<Scene>();
+	scene->SetSceneName(string("Lobby"));
 
 #pragma region Camera
 	{

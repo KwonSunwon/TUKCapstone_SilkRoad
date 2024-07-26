@@ -71,6 +71,9 @@ public:
 	void testCollision();
 	void PhysicsStep(int iterations);
 
+	void SetSceneName(string name) { m_sceneName = name; }
+	string GetSceneName() { return m_sceneName; }
+
 	shared_ptr<Terrain> m_terrain;
 
 	array<shared_ptr<class NetworkPlayer>, 2> m_networkPlayers;
@@ -94,6 +97,7 @@ private:
 	int m_numOfNetworkObject = 0;
 	shared_ptr<OcTree> m_ocTree = make_shared<OcTree>(100000, 1000);
 	shared_ptr<AstarGrid> m_astarGrid = make_shared<AstarGrid>();
+	string m_sceneName = "";
 
 
 };
