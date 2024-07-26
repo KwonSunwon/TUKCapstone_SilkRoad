@@ -644,14 +644,14 @@ bool NetworkManager::Recv(shared_ptr<Packet> packet)
 
 void NetworkScript::LateUpdate()
 {
-	if(INPUT->GetButtonDown(KEY_TYPE::KEY_1)) {
+	/*if(INPUT->GetButtonDown(KEY_TYPE::KEY_1)) {
 		GET_SINGLE(NetworkManager)->m_networkId = 0;
 		GET_SINGLE(NetworkManager)->RunMulti();
-	}
+	}*/
 
-	if(INPUT->GetButtonDown(KEY_TYPE::KEY_2)) {
+	/*if(INPUT->GetButtonDown(KEY_TYPE::KEY_2)) {
 		GET_SINGLE(NetworkManager)->ConnectAsGuest();
-	}
+	}*/
 
 	if(INPUT->GetButtonDown(KEY_TYPE::KEY_3)) {
 		/*Packet packet;

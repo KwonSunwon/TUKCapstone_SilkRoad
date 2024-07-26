@@ -24,7 +24,7 @@ public:
 	int GetUpgradeLevel(int id) { return m_upgradeLevels[id]; }
 	int GetClass() { return m_charClass; }
     int GetGold() { return m_upgradeLevels[5]; }
-    int AddGold(int gold) { m_upgradeLevels[5] += gold; }
+    void AddGold(int gold) { m_upgradeLevels[5] += gold; }
     void UseGold(int gold){ m_upgradeLevels[5] -= gold; }
 
 private:

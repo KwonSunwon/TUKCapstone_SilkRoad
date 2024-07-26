@@ -10,7 +10,7 @@
 #include "SceneManager.h"
 #include "Player.h"
 #include "UpgradeManager.h"
-
+#include "Network.h"
 
 InteractiveObject::InteractiveObject(int num):Component(COMPONENT_TYPE::INTERACTIVE_OBJECT)
 {
@@ -65,6 +65,15 @@ void InteractiveObject::PrintInteractiveText()
 		break;
 	case CHARACTER_CHANGER4:
 		text = (L"CHARACTER_CHANGER4");
+		break;
+	case GAME_START_MONITOR:
+		text = (L"GAME_START_MONITOR");
+		break;
+	case GAME_HOST_MONITOR:
+		text = (L"GAME_HOST_MONITOR");
+		break;
+	case GAME_GUEST_MONITOR:
+		text = (L"GAME_GUEST_MONITOR");
 		break;
 
 	default:
@@ -130,6 +139,26 @@ void InteractiveObject::InteractiveFunction()
 	case CHARACTER_CHANGER4:
 		GET_SINGLE(UpgradeManager)->ClassChange(m_id);
 		text->SetText(L"CHARACTER_CHANGER4");
+		break;
+
+	case GAME_START_MONITOR:
+		GET_SINGLE(SceneManager)->StartNextStage();
+		if (GET_SINGLE(NetworkManager)->GetNetworkState() == NETWORK_STATE::HOST) {
+			shared_ptr<StageChangePacket> packet = make_shared<StageChangePacket>();
+			packet->m_stageIndex = GET_SINGLE(SceneManager)->GetStageIndex();
+			SEND(packet);
+		}
+		text->SetText(L"GAME_START_MONITOR");
+		break;
+	case GAME_HOST_MONITOR:
+		GET_SINGLE(NetworkManager)->m_networkId = 0;
+		GET_SINGLE(NetworkManager)->RunMulti();
+		text->SetText(L"GAME_HOST_MONITOR");
+		break;
+	case GAME_GUEST_MONITOR:
+		GET_SINGLE(NetworkManager)->ConnectAsGuest();
+		text->SetText(L"GAME_GUEST_MONITOR");
+
 		break;
 
 	default:

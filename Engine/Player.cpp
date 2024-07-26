@@ -319,7 +319,7 @@ void Player::InteracitveObjectPick()
 		if(gameObject->GetMonobehaviour("Player"))
 			continue;
 
-		if(distance > 250.f) {
+		if(distance > 400.f) {
 			continue;
 		}
 
