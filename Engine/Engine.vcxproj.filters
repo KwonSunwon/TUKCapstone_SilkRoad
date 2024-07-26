@@ -319,6 +319,9 @@
     <ClCompile Include="Packet.cpp">
       <Filter>Server</Filter>
     </ClCompile>
+    <ClCompile Include="HealerSkill.cpp">
+      <Filter>Object\Player\Skill</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -573,6 +576,9 @@
     </ClInclude>
     <ClInclude Include="Packet.h">
       <Filter>Server</Filter>
+    </ClInclude>
+    <ClInclude Include="HealerSkill.h">
+      <Filter>Object\Player\Skill</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

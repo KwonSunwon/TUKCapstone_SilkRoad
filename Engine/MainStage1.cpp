@@ -42,7 +42,7 @@
 #include "SoundManager.h"
 #include "EnemyHP.h"
 #include "TankerSkill.h"
-
+#include "HealerSkill.h"
 shared_ptr<class Scene> LoadMainScene1()
 {
 	GET_SINGLE(SoundManager)->soundStop(Sounds::BGM_SPACE);
@@ -684,6 +684,50 @@ shared_ptr<class Scene> LoadMainScene1()
 
 	}
 
+	{
+		int idx = 0;
+		shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Bld_Bridge_01.fbx");
+		vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
+		shared_ptr<GameObject> gm = gameObjects[idx];
+
+		gm->GetTransform()->SetLocalScale(Vec3(10.f, 0.1f, 10.f));
+		gm->GetTransform()->SetLocalPosition(Vec3(500, 500.f, 500.f));
+
+		shared_ptr<RigidBody> rbb = make_shared<RigidBody>();
+		rbb->SetStatic(true);
+		rbb->SetMass(1000000.f);
+		rbb->SetOverlap();
+		gm->AddComponent(rbb);
+		gm->AddComponent(make_shared<HealerSkill>());
+
+		gm->AddComponent(make_shared<OrientedBoxCollider>());
+		gm->GetCollider()->SetExtent(Vec3(500, 5, 500));
+		gm->GetCollider()->SetOffset(Vec3(0, 5, 0));
+
+
+
+		//Instancing 유무 설정(사용:0,0  미사용:0,1)
+		{
+			gm->GetMeshRenderer()->GetMaterial()->SetInt(0, 0);
+		}
+
+		if (gm->GetCollider()->GetDebugCollider() != nullptr)
+			scene->AddGameObject(gm->GetCollider()->GetDebugCollider());
+		gm->SetShadow(true);
+		scene->AddGameObject(gm);
+
+		scene->GetMainPlayerScript()->SetSkillObject(0, gm);
+
+	}
+
+	{
+		shared_ptr<GameObject> bomb = GET_SINGLE(Resources)->LoadBombPrefab(Vec3(0, 0, 0));
+		bomb->GetRigidBody()->SetOverlap();
+		shared_ptr<Bomb> bombScript = dynamic_pointer_cast<Bomb>(bomb->GetMonobehaviour("Bomb"));
+		scene->GetMainPlayerScript()->SetBomb(bombScript);
+		scene->AddGameObject(bomb);
+	}
+
 
 #pragma region First Network Characters Setting Example
 	{
@@ -767,7 +811,7 @@ shared_ptr<class Scene> LoadMainScene1()
 		//Transform 설정
 		{
 			shared_ptr<Transform> transform = go->GetTransform();
-			transform->SetLocalPosition(Vec3(4500.f, 1500.f, 2500.f));
+			transform->SetLocalPosition(Vec3(-4500.f, 1500.f, 2500.f));
 			//transform->SetLocalScale(Vec3(1.f, 1.f, 1.f));
 			//transform->SetLocalRotation(Vec3(XMConvertToRadians(0.f), XMConvertToRadians(0.f), XMConvertToRadians(0.f)));
 		}

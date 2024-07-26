@@ -24,6 +24,7 @@
 #include "InteractiveObject.h"
 #include "UpgradeManager.h"
 #include "Resources.h"
+#include "Bomb.h"
 void Player::Awake()
 {
 	GET_SINGLE(UpgradeManager)->SetClass();
@@ -138,8 +139,8 @@ void Player::LateUpdate()
 
 void Player::Fire()
 {
-	BulletType bulletType = CalcBulletType();
-	m_fireInfo.bulletType = bulletType;
+	//BulletType bulletType = CalcBulletType();
+	//m_fireInfo.bulletType = bulletType;
 	m_fireElapsedTime = 1.f / m_fireRate;
 	GET_SINGLE(SoundManager)->soundPlay(Sounds::WEAPON_ASSULT_FIRE);
 
@@ -160,6 +161,9 @@ void Player::Fire()
 		if (gameObject->GetMonobehaviour("Player"))
 			continue;
 
+		if (gameObject->GetMonobehaviour("Bomb"))
+			continue;
+
 		if (distance < minDistance)
 		{
 			minDistance = distance;
@@ -172,6 +176,7 @@ void Player::Fire()
 
 	shared_ptr<MonoBehaviour> scriptE = picked->GetMonobehaviour("Enemy");
 	Vec3 damagePos = cameraPos + cameraDir * minDistance;
+
 
 	switch (m_fireInfo.bulletType) {
 	case BulletType::BASIC:
@@ -191,8 +196,16 @@ void Player::Fire()
 		if (scriptE) {
 			shared_ptr<Enemy> enemyScript = dynamic_pointer_cast<Enemy>(scriptE);
 			if (enemyScript->IsDie()) return;
-			enemyScript->GetDamage(m_fireInfo.explosionDamage);
-			enemyScript->MakeDamageIndicator(m_fireInfo.explosionDamage, damagePos,m_isCritical);
+
+
+			m_fireInfo.bulletType = BASIC;
+			
+			m_bomb->SetBombSize(500.f);
+			m_bomb->SetBombPosition(damagePos);
+			m_bomb->SetBombActive();
+
+			//enemyScript->GetDamage(m_fireInfo.explosionDamage);
+			//enemyScript->MakeDamageIndicator(m_fireInfo.explosionDamage, damagePos,m_isCritical);
 		}
 		break;
 
@@ -374,12 +387,22 @@ void Player::SkillDealer()
 
 void Player::SkillHealer()
 {
+	if (!m_guardObject)
+		return;
 
+	shared_ptr<Transform> transform = GetTransform();
+	Vec3 pos = transform->GetLocalPosition();
+	Vec3 look = transform->GetLook();
+	Vec3 dropPos = pos + look * 700.f + Vec3(0.f, 1000.f, 0.f);
+
+	//m_guardObject->GetRigidBody()->SetStatic(false);
+	m_guardObject->GetRigidBody()->MoveTo(pos);
+	//m_guardObject->GetTransform()->LookAt(look);
 }
 
 void Player::SkillLauncher()
 {
-
+	m_fireInfo.bulletType = EXPLOSIVE;
 }
 
 
@@ -401,6 +424,8 @@ void Player::SkillTanker()
 
 void Player::SkillManage()
 {
+
+
 	if (m_isRage) {
 		GET_SINGLE(UpgradeManager)->SetStat();
 		m_bulletDamage *= 1.5f;

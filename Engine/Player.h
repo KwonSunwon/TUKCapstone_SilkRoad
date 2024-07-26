@@ -11,6 +11,7 @@ struct FireInfo {
 	float explosionSize = 0.f;
 };
 
+class Bomb;
 
 class Player : public MonoBehaviour, public std::enable_shared_from_this<Player>
 {
@@ -67,6 +68,7 @@ public:
 	void SetPlusDamage(float plusDamage) { m_plusDamage = plusDamage; }
 
 	void SetSkillObject(int id, shared_ptr<GameObject> gm);
+	void SetBomb(shared_ptr<Bomb> bomb) { m_bomb = bomb; }
 private:
 	shared_ptr<class PlayerState> m_curState;
 	shared_ptr<Camera> m_playerCamera;
@@ -105,7 +107,10 @@ private:
 
 	
 	float m_rageTime = 0.f;
+	float m_bombTime = 0.f;
 	bool m_isRage = false;
+	bool m_isBombTime = false;
+	shared_ptr<Bomb> m_bomb;
 
 private:
 	void InteracitveObjectPick();
