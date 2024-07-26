@@ -49,6 +49,9 @@ void Player::Update()
 	SkillManage();
 	ProcessGetItem();
 	InteracitveObjectPick();
+
+	SetHP(GetHP() + m_hpRegen * DELTA_TIME);
+
 	if(INPUT->GetButtonDown(KEY_TYPE::Q))
 	{
 		Skill();
@@ -100,6 +103,11 @@ void Player::Update()
 	{
 
 		GET_SINGLE(UpgradeManager)->AddGold(100.f);
+	}
+	if (INPUT->GetButtonDown(KEY_TYPE::C))
+	{
+
+		SetHP(10.f);
 	}
 
 	shared_ptr<Transform> transform = GetTransform();

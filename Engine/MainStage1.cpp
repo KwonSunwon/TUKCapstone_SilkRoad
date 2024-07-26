@@ -851,7 +851,7 @@ shared_ptr<class Scene> LoadMainScene1()
 		vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
 		shared_ptr<GameObject> gm = gameObjects[idx];
 
-		gm->GetTransform()->SetLocalScale(Vec3(10.f, 0.1f, 10.f));
+		gm->GetTransform()->SetLocalScale(Vec3(3.f, 0.1f, 3.f));
 		gm->GetTransform()->SetLocalPosition(Vec3(500, 500.f, 500.f));
 
 		shared_ptr<RigidBody> rbb = make_shared<RigidBody>();
@@ -862,8 +862,8 @@ shared_ptr<class Scene> LoadMainScene1()
 		gm->AddComponent(make_shared<HealerSkill>());
 
 		gm->AddComponent(make_shared<OrientedBoxCollider>());
-		gm->GetCollider()->SetExtent(Vec3(500, 5, 500));
-		gm->GetCollider()->SetOffset(Vec3(0, 5, 0));
+		gm->GetCollider()->SetExtent(Vec3(1500, 100, 1500));
+		gm->GetCollider()->SetOffset(Vec3(0, 50, 0));
 
 
 

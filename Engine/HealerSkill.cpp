@@ -24,7 +24,7 @@ void HealerSkill::Update()
 		shared_ptr<MonoBehaviour> scriptP = col->m_rb2->GetGameObject()->GetMonobehaviour("Player");
 		if (scriptP) {
 			shared_ptr<Player> playerScript = dynamic_pointer_cast<Player>(scriptP);
-			playerScript->SetHP(playerScript->GetHP() + DELTA_TIME * 2.f);
+			playerScript->SetHP(playerScript->GetHP() + DELTA_TIME * 10.f);
 
 		}
 
