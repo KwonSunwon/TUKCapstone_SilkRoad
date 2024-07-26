@@ -30,10 +30,7 @@ void NetworkPlayer::LateUpdate()
 
 void NetworkPlayer::ProcessPacket(shared_ptr<PlayerPacket> packet)
 {
-	/*auto timeStamp = chrono::system_clock::now();
-	string debugText = " Player " + to_string(packet->m_targetId) + " position: " + to_string(packet->m_position.x) + ", " + to_string(packet->m_position.y) + ", " + to_string(packet->m_position.z);
-	debugText += " velocity: " + to_string(packet->m_velocity.x) + ", " + to_string(packet->m_velocity.y) + ", " + to_string(packet->m_velocity.z) + '\n';
-	GET_SINGLE(NetworkManager)->m_log << timeStamp << debugText;*/
+	m_isActivated = true;
 
 	shared_ptr<RigidBody> rb = GetRigidBody();
 	shared_ptr<Transform> transform = GetTransform();
@@ -44,6 +41,7 @@ void NetworkPlayer::ProcessPacket(shared_ptr<PlayerPacket> packet)
 	//rb->SetRotation(packet->m_rotation);
 	if(GetAnimator()->GetCurrentClipIndex() != packet->m_animationIndex)
 		GetAnimator()->Play(packet->m_animationIndex);
+	m_hp = packet->m_hp;
 }
 
 void NetworkPlayer::ChangeClass(shared_ptr<PlayerClassChangePacket> packet)
