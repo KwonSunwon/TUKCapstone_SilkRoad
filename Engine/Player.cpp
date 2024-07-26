@@ -218,6 +218,14 @@ void Player::Fire()
 
 			//enemyScript->GetDamage(m_fireInfo.explosionDamage);
 			//enemyScript->MakeDamageIndicator(m_fireInfo.explosionDamage, damagePos,m_isCritical);
+
+			if(GET_SINGLE(NetworkManager)->GetNetworkState() != NETWORK_STATE::SINGLE) {
+				shared_ptr<SkillPacket> packet = make_shared<SkillPacket>();
+				packet->m_skillType = GET_SINGLE(UpgradeManager)->GetClass();
+				packet->m_pos = damagePos;
+				packet->m_isBomb = true;
+				SEND(packet);
+			}
 		}
 		break;
 
@@ -405,6 +413,7 @@ void Player::Skill()
 		packet->m_pos = transform->GetLocalPosition();
 		packet->m_look = transform->GetLook();
 		packet->m_dropPos = packet->m_pos + packet->m_look * 700.f + Vec3(0.f, 1000.f, 0.f);
+		packet->m_isBomb = false;
 		SEND(packet);
 	}
 }
@@ -490,6 +499,13 @@ void Player::NetworkSkill(shared_ptr<SkillPacket> packet)
 		m_guardObject->GetRigidBody()->SetStatic(false);
 		m_guardObject->GetRigidBody()->MoveTo(packet->m_dropPos);
 		m_guardObject->GetTransform()->LookAt(packet->m_look);
+		break;
+	case CharacterClass::LAUNCHER:
+		if(packet->m_isBomb) {
+			m_bomb->SetBombSize(500.f);
+			m_bomb->SetBombPosition(packet->m_pos);
+			m_bomb->SetBombActive();
+		}
 		break;
 	}
 }

@@ -145,6 +145,8 @@ public:
 	Vec3 m_pos;
 	Vec3 m_look;
 	Vec3 m_dropPos;
+
+	bool m_isBomb;
 };
 
 #pragma pack(pop)
