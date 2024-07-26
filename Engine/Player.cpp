@@ -96,6 +96,11 @@ void Player::Update()
 
 		GET_SINGLE(UpgradeManager)->ClassChange(chaClass);
 	}
+	if (INPUT->GetButtonDown(KEY_TYPE::Z))
+	{
+
+		GET_SINGLE(UpgradeManager)->AddGold(100.f);
+	}
 
 	shared_ptr<Transform> transform = GetTransform();
 	shared_ptr<RigidBody> rb = GetRigidBody();

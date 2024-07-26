@@ -23,10 +23,13 @@ public:
 	int GetItemLevel(int id) { return m_itemLevels[id]; }
 	int GetUpgradeLevel(int id) { return m_upgradeLevels[id]; }
 	int GetClass() { return m_charClass; }
+    int GetGold() { return m_upgradeLevels[5]; }
+    int AddGold(int gold) { m_upgradeLevels[5] += gold; }
+    void UseGold(int gold){ m_upgradeLevels[5] -= gold; }
 
 private:
 
-    array<int, 5> m_upgradeLevels;
+    array<int, 6> m_upgradeLevels;
     array<int, 17> m_itemLevels;
     int m_charClass = 5;
 
