@@ -88,7 +88,7 @@ void Player::Update()
 	shared_ptr<Transform> transform = GetTransform();
 	shared_ptr<RigidBody> rb = GetRigidBody();
 
-	if (m_fireElapsedTime > 0)
+	if(m_fireElapsedTime > 0)
 		m_fireElapsedTime -= DELTA_TIME;
 
 	Vec3 rot = GetTransform()->GetLocalRotation();
@@ -97,7 +97,7 @@ void Player::Update()
 	// Rotate according to mouse movement
 
 	rot.y += mouseDelta.x * (double)0.001;
-	if (rot.x + mouseDelta.y * 0.001f < XMConvertToRadians(40.f) && rot.x + mouseDelta.y * 0.001f > XMConvertToRadians(-40.f))
+	if(rot.x + mouseDelta.y * 0.001f < XMConvertToRadians(40.f) && rot.x + mouseDelta.y * 0.001f > XMConvertToRadians(-40.f))
 		rot.x += mouseDelta.y * 0.001f;
 
 
@@ -105,7 +105,7 @@ void Player::Update()
 
 
 	shared_ptr<PlayerState> nextState = m_curState->OnUpdateState();
-	if (nextState)
+	if(nextState)
 	{
 		m_curState->OnExit();
 		m_curState = nextState;
@@ -118,20 +118,22 @@ void Player::LateUpdate()
 	shared_ptr<PlayerState> nextState = m_curState->OnLateUpdateState();
 	shared_ptr<RigidBody> rb = GetRigidBody();
 	shared_ptr<Transform> transform = GetTransform();
-	if (nextState)
+	if(nextState)
 	{
 		m_curState->OnExit();
 		m_curState = nextState;
 		m_curState->OnEnter();
 	}
 
-	shared_ptr<PlayerPacket> playerPacket = make_shared<PlayerPacket>();
-	playerPacket->m_targetId = GET_SINGLE(NetworkManager)->m_networkId;
-	playerPacket->m_position = rb->GetPosition();
-	playerPacket->m_velocity = rb->GetLinearVelocity();
-	playerPacket->m_rotation = transform->GetLocalRotation();
-	playerPacket->m_animationIndex = GetAnimator()->GetCurrentClipIndex();
-	SEND(playerPacket)
+	if(GET_SINGLE(NetworkManager)->m_isSend) {
+		shared_ptr<PlayerPacket> playerPacket = make_shared<PlayerPacket>();
+		playerPacket->m_targetId = GET_SINGLE(NetworkManager)->m_networkId;
+		playerPacket->m_position = rb->GetPosition();
+		playerPacket->m_velocity = rb->GetLinearVelocity();
+		playerPacket->m_rotation = transform->GetLocalRotation();
+		playerPacket->m_animationIndex = GetAnimator()->GetCurrentClipIndex();
+		SEND(playerPacket)
+	}
 }
 
 void Player::Fire()
@@ -289,9 +291,9 @@ void Player::InteracitveObjectPick()
 void Player::ProcessGetItem()
 {
 	shared_ptr<RigidBody> rb = GetRigidBody();
-	for (auto col : *(rb->GetCollideEvent())) {
+	for(auto col : *(rb->GetCollideEvent())) {
 		shared_ptr<MonoBehaviour> scriptI = col->m_rb2->GetGameObject()->GetMonobehaviour("Item");
-		if (scriptI) {
+		if(scriptI) {
 			shared_ptr<Item> itemScript = dynamic_pointer_cast<Item>(scriptI);
 
 			itemScript->AddGetItemText();

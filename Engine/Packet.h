@@ -1,6 +1,6 @@
 #pragma once
 
-static constexpr size_t BUFFER_SIZE = 2048;
+static constexpr size_t BUFFER_SIZE = 4096;
 
 class Packet;
 
@@ -17,7 +17,7 @@ public:
 	char Peek(int index) const;
 
 	char Read();
-	void Read(char* data, size_t size);
+	bool Read(char* data, size_t size);
 	void Read(shared_ptr<Packet>& packet);
 
 	bool Empty() const;
@@ -98,6 +98,7 @@ public:
 	uint32 m_animationIndex;
 
 	uint32 m_targetPlayerId;
+	float m_hp;
 };
 
 #pragma pack(pop)

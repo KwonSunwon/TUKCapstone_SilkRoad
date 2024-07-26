@@ -30,6 +30,8 @@ void Network::Update()
 	//while(Recv(m_packetBuffer)) {
 	while(m_receivedPacketQue.TryPop(packet)) {
 		switch(packet->m_type) {
+		case PACKET_TYPE::PT_NONE:
+			break;
 		case PACKET_TYPE::PT_MOVE:
 			/*for(auto& player : players) {
 				if(!player)
@@ -38,10 +40,18 @@ void Network::Update()
 					player->GetTransform()->SetLocalPosition(reinterpret_pointer_cast<MovePacket>(packet)->m_position);
 				}
 			}*/
-			players[packet->m_targetId]->GetTransform()->SetLocalPosition(reinterpret_pointer_cast<MovePacket>(packet)->m_position);
+			// players[packet->m_targetId]->GetTransform()->SetLocalPosition(reinterpret_pointer_cast<MovePacket>(packet)->m_position);
 			break;
 		case PACKET_TYPE::PT_PLAYER:
-			GET_SINGLE(SceneManager)->GetActiveScene()->m_networkPlayers[0]->ProcessPacket(reinterpret_pointer_cast<PlayerPacket>(packet));
+			if(packet->m_targetId != 0 && packet->m_targetId != 1 && packet->m_targetId != 2) {
+				OutputDebugString(L"Invalid PlayerPacket targetId\n");
+				break;
+			}
+			if(m_networkState == NETWORK_STATE::HOST && packet->m_targetId == 1)
+				packet->m_targetId = 0;
+			if(packet->m_targetId == 2)
+				packet->m_targetId = 1;
+			GET_SINGLE(SceneManager)->GetActiveScene()->m_networkPlayers[packet->m_targetId]->ProcessPacket(reinterpret_pointer_cast<PlayerPacket>(packet));
 			break;
 		case PACKET_TYPE::PT_ENEMY:
 			GET_SINGLE(SceneManager)->GetActiveScene()->m_enemies[packet->m_targetId]->ProcessPacket(reinterpret_pointer_cast<EnemyPacket>(packet));
@@ -50,6 +60,35 @@ void Network::Update()
 			break;
 		}
 	}
+}
+
+shared_ptr<Packet> Network::PacketProcess(int idx)
+{
+	PACKET_TYPE packetType = static_cast<PACKET_TYPE>(m_buffer[idx].Peek(2));
+	shared_ptr<Packet> packet = nullptr;
+	switch(packetType) {
+	case PACKET_TYPE::PT_NONE:
+		return nullptr;
+	case PACKET_TYPE::PT_INIT:
+		packet = make_shared<InitPacket>();
+		break;
+	case PACKET_TYPE::PT_MOVE:
+		packet = make_shared<MovePacket>();
+		break;
+	case PACKET_TYPE::PT_PLAYER:
+		packet = make_shared<PlayerPacket>();
+		break;
+	case PACKET_TYPE::PT_ENEMY:
+		packet = make_shared<EnemyPacket>();
+		break;
+	}
+
+	if(!m_buffer[idx].Read(reinterpret_cast<char*>(packet.get()), packet->m_size)) {
+		OutputDebugString(L"(PacketProcess)Fail read buffer - required size > m_size\n");
+		return nullptr;
+	}
+
+	return packet;
 }
 
 #pragma region Host
@@ -144,8 +183,8 @@ void Host::WaitLoop()
 
 		DWORD optval = TIMEOUT;
 		setsockopt(tempSocket, SOL_SOCKET, SO_RCVTIMEO, (const char*)&optval, sizeof(optval));
-		optval = TRUE;
-		setsockopt(tempSocket, IPPROTO_TCP, TCP_NODELAY, (const char*)&optval, sizeof(optval));
+		/*optval = TRUE;
+		setsockopt(tempSocket, IPPROTO_TCP, TCP_NODELAY, (const char*)&optval, sizeof(optval));*/
 
 		thread connectionThread = thread{ &Host::Connection, this, guest.id };
 		connectionThread.detach();
@@ -170,6 +209,8 @@ void Host::Connection(ushort id)
 			break;
 		}
 	}
+
+	int bufferIdx = id == 1 ? 0 : 1;
 
 	chrono::steady_clock::time_point startTime;
 	chrono::steady_clock::time_point endTime;
@@ -199,42 +240,35 @@ void Host::Connection(ushort id)
 		shared_ptr<Packet> packet = nullptr;
 		shared_ptr<char[]> buffer = make_shared<char[]>(BUFFER_SIZE);
 
+		int otherId = id == 1 ? 1 : 0;
 		// Write received data to buffer
-		retval = recv(socket, buffer.get(), BUFFER_SIZE - m_buffer.Size(), 0);
+		retval = recv(socket, buffer.get(), BUFFER_SIZE - m_buffer[bufferIdx].Size(), 0);
 		if(retval > 0) {
-			m_buffer.Write(buffer.get(), retval);
+			m_buffer[bufferIdx].Write(buffer.get(), retval);
 
-			ushort packetSize = m_buffer.Peek();
-			while(packetSize <= m_buffer.Size()) {
-				// Save packet to m_receivedPacketQue for apply to game
-				PACKET_TYPE packetType = static_cast<PACKET_TYPE>(m_buffer.Peek(2));
-				switch(packetType) {
-				case PACKET_TYPE::PT_NONE:
+			ushort packetSize = m_buffer[bufferIdx].Peek();
+			while(packetSize <= m_buffer[bufferIdx].Size()) {
+				if(packetSize == -1)
 					break;
-				case PACKET_TYPE::PT_INIT:
-					packet = make_shared<InitPacket>();
-					break;
-				case PACKET_TYPE::PT_MOVE:
-					packet = make_shared<MovePacket>();
-					break;
-				case PACKET_TYPE::PT_PLAYER:
-					packet = make_shared<PlayerPacket>();
-					break;
-				case PACKET_TYPE::PT_ENEMY:
-					packet = make_shared<EnemyPacket>();
+
+				packet = PacketProcess(bufferIdx);
+				if(packet == nullptr) {
+					OutputDebugString(L"Fail PacketProcess\n");
 					break;
 				}
-				m_buffer.Read(reinterpret_cast<char*>(packet.get()), packet->m_size);
 
+				if(m_guestInfos.size() > 1 && packet->m_type == PACKET_TYPE::PT_PLAYER) {
+					send(m_guestInfos[otherId].socket, (char*)packet.get(), packet->m_size, 0);
+				}
 				m_receivedPacketQue.Push(packet);
 
 				packetSize = 0;
 				packet.reset();
 
-				if(m_buffer.Empty())
+				if(m_buffer[bufferIdx].Empty())
 					break;
 
-				packetSize = m_buffer.Peek();
+				packetSize = m_buffer[bufferIdx].Peek();
 			}
 		}
 		endTime = chrono::steady_clock::now();
@@ -306,6 +340,8 @@ void Guest::Connect()
 	inet_pton(AF_INET, m_serverIP, &serverAddr.sin_addr);
 	serverAddr.sin_port = htons(SERVER_PORT);
 	int retval = connect(m_socket, (struct sockaddr*)&serverAddr, sizeof(serverAddr));
+	OutputDebugString(L"Retval: ");
+	OutputDebugString(to_wstring(retval).c_str());
 	if(retval == SOCKET_ERROR) {
 		//err_display(retval);
 		throw runtime_error("Fail connect server");
@@ -314,11 +350,14 @@ void Guest::Connect()
 	InitPacket initPacket;
 	recv(m_socket, (char*)&initPacket, sizeof(InitPacket), 0);
 	GET_SINGLE(NetworkManager)->m_networkId = initPacket.m_networkId;
+	OutputDebugString(L"NetworkId: ");
+	OutputDebugString(to_wstring(GET_SINGLE(NetworkManager)->m_networkId).c_str());
 
 	DWORD optval = TIMEOUT;
 	setsockopt(m_socket, SOL_SOCKET, SO_RCVTIMEO, (const char*)&optval, sizeof(optval));
-	optval = TRUE;
-	setsockopt(m_socket, IPPROTO_TCP, TCP_NODELAY, (const char*)&optval, sizeof(optval));
+	/*optval = TRUE;
+	setsockopt(m_socket, IPPROTO_TCP, TCP_NODELAY, (const char*)&optval, sizeof(optval));*/
+
 	GET_SINGLE(SceneManager)->GetActiveScene()->m_networkPlayers[0]->m_myNetworkId = 0;
 	if(initPacket.m_networkId == 1) {
 		GET_SINGLE(SceneManager)->GetActiveScene()->m_networkPlayers[1]->m_myNetworkId = 2;
@@ -391,41 +430,29 @@ void Guest::Receiver()
 		shared_ptr<char[]> buffer = make_shared<char[]>(BUFFER_SIZE);
 
 		// Write received data to buffer
-		retval = recv(m_socket, buffer.get(), BUFFER_SIZE - m_buffer.Size(), 0);
+		retval = recv(m_socket, buffer.get(), BUFFER_SIZE - m_buffer[0].Size(), 0);
 		if(retval > 0) {
-			m_buffer.Write(buffer.get(), retval);
+			m_buffer[0].Write(buffer.get(), retval);
 
-			ushort packetSize = m_buffer.Peek();
-			while(packetSize <= m_buffer.Size()) {
-				// Save packet to m_receivedPacketQue for apply to game
-				PACKET_TYPE packetType = static_cast<PACKET_TYPE>(m_buffer.Peek(2));
-				switch(packetType) {
-				case PACKET_TYPE::PT_NONE:
+			ushort packetSize = m_buffer[0].Peek();
+			while(packetSize <= m_buffer[0].Size()) {
+				if(packetSize == -1)
 					break;
-				case PACKET_TYPE::PT_INIT:
-					packet = make_shared<InitPacket>();
-					break;
-				case PACKET_TYPE::PT_MOVE:
-					packet = make_shared<MovePacket>();
-					break;
-				case PACKET_TYPE::PT_PLAYER:
-					packet = make_shared<PlayerPacket>();
-					break;
-				case PACKET_TYPE::PT_ENEMY:
-					packet = make_shared<EnemyPacket>();
+
+				packet = PacketProcess(0);
+				if(packet == nullptr) {
+					OutputDebugString(L"Fail PacketProcess\n");
 					break;
 				}
-				m_buffer.Read(reinterpret_cast<char*>(packet.get()), packet->m_size);
-
 				m_receivedPacketQue.Push(packet);
 
 				packetSize = 0;
 				packet.reset();
 
-				if(m_buffer.Empty())
+				if(m_buffer[0].Empty())
 					break;
 
-				packetSize = m_buffer.Peek();
+				packetSize = m_buffer[0].Peek();
 			}
 		}
 		endTime = chrono::steady_clock::now();
@@ -476,12 +503,25 @@ bool Guest::Recv(shared_ptr<Packet> packet)
 void NetworkManager::Initialize()
 {
 	m_network = make_unique<Network>();
+
+	m_prevTime = chrono::system_clock::now();
+	m_remainTime = SEND_PACKET_PER_SEC;
 }
 
 void NetworkManager::Update()
 {
 	if(GetNetworkState() != NETWORK_STATE::SINGLE)
 		m_network->Update();
+
+	m_isSend = false;
+
+	auto elapsedTime = chrono::duration<double>(chrono::system_clock::now() - m_prevTime).count();
+	m_remainTime -= elapsedTime;
+	if(m_remainTime <= 0) {
+		m_prevTime = chrono::system_clock::now();
+		m_remainTime = SEND_PACKET_PER_SEC;
+		m_isSend = true;
+	}
 }
 
 void NetworkManager::MakeCorrectPacket()
