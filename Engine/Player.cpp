@@ -235,7 +235,7 @@ void Player::Fire()
 		picked->GetRigidBody()->AddForce(Vec3(rayDir) * m_knockBackPower * 1000000.f);
 	}
 
-	if(!picked->GetNetworkObject())
+	if(scriptE == nullptr)
 		return;
 	shared_ptr<EnemyHitPacket> packet = make_shared<EnemyHitPacket>();
 	packet->m_targetId = picked->GetNetworkObject()->GetNetworkId();
@@ -506,6 +506,8 @@ void Player::NetworkSkill(shared_ptr<SkillPacket> packet)
 			m_bomb->SetBombPosition(packet->m_pos);
 			m_bomb->SetBombActive();
 		}
+		break;
+	default:
 		break;
 	}
 }
