@@ -15,6 +15,16 @@ public:
 	void ProcessPacket(shared_ptr<PlayerPacket> packet);
 	void ChangeClass(shared_ptr<PlayerClassChangePacket> packet);
 
+	void SetHP(float hp) { m_hp = hp; }
+	float GetHP() { return m_hp; }
+
+	void SetActivated(bool isActivated) { m_isActivated = isActivated; }
+	bool IsActivated() { return m_isActivated; }
+
+public:
 	uint32 m_myNetworkId = -1;
 
+private:
+	float m_hp = 100.f;
+	bool m_isActivated = false;
 };

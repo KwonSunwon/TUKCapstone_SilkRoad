@@ -89,6 +89,8 @@ public:
 	Vec3 m_velocity;
 	Vec3 m_rotation;
 	uint32 m_animationIndex;
+
+	float m_hp;
 };
 
 class PlayerClassChangePacket : public Packet {
