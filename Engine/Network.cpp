@@ -36,16 +36,6 @@ void Network::Update()
 		switch(packet->m_type) {
 		case PACKET_TYPE::PT_NONE:
 			break;
-		case PACKET_TYPE::PT_MOVE:
-			/*for(auto& player : players) {
-				if(!player)
-					continue;
-				if(player->GetID() == packet->m_targetId) {
-					player->GetTransform()->SetLocalPosition(reinterpret_pointer_cast<MovePacket>(packet)->m_position);
-				}
-			}*/
-			// players[packet->m_targetId]->GetTransform()->SetLocalPosition(reinterpret_pointer_cast<MovePacket>(packet)->m_position);
-			break;
 		case PACKET_TYPE::PT_GUEST_INIT:
 			id = ProcessPlayerID(packet->m_targetId);
 			if(id != -1)
@@ -90,9 +80,6 @@ shared_ptr<Packet> Network::PacketProcess(int idx)
 		return nullptr;
 	case PACKET_TYPE::PT_INIT:
 		packet = make_shared<InitPacket>();
-		break;
-	case PACKET_TYPE::PT_MOVE:
-		packet = make_shared<MovePacket>();
 		break;
 	case PACKET_TYPE::PT_PLAYER:
 		packet = make_shared<PlayerPacket>();

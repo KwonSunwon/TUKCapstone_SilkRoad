@@ -125,13 +125,6 @@ InitPacket::InitPacket()
 	m_targetId = -1;
 }
 
-MovePacket::MovePacket()
-{
-	m_size = sizeof(MovePacket);
-	m_type = PACKET_TYPE::PT_MOVE;
-	m_targetId = -1;
-}
-
 PlayerPacket::PlayerPacket()
 {
 	m_size = sizeof(PlayerPacket);

@@ -39,7 +39,6 @@ enum class PACKET_TYPE : BYTE {
 	PT_NONE = 0,
 	PT_INIT = 1,
 	PT_GUEST_INIT,
-	PT_MOVE,
 	PT_PLAYER,
 	PT_PLAYER_CLASS_CHANGE,
 	PT_ENEMY,
@@ -80,15 +79,6 @@ public:
 
 public:
 	int16 m_classIndex;
-};
-
-class MovePacket : public Packet {
-public:
-	MovePacket();
-	~MovePacket() {}
-
-public:
-	Vec3 m_position;
 };
 
 class PlayerPacket : public Packet {
