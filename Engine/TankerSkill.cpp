@@ -8,6 +8,11 @@
 #include "Timer.h"
 #include "Transform.h"
 
+void TankerSkill::Awake()
+{
+	SetMonovihaviourName("TankerSkill");
+}
+
 void TankerSkill::Update()
 {
 	if (GetRigidBody()->GetStatic()) {

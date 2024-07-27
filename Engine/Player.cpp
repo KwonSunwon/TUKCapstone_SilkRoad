@@ -26,7 +26,8 @@
 #include "Resources.h"
 #include "Bomb.h"
 #include "NetworkObject.h"
-
+#include "HealerSkill.h"
+#include "TankerSkill.h"
 void Player::Awake()
 {
 	GET_SINGLE(UpgradeManager)->SetClass();
@@ -214,6 +215,7 @@ void Player::Fire()
 
 	if (picked->GetRigidBody()) {
 		GET_SINGLE(SceneManager)->GetActiveScene()->SpawnParticle(particlePos, ParticleType::EXPLOSION);
+		//GET_SINGLE(SceneManager)->GetActiveScene()->SpawnParticle(particlePos, ParticleType::PARTICLE_PORTAL);
 	}
 
 	switch(m_fireInfo.bulletType) {
@@ -232,28 +234,21 @@ void Player::Fire()
 		break;
 
 	case BulletType::EXPLOSIVE:
-		if(scriptE) {
-			shared_ptr<Enemy> enemyScript = dynamic_pointer_cast<Enemy>(scriptE);
-			if(enemyScript->IsDie()) return;
+		GET_SINGLE(SceneManager)->GetActiveScene()->SpawnParticle(damagePos, ParticleType::PARTICLE_LAUNCHER);
+		m_fireInfo.bulletType = BASIC;
 
+		m_bomb->SetBombSize(500.f);
+		m_bomb->SetBombPosition(damagePos);
+		m_bomb->SetBombActive();
 
-			m_fireInfo.bulletType = BASIC;
-
-			m_bomb->SetBombSize(500.f);
-			m_bomb->SetBombPosition(damagePos);
-			m_bomb->SetBombActive();
-
-			//enemyScript->GetDamage(m_fireInfo.explosionDamage);
-			//enemyScript->MakeDamageIndicator(m_fireInfo.explosionDamage, damagePos,m_isCritical);
-
-			if(GET_SINGLE(NetworkManager)->GetNetworkState() != NETWORK_STATE::SINGLE) {
-				shared_ptr<SkillPacket> packet = make_shared<SkillPacket>();
-				packet->m_skillType = GET_SINGLE(UpgradeManager)->GetClass();
-				packet->m_pos = damagePos;
-				packet->m_isBomb = true;
-				SEND(packet);
-			}
+		if (GET_SINGLE(NetworkManager)->GetNetworkState() != NETWORK_STATE::SINGLE) {
+			shared_ptr<SkillPacket> packet = make_shared<SkillPacket>();
+			packet->m_skillType = GET_SINGLE(UpgradeManager)->GetClass();
+			packet->m_pos = damagePos;
+			packet->m_isBomb = true;
+			SEND(packet);
 		}
+		
 		break;
 
 	}
@@ -455,6 +450,8 @@ void Player::Skill()
 
 void Player::SkillDealer()
 {
+	GET_SINGLE(SceneManager)->GetActiveScene()->SpawnParticle(Vec3(0.f,0.f,100.f), ParticleType::PARTICLE_PORTAL);
+	
 	GET_SINGLE(Resources)->Get<Material>(L"Final")->SetInt(0, 1);
 	m_isRage = true;
 }
@@ -472,6 +469,12 @@ void Player::SkillHealer()
 
 	//m_guardObject->GetRigidBody()->SetStatic(false);
 	m_healObject->GetRigidBody()->MoveTo(pos);
+	auto hScript = m_healObject->GetMonobehaviour("HealerSkill");
+	if (hScript) {
+		shared_ptr<HealerSkill> healScript = dynamic_pointer_cast<HealerSkill>(hScript);
+		healScript->m_time = 0.f;
+	}
+
 	//m_guardObject->GetTransform()->LookAt(look);
 	GET_SINGLE(SceneManager)->GetActiveScene()->SpawnParticle(pos, ParticleType::HEAL);
 }
@@ -496,6 +499,12 @@ void Player::SkillTanker()
 	m_guardObject->GetRigidBody()->SetStatic(false);
 	m_guardObject->GetRigidBody()->MoveTo(dropPos);
 	m_guardObject->GetTransform()->LookAt(look);
+
+	auto hScript = m_healObject->GetMonobehaviour("TankerSkill");
+	if (hScript) {
+		shared_ptr<TankerSkill> healScript = dynamic_pointer_cast<TankerSkill>(hScript);
+		healScript->m_time = 0.f;
+	}
 }
 
 void Player::SkillManage()

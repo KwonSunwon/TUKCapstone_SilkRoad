@@ -8,8 +8,8 @@ class StructuredBuffer;
 enum ParticleType {
 	EXPLOSION,
 	HEAL,
-	EXPLOSION2,
-	EXPLOSION3,
+	PARTICLE_LAUNCHER,
+	PARTICLE_PORTAL,
 	EXPLOSION4,
 	EXPLOSION5,
 	PARTICLE_TYPE_COUNT
@@ -68,6 +68,7 @@ public:
 	float				m_endScale = 70.f;
 
 	float				m_exposeTime = 0.f;
+	float				m_makeTime = 0.f;
 
 	int					m_row = 6;
 	int					m_column = 6;

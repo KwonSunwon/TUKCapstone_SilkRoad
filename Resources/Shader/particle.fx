@@ -208,9 +208,9 @@ void CS_Main(int3 threadIndex : SV_DispatchThreadID)
                 dir.x = 0.f;
                 dir.z = 0.f;
                 dir.y += 1.f;
-                noise.z = (noise.z - 0.5f) * 3000.f;
-                noise.x = (noise.x - 0.5f) * 3000.f;
-                noise.y = (noise.y) * 50.f;
+                noise.z = (noise.z - 0.5f) * 1500.f;
+                noise.x = (noise.x - 0.5f) * 1500.f;
+                noise.y = (noise.y) * 150.f;
                 g_particle[threadIndex.x].worldDir = normalize(dir);
                 g_particle[threadIndex.x].worldPos = noise.xyz;
             }
