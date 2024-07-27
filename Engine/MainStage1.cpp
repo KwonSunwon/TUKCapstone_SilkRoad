@@ -1241,8 +1241,8 @@ shared_ptr<class Scene> LoadMainScene1()
 			shared_ptr<DifficultyBar> uiObject = make_shared<DifficultyBar>();
 			uiObject->SetPivot(ePivot::CENTER);
 			uiObject->SetScreenPivot(ePivot::LEFTTOP);
-			uiObject->SetWidth(150.f);
-			uiObject->SetHeight(50.f);
+			uiObject->SetWidth(153.f);
+			uiObject->SetHeight(35.f);
 			uiObject->SetPosition(Vec2(80, -50));
 			uiObject->SetZOrder(200);
 
@@ -1251,18 +1251,6 @@ shared_ptr<class Scene> LoadMainScene1()
 			obj->AddComponent(meshRenderer);
 			scene->AddGameObject(obj);
 		}
-		// 난이도 텍스트
-		{
-			auto difficultyText = make_shared<DifficultyTextObject>();
-			difficultyText->SetFormat("24C");
-			difficultyText->SetBrush("WHITE");
-			difficultyText->SetPivot(ePivot::CENTER);
-			difficultyText->SetScreenPivot(ePivot::LEFTTOP);
-			difficultyText->SetText(L"EASY");
-			difficultyText->SetPosition(Vec2(80, 50));
-			scene->AddTextObject(difficultyText);
-
-		}
 		// 다음 난이도 안내 텍스트
 		{
 			auto nextDifficultyText = make_shared<DifficultyInfoTextObject>();
@@ -1270,8 +1258,8 @@ shared_ptr<class Scene> LoadMainScene1()
 			nextDifficultyText->SetBrush("WHITE");
 			nextDifficultyText->SetPivot(ePivot::CENTER);
 			nextDifficultyText->SetScreenPivot(ePivot::LEFTTOP);
-			nextDifficultyText->SetText(L"Next Difficulty : NORMAL");
-			nextDifficultyText->SetPosition(Vec2(80, 100));
+			nextDifficultyText->SetText(L"^");
+			nextDifficultyText->SetPosition(Vec2(80, 80));
 			scene->AddTextObject(nextDifficultyText);
 
 		}

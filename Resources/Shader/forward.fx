@@ -100,7 +100,7 @@ VS_TEX_OUT VS_Tex(VS_TEX_IN input)
     {
     
         output.uv.x /= 8;
-        output.uv.x += g_float_0 / 100;
+        output.uv.x += g_float_0 / 300;
 
     }
     

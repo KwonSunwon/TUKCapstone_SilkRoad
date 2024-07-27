@@ -514,7 +514,7 @@ void DifficultyBar::Update()
 	GetMeshRenderer()->GetMaterial()->SetTexture(0, GET_SINGLE(Resources)->Load<Texture>(L"Diffic", L"..\\Resources\\Texture\\dif.png"));
 	float time = GET_SINGLE(DifficultyManager)->GetTimer();
 	GetMeshRenderer()->GetMaterial()->SetInt(0, 1);
-	GetMeshRenderer()->GetMaterial()->SetFloat(0, time);
+	GetMeshRenderer()->GetMaterial()->SetFloat(0, min(262, time));
 
 	/*switch (diff)
 	{
