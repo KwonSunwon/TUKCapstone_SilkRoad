@@ -9,6 +9,11 @@
 #include "Transform.h"
 #include "Player.h"
 
+void HealerSkill::Awake()
+{
+	SetMonovihaviourName("HealerSkill");
+}
+
 void HealerSkill::Update()
 {
 	m_time += DELTA_TIME;

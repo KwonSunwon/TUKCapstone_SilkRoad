@@ -248,7 +248,7 @@ void Scene::AddGameObject(shared_ptr<GameObject> gameObject)
 
 	if(gameObject->GetParticleSystem() != nullptr)
 	{
-		m_particles.push_back(gameObject);
+		m_particles[gameObject->GetParticleSystem()->m_particleType].push_back(gameObject);
 	}
 
 	m_gameObjects.push_back(gameObject);
@@ -447,13 +447,17 @@ void Scene::PhysicsStep(int iterations)
 	}
 }
 
-void Scene::SpawnParticle(Vec3 pos, bool network)
+void Scene::SpawnParticle(Vec3 pos, int type, bool network)
 {
-	m_particles[m_particleCycle]->GetTransform()->SetLocalPosition(pos);
-	m_particles[m_particleCycle]->GetParticleSystem()->m_accTime = 0.f;
-	m_particles[m_particleCycle]->GetParticleSystem()->m_isSpawn = true;
-	m_particleCycle = (m_particleCycle + 1) % m_particles.size();
+	if (m_particles[type].empty())
+		return;
 
+	m_particles[type][m_particleCycle[type]]->GetTransform()->SetLocalPosition(pos);
+	m_particles[type][m_particleCycle[type]]->GetParticleSystem()->SetArgs();
+	
+	m_particleCycle[type] = (m_particleCycle[type] + 1) % m_particles[type].size();
+
+	/*if(!network) {
 	if(!network) {
 		if(GET_SINGLE(NetworkManager)->GetNetworkState() == NETWORK_STATE::SINGLE)
 			return;
@@ -463,7 +467,7 @@ void Scene::SpawnParticle(Vec3 pos, bool network)
 		shared_ptr<ParticlePacket> packet = make_shared<ParticlePacket>();
 		packet->m_pos = pos;
 		SEND(packet);
-	}
+	}*/
 }
 
 bool Scene::ChangeSpectate(PlayerType type)

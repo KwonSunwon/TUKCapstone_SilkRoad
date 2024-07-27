@@ -812,7 +812,7 @@ shared_ptr<class Scene> LoadMainScene1()
 #pragma endregion
 	{
 		int idx = 0;
-		shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Prop_Crate_03.fbx");
+		shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Skill_Tanker.fbx");
 		vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
 		shared_ptr<GameObject> gm = gameObjects[idx];
 
@@ -847,11 +847,11 @@ shared_ptr<class Scene> LoadMainScene1()
 
 	{
 		int idx = 0;
-		shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Bld_Bridge_01.fbx");
+		shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Skill_Healer.fbx");
 		vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
 		shared_ptr<GameObject> gm = gameObjects[idx];
 
-		gm->GetTransform()->SetLocalScale(Vec3(3.f, 0.1f, 3.f));
+		gm->GetTransform()->SetLocalScale(Vec3(50.f, 0.1f, 50.f));
 		gm->GetTransform()->SetLocalPosition(Vec3(500, 500.f, 500.f));
 
 		shared_ptr<RigidBody> rbb = make_shared<RigidBody>();
@@ -862,7 +862,7 @@ shared_ptr<class Scene> LoadMainScene1()
 		gm->AddComponent(make_shared<HealerSkill>());
 
 		gm->AddComponent(make_shared<OrientedBoxCollider>());
-		gm->GetCollider()->SetExtent(Vec3(1500, 100, 1500));
+		gm->GetCollider()->SetExtent(Vec3(750, 100, 750));
 		gm->GetCollider()->SetOffset(Vec3(0, 50, 0));
 
 
@@ -1231,14 +1231,53 @@ shared_ptr<class Scene> LoadMainScene1()
 
 #pragma region ParticleSystem
 	{
-		for(int i = 0; i < 20; ++i)
 		{
-			shared_ptr<GameObject> particle = make_shared<GameObject>();
-			particle->AddComponent(make_shared<Transform>());
-			particle->AddComponent(make_shared<ParticleSystem>());
-			particle->SetCheckFrustum(false);
-			particle->GetTransform()->SetLocalPosition(Vec3(3000.f, 300.f, 3000.f));
-			scene->AddGameObject(particle);
+			for (int i = 0; i < 20; ++i)
+			{
+				shared_ptr<GameObject> particle = make_shared<GameObject>();
+				particle->AddComponent(make_shared<Transform>());
+				particle->AddComponent(make_shared<ParticleSystem>(ParticleType::EXPLOSION));
+				particle->SetCheckFrustum(false);
+				particle->GetTransform()->SetLocalPosition(Vec3(3000.f, 300.f, 3000.f));
+				scene->AddGameObject(particle);
+			}
+		}
+		{
+			for (int i = 0; i < 2; ++i)
+			{
+				shared_ptr<GameObject> particle = make_shared<GameObject>();
+				particle->AddComponent(make_shared<Transform>());
+				particle->AddComponent(make_shared<ParticleSystem>(ParticleType::HEAL));
+				particle->SetCheckFrustum(false);
+				particle->GetTransform()->SetLocalPosition(Vec3(3000.f, 300.f, 3000.f));
+				
+				scene->AddGameObject(particle);
+			}
+		}
+		{
+			for (int i = 0; i < 1; ++i)
+			{
+				shared_ptr<GameObject> particle = make_shared<GameObject>();
+				particle->AddComponent(make_shared<Transform>());
+				particle->AddComponent(make_shared<ParticleSystem>(ParticleType::PARTICLE_LAUNCHER));
+				particle->SetCheckFrustum(false);
+				particle->GetTransform()->SetLocalPosition(Vec3(3000.f, 300.f, 3000.f));
+				
+				scene->AddGameObject(particle);
+			}
+		}
+		{
+			for (int i = 0; i < 1; ++i)
+			{
+				shared_ptr<GameObject> particle = make_shared<GameObject>();
+				particle->AddComponent(make_shared<Transform>());
+				particle->AddComponent(make_shared<ParticleSystem>(ParticleType::PARTICLE_PORTAL));
+				particle->SetCheckFrustum(false);
+				particle->GetTransform()->SetParent(scene->GetMainCamera()->GetTransform());
+				particle->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 100.f));
+
+				scene->AddGameObject(particle);
+			}
 		}
 	}
 #pragma endregion

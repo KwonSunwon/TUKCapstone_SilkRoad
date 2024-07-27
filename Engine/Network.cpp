@@ -69,7 +69,8 @@ void Network::Update()
 			}
 			break;
 		case PACKET_TYPE::PT_PARTICLE:
-			GET_SINGLE(SceneManager)->GetActiveScene()->SpawnParticle(reinterpret_pointer_cast<ParticlePacket>(packet)->m_pos, true);
+			//순원이
+			//GET_SINGLE(SceneManager)->GetActiveScene()->SpawnParticle(reinterpret_pointer_cast<ParticlePacket>(packet)->m_pos, 0, true);
 			break;
 		default:
 			break;

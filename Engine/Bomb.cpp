@@ -74,7 +74,7 @@ void Bomb::explosion()
 	
 
 
-	GetTransform()->SetLocalScale(Vec3(size, size, size));
+	//GetTransform()->SetLocalScale(Vec3(size, size, size));
 	bs->SetRadius(size/2);
 	
 

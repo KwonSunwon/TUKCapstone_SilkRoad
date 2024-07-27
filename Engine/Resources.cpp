@@ -1250,7 +1250,7 @@ void Resources::CreateDefaultMaterial()
 		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"Particle");
 		shared_ptr<Material> material = make_shared<Material>();
 		material->SetShader(shader);
-		Add<Material>(L"Particle", material);
+		Add<Material>(L"Particle0", material);
 	}
 
 	// ComputeParticle
@@ -1259,7 +1259,58 @@ void Resources::CreateDefaultMaterial()
 		shared_ptr<Material> material = make_shared<Material>();
 		material->SetShader(shader);
 
-		Add<Material>(L"ComputeParticle", material);
+		Add<Material>(L"ComputeParticle0", material);
+	}
+
+	// Particle
+	{
+		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"Particle");
+		shared_ptr<Material> material = make_shared<Material>();
+		material->SetShader(shader);
+		Add<Material>(L"Particle1", material);
+	}
+
+	// ComputeParticle
+	{
+		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"ComputeParticle");
+		shared_ptr<Material> material = make_shared<Material>();
+		material->SetShader(shader);
+
+		Add<Material>(L"ComputeParticle1", material);
+	}
+
+	// Particle
+	{
+		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"Particle");
+		shared_ptr<Material> material = make_shared<Material>();
+		material->SetShader(shader);
+		Add<Material>(L"Particle2", material);
+	}
+
+	// ComputeParticle
+	{
+		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"ComputeParticle");
+		shared_ptr<Material> material = make_shared<Material>();
+		material->SetShader(shader);
+
+		Add<Material>(L"ComputeParticle2", material);
+	}
+
+	// Particle
+	{
+		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"Particle");
+		shared_ptr<Material> material = make_shared<Material>();
+		material->SetShader(shader);
+		Add<Material>(L"Particle3", material);
+	}
+
+	// ComputeParticle
+	{
+		shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"ComputeParticle");
+		shared_ptr<Material> material = make_shared<Material>();
+		material->SetShader(shader);
+
+		Add<Material>(L"ComputeParticle3", material);
 	}
 
 	// GameObject
