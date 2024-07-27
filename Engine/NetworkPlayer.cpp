@@ -30,11 +30,6 @@ void NetworkPlayer::LateUpdate()
 
 void NetworkPlayer::ProcessPacket(shared_ptr<PlayerPacket> packet)
 {
-	/*auto timeStamp = chrono::system_clock::now();
-	string debugText = " Player " + to_string(packet->m_targetId) + " position: " + to_string(packet->m_position.x) + ", " + to_string(packet->m_position.y) + ", " + to_string(packet->m_position.z);
-	debugText += " velocity: " + to_string(packet->m_velocity.x) + ", " + to_string(packet->m_velocity.y) + ", " + to_string(packet->m_velocity.z) + '\n';
-	GET_SINGLE(NetworkManager)->m_log << timeStamp << debugText;*/
-
 	shared_ptr<RigidBody> rb = GetRigidBody();
 	shared_ptr<Transform> transform = GetTransform();
 	rb->MoveTo(packet->m_position);
@@ -44,14 +39,14 @@ void NetworkPlayer::ProcessPacket(shared_ptr<PlayerPacket> packet)
 	//rb->SetRotation(packet->m_rotation);
 	if(GetAnimator()->GetCurrentClipIndex() != packet->m_animationIndex)
 		GetAnimator()->Play(packet->m_animationIndex);
+	m_hp = packet->m_hp;
 }
 
-void NetworkPlayer::ChangeClass(shared_ptr<PlayerClassChangePacket> packet)
+void NetworkPlayer::ChangeClass(int classIndex)
 {
-	int id = packet->m_classIndex;
+	m_classIndex = classIndex;
 	shared_ptr<MeshData> meshData;
-
-	switch(id) {
+	switch(m_classIndex) {
 	case EnumInteract::CHARACTER_CHANGER1:
 		meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Character_Dealer.fbx");
 		break;

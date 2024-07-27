@@ -132,7 +132,7 @@ void Player::Update()
 	GetTransform()->SetLocalRotation(rot);
 
 
-	if (GET_SINGLE(Input)->GetButtonDown(KEY_TYPE::KEY_3))
+	if(GET_SINGLE(Input)->GetButtonDown(KEY_TYPE::KEY_3))
 		m_hp -= 30.f;
 
 
@@ -164,6 +164,7 @@ void Player::LateUpdate()
 		playerPacket->m_velocity = rb->GetLinearVelocity();
 		playerPacket->m_rotation = transform->GetLocalRotation();
 		playerPacket->m_animationIndex = GetAnimator()->GetCurrentClipIndex();
+		playerPacket->m_hp = m_hp;
 		SEND(playerPacket)
 	}
 }
@@ -343,7 +344,7 @@ void Player::InteracitveObjectPick()
 		}
 	}
 
-	if (!picked)
+	if(!picked)
 	{
 		GET_SINGLE(SceneManager)->GetActiveScene()->GetInteractiveObjectText()->SetVisible(false);
 		return;
@@ -413,7 +414,7 @@ void Player::Skill()
 	if(GET_SINGLE(SceneManager)->GetActiveScene()->GetSceneName() == "Lobby")
 		return;
 
-	if (m_skillRemainingTime > 0)
+	if(m_skillRemainingTime > 0)
 		return;
 
 	m_skillRemainingTime = m_skillCoolTime;
