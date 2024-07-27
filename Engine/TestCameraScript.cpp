@@ -95,6 +95,12 @@ void TestCameraScript::LateUpdate()
 
 	}
 
+	// 관전 전환
+	if(INPUT->GetButtonDown(KEY_TYPE::C)) {
+		m_playerType = (m_playerType + 1) % 3;
+		GET_SINGLE(SceneManager)->GetActiveScene()->ChangeSpectate(static_cast<PlayerType>(m_playerType));
+	}
+
 	/*if (rot.x + mouseDelta.y * 0.001f < XMConvertToRadians(40.f) && rot.x + mouseDelta.y * 0.001f > XMConvertToRadians(-40.f))
 		rot.x += mouseDelta.y * 0.001f;
 

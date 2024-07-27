@@ -20,6 +20,8 @@
 #include "NetworkPlayer.h"
 #include "Light.h"
 
+#include "Player.h"
+
 #include "RigidBody.h"
 #include "SceneManager.h"
 #include "Terrain.h"
@@ -457,6 +459,25 @@ void Scene::SpawnParticle(Vec3 pos, bool network)
 		packet->m_pos = pos;
 		SEND(packet);
 	}
+}
+
+bool Scene::ChangeSpectate(PlayerType type)
+{
+	auto mainCamera = GetMainCamera();
+	switch(type) {
+	case MAIN_PLAYER:
+		mainCamera->GetTransform()->SetParent(m_mainPlayerScript->GetTransform());
+		return true;
+	case GUEST_PLAYER1:
+		if(!m_networkPlayers[0]->IsActivated()) break;
+		mainCamera->GetTransform()->SetParent(m_networkPlayers[0]->GetTransform());
+		return true;
+	case GUEST_PLAYER2:
+		if(!m_networkPlayers[1]->IsActivated()) break;
+		mainCamera->GetTransform()->SetParent(m_networkPlayers[1]->GetTransform());
+		return true;
+	}
+	return false;
 }
 
 void Scene::Resolution()

@@ -11,5 +11,7 @@ public:
 
 private:
 	float		m_speed = 2000.f;
+
+	int m_playerType = 0;
 };
 

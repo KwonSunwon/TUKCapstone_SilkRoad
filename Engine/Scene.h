@@ -94,6 +94,8 @@ public:
 	int AddNetworkObject() { return m_numOfNetworkObject++; }
 
 	void SpawnParticle(Vec3 pos, bool network = false);
+
+	bool ChangeSpectate(PlayerType type);
 private:
 	vector<shared_ptr<GameObject>>		m_gameObjects;
 	vector<shared_ptr<GameObject>>		m_collidableGameObjects;
