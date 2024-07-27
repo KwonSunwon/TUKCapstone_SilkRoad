@@ -37,6 +37,9 @@ VS_OUT VS_Main(VS_IN input)
     return output;
 }
 
+//g_int_0이 1이면 난이도
+//g_float_1이 시간
+
 float4 PS_Main(VS_OUT input) : SV_Target
 {
     float4 color = float4(1.f, 1.f, 1.f, 1.f);
@@ -92,7 +95,15 @@ VS_TEX_OUT VS_Tex(VS_TEX_IN input)
 
     output.pos = mul(float4(input.pos, 1.f), g_matWVP);
     output.uv = input.uv;
+    
+    if (g_int_0 == 1)
+    {
+    
+        output.uv.x /= 8;
+        output.uv.x += g_float_0 / 100;
 
+    }
+    
     return output;
 }
 

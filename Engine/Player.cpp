@@ -199,6 +199,10 @@ void Player::Fire()
 		if(gameObject->GetMonobehaviour("Bomb"))
 			continue;
 
+		if (gameObject->GetMonobehaviour("HealerSkill"))
+			continue;
+
+
 		if(distance < minDistance)
 		{
 			minDistance = distance;
