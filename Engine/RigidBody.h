@@ -23,7 +23,7 @@ public:
 	void	MoveTo(Vec3 position);
 
 	//힘에 방향으로 힘을 가한다. 질량이 클수록 적은 영향을 받음
-	void	AddForce(Vec3 amount) { m_force += amount; }
+	void	AddForce(Vec3 amount, bool isPacketProcess = false);
 
 	//프레임 워크에서 사용하는 함수이므로 임의사용X
 	void	MovementStep(int iterations);

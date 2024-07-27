@@ -47,6 +47,7 @@ enum class PACKET_TYPE : BYTE {
 	PT_SKILL,
 	PT_ITEM,
 	PT_PARTICLE,
+	PT_FORCE,
 	PT_MAX,
 };
 
@@ -172,6 +173,15 @@ public:
 public:
 	Vec3 m_pos;
 	uint16 m_particleIndex;
+};
+
+class ForcePacket : public Packet {
+public:
+	ForcePacket();
+	~ForcePacket() {}
+
+public:
+	Vec3 m_force;
 };
 
 #pragma pack(pop)

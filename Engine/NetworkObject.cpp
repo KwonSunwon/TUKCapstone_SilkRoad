@@ -8,6 +8,7 @@
 #include "RigidBody.h"
 #include "Item.h"
 #include "ParticleSystem.h"
+#include "Transform.h"
 
 NetworkObject::NetworkObject() : Component(COMPONENT_TYPE::NETWORK)
 {
@@ -19,8 +20,22 @@ NetworkObject::~NetworkObject()
 
 }
 
+void NetworkObject::LateUpdate()
+{
+
+}
+
 void NetworkObject::ProcessPacket(shared_ptr<Packet> packet)
 {
+	if(m_isDefaultPacket) {
+		if(packet->m_type == PACKET_TYPE::PT_FORCE) {
+			if(GetRigidBody()->GetStatic())
+				return;
+			GetRigidBody()->AddForce(reinterpret_pointer_cast<ForcePacket>(packet)->m_force, true);
+		}
+		return;
+	}
+
 	shared_ptr<MonoBehaviour> scriptE = GetGameObject()->GetMonobehaviour("Enemy");
 	shared_ptr<MonoBehaviour> scriptI = GetGameObject()->GetMonobehaviour("Item");
 

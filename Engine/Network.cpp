@@ -59,6 +59,7 @@ void Network::Update()
 		case PACKET_TYPE::PT_ENEMY:
 		case PACKET_TYPE::PT_ENEMY_HIT:
 		case PACKET_TYPE::PT_ITEM:
+		case PACKET_TYPE::PT_FORCE:
 			objects[packet->m_targetId]->ProcessPacket(packet);
 			break;
 		case PACKET_TYPE::PT_STAGE_CHANGE:
@@ -112,6 +113,9 @@ shared_ptr<Packet> Network::PacketProcess(int idx)
 		break;
 	case PACKET_TYPE::PT_PARTICLE:
 		packet = make_shared<ParticlePacket>();
+		break;
+	case PACKET_TYPE::PT_FORCE:
+		packet = make_shared<ForcePacket>();
 		break;
 	}
 
@@ -368,6 +372,7 @@ bool Host::IsThroughPacket(PACKET_TYPE type)
 	case PACKET_TYPE::PT_ITEM:
 	case PACKET_TYPE::PT_GUEST_INIT:
 	case PACKET_TYPE::PT_PARTICLE:
+	case PACKET_TYPE::PT_FORCE:
 		return true;
 	}
 	return false;

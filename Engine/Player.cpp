@@ -263,6 +263,10 @@ void Player::Fire()
 
 	if(scriptE == nullptr)
 		return;
+
+	if(GET_SINGLE(NetworkManager)->GetNetworkState() == NETWORK_STATE::SINGLE)
+		return;
+
 	shared_ptr<EnemyHitPacket> packet = make_shared<EnemyHitPacket>();
 	packet->m_targetId = picked->GetNetworkObject()->GetNetworkId();
 	packet->m_damage = finalDamage;

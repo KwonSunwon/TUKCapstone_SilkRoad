@@ -637,7 +637,6 @@ shared_ptr<GameObject> Resources::LoadItemPrefab(int id, Vec3 location, shared_p
 			shared_ptr<NetworkObject> networkObject = make_shared<NetworkObject>();
 			int networkId = scene->AddNetworkObject();
 			networkObject->SetNetworkId(networkId);
-			OutputDebugString((L"Item Network Id : " + to_wstring(networkId) + L"\n").c_str());
 			go->AddComponent(networkObject);
 		}
 
@@ -857,6 +856,11 @@ void Resources::LoadCratePrefab(Vec3 pos, shared_ptr<Scene> scene)
 		scene->AddGameObject(gm->GetCollider()->GetDebugCollider());
 
 	gm->SetShadow(true);
+
+	gm->AddComponent(make_shared<NetworkObject>());
+	gm->GetNetworkObject()->SetNetworkId(scene->AddNetworkObject());
+	gm->GetNetworkObject()->SetDefaultPacket(true);
+
 	scene->AddGameObject(gm);
 }
 

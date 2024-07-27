@@ -187,3 +187,10 @@ ParticlePacket::ParticlePacket()
 	m_targetId = -1;
 	m_type = PACKET_TYPE::PT_PARTICLE;
 }
+
+ForcePacket::ForcePacket()
+{
+	m_size = sizeof(ForcePacket);
+	m_targetId = -1;
+	m_type = PACKET_TYPE::PT_FORCE;
+}

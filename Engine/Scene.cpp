@@ -455,6 +455,11 @@ void Scene::SpawnParticle(Vec3 pos, bool network)
 	m_particleCycle = (m_particleCycle + 1) % m_particles.size();
 
 	if(!network) {
+		if(GET_SINGLE(NetworkManager)->GetNetworkState() == NETWORK_STATE::SINGLE)
+			return;
+		if(!GET_SINGLE(NetworkManager)->m_isSend)
+			return;
+
 		shared_ptr<ParticlePacket> packet = make_shared<ParticlePacket>();
 		packet->m_pos = pos;
 		SEND(packet);
