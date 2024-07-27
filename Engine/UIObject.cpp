@@ -511,9 +511,12 @@ void NetworkPlayerIcon::Update()
 
 void DifficultyBar::Update()
 {
-	Difficulty diff = GET_SINGLE(DifficultyManager)->GetDifficulty();
+	GetMeshRenderer()->GetMaterial()->SetTexture(0, GET_SINGLE(Resources)->Load<Texture>(L"Diffic", L"..\\Resources\\Texture\\dif.png"));
+	float time = GET_SINGLE(DifficultyManager)->GetTimer();
+	GetMeshRenderer()->GetMaterial()->SetInt(0, 1);
+	GetMeshRenderer()->GetMaterial()->SetFloat(0, time);
 
-	switch (diff)
+	/*switch (diff)
 	{
 	case Difficulty::EASY:
 		GetMeshRenderer()->GetMaterial()->SetTexture(0, GET_SINGLE(Resources)->Load<Texture>(L"Difficulty_EASY", L"..\\Resources\\Texture\\Difficulty_EASY.png"));
@@ -527,7 +530,7 @@ void DifficultyBar::Update()
 	case Difficulty::VERYHARD:
 		GetMeshRenderer()->GetMaterial()->SetTexture(0, GET_SINGLE(Resources)->Load<Texture>(L"Difficulty_VERYHARD", L"..\\Resources\\Texture\\Difficulty_VERYHARD.png"));
 		break;
-	}
+	}*/
 	
 	UIObject::Update();
 }
