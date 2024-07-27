@@ -246,7 +246,7 @@ void Scene::AddGameObject(shared_ptr<GameObject> gameObject)
 
 	if(gameObject->GetParticleSystem() != nullptr)
 	{
-		m_particles.push_back(gameObject);
+		m_particles[gameObject->GetParticleSystem()->m_particleType].push_back(gameObject);
 	}
 
 	m_gameObjects.push_back(gameObject);
@@ -445,20 +445,21 @@ void Scene::PhysicsStep(int iterations)
 	}
 }
 
-void Scene::SpawnParticle(Vec3 pos, bool network)
+void Scene::SpawnParticle(Vec3 pos, int type, bool network)
 {
-	if (m_particles.empty())
+	if (m_particles[type].empty())
 		return;
 
-	m_particles[m_particleCycle]->GetTransform()->SetLocalPosition(pos);
-	m_particles[m_particleCycle]->GetParticleSystem()->SetArgs();
-	m_particleCycle = (m_particleCycle + 1) % m_particles.size();
+	m_particles[type][m_particleCycle[type]]->GetTransform()->SetLocalPosition(pos);
+	m_particles[type][m_particleCycle[type]]->GetParticleSystem()->SetArgs();
+	
+	m_particleCycle[type] = (m_particleCycle[type] + 1) % m_particles[type].size();
 
-	if(!network) {
+	/*if(!network) {
 		shared_ptr<ParticlePacket> packet = make_shared<ParticlePacket>();
 		packet->m_pos = pos;
 		SEND(packet);
-	}
+	}*/
 }
 
 void Scene::Resolution()

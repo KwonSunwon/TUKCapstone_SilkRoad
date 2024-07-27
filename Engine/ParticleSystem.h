@@ -7,6 +7,12 @@ class StructuredBuffer;
 
 enum ParticleType {
 	EXPLOSION,
+	HEAL,
+	EXPLOSION2,
+	EXPLOSION3,
+	EXPLOSION4,
+	EXPLOSION5,
+	PARTICLE_TYPE_COUNT
 };
 
 struct ParticleInfo
@@ -28,7 +34,7 @@ struct ComputeSharedInfo
 class ParticleSystem : public Component
 {
 public:
-	ParticleSystem();
+	ParticleSystem(ParticleType type);
 	virtual ~ParticleSystem();
 
 public:
@@ -61,8 +67,10 @@ public:
 	float				m_startScale = 70.f;
 	float				m_endScale = 70.f;
 
-	int					m_row = 5;
-	int					m_column = 5;
+	float				m_exposeTime = 0.f;
+
+	int					m_row = 6;
+	int					m_column = 6;
 
 	bool				m_singleType = false;
 

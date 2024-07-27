@@ -42,7 +42,7 @@ void TankerSkill::Update()
 	if (GetRigidBody()->GetIsFalling())
 	{
 		if (!m_isMakeSound) {
-			GET_SINGLE(SoundManager)->soundPlay(Sounds::ENV_HIT_ENEMY);
+			GET_SINGLE(SoundManager)->soundPlay(Sounds::SKILL_TANKER);
 			m_isMakeSound = true;
 		}
 			

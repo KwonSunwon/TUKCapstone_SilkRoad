@@ -136,6 +136,7 @@ RWStructuredBuffer<ComputeShared> g_shared : register(u1);
 // g_vec2_1 : DeltaTime / AccTime
 // g_int_0  : Particle Max Count
 // g_int_1  : AddCount
+// g_int_3  : Type
 // g_vec4_0 : MinLifeTime / MaxLifeTime / MinSpeed / MaxSpeed
 
 
@@ -195,10 +196,26 @@ void CS_Main(int3 threadIndex : SV_DispatchThreadID)
             };
 
             // [0~1] -> [-1~1]
+            
             float3 dir = (noise - 0.5f) * 2.f;
+            if (g_int_3 == 1)
+            {
+                g_particle[threadIndex.x].worldDir = normalize(dir);
+                g_particle[threadIndex.x].worldPos = (noise.xyz - 0.5f) * 25;
+            }
+            if (g_int_3 == 1)
+            {
+                dir.x = 0.f;
+                dir.z = 0.f;
+                dir.y += 1.f;
+                noise.z = (noise.z - 0.5f) * 3000.f;
+                noise.x = (noise.x - 0.5f) * 3000.f;
+                noise.y = (noise.y) * 50.f;
+                g_particle[threadIndex.x].worldDir = normalize(dir);
+                g_particle[threadIndex.x].worldPos = noise.xyz;
+            }
 
-            g_particle[threadIndex.x].worldDir = normalize(dir);
-            g_particle[threadIndex.x].worldPos = (noise.xyz - 0.5f) * 25;
+           
             g_particle[threadIndex.x].lifeTime = ((maxLifeTime - minLifeTime) * noise.x) + minLifeTime;
             g_particle[threadIndex.x].curTime = 0.f;
         }

@@ -103,6 +103,7 @@ void Player::Update()
 	{
 
 		GET_SINGLE(UpgradeManager)->AddGold(100.f);
+		GET_SINGLE(SceneManager)->GetActiveScene()->m_testType = (GET_SINGLE(SceneManager)->GetActiveScene()->m_testType + 1) % 6;
 	}
 	if (INPUT->GetButtonDown(KEY_TYPE::C))
 	{
@@ -208,11 +209,11 @@ void Player::Fire()
 
 	shared_ptr<MonoBehaviour> scriptE = picked->GetMonobehaviour("Enemy");
 	Vec3 damagePos = cameraPos + cameraDir * minDistance + Vec3(0.f, 100.f, 0.f);
-	Vec3 particlePos = cameraPos + cameraDir * minDistance * 0.97;
+	Vec3 particlePos = cameraPos + cameraDir * minDistance  - cameraDir * 100.f;
 	float finalDamage = 0.f;
 
 	if (picked->GetRigidBody()) {
-		GET_SINGLE(SceneManager)->GetActiveScene()->SpawnParticle(particlePos);
+		GET_SINGLE(SceneManager)->GetActiveScene()->SpawnParticle(particlePos, ParticleType::EXPLOSION);
 	}
 
 	switch(m_fireInfo.bulletType) {
@@ -472,6 +473,7 @@ void Player::SkillHealer()
 	//m_guardObject->GetRigidBody()->SetStatic(false);
 	m_healObject->GetRigidBody()->MoveTo(pos);
 	//m_guardObject->GetTransform()->LookAt(look);
+	GET_SINGLE(SceneManager)->GetActiveScene()->SpawnParticle(pos, ParticleType::HEAL);
 }
 
 void Player::SkillLauncher()

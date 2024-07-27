@@ -12,11 +12,11 @@
 void HealerSkill::Update()
 {
 	m_time += DELTA_TIME;
-	if (m_time >= 10.f) {
+	/*if (m_time >= 10.f) {
 		GetRigidBody()->MoveTo(Vec3(-50000.f, -50000.f, -50000.f));
 		GetRigidBody()->SetStatic(true);
 		m_time = 0.f;
-	}
+	}*/
 
 	shared_ptr<RigidBody> rb = GetRigidBody();
 	shared_ptr<Transform> transform = GetTransform();

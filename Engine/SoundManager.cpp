@@ -12,6 +12,7 @@ void SoundManager::Init()
     m_soundSystem->createSound("..\\Resources\\Sound\\Weapon_Assult_Fire.wav", FMOD_DEFAULT, 0, &m_sound[WEAPON_ASSULT_FIRE]);
     m_soundSystem->createSound("..\\Resources\\Sound\\Env_Hit_Enemy.wav", FMOD_DEFAULT, 0, &m_sound[ENV_HIT_ENEMY]);
     m_soundSystem->createSound("..\\Resources\\Sound\\Env_Eat_Item.wav", FMOD_DEFAULT, 0, &m_sound[ENV_EAT_ITEM]);
+    m_soundSystem->createSound("..\\Resources\\Sound\\Skill_Tanker.wav", FMOD_DEFAULT, 0, &m_sound[SKILL_TANKER]);
 
 
 
