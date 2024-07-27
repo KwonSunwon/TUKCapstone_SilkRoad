@@ -92,6 +92,8 @@ public:
 	shared_ptr<InteractiveObjectText> m_interactiveObjectText;
 
 	int AddNetworkObject() { return m_numOfNetworkObject++; }
+
+	void SpawnParticle(Vec3 pos);
 private:
 	vector<shared_ptr<GameObject>>		m_gameObjects;
 	vector<shared_ptr<GameObject>>		m_collidableGameObjects;
@@ -102,6 +104,9 @@ private:
 	vector<shared_ptr<class Manifold>>	m_contacts;
 	// 네트워크 객체 목록 추가
 	vector<shared_ptr<class NetworkObject>> m_networkObjects;
+
+	vector<shared_ptr<GameObject>>		m_particles;
+	int m_particleCycle = 0;
 
 private:
 	int m_numOfNetworkObject = 0;

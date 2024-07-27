@@ -206,9 +206,13 @@ void Player::Fire()
 		return;
 
 	shared_ptr<MonoBehaviour> scriptE = picked->GetMonobehaviour("Enemy");
-	Vec3 damagePos = cameraPos + cameraDir * minDistance;
+	Vec3 damagePos = cameraPos + cameraDir * minDistance + Vec3(0.f, 100.f, 0.f);
+	Vec3 particlePos = cameraPos + cameraDir * minDistance * 0.97;
 	float finalDamage = 0.f;
 
+	if (picked->GetRigidBody()) {
+		GET_SINGLE(SceneManager)->GetActiveScene()->SpawnParticle(particlePos);
+	}
 
 	switch(m_fireInfo.bulletType) {
 	case BulletType::BASIC:
@@ -220,6 +224,7 @@ void Player::Fire()
 
 			enemyScript->GetDamage(finalDamage);
 			enemyScript->MakeDamageIndicator(finalDamage, damagePos, m_isCritical);
+			
 			GET_SINGLE(SoundManager)->soundPlay(Sounds::ENV_HIT_ENEMY);
 		}
 		break;

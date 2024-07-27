@@ -1230,12 +1230,15 @@ shared_ptr<class Scene> LoadMainScene1()
 
 #pragma region ParticleSystem
 	{
-		shared_ptr<GameObject> particle = make_shared<GameObject>();
-		particle->AddComponent(make_shared<Transform>());
-		particle->AddComponent(make_shared<ParticleSystem>());
-		particle->SetCheckFrustum(false);
-		particle->GetTransform()->SetLocalPosition(Vec3(3000.f, 300.f, 3000.f));
-		scene->AddGameObject(particle);
+		for (int i = 0; i < 20; ++i)
+		{
+			shared_ptr<GameObject> particle = make_shared<GameObject>();
+			particle->AddComponent(make_shared<Transform>());
+			particle->AddComponent(make_shared<ParticleSystem>());
+			particle->SetCheckFrustum(false);
+			particle->GetTransform()->SetLocalPosition(Vec3(3000.f, 300.f, 3000.f));
+			scene->AddGameObject(particle);
+		}
 	}
 #pragma endregion
 

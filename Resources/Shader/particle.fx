@@ -86,10 +86,19 @@ void GS_Main(point VS_OUT input[1], inout TriangleStream<GS_OUT> outputStream)
     output[2].position = mul(output[2].position, g_matProjection);
     output[3].position = mul(output[3].position, g_matProjection);
 
-    output[0].uv = float2(0.f, 0.f);
-    output[1].uv = float2(1.f, 0.f);
-    output[2].uv = float2(1.f, 1.f);
-    output[3].uv = float2(0.f, 1.f);
+    uint totalFrames = 25;
+    uint currentFrame = min((uint) (ratio * totalFrames), totalFrames - 1);
+
+    uint frameX = currentFrame % 5;
+    uint frameY = currentFrame / 5;
+
+    float uvOffsetX = frameX * 0.20f;
+    float uvOffsetY = frameY * 0.20f;
+
+    output[0].uv = float2(uvOffsetX, uvOffsetY);
+    output[1].uv = float2(uvOffsetX + 0.20f, uvOffsetY);
+    output[2].uv = float2(uvOffsetX + 0.20f, uvOffsetY + 0.20f);
+    output[3].uv = float2(uvOffsetX, uvOffsetY + 0.20f);
 
     output[0].id = id;
     output[1].id = id;
@@ -126,6 +135,8 @@ RWStructuredBuffer<ComputeShared> g_shared : register(u1);
 // g_int_0  : Particle Max Count
 // g_int_1  : AddCount
 // g_vec4_0 : MinLifeTime / MaxLifeTime / MinSpeed / MaxSpeed
+
+// g_int_2  : ParticleType
 [numthreads(1024, 1, 1)]
 void CS_Main(int3 threadIndex : SV_DispatchThreadID)
 {

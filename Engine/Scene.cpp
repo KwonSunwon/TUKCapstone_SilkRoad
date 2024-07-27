@@ -28,6 +28,8 @@
 #include "TextObject.h"
 
 #include "AstarGrid.h"
+#include "Transform.h"
+#include "ParticleSystem.h"
 
 Scene::Scene()
 {
@@ -242,6 +244,11 @@ void Scene::AddGameObject(shared_ptr<GameObject> gameObject)
 		m_networkObjects.push_back(gameObject->GetNetworkObject());
 	}
 
+	if (gameObject->GetParticleSystem() != nullptr)
+	{
+		m_particles.push_back(gameObject);
+	}
+
 	m_gameObjects.push_back(gameObject);
 }
 
@@ -436,6 +443,15 @@ void Scene::PhysicsStep(int iterations)
 		if(gameObject->GetRigidBody())
 			gameObject->GetRigidBody()->MovementStep(iterations);
 	}
+}
+
+void Scene::SpawnParticle(Vec3 pos)
+{
+	m_particles[m_particleCycle]->GetTransform()->SetLocalPosition(pos);
+	m_particles[m_particleCycle]->GetParticleSystem()->m_accTime = 0.f;
+	m_particles[m_particleCycle]->GetParticleSystem()->m_isSpawn = true;
+	m_particleCycle = (m_particleCycle + 1) % m_particles.size();
+	
 }
 
 void Scene::Resolution()

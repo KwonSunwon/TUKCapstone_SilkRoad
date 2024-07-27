@@ -17,7 +17,7 @@ ParticleSystem::ParticleSystem() : Component(COMPONENT_TYPE::PARTICLE_SYSTEM)
 	m_mesh = GET_SINGLE(Resources)->LoadPointMesh();
 	m_material = GET_SINGLE(Resources)->Get<Material>(L"Particle");
 	shared_ptr<Texture> tex = GET_SINGLE(Resources)->Load<Texture>(
-		L"Bubbles", L"..\\Resources\\Texture\\Particle\\bubble.png");
+		L"Bubbles", L"..\\Resources\\Texture\\Particle\\test.png");
 
 	m_material->SetTexture(0, tex);
 
@@ -30,12 +30,20 @@ ParticleSystem::~ParticleSystem()
 
 void ParticleSystem::FinalUpdate()
 {
+	if (!m_isSpawn)
+		return;
+
 	m_accTime += DELTA_TIME;
+
+	if (m_accTime > 0.75f) {
+		GetTransform()->SetLocalPosition(Vec3(0.f, -100000.f, 0.f));
+		m_isSpawn = false;
+	}
 
 	int32 add = 0;
 	if (m_createInterval < m_accTime)
 	{
-		m_accTime = m_accTime - m_createInterval;
+		//m_accTime = m_accTime - m_createInterval;
 		add = 1;
 	}
 
@@ -53,6 +61,9 @@ void ParticleSystem::FinalUpdate()
 
 void ParticleSystem::Render()
 {
+	if (!m_isSpawn)
+		return;
+
 	GetTransform()->PushData();
 
 	m_particleBuffer->PushGraphicsData(SRV_REGISTER::t9);
