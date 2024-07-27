@@ -68,10 +68,13 @@ void Network::Update()
 				GET_SINGLE(SceneManager)->StartNextStage();
 			}
 			break;
-		case PACKET_TYPE::PT_PARTICLE:
-			//순원이
-			//GET_SINGLE(SceneManager)->GetActiveScene()->SpawnParticle(reinterpret_pointer_cast<ParticlePacket>(packet)->m_pos, 0, true);
+		case PACKET_TYPE::PT_PARTICLE: {
+			auto pp = reinterpret_pointer_cast<ParticlePacket>(packet);
+			if(pp->m_particleIndex == ParticleType::PARTICLE_PORTAL)
+				break;
+			GET_SINGLE(SceneManager)->GetActiveScene()->SpawnParticle(reinterpret_pointer_cast<ParticlePacket>(packet)->m_pos, reinterpret_pointer_cast<ParticlePacket>(packet)->m_particleIndex, true);
 			break;
+		}
 		default:
 			break;
 		}
