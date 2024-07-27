@@ -237,6 +237,17 @@ shared_ptr<class Scene> LoadMainScene1()
 			material->SetTexture(0, texture);
 			meshRenderer->SetMaterial(material);
 		}
+		{
+			shared_ptr<UIToggleObject> uiObject = make_shared<UIToggleObject>();
+			uiObject->SetPivot(ePivot::CENTER);
+			uiObject->SetScreenPivot(ePivot::CENTER);
+			uiObject->SetWidth(100.f);
+			uiObject->SetHeight(100.f);
+			uiObject->SetZOrder(100);
+			uiObject->SetPosition(Vec2(-350.0f + (i * 120), 250));
+			uiObject->SetToggleKey(KEY_TYPE::F1);
+			obj->AddComponent(uiObject);
+		}
 		obj->AddComponent(meshRenderer);
 		scene->AddGameObject(obj);
 	}
@@ -686,7 +697,7 @@ shared_ptr<class Scene> LoadMainScene1()
 		light->GetTransform()->SetLocalPosition(Vec3(25000.f, 10000, 25000));
 		light->AddComponent(make_shared<Light>());
 		//light->GetLight()->SetLightDirection(Vec3(0.3f, -1.0f, 1.0f));
-		light->GetLight()->SetLightDirection(Vec3(-0.1, -1.0f, 0.2));
+		light->GetLight()->SetLightDirection(Vec3(-0.1, -1.0f, 0.7));
 		light->GetLight()->SetLightType(LIGHT_TYPE::DIRECTIONAL_LIGHT);
 		light->GetLight()->SetDiffuse(Vec3(1.f, 1.f, 1.f));
 		light->GetLight()->SetAmbient(Vec3(0.5f, 0.5f, 0.5f));

@@ -35,13 +35,19 @@ enum class KEY_TYPE
 	F1 = VK_F1,
 	F2 = VK_F2,
 	F3 = VK_F3,
+	F5 = VK_F5,
+	F6 = VK_F6,
+	F7 = VK_F7,
+	F8 = VK_F8,
+	F9 = VK_F9,
+	F10 = VK_F10,
 	F12 = VK_F12,
 
 
 	ESC = VK_ESCAPE,
 };
 
-static constexpr int NUM_OF_KEYS = 28;
+static constexpr int NUM_OF_KEYS = 34;
 
 constexpr std::array<KEY_TYPE, NUM_OF_KEYS> ALL_KEYS =
 {
@@ -71,6 +77,12 @@ constexpr std::array<KEY_TYPE, NUM_OF_KEYS> ALL_KEYS =
 	KEY_TYPE::F1,
 	KEY_TYPE::F2,
 	KEY_TYPE::F3,
+	KEY_TYPE::F5,
+	KEY_TYPE::F6,
+	KEY_TYPE::F7,
+	KEY_TYPE::F8,
+	KEY_TYPE::F9,
+	KEY_TYPE::F10,
 	KEY_TYPE::F12,
 	KEY_TYPE::ESC,
 

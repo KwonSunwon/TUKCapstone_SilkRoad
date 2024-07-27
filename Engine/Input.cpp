@@ -1,6 +1,11 @@
 #include "pch.h"
 #include "Input.h"
 #include "Engine.h"
+#include "SceneManager.h"
+#include "Packet.h"
+#include "Network.h"
+#include "UpgradeManager.h"
+
 
 void Input::Init(HWND hwnd)
 {
@@ -57,6 +62,35 @@ void Input::Update()
 	m_mouseDelta.y = (double)(ptCursorPos.y - centerY);
 
 	SetCursorPos(centerX, centerY);
+
+
+	// 테스트용 키
+	if (INPUT->GetButton(KEY_TYPE::KEY_4))
+	{
+		GET_SINGLE(SceneManager)->ResetStage();
+	}
+	if (INPUT->GetButton(KEY_TYPE::KEY_5))
+	{
+		GET_SINGLE(SceneManager)->StartNextStage();
+		if (GET_SINGLE(NetworkManager)->GetNetworkState() == NETWORK_STATE::HOST) {
+			shared_ptr<StageChangePacket> packet = make_shared<StageChangePacket>();
+			packet->m_stageIndex = GET_SINGLE(SceneManager)->GetStageIndex();
+			SEND(packet);
+		}
+
+	}
+	if (INPUT->GetButtonDown(KEY_TYPE::E))
+	{
+		int chaClass = GET_SINGLE(UpgradeManager)->GetClass() + 1;
+		if (chaClass == 9) chaClass = 5;
+
+		GET_SINGLE(UpgradeManager)->ClassChange(chaClass);
+	}
+	if (INPUT->GetButtonDown(KEY_TYPE::Z))
+	{
+
+		GET_SINGLE(UpgradeManager)->AddGold(100.f);
+	}
 }
 
 bool Input::GetAnyButtonDown()

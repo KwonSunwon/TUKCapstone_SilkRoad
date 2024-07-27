@@ -49,7 +49,7 @@ void Player::Update()
 	SkillManage();
 	ProcessGetItem();
 	InteracitveObjectPick();
-	if(INPUT->GetButtonDown(KEY_TYPE::Q))
+	if(INPUT->GetButtonDown(KEY_TYPE::F))
 	{
 		Skill();
 
@@ -86,20 +86,6 @@ void Player::Update()
 			picked->GetInteractiveObject()->InteractiveFunction();
 
 
-	}
-
-
-	if(INPUT->GetButtonDown(KEY_TYPE::E))
-	{
-		int chaClass = GET_SINGLE(UpgradeManager)->GetClass() + 1;
-		if(chaClass == 9) chaClass = 5;
-
-		GET_SINGLE(UpgradeManager)->ClassChange(chaClass);
-	}
-	if (INPUT->GetButtonDown(KEY_TYPE::Z))
-	{
-
-		GET_SINGLE(UpgradeManager)->AddGold(100.f);
 	}
 
 	shared_ptr<Transform> transform = GetTransform();

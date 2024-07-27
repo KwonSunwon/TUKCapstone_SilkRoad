@@ -39,31 +39,31 @@ void TestCameraScript::LateUpdate()
 	if(INPUT->GetButton(KEY_TYPE::RIGHT))
 		pos += GetTransform()->GetRight() * m_speed * DELTA_TIME;
 
-	if(INPUT->GetButton(KEY_TYPE::Q))
+	if(INPUT->GetButton(KEY_TYPE::F5))
 	{
-		/*Vec3 rotation = GetTransform()->GetLocalRotation();
+		Vec3 rotation = GetTransform()->GetLocalRotation();
 		rotation.x += DELTA_TIME * 2.5f;
-		GetTransform()->SetLocalRotation(rotation);*/
-	}
-
-	if(INPUT->GetButton(KEY_TYPE::E))
-	{
-		Vec3 rotation = GetTransform()->GetLocalRotation();
-		rotation.x -= DELTA_TIME * 2.5f;
 		GetTransform()->SetLocalRotation(rotation);
 	}
 
-	if(INPUT->GetButton(KEY_TYPE::Z))
+	if(INPUT->GetButton(KEY_TYPE::F6))
 	{
 		Vec3 rotation = GetTransform()->GetLocalRotation();
-		rotation.y += DELTA_TIME * 2.5f;
+		rotation.x -= DELTA_TIME * 1.f;
 		GetTransform()->SetLocalRotation(rotation);
 	}
 
-	if(INPUT->GetButton(KEY_TYPE::C))
+	if(INPUT->GetButton(KEY_TYPE::F7))
 	{
 		Vec3 rotation = GetTransform()->GetLocalRotation();
-		rotation.y -= DELTA_TIME * 2.5f;
+		rotation.y += DELTA_TIME * 1.f;
+		GetTransform()->SetLocalRotation(rotation);
+	}
+
+	if(INPUT->GetButton(KEY_TYPE::F8))
+	{
+		Vec3 rotation = GetTransform()->GetLocalRotation();
+		rotation.y -= DELTA_TIME * 1.f;
 		GetTransform()->SetLocalRotation(rotation);
 	}
 
@@ -73,31 +73,5 @@ void TestCameraScript::LateUpdate()
 		GET_SINGLE(SceneManager)->Pick(pos.x, pos.y);
 	}
 	GetTransform()->SetLocalPosition(pos);
-
-	Vec3 rot = GetTransform()->GetLocalRotation();
-	const POINT& mouseDelta = INPUT->GetMouseDelta();
-
-	// Rotate according to mouse movement
-
-
-	if(INPUT->GetButton(KEY_TYPE::KEY_4))
-	{
-		GET_SINGLE(SceneManager)->ResetStage();
-	}
-	if(INPUT->GetButton(KEY_TYPE::KEY_5))
-	{
-		GET_SINGLE(SceneManager)->StartNextStage();
-		if(GET_SINGLE(NetworkManager)->GetNetworkState() == NETWORK_STATE::HOST) {
-			shared_ptr<StageChangePacket> packet = make_shared<StageChangePacket>();
-			packet->m_stageIndex = GET_SINGLE(SceneManager)->GetStageIndex();
-			SEND(packet);
-		}
-
-	}
-
-	/*if (rot.x + mouseDelta.y * 0.001f < XMConvertToRadians(40.f) && rot.x + mouseDelta.y * 0.001f > XMConvertToRadians(-40.f))
-		rot.x += mouseDelta.y * 0.001f;
-
-	GetTransform()->SetLocalRotation(rot);*/
 
 }
