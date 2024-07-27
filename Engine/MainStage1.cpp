@@ -524,7 +524,7 @@ shared_ptr<class Scene> LoadMainScene1()
 				scene->AddTextObject(outgameUpgradeText);
 			}
 
-			for (int i = 0; i < 17; ++i)
+			for(int i = 0; i < 17; ++i)
 			{
 				// 아이템 아이콘
 				{
@@ -1179,50 +1179,51 @@ shared_ptr<class Scene> LoadMainScene1()
 
 	for(int j = 0; j < 5; ++j) {
 		for(int i = 0; i < 5; ++i) {
+			GET_SINGLE(Resources)->LoadCratePrefab(Vec3(12750 + 100 * i, 1500.f + 400.f * j, 15000 + 100 * j), scene);
 
-			int idx = 0;
-			shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Prop_Crate_03.fbx");
-			vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
-			shared_ptr<GameObject> gm = gameObjects[idx];
+			//int idx = 0;
+			//shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Prop_Crate_03.fbx");
+			//vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
+			//shared_ptr<GameObject> gm = gameObjects[idx];
 
-			gm->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
-			gm->GetTransform()->SetLocalPosition(Vec3(12750 + 100 * i, 1500.f + 400.f * i, 15000 + 100 * j));
-
-
-			gm->AddComponent(make_shared<RigidBody>());
-			//gm->AddComponent(make_shared<TestDragon>());
-
-			if(i & 1) {
-				gm->AddComponent(make_shared<OrientedBoxCollider>());
-				gm->GetCollider()->SetExtent(Vec3(50, 50, 50));
-				gm->GetCollider()->SetOffset(Vec3(0, 50, 0));
+			//gm->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
+			//gm->GetTransform()->SetLocalPosition(Vec3(12750 + 100 * i, 1500.f + 400.f * i, 15000 + 100 * j));
 
 
-				/*gm->AddComponent(make_shared<SphereCollider>());
-				gm->GetCollider()->SetRadius(100.f);*/
+			//gm->AddComponent(make_shared<RigidBody>());
+			////gm->AddComponent(make_shared<TestDragon>());
+
+			//if(i & 1) {
+			//	gm->AddComponent(make_shared<OrientedBoxCollider>());
+			//	gm->GetCollider()->SetExtent(Vec3(50, 50, 50));
+			//	gm->GetCollider()->SetOffset(Vec3(0, 50, 0));
 
 
-			}
-			else {
-				gm->AddComponent(make_shared<SphereCollider>());
-				gm->GetCollider()->SetRadius(50.f);
-				gm->GetCollider()->SetOffset(Vec3(0, 50, 0));
-
-				/*gm->AddComponent(make_shared<OrientedBoxCollider>());
-				gm->GetCollider()->SetExtent(Vec3(75, 50, 50));*/
+			//	/*gm->AddComponent(make_shared<SphereCollider>());
+			//	gm->GetCollider()->SetRadius(100.f);*/
 
 
-			}
+			//}
+			//else {
+			//	gm->AddComponent(make_shared<SphereCollider>());
+			//	gm->GetCollider()->SetRadius(50.f);
+			//	gm->GetCollider()->SetOffset(Vec3(0, 50, 0));
 
-			//Instancing 유무 설정(사용:0,0  미사용:0,1)
-			{
-				gm->GetMeshRenderer()->GetMaterial()->SetInt(0, 0);
-			}
+			//	/*gm->AddComponent(make_shared<OrientedBoxCollider>());
+			//	gm->GetCollider()->SetExtent(Vec3(75, 50, 50));*/
 
-			if(gm->GetCollider()->GetDebugCollider() != nullptr)
-				scene->AddGameObject(gm->GetCollider()->GetDebugCollider());
-			gm->SetShadow(true);
-			scene->AddGameObject(gm);
+
+			//}
+
+			////Instancing 유무 설정(사용:0,0  미사용:0,1)
+			//{
+			//	gm->GetMeshRenderer()->GetMaterial()->SetInt(0, 0);
+			//}
+
+			//if(gm->GetCollider()->GetDebugCollider() != nullptr)
+			//	scene->AddGameObject(gm->GetCollider()->GetDebugCollider());
+			//gm->SetShadow(true);
+			//scene->AddGameObject(gm);
 		}
 	}
 
@@ -1230,7 +1231,7 @@ shared_ptr<class Scene> LoadMainScene1()
 
 #pragma region ParticleSystem
 	{
-		for (int i = 0; i < 20; ++i)
+		for(int i = 0; i < 20; ++i)
 		{
 			shared_ptr<GameObject> particle = make_shared<GameObject>();
 			particle->AddComponent(make_shared<Transform>());

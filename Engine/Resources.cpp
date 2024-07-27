@@ -323,7 +323,7 @@ shared_ptr<Texture> Resources::LoadSkillIconTexture(int id)
 {
 	shared_ptr<Texture> texture = make_shared<Texture>();
 
-	switch (id)
+	switch(id)
 	{
 	case 5:
 		texture = GET_SINGLE(Resources)->Load<Texture>(L"Skill_Icon_1", L"..\\Resources\\Texture\\SkillIcon_Dealer.png");
@@ -349,7 +349,7 @@ shared_ptr<Texture> Resources::LoadItemIconTexture(int id)
 {
 	shared_ptr<Texture> texture = make_shared<Texture>();
 
-	switch (id) {
+	switch(id) {
 	case 0:
 		texture = GET_SINGLE(Resources)->Load<Texture>(L"Item_Icon_Bomb", L"..\\Resources\\Texture\\ItemIcon\\Item_Icon_Bomb.png");
 		break;
@@ -428,7 +428,7 @@ shared_ptr<Texture> Resources::LoadItemIconTexture(int id)
 wstring Resources::GetItemDesc(int id)
 {
 	wstring desc{};
-	switch (id) {
+	switch(id) {
 	case 0:
 		desc = L"Brilliant Behemoth\nAdds explosion to bullets.";
 		break;
@@ -834,6 +834,30 @@ shared_ptr<GameObject> Resources::LoadBombPrefab(Vec3 Location)
 		return go;
 
 	}
+}
+
+void Resources::LoadCratePrefab(Vec3 pos, shared_ptr<Scene> scene)
+{
+	shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Prop_Crate_03.fbx");
+	vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
+	shared_ptr<GameObject> gm = gameObjects[0];
+
+	gm->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
+	gm->GetTransform()->SetLocalPosition(pos);
+
+	gm->AddComponent(make_shared<RigidBody>());
+
+	gm->AddComponent(make_shared<OrientedBoxCollider>());
+	gm->GetCollider()->SetExtent(Vec3(50, 50, 50));
+	gm->GetCollider()->SetOffset(Vec3(0, 50, 0));
+
+	gm->GetMeshRenderer()->GetMaterial()->SetInt(0, 0);
+
+	if(gm->GetCollider()->GetDebugCollider())
+		scene->AddGameObject(gm->GetCollider()->GetDebugCollider());
+
+	gm->SetShadow(true);
+	scene->AddGameObject(gm);
 }
 
 shared_ptr<Texture> Resources::CreateTexture(const wstring& name, DXGI_FORMAT format, uint32 width, uint32 height,
