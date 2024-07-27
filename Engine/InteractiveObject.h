@@ -20,6 +20,7 @@ enum EnumInteract
 	CHARACTER_CHANGER2,
 	CHARACTER_CHANGER3,
 	CHARACTER_CHANGER4,
+	STAGE_PORTAL,
 	INTERACT_TYPE_COUNT
 };
 
@@ -35,10 +36,10 @@ public :
 	virtual void FinalUpdate() override;
 
 public:
-	void PrintInteractiveText();
-	void InteractiveFunction();
+	virtual void PrintInteractiveText();
+	virtual void InteractiveFunction();
 
-private:
+protected:
 	float m_timer = 0.f;
 	shared_ptr<TextObject> m_textObject;
 	int m_id = -1;
