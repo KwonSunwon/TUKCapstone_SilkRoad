@@ -50,8 +50,10 @@ void Network::Update()
 			break;
 		case PACKET_TYPE::PT_PLAYER_CLASS_CHANGE:
 			id = ProcessPlayerID(packet->m_targetId);
-			if(id != -1)
+			if (id != -1) {
 				players[id]->ChangeClass(reinterpret_pointer_cast<PlayerClassChangePacket>(packet)->m_classIndex);
+				players[id]->SetActivated(true);
+			}
 			break;
 		case PACKET_TYPE::PT_SKILL:
 			GET_SINGLE(SceneManager)->GetActiveScene()->m_mainPlayerScript->NetworkSkill(reinterpret_pointer_cast<SkillPacket>(packet));

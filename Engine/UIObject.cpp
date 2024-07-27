@@ -368,7 +368,7 @@ void MiniMapUI::Update()
 			float dist = sqrt(pow(enemypos.x - playerpos.x, 2) + pow(enemypos.z - playerpos.z, 2));
 			if (dist > 9700.f)
 				continue;
-
+			m_miniMapIcons[iconIdx]->SetZOrder(490);
 			m_miniMapIcons[iconIdx]->SetToggle(true);
 			m_miniMapIcons[iconIdx]->SetPosition(Vec2( ((enemypos.x - playerpos.x) / 100) - 100,
 				((enemypos.z - playerpos.z) / 100) - 100 ));
@@ -388,6 +388,7 @@ void MiniMapUI::Update()
 			if (networkPlayer->IsActivated() == false)
 				continue;
 
+			m_miniMapIcons[iconIdx]->SetZOrder(480);
 			m_miniMapIcons[iconIdx]->SetToggle(true);
 			m_miniMapIcons[iconIdx]->SetPosition(Vec2(((partnerpos.x - playerpos.x) / 100) - 100,
 				((partnerpos.z - playerpos.z) / 100) - 100));
@@ -396,14 +397,13 @@ void MiniMapUI::Update()
 		}
 		else if (go->GetMonobehaviour("Item"))
 		{
-			if (go->GetRigidBody()->GetStatic())
-				continue;
 			auto itempos = go->GetTransform()->GetLocalPosition();
 			auto playerpos = player->GetTransform()->GetLocalPosition();
 			float dist = sqrt(pow(itempos.x - playerpos.x, 2) + pow(itempos.z - playerpos.z, 2));
 			if (dist > 9700.f)
 				continue;
 
+			m_miniMapIcons[iconIdx]->SetZOrder(490);
 			m_miniMapIcons[iconIdx]->SetToggle(true);
 			m_miniMapIcons[iconIdx]->SetPosition(Vec2(((itempos.x - playerpos.x) / 100) - 100,
 				((itempos.z - playerpos.z) / 100) - 100));
