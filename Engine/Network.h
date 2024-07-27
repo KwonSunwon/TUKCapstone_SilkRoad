@@ -82,6 +82,8 @@ public:
 	NETWORK_STATE GetState() { return m_networkState; }
 	void SetState(NETWORK_STATE state) { m_networkState = state; }
 
+	int ProcessPlayerID(int id);
+
 	LockQueue<shared_ptr<Packet>> m_receivedPacketQue;
 
 private:

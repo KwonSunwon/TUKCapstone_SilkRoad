@@ -20,6 +20,8 @@
 #include "NetworkPlayer.h"
 #include "Light.h"
 
+#include "Player.h"
+
 #include "RigidBody.h"
 #include "SceneManager.h"
 #include "Terrain.h"
@@ -28,6 +30,8 @@
 #include "TextObject.h"
 
 #include "AstarGrid.h"
+#include "Transform.h"
+#include "ParticleSystem.h"
 #include "DifficultyManager.h"
 
 Scene::Scene()
@@ -237,10 +241,15 @@ void Scene::AddGameObject(shared_ptr<GameObject> gameObject)
 	{
 		m_lights.push_back(gameObject->GetLight());
 	}
-	
+
 	if(gameObject->GetNetworkObject() != nullptr)
 	{
 		m_networkObjects.push_back(gameObject->GetNetworkObject());
+	}
+
+	if(gameObject->GetParticleSystem() != nullptr)
+	{
+		m_particles[gameObject->GetParticleSystem()->m_particleType].push_back(gameObject);
 	}
 
 	m_gameObjects.push_back(gameObject);
@@ -437,6 +446,48 @@ void Scene::PhysicsStep(int iterations)
 		if(gameObject->GetRigidBody())
 			gameObject->GetRigidBody()->MovementStep(iterations);
 	}
+}
+
+void Scene::SpawnParticle(Vec3 pos, int type, bool network)
+{
+	if(m_particles[type].empty())
+		return;
+
+	m_particles[type][m_particleCycle[type]]->GetTransform()->SetLocalPosition(pos);
+	m_particles[type][m_particleCycle[type]]->GetParticleSystem()->SetArgs();
+
+	m_particleCycle[type] = (m_particleCycle[type] + 1) % m_particles[type].size();
+
+	if(!network) {
+		if(GET_SINGLE(NetworkManager)->GetNetworkState() == NETWORK_STATE::SINGLE)
+			return;
+		//if(!GET_SINGLE(NetworkManager)->m_isSend)
+		//	return;
+
+		shared_ptr<ParticlePacket> packet = make_shared<ParticlePacket>();
+		packet->m_pos = pos;
+		packet->m_particleIndex = type;
+		SEND(packet);
+	}
+}
+
+bool Scene::ChangeSpectate(PlayerType type)
+{
+	auto mainCamera = GetMainCamera();
+	switch(type) {
+	case MAIN_PLAYER:
+		mainCamera->GetTransform()->SetParent(m_mainPlayerScript->GetTransform());
+		return true;
+	case GUEST_PLAYER1:
+		if(!m_networkPlayers[0]->IsActivated()) break;
+		mainCamera->GetTransform()->SetParent(m_networkPlayers[0]->GetTransform());
+		return true;
+	case GUEST_PLAYER2:
+		if(!m_networkPlayers[1]->IsActivated()) break;
+		mainCamera->GetTransform()->SetParent(m_networkPlayers[1]->GetTransform());
+		return true;
+	}
+	return false;
 }
 
 void Scene::Resolution()

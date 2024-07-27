@@ -8,6 +8,11 @@
 #include "Timer.h"
 #include "Transform.h"
 
+void TankerSkill::Awake()
+{
+	SetMonovihaviourName("TankerSkill");
+}
+
 void TankerSkill::Update()
 {
 	if (GetRigidBody()->GetStatic()) {
@@ -42,7 +47,7 @@ void TankerSkill::Update()
 	if (GetRigidBody()->GetIsFalling())
 	{
 		if (!m_isMakeSound) {
-			GET_SINGLE(SoundManager)->soundPlay(Sounds::ENV_HIT_ENEMY);
+			GET_SINGLE(SoundManager)->soundPlay(Sounds::SKILL_TANKER);
 			m_isMakeSound = true;
 		}
 			

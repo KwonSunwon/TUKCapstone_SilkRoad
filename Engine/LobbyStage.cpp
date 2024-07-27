@@ -160,6 +160,8 @@ shared_ptr<class Scene> LoadLobbyScene()
 			L"..\\Resources\\FBX\\SM_Prop_Banner_01_C.fbx",
 			L"..\\Resources\\FBX\\SM_Prop_Banner_01_D.fbx",
 			L"..\\Resources\\FBX\\SM_Prop_Monitor_03.fbx",
+			L"..\\Resources\\FBX\\SM_Prop_Monitor_06.fbx",
+			L"..\\Resources\\FBX\\SM_Prop_Monitor_07.fbx",
 		};
 		
 
@@ -267,6 +269,23 @@ shared_ptr<class Scene> LoadLobbyScene()
 			case 9:
 				// 게임 시작 모니터
 				localPos = Vec3(-15.f, 2073.f, -2063.9f);
+				localRot = Vec3(0.f, 180.f, 0.f);
+				colliderCenter = Vec3(0.f, 0.856f, 0.f);
+				ColliderSize = Vec3(1.113f, 1.712f, 0.903f);
+				break;
+
+			case 10:
+				// 방 개설 모니터
+				localPos = Vec3(-15.f -200.f, 2073.f, -2063.9f);
+				localRot = Vec3(0.f, 180.f, 0.f);
+				colliderCenter = Vec3(0.f, 0.856f, 0.f);
+				ColliderSize = Vec3(1.113f, 1.712f, 0.903f);
+				break;
+
+
+			case 11:
+				// 방 참가 모니터
+				localPos = Vec3(-15.f +200.f, 2073.f, -2063.9f);
 				localRot = Vec3(0.f, 180.f, 0.f);
 				colliderCenter = Vec3(0.f, 0.856f, 0.f);
 				ColliderSize = Vec3(1.113f, 1.712f, 0.903f);

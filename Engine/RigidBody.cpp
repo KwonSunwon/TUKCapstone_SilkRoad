@@ -10,8 +10,9 @@
 #include "Scene.h"
 #include "Terrain.h"
 #include "Manifold.h"
-
-
+#include "Packet.h"
+#include "Network.h"
+#include "NetworkObject.h"
 
 RigidBody::RigidBody() : Component(COMPONENT_TYPE::RIGIDBODY)
 {
@@ -58,6 +59,25 @@ void RigidBody::MoveTo(Vec3 position)
 	m_position = position;
 	m_baseCollider->SetCenter(m_position);
 	m_baseCollider->UpdateNodePos();
+}
+
+void RigidBody::AddForce(Vec3 amount, bool isPacketProcess)
+{
+	m_force += amount;
+
+	if(isPacketProcess)
+		return;
+	if(!GetNetworkObject())
+		return;
+	if(!GetNetworkObject()->IsDefaultPacket())
+		return;
+	if(GET_SINGLE(NetworkManager)->GetNetworkState() == NETWORK_STATE::SINGLE)
+		return;
+
+	shared_ptr<ForcePacket> packet = make_shared<ForcePacket>();
+	packet->m_targetId = GetNetworkObject()->GetNetworkId();
+	packet->m_force = amount;
+	SEND(packet);
 }
 
 void RigidBody::MovementStep(int iterations)

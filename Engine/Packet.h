@@ -38,7 +38,7 @@ private:
 enum class PACKET_TYPE : BYTE {
 	PT_NONE = 0,
 	PT_INIT = 1,
-	PT_MOVE,
+	PT_GUEST_INIT,
 	PT_PLAYER,
 	PT_PLAYER_CLASS_CHANGE,
 	PT_ENEMY,
@@ -46,6 +46,8 @@ enum class PACKET_TYPE : BYTE {
 	PT_STAGE_CHANGE,
 	PT_SKILL,
 	PT_ITEM,
+	PT_PARTICLE,
+	PT_FORCE,
 	PT_MAX,
 };
 
@@ -56,7 +58,7 @@ public:
 	~Packet() {}
 
 public:
-	ushort m_size;
+	uint16 m_size;
 	PACKET_TYPE m_type;
 	uint32 m_targetId;
 };
@@ -68,15 +70,17 @@ public:
 
 public:
 	BYTE m_networkId;
+	int16 m_classIndex;
+	int16 m_classIndexGuest;
 };
 
-class MovePacket : public Packet {
+class GuestInitPacket : public Packet {
 public:
-	MovePacket();
-	~MovePacket() {}
+	GuestInitPacket();
+	~GuestInitPacket() {}
 
 public:
-	Vec3 m_position;
+	int16 m_classIndex;
 };
 
 class PlayerPacket : public Packet {
@@ -160,6 +164,25 @@ public:
 
 public:
 	Vec3 m_pos;
+};
+
+class ParticlePacket : public Packet {
+public:
+	ParticlePacket();
+	~ParticlePacket() {}
+
+public:
+	Vec3 m_pos;
+	uint16 m_particleIndex;
+};
+
+class ForcePacket : public Packet {
+public:
+	ForcePacket();
+	~ForcePacket() {}
+
+public:
+	Vec3 m_force;
 };
 
 #pragma pack(pop)

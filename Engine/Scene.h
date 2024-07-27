@@ -1,5 +1,5 @@
 #pragma once
-
+#include "ParticleSystem.h"
 enum PlayerType
 {
 	MAIN_PLAYER,
@@ -92,6 +92,9 @@ public:
 	shared_ptr<InteractiveObjectText> m_interactiveObjectText;
 
 	int AddNetworkObject() { return m_numOfNetworkObject++; }
+
+	bool ChangeSpectate(PlayerType type);
+	void SpawnParticle(Vec3 pos, int type, bool network = false);
 private:
 	vector<shared_ptr<GameObject>>		m_gameObjects;
 	vector<shared_ptr<GameObject>>		m_collidableGameObjects;
@@ -103,6 +106,11 @@ private:
 	// 네트워크 객체 목록 추가
 	vector<shared_ptr<class NetworkObject>> m_networkObjects;
 
+	array<vector<shared_ptr<GameObject>>,ParticleType::PARTICLE_TYPE_COUNT>	m_particles;
+	array<int, ParticleType::PARTICLE_TYPE_COUNT>m_particleCycle = {0};
+
+
+	
 private:
 	int m_numOfNetworkObject = 0;
 	shared_ptr<OcTree> m_ocTree = make_shared<OcTree>(100000, 1000);

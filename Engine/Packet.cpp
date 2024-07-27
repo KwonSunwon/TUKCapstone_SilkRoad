@@ -125,13 +125,6 @@ InitPacket::InitPacket()
 	m_targetId = -1;
 }
 
-MovePacket::MovePacket()
-{
-	m_size = sizeof(MovePacket);
-	m_type = PACKET_TYPE::PT_MOVE;
-	m_targetId = -1;
-}
-
 PlayerPacket::PlayerPacket()
 {
 	m_size = sizeof(PlayerPacket);
@@ -179,4 +172,25 @@ ItemPacket::ItemPacket()
 	m_size = sizeof(ItemPacket);
 	m_targetId = -1;
 	m_type = PACKET_TYPE::PT_ITEM;
+}
+
+GuestInitPacket::GuestInitPacket()
+{
+	m_size = sizeof(GuestInitPacket);
+	m_targetId = -1;
+	m_type = PACKET_TYPE::PT_GUEST_INIT;
+}
+
+ParticlePacket::ParticlePacket()
+{
+	m_size = sizeof(ParticlePacket);
+	m_targetId = -1;
+	m_type = PACKET_TYPE::PT_PARTICLE;
+}
+
+ForcePacket::ForcePacket()
+{
+	m_size = sizeof(ForcePacket);
+	m_targetId = -1;
+	m_type = PACKET_TYPE::PT_FORCE;
 }

@@ -8,6 +8,7 @@ enum Sounds
     WEAPON_ASSULT_FIRE,
     ENV_HIT_ENEMY,
     ENV_EAT_ITEM,
+    SKILL_TANKER,
     SOUND_TYPE_COUNT
 };
 

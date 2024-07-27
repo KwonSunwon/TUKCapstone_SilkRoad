@@ -13,7 +13,7 @@ public:
 	virtual void LateUpdate();
 
 	void ProcessPacket(shared_ptr<PlayerPacket> packet);
-	void ChangeClass(shared_ptr<PlayerClassChangePacket> packet);
+	void ChangeClass(int classIndex);
 
 	void SetHP(float hp) { m_hp = hp; }
 	float GetHP() { return m_hp; }

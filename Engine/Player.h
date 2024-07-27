@@ -28,7 +28,7 @@ public:
 
 public:
 	float GetHP() { return m_hp; }
-	void SetHP(float hp) { m_hp = hp; }
+	void SetHP(float hp) { m_hp = hp; if (m_hp > m_maxHP) m_hp = m_maxHP; }
 
 	float GetMaxHP() { return m_maxHP; }
 	void SetMaxHP(float maxHP) { m_maxHP = maxHP; }

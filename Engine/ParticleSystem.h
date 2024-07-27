@@ -5,6 +5,16 @@ class Material;
 class Mesh;
 class StructuredBuffer;
 
+enum ParticleType {
+	EXPLOSION,
+	HEAL,
+	PARTICLE_LAUNCHER,
+	PARTICLE_PORTAL,
+	EXPLOSION4,
+	EXPLOSION5,
+	PARTICLE_TYPE_COUNT
+};
+
 struct ParticleInfo
 {
 	Vec3	worldPos;
@@ -24,21 +34,24 @@ struct ComputeSharedInfo
 class ParticleSystem : public Component
 {
 public:
-	ParticleSystem();
+	ParticleSystem(ParticleType type);
 	virtual ~ParticleSystem();
 
 public:
 	virtual void FinalUpdate();
 	void Render();
 
+	void SetArgs();
 public:
 	virtual void Load(const wstring& path) override { }
 	virtual void Save(const wstring& path) override { }
 
-private:
+	shared_ptr<Material> GetMaterial() { return m_material; }
+
+public:
 	shared_ptr<StructuredBuffer>	m_particleBuffer;
 	shared_ptr<StructuredBuffer>	m_computeSharedBuffer;
-	uint32							m_maxParticle = 1000;
+	uint32							m_maxParticle = 1;
 
 	shared_ptr<Material>		m_computeMaterial;
 	shared_ptr<Material>		m_material;
@@ -47,10 +60,22 @@ private:
 	float				m_createInterval = 0.005f;
 	float				m_accTime = 0.f;
 
-	float				m_minLifeTime = 0.5f;
-	float				m_maxLifeTime = 1.f;
-	float				m_minSpeed = 100;
-	float				m_maxSpeed = 50;
-	float				m_startScale = 10.f;
-	float				m_endScale = 5.f;
+	float				m_minLifeTime = 0.75f;
+	float				m_maxLifeTime = 0.75f;
+	float				m_minSpeed = 0;
+	float				m_maxSpeed = 0;
+	float				m_startScale = 70.f;
+	float				m_endScale = 70.f;
+
+	float				m_exposeTime = 0.f;
+	float				m_makeTime = 0.f;
+
+	int					m_row = 6;
+	int					m_column = 6;
+
+	bool				m_singleType = false;
+
+	ParticleType		m_particleType = EXPLOSION;
+
+	bool m_isSpawn = false;
 };

@@ -42,6 +42,8 @@ public:
 	void LoadEnemyPrefab(int modelNum, Vec3 Location, Vec3 Scale, float hp, shared_ptr<Scene> scene);
 	shared_ptr<GameObject> LoadBombPrefab(Vec3 Location);
 
+	void LoadCratePrefab(Vec3 pos, shared_ptr<Scene> scene);
+
 	shared_ptr<Texture> CreateTexture(const wstring& name, DXGI_FORMAT format, uint32 width, uint32 height,
 		const D3D12_HEAP_PROPERTIES& heapProperty, D3D12_HEAP_FLAGS heapFlags,
 		D3D12_RESOURCE_FLAGS resFlags = D3D12_RESOURCE_FLAG_NONE, Vec4 clearColor = Vec4(), uint32 arraysize = 1U);
