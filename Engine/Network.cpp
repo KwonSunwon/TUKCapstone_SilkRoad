@@ -67,6 +67,9 @@ void Network::Update()
 				GET_SINGLE(SceneManager)->StartNextStage();
 			}
 			break;
+		case PACKET_TYPE::PT_PARTICLE:
+			GET_SINGLE(SceneManager)->GetActiveScene()->SpawnParticle(reinterpret_pointer_cast<ParticlePacket>(packet)->m_pos, true);
+			break;
 		default:
 			break;
 		}
@@ -106,6 +109,9 @@ shared_ptr<Packet> Network::PacketProcess(int idx)
 		break;
 	case PACKET_TYPE::PT_GUEST_INIT:
 		packet = make_shared<GuestInitPacket>();
+		break;
+	case PACKET_TYPE::PT_PARTICLE:
+		packet = make_shared<ParticlePacket>();
 		break;
 	}
 
@@ -361,6 +367,7 @@ bool Host::IsThroughPacket(PACKET_TYPE type)
 	case PACKET_TYPE::PT_SKILL:
 	case PACKET_TYPE::PT_ITEM:
 	case PACKET_TYPE::PT_GUEST_INIT:
+	case PACKET_TYPE::PT_PARTICLE:
 		return true;
 	}
 	return false;

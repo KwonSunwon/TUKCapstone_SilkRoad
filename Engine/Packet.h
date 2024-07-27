@@ -46,6 +46,7 @@ enum class PACKET_TYPE : BYTE {
 	PT_STAGE_CHANGE,
 	PT_SKILL,
 	PT_ITEM,
+	PT_PARTICLE,
 	PT_MAX,
 };
 
@@ -56,7 +57,7 @@ public:
 	~Packet() {}
 
 public:
-	ushort m_size;
+	uint16 m_size;
 	PACKET_TYPE m_type;
 	uint32 m_targetId;
 };
@@ -161,6 +162,16 @@ public:
 
 public:
 	Vec3 m_pos;
+};
+
+class ParticlePacket : public Packet {
+public:
+	ParticlePacket();
+	~ParticlePacket() {}
+
+public:
+	Vec3 m_pos;
+	uint16 m_particleIndex;
 };
 
 #pragma pack(pop)

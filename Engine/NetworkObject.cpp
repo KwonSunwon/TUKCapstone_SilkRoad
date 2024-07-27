@@ -7,6 +7,7 @@
 #include "Enemy.h"
 #include "RigidBody.h"
 #include "Item.h"
+#include "ParticleSystem.h"
 
 NetworkObject::NetworkObject() : Component(COMPONENT_TYPE::NETWORK)
 {

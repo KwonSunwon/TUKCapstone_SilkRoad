@@ -180,3 +180,10 @@ GuestInitPacket::GuestInitPacket()
 	m_targetId = -1;
 	m_type = PACKET_TYPE::PT_GUEST_INIT;
 }
+
+ParticlePacket::ParticlePacket()
+{
+	m_size = sizeof(ParticlePacket);
+	m_targetId = -1;
+	m_type = PACKET_TYPE::PT_PARTICLE;
+}
