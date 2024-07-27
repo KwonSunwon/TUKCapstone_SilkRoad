@@ -751,36 +751,6 @@
             }
         },
         {
-            "name": "SM_Prop_Turret_Large_03 (2)",
-            "meshName": "SM_Prop_Turret_Large_03.fbx",
-            "position": {
-                "x": 2842.0,
-                "y": 23.0010986328125,
-                "z": -16353.0
-            },
-            "rotation": {
-                "x": 0.0,
-                "y": 327.3711242675781,
-                "z": 0.0
-            },
-            "scale": {
-                "x": 1.0,
-                "y": 1.0,
-                "z": 1.0
-            },
-            "objectType": 1,
-            "boxColliderCenter": {
-                "x": -0.000029981136322021484,
-                "y": 2.2300000190734865,
-                "z": -0.00006836652755737305
-            },
-            "boxColliderSize": {
-                "x": 4.03000020980835,
-                "y": 4.650000095367432,
-                "z": 3.684464693069458
-            }
-        },
-        {
             "name": "SM_Prop_Turret_Large_03 (5)",
             "meshName": "SM_Prop_Turret_Large_03.fbx",
             "position": {
@@ -817,36 +787,6 @@
                 "x": 5077.0,
                 "y": 23.0010986328125,
                 "z": -16735.0
-            },
-            "rotation": {
-                "x": 0.0,
-                "y": 327.3711242675781,
-                "z": 0.0
-            },
-            "scale": {
-                "x": 1.0,
-                "y": 1.0,
-                "z": 1.0
-            },
-            "objectType": 1,
-            "boxColliderCenter": {
-                "x": -0.000029981136322021484,
-                "y": 2.2300000190734865,
-                "z": -0.00006836652755737305
-            },
-            "boxColliderSize": {
-                "x": 4.03000020980835,
-                "y": 4.650000095367432,
-                "z": 3.684464693069458
-            }
-        },
-        {
-            "name": "SM_Prop_Turret_Large_03 (7)",
-            "meshName": "SM_Prop_Turret_Large_03.fbx",
-            "position": {
-                "x": 3665.000244140625,
-                "y": 23.0010986328125,
-                "z": -17639.0
             },
             "rotation": {
                 "x": 0.0,
@@ -991,36 +931,6 @@
             }
         },
         {
-            "name": "SM_Prop_Turret_Large_03 (10)",
-            "meshName": "SM_Prop_Turret_Large_03.fbx",
-            "position": {
-                "x": 560.0,
-                "y": 23.0010986328125,
-                "z": -19620.0
-            },
-            "rotation": {
-                "x": 0.0,
-                "y": 327.3711242675781,
-                "z": 0.0
-            },
-            "scale": {
-                "x": 1.0,
-                "y": 1.0,
-                "z": 1.0
-            },
-            "objectType": 1,
-            "boxColliderCenter": {
-                "x": -0.000029981136322021484,
-                "y": 2.2300000190734865,
-                "z": -0.00006836652755737305
-            },
-            "boxColliderSize": {
-                "x": 4.03000020980835,
-                "y": 4.650000095367432,
-                "z": 3.684464693069458
-            }
-        },
-        {
             "name": "SM_Prop_Turret_Large_03 (11)",
             "meshName": "SM_Prop_Turret_Large_03.fbx",
             "position": {
@@ -1057,36 +967,6 @@
                 "x": 1150.0,
                 "y": 23.0010986328125,
                 "z": -17430.0
-            },
-            "rotation": {
-                "x": 0.0,
-                "y": 327.3711242675781,
-                "z": 0.0
-            },
-            "scale": {
-                "x": 1.0,
-                "y": 1.0,
-                "z": 1.0
-            },
-            "objectType": 1,
-            "boxColliderCenter": {
-                "x": -0.000029981136322021484,
-                "y": 2.2300000190734865,
-                "z": -0.00006836652755737305
-            },
-            "boxColliderSize": {
-                "x": 4.03000020980835,
-                "y": 4.650000095367432,
-                "z": 3.684464693069458
-            }
-        },
-        {
-            "name": "SM_Prop_Turret_Large_03 (13)",
-            "meshName": "SM_Prop_Turret_Large_03.fbx",
-            "position": {
-                "x": -260.0,
-                "y": 23.0010986328125,
-                "z": -18330.0
             },
             "rotation": {
                 "x": 0.0,
@@ -1384,9 +1264,9 @@
             "name": "SM_Bld_Scav_Refinery_Silo_01 (1)",
             "meshName": "SM_Bld_Scav_Refinery_Silo_01.fbx",
             "position": {
-                "x": -1370.0,
-                "y": 163.0906982421875,
-                "z": 3160.0
+                "x": -2672.0,
+                "y": -17.0,
+                "z": 5748.0
             },
             "rotation": {
                 "x": 0.0,
@@ -1417,6 +1297,2166 @@
                 "x": -268.0,
                 "y": -12.593269348144532,
                 "z": 2260.000732421875
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Plant_Cactus_02 (6)",
+            "meshName": "SM_Env_Plant_Cactus_02.fbx",
+            "position": {
+                "x": 6851.0,
+                "y": -10.0,
+                "z": -2200.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Grass_02 (11)",
+            "meshName": "SM_Env_Grass_02.fbx",
+            "position": {
+                "x": 6640.0,
+                "y": 5.801963806152344,
+                "z": -1450.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Grass_04 (43)",
+            "meshName": "SM_Env_Grass_04.fbx",
+            "position": {
+                "x": 6900.0,
+                "y": 0.0,
+                "z": -820.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 316.2567138671875,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Plant_Small_02 (29)",
+            "meshName": "SM_Env_Plant_Small_02.fbx",
+            "position": {
+                "x": 6710.0,
+                "y": 10.0,
+                "z": -1080.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 235.105224609375,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Plant_Small_02 (30)",
+            "meshName": "SM_Env_Plant_Small_02.fbx",
+            "position": {
+                "x": 6660.0,
+                "y": 10.0,
+                "z": -360.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 254.8456573486328,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Grass_03 (20)",
+            "meshName": "SM_Env_Grass_03.fbx",
+            "position": {
+                "x": 6910.0,
+                "y": 10.0,
+                "z": -1593.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Plant_Cactus_02 (2)",
+            "meshName": "SM_Env_Plant_Cactus_02.fbx",
+            "position": {
+                "x": -8076.99951171875,
+                "y": -10.0,
+                "z": 5998.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Grass_02 (4)",
+            "meshName": "SM_Env_Grass_02.fbx",
+            "position": {
+                "x": -6617.0,
+                "y": 10.0,
+                "z": 5558.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Grass_04 (38)",
+            "meshName": "SM_Env_Grass_04.fbx",
+            "position": {
+                "x": -6357.0,
+                "y": 0.0,
+                "z": 6198.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 316.2567138671875,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Plant_Small_01 (4)",
+            "meshName": "SM_Env_Plant_Small_01.fbx",
+            "position": {
+                "x": -7647.0,
+                "y": 10.0,
+                "z": 5878.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Plant_Small_02 (14)",
+            "meshName": "SM_Env_Plant_Small_02.fbx",
+            "position": {
+                "x": -6547.0,
+                "y": 6.326866149902344,
+                "z": 5928.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 235.105224609375,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Plant_Cactus_02 (3)",
+            "meshName": "SM_Env_Plant_Cactus_02.fbx",
+            "position": {
+                "x": -12498.0,
+                "y": -19.0,
+                "z": -12907.0009765625
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Grass_02 (5)",
+            "meshName": "SM_Env_Grass_02.fbx",
+            "position": {
+                "x": -11038.0,
+                "y": 1.5,
+                "z": -13347.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Grass_02 (10)",
+            "meshName": "SM_Env_Grass_02.fbx",
+            "position": {
+                "x": -7374.0,
+                "y": 1.5,
+                "z": -19550.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Plant_Small_02 (24)",
+            "meshName": "SM_Env_Plant_Small_02.fbx",
+            "position": {
+                "x": -7304.0,
+                "y": 6.0,
+                "z": -19180.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 235.105224609375,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Grass_05 (14)",
+            "meshName": "SM_Env_Grass_05.fbx",
+            "position": {
+                "x": -8634.0,
+                "y": 7.0,
+                "z": -19800.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 35.22966003417969,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Grass_03 (15)",
+            "meshName": "SM_Env_Grass_03.fbx",
+            "position": {
+                "x": -7914.0,
+                "y": 4.400000095367432,
+                "z": -19190.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Grass_04 (39)",
+            "meshName": "SM_Env_Grass_04.fbx",
+            "position": {
+                "x": -10778.0,
+                "y": -1.600000023841858,
+                "z": -12707.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 316.2567138671875,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Plant_Small_01 (5)",
+            "meshName": "SM_Env_Plant_Small_01.fbx",
+            "position": {
+                "x": -12068.0,
+                "y": 10.0,
+                "z": -13027.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Plant_Small_02 (16)",
+            "meshName": "SM_Env_Plant_Small_02.fbx",
+            "position": {
+                "x": -10968.0,
+                "y": 6.0,
+                "z": -12977.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 235.105224609375,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Plant_Small_02 (17)",
+            "meshName": "SM_Env_Plant_Small_02.fbx",
+            "position": {
+                "x": -11018.0,
+                "y": 10.0,
+                "z": -12247.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 254.8456573486328,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Grass_05 (7)",
+            "meshName": "SM_Env_Grass_05.fbx",
+            "position": {
+                "x": -12298.0,
+                "y": 7.0,
+                "z": -13597.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 35.22966003417969,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Grass_03 (8)",
+            "meshName": "SM_Env_Grass_03.fbx",
+            "position": {
+                "x": -11578.0,
+                "y": 4.400000095367432,
+                "z": -12987.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Plant_Cactus_02 (4)",
+            "meshName": "SM_Env_Plant_Cactus_02.fbx",
+            "position": {
+                "x": -16060.0009765625,
+                "y": -19.0,
+                "z": -19076.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Grass_02 (6)",
+            "meshName": "SM_Env_Grass_02.fbx",
+            "position": {
+                "x": -14600.0,
+                "y": 1.5,
+                "z": -19516.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Grass_04 (40)",
+            "meshName": "SM_Env_Grass_04.fbx",
+            "position": {
+                "x": -14339.9990234375,
+                "y": -1.600000023841858,
+                "z": -18876.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 316.2567138671875,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Plant_Small_01 (6)",
+            "meshName": "SM_Env_Plant_Small_01.fbx",
+            "position": {
+                "x": -15630.0,
+                "y": 10.0,
+                "z": -19196.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Plant_Small_02 (18)",
+            "meshName": "SM_Env_Plant_Small_02.fbx",
+            "position": {
+                "x": -14530.0,
+                "y": 6.0,
+                "z": -19146.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 235.105224609375,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Plant_Small_02 (19)",
+            "meshName": "SM_Env_Plant_Small_02.fbx",
+            "position": {
+                "x": -14580.0,
+                "y": 10.0,
+                "z": -18416.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 254.8456573486328,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Grass_05 (8)",
+            "meshName": "SM_Env_Grass_05.fbx",
+            "position": {
+                "x": -15860.0009765625,
+                "y": 7.0,
+                "z": -19766.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 35.22966003417969,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Grass_03 (9)",
+            "meshName": "SM_Env_Grass_03.fbx",
+            "position": {
+                "x": -15139.9990234375,
+                "y": 4.400000095367432,
+                "z": -19156.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Grass_02 (7)",
+            "meshName": "SM_Env_Grass_02.fbx",
+            "position": {
+                "x": -14019.0,
+                "y": 1.0,
+                "z": -16845.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Plant_Cactus_02 (5)",
+            "meshName": "SM_Env_Plant_Cactus_02.fbx",
+            "position": {
+                "x": -2800.0,
+                "y": -19.0,
+                "z": -17160.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Grass_02 (8)",
+            "meshName": "SM_Env_Grass_02.fbx",
+            "position": {
+                "x": -1340.0,
+                "y": 1.5,
+                "z": -17600.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Grass_04 (42)",
+            "meshName": "SM_Env_Grass_04.fbx",
+            "position": {
+                "x": -1080.0,
+                "y": -1.600000023841858,
+                "z": -16960.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 316.2567138671875,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Plant_Small_01 (8)",
+            "meshName": "SM_Env_Plant_Small_01.fbx",
+            "position": {
+                "x": -2370.0,
+                "y": 10.0,
+                "z": -17280.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Grass_02 (9)",
+            "meshName": "SM_Env_Grass_02.fbx",
+            "position": {
+                "x": 1425.0,
+                "y": 1.5,
+                "z": -15172.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Plant_Small_01 (9)",
+            "meshName": "SM_Env_Plant_Small_01.fbx",
+            "position": {
+                "x": 395.0,
+                "y": 10.0,
+                "z": -14852.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Grass_05 (12)",
+            "meshName": "SM_Env_Grass_05.fbx",
+            "position": {
+                "x": 2060.0,
+                "y": 83.0,
+                "z": -17185.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 35.22966003417969,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Grass_05 (13)",
+            "meshName": "SM_Env_Grass_05.fbx",
+            "position": {
+                "x": 5355.0,
+                "y": 83.0,
+                "z": -17666.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 35.22966003417969,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Grass_03 (12)",
+            "meshName": "SM_Env_Grass_03.fbx",
+            "position": {
+                "x": 885.0000610351563,
+                "y": 4.400000095367432,
+                "z": -14812.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Plant_Small_02 (22)",
+            "meshName": "SM_Env_Plant_Small_02.fbx",
+            "position": {
+                "x": -1270.0,
+                "y": 6.0,
+                "z": -17230.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 235.105224609375,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Plant_Small_02 (23)",
+            "meshName": "SM_Env_Plant_Small_02.fbx",
+            "position": {
+                "x": -1320.0,
+                "y": 10.0,
+                "z": -16500.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 254.8456573486328,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Grass_05 (10)",
+            "meshName": "SM_Env_Grass_05.fbx",
+            "position": {
+                "x": -2600.0,
+                "y": 7.0,
+                "z": -17850.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 35.22966003417969,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Grass_05 (11)",
+            "meshName": "SM_Env_Grass_05.fbx",
+            "position": {
+                "x": -705.0,
+                "y": 83.0,
+                "z": -19613.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 35.22966003417969,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Grass_03 (11)",
+            "meshName": "SM_Env_Grass_03.fbx",
+            "position": {
+                "x": -1879.9998779296875,
+                "y": 4.400000095367432,
+                "z": -17240.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Grass_02 (12)",
+            "meshName": "SM_Env_Grass_02.fbx",
+            "position": {
+                "x": -4796.0,
+                "y": 1.5,
+                "z": -9006.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Grass_02 (13)",
+            "meshName": "SM_Env_Grass_02.fbx",
+            "position": {
+                "x": -7640.0,
+                "y": 0.0,
+                "z": 1070.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Grass_04 (45)",
+            "meshName": "SM_Env_Grass_04.fbx",
+            "position": {
+                "x": -7380.00048828125,
+                "y": 0.0,
+                "z": 1710.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 316.2567138671875,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Plant_Small_02 (33)",
+            "meshName": "SM_Env_Plant_Small_02.fbx",
+            "position": {
+                "x": -7569.99951171875,
+                "y": 10.0,
+                "z": 1440.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 235.105224609375,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Plant_Small_02 (34)",
+            "meshName": "SM_Env_Plant_Small_02.fbx",
+            "position": {
+                "x": -7619.99951171875,
+                "y": 10.0,
+                "z": 2170.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 254.8456573486328,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Grass_03 (22)",
+            "meshName": "SM_Env_Grass_03.fbx",
+            "position": {
+                "x": -8180.00048828125,
+                "y": 4.400000095367432,
+                "z": 1430.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Grass_02 (14)",
+            "meshName": "SM_Env_Grass_02.fbx",
+            "position": {
+                "x": -10286.0,
+                "y": 1.5,
+                "z": -3856.000244140625
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Grass_04 (46)",
+            "meshName": "SM_Env_Grass_04.fbx",
+            "position": {
+                "x": -10026.0,
+                "y": -1.600000023841858,
+                "z": -3216.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 316.2567138671875,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Plant_Small_02 (35)",
+            "meshName": "SM_Env_Plant_Small_02.fbx",
+            "position": {
+                "x": -10216.0,
+                "y": 6.0,
+                "z": -3486.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 235.105224609375,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Plant_Small_02 (36)",
+            "meshName": "SM_Env_Plant_Small_02.fbx",
+            "position": {
+                "x": -10266.0,
+                "y": 10.0,
+                "z": -2756.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 254.8456573486328,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Grass_03 (23)",
+            "meshName": "SM_Env_Grass_03.fbx",
+            "position": {
+                "x": -10826.0,
+                "y": 4.400000095367432,
+                "z": -3496.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Grass_04 (44)",
+            "meshName": "SM_Env_Grass_04.fbx",
+            "position": {
+                "x": -4536.0,
+                "y": 0.0,
+                "z": -8366.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 316.2567138671875,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Plant_Small_02 (31)",
+            "meshName": "SM_Env_Plant_Small_02.fbx",
+            "position": {
+                "x": -4726.0,
+                "y": 10.0,
+                "z": -8636.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 235.105224609375,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Plant_Small_02 (32)",
+            "meshName": "SM_Env_Plant_Small_02.fbx",
+            "position": {
+                "x": -4776.0,
+                "y": 10.0,
+                "z": -7906.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 254.8456573486328,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Grass_03 (21)",
+            "meshName": "SM_Env_Grass_03.fbx",
+            "position": {
+                "x": -5336.0,
+                "y": 0.0,
+                "z": -8646.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Grass_03 (13)",
+            "meshName": "SM_Env_Grass_03.fbx",
+            "position": {
+                "x": 3288.0,
+                "y": 71.0,
+                "z": -17274.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Grass_03 (14)",
+            "meshName": "SM_Env_Grass_03.fbx",
+            "position": {
+                "x": 5702.0,
+                "y": 71.0,
+                "z": -12941.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Grass_04 (41)",
+            "meshName": "SM_Env_Grass_04.fbx",
+            "position": {
+                "x": -13141.0,
+                "y": -1.600000023841858,
+                "z": -16296.0009765625
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 316.2567138671875,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Plant_Small_01 (7)",
+            "meshName": "SM_Env_Plant_Small_01.fbx",
+            "position": {
+                "x": -14360.0009765625,
+                "y": 10.0,
+                "z": -17064.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Plant_Small_02 (20)",
+            "meshName": "SM_Env_Plant_Small_02.fbx",
+            "position": {
+                "x": -13331.0,
+                "y": 6.0,
+                "z": -16566.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 235.105224609375,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Plant_Small_02 (21)",
+            "meshName": "SM_Env_Plant_Small_02.fbx",
+            "position": {
+                "x": -13381.0,
+                "y": 10.0,
+                "z": -15836.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 254.8456573486328,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Grass_05 (9)",
+            "meshName": "SM_Env_Grass_05.fbx",
+            "position": {
+                "x": -14372.0,
+                "y": 7.0,
+                "z": -17757.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 35.22966003417969,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Grass_03 (10)",
+            "meshName": "SM_Env_Grass_03.fbx",
+            "position": {
+                "x": -15214.0,
+                "y": 4.0,
+                "z": -17542.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Plant_Small_02 (15)",
+            "meshName": "SM_Env_Plant_Small_02.fbx",
+            "position": {
+                "x": -6597.0,
+                "y": 10.0,
+                "z": 6658.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 254.8456573486328,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Grass_05 (6)",
+            "meshName": "SM_Env_Grass_05.fbx",
+            "position": {
+                "x": -7876.99951171875,
+                "y": 10.0,
+                "z": 5308.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 35.22966003417969,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Grass_03 (7)",
+            "meshName": "SM_Env_Grass_03.fbx",
+            "position": {
+                "x": -7157.0,
+                "y": 10.0,
+                "z": 5918.0
             },
             "rotation": {
                 "x": 0.0,
@@ -2341,6 +4381,486 @@
             }
         },
         {
+            "name": "SM_Env_Grass_03 (16)",
+            "meshName": "SM_Env_Grass_03.fbx",
+            "position": {
+                "x": 514.0,
+                "y": 5.022430419921875,
+                "z": -7116.00048828125
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Grass_03 (17)",
+            "meshName": "SM_Env_Grass_03.fbx",
+            "position": {
+                "x": 5757.0,
+                "y": 5.022430419921875,
+                "z": -6741.00048828125
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Grass_05 (16)",
+            "meshName": "SM_Env_Grass_05.fbx",
+            "position": {
+                "x": 5037.0,
+                "y": 8.0,
+                "z": -7344.99951171875
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 35.22966003417969,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Grass_03 (18)",
+            "meshName": "SM_Env_Grass_03.fbx",
+            "position": {
+                "x": 5590.0,
+                "y": 5.022430419921875,
+                "z": -8249.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Grass_05 (17)",
+            "meshName": "SM_Env_Grass_05.fbx",
+            "position": {
+                "x": 4870.0,
+                "y": 8.0,
+                "z": -8853.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 35.22966003417969,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Plant_Small_02 (27)",
+            "meshName": "SM_Env_Plant_Small_02.fbx",
+            "position": {
+                "x": 6196.0,
+                "y": 6.0,
+                "z": -8235.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 235.105224609375,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Grass_03 (19)",
+            "meshName": "SM_Env_Grass_03.fbx",
+            "position": {
+                "x": 10845.0,
+                "y": 5.022430419921875,
+                "z": -322.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Grass_05 (18)",
+            "meshName": "SM_Env_Grass_05.fbx",
+            "position": {
+                "x": 10125.0,
+                "y": 8.0,
+                "z": -922.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 35.22966003417969,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Plant_Small_02 (28)",
+            "meshName": "SM_Env_Plant_Small_02.fbx",
+            "position": {
+                "x": 11455.0,
+                "y": 6.0,
+                "z": -312.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 235.105224609375,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Plant_Small_01 (13)",
+            "meshName": "SM_Env_Plant_Small_01.fbx",
+            "position": {
+                "x": 10355.0,
+                "y": 7.0,
+                "z": -362.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Plant_Small_01 (12)",
+            "meshName": "SM_Env_Plant_Small_01.fbx",
+            "position": {
+                "x": 5095.0,
+                "y": 7.0,
+                "z": -8287.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Plant_Small_02 (26)",
+            "meshName": "SM_Env_Plant_Small_02.fbx",
+            "position": {
+                "x": 6363.0,
+                "y": 6.0,
+                "z": -6726.99951171875
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 235.105224609375,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Plant_Small_01 (11)",
+            "meshName": "SM_Env_Plant_Small_01.fbx",
+            "position": {
+                "x": 5262.0,
+                "y": 7.0,
+                "z": -6779.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Grass_05 (15)",
+            "meshName": "SM_Env_Grass_05.fbx",
+            "position": {
+                "x": -206.0,
+                "y": 8.0,
+                "z": -7719.99951171875
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 35.22966003417969,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Plant_Small_02 (25)",
+            "meshName": "SM_Env_Plant_Small_02.fbx",
+            "position": {
+                "x": 1120.0,
+                "y": 6.0,
+                "z": -7101.99951171875
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 235.105224609375,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Plant_Small_01 (10)",
+            "meshName": "SM_Env_Plant_Small_01.fbx",
+            "position": {
+                "x": 19.0,
+                "y": 7.0,
+                "z": -7154.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
             "name": "SM_Env_Plant_Small_01 (3)",
             "meshName": "SM_Env_Plant_Small_01.fbx",
             "position": {
@@ -2465,7 +4985,7 @@
             "meshName": "SM_Env_Plant_Spikey_02.fbx",
             "position": {
                 "x": 1700.0,
-                "y": -84.0,
+                "y": -26.0,
                 "z": 10377.00390625
             },
             "rotation": {
@@ -2495,7 +5015,7 @@
             "meshName": "SM_Env_Plant_Spikey_02.fbx",
             "position": {
                 "x": 14300.0,
-                "y": -21.599578857421876,
+                "y": -21.0,
                 "z": 8438.0
             },
             "rotation": {
@@ -2617,6 +5137,66 @@
                 "x": 8446.2001953125,
                 "y": 7.7167510986328129,
                 "z": 4555.7001953125
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 35.22966003417969,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Grass_05 (19)",
+            "meshName": "SM_Env_Grass_05.fbx",
+            "position": {
+                "x": 7436.0,
+                "y": 7.7167510986328129,
+                "z": 2452.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 35.22966003417969,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 2,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "boxColliderSize": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Env_Grass_05 (20)",
+            "meshName": "SM_Env_Grass_05.fbx",
+            "position": {
+                "x": 9835.0,
+                "y": 7.7167510986328129,
+                "z": 1406.0
             },
             "rotation": {
                 "x": 0.0,
@@ -2908,6 +5488,216 @@
                 "x": 0.0,
                 "y": 0.0,
                 "z": 0.0
+            }
+        },
+        {
+            "name": "SM_Bld_Corp_Comms_Tower_01 (3)",
+            "meshName": "SM_Bld_Corp_Comms_Tower_01.fbx",
+            "position": {
+                "x": 6035.0,
+                "y": -23.9990234375,
+                "z": -5422.00146484375
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 1,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 19.052738189697267,
+                "z": -0.000010728836059570313
+            },
+            "boxColliderSize": {
+                "x": 9.848905563354493,
+                "y": 38.105491638183597,
+                "z": 9.848910331726075
+            }
+        },
+        {
+            "name": "SM_Bld_Corp_Comms_Tower_01 (4)",
+            "meshName": "SM_Bld_Corp_Comms_Tower_01.fbx",
+            "position": {
+                "x": -18380.0,
+                "y": 1.0005950927734376,
+                "z": 3140.00048828125
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 1,
+            "boxColliderCenter": {
+                "x": 0.0,
+                "y": 19.052738189697267,
+                "z": -0.000010728836059570313
+            },
+            "boxColliderSize": {
+                "x": 9.848905563354493,
+                "y": 38.105491638183597,
+                "z": 9.848910331726075
+            }
+        },
+        {
+            "name": "SM_Prop_Container_01 (8)",
+            "meshName": "SM_Prop_Container_01.fbx",
+            "position": {
+                "x": 1450.0,
+                "y": -14.9993896484375,
+                "z": -8550.0009765625
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 89.99983978271485,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 1,
+            "boxColliderCenter": {
+                "x": 0.0000324249267578125,
+                "y": 1.4299266338348389,
+                "z": 0.029950030148029329
+            },
+            "boxColliderSize": {
+                "x": 3.000619411468506,
+                "y": 2.8598837852478029,
+                "z": 6.288733005523682
+            }
+        },
+        {
+            "name": "SM_Prop_Container_01 (11)",
+            "meshName": "SM_Prop_Container_01.fbx",
+            "position": {
+                "x": -904.0,
+                "y": -19.99950408935547,
+                "z": -1471.000732421875
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 160.89334106445313,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 1,
+            "boxColliderCenter": {
+                "x": 0.0000324249267578125,
+                "y": 1.4299266338348389,
+                "z": 0.029950030148029329
+            },
+            "boxColliderSize": {
+                "x": 3.000619411468506,
+                "y": 2.8598837852478029,
+                "z": 6.288733005523682
+            }
+        },
+        {
+            "name": "SM_Prop_Container_01 (12)",
+            "meshName": "SM_Prop_Container_01.fbx",
+            "position": {
+                "x": -9913.0,
+                "y": -42.999267578125,
+                "z": 2605.000732421875
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 123.86367797851563,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 1,
+            "boxColliderCenter": {
+                "x": 0.0000324249267578125,
+                "y": 1.4299266338348389,
+                "z": 0.029950030148029329
+            },
+            "boxColliderSize": {
+                "x": 3.000619411468506,
+                "y": 2.8598837852478029,
+                "z": 6.288733005523682
+            }
+        },
+        {
+            "name": "SM_Prop_Container_01 (9)",
+            "meshName": "SM_Prop_Container_01.fbx",
+            "position": {
+                "x": 1450.0,
+                "y": -15.000152587890625,
+                "z": -8234.001953125
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 89.99983978271485,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 1,
+            "boxColliderCenter": {
+                "x": 0.0000324249267578125,
+                "y": 1.4299266338348389,
+                "z": 0.029950030148029329
+            },
+            "boxColliderSize": {
+                "x": 3.000619411468506,
+                "y": 2.8598837852478029,
+                "z": 6.288733005523682
+            }
+        },
+        {
+            "name": "SM_Prop_Container_01 (10)",
+            "meshName": "SM_Prop_Container_01.fbx",
+            "position": {
+                "x": 1464.0,
+                "y": 267.0013427734375,
+                "z": -8375.0009765625
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 42.35569763183594,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "objectType": 1,
+            "boxColliderCenter": {
+                "x": 0.0000324249267578125,
+                "y": 1.4299266338348389,
+                "z": 0.029950030148029329
+            },
+            "boxColliderSize": {
+                "x": 3.000619411468506,
+                "y": 2.8598837852478029,
+                "z": 6.288733005523682
             }
         }
     ]
