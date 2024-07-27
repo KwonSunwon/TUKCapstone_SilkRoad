@@ -47,9 +47,9 @@ void NetworkPlayer::ProcessPacket(shared_ptr<PlayerPacket> packet)
 
 void NetworkPlayer::ChangeClass(int classIndex)
 {
-	m_classIndex = classIndex;
+	m_classIdx = classIndex;
 	shared_ptr<MeshData> meshData;
-	switch(m_classIndex) {
+	switch(m_classIdx) {
 	case EnumInteract::CHARACTER_CHANGER1:
 		meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Character_Dealer.fbx");
 		break;
@@ -67,7 +67,6 @@ void NetworkPlayer::ChangeClass(int classIndex)
 		break;
 	}
 
-	m_classIdx = id;
 	vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
 	GetMeshRenderer()->SetMesh(gameObjects[0]->GetMeshRenderer()->GetMesh());
 	GetGameObject()->AddComponent(gameObjects[0]->GetAnimator());

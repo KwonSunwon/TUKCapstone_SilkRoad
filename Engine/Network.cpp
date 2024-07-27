@@ -234,7 +234,7 @@ void Host::WaitLoop()
 		initPacket.m_networkId = guest.id;
 		initPacket.m_classIndex = GET_SINGLE(UpgradeManager)->GetClass();
 		if(playerCount == 2)
-			initPacket.m_classIndexGuest = GET_SINGLE(SceneManager)->GetActiveScene()->m_networkPlayers[0]->GetClassIndex();
+			initPacket.m_classIndexGuest = GET_SINGLE(SceneManager)->GetActiveScene()->m_networkPlayers[0]->GetClassIdx();
 		else
 			initPacket.m_classIndexGuest = -1;
 		send(guest.socket, (char*)&initPacket, sizeof(InitPacket), 0);
