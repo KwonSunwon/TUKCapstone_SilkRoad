@@ -447,9 +447,11 @@ void Scene::PhysicsStep(int iterations)
 
 void Scene::SpawnParticle(Vec3 pos, bool network)
 {
+	if (m_particles.empty())
+		return;
+
 	m_particles[m_particleCycle]->GetTransform()->SetLocalPosition(pos);
-	m_particles[m_particleCycle]->GetParticleSystem()->m_accTime = 0.f;
-	m_particles[m_particleCycle]->GetParticleSystem()->m_isSpawn = true;
+	m_particles[m_particleCycle]->GetParticleSystem()->SetArgs();
 	m_particleCycle = (m_particleCycle + 1) % m_particles.size();
 
 	if(!network) {

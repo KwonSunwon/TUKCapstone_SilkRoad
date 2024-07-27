@@ -17,7 +17,7 @@ ParticleSystem::ParticleSystem() : Component(COMPONENT_TYPE::PARTICLE_SYSTEM)
 	m_mesh = GET_SINGLE(Resources)->LoadPointMesh();
 	m_material = GET_SINGLE(Resources)->Get<Material>(L"Particle");
 	shared_ptr<Texture> tex = GET_SINGLE(Resources)->Load<Texture>(
-		L"Bubbles", L"..\\Resources\\Texture\\Particle\\test.png");
+		L"Bubbles", L"..\\Resources\\Texture\\Particle\\Explosion.png");
 
 	m_material->SetTexture(0, tex);
 
@@ -41,9 +41,15 @@ void ParticleSystem::FinalUpdate()
 	}
 
 	int32 add = 0;
-	if (m_createInterval < m_accTime)
+
+	if (m_singleType)
 	{
-		//m_accTime = m_accTime - m_createInterval;
+		add = 1;
+	}
+
+	else if (m_createInterval < m_accTime)
+	{
+		m_accTime = m_accTime - m_createInterval;
 		add = 1;
 	}
 
@@ -70,6 +76,42 @@ void ParticleSystem::Render()
 	m_material->SetFloat(0, m_startScale);
 	m_material->SetFloat(1, m_endScale);
 	m_material->PushGraphicsData();
+	m_material->SetInt(0, m_row);
+	m_material->SetInt(1, m_column);
 
 	m_mesh->Render(m_maxParticle);
+}
+
+void ParticleSystem::SetArgs()
+{
+	switch (m_particleType)
+	{
+	case EXPLOSION:
+	{
+		m_singleType = true;
+		m_maxParticle = 1;
+		shared_ptr<Texture> tex = GET_SINGLE(Resources)->Load<Texture>(
+			L"Explosion", L"..\\Resources\\Texture\\Particle\\Explosion.png");
+		m_material->SetTexture(0, tex);
+		m_startScale = 70.f;
+		m_endScale = 70.f;
+		m_minSpeed = 0.f;
+		m_maxSpeed = 0.f;
+		m_minLifeTime = 0.75f;
+		m_maxLifeTime = 0.75f;
+		m_column = 5;
+		m_row = 5;
+		break;
+	}
+
+	default:
+		break;
+	}
+
+
+
+	m_accTime = 0.f;
+	m_isSpawn = true;
+
+
 }

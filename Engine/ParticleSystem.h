@@ -5,6 +5,10 @@ class Material;
 class Mesh;
 class StructuredBuffer;
 
+enum ParticleType {
+	EXPLOSION,
+};
+
 struct ParticleInfo
 {
 	Vec3	worldPos;
@@ -31,6 +35,7 @@ public:
 	virtual void FinalUpdate();
 	void Render();
 
+	void SetArgs();
 public:
 	virtual void Load(const wstring& path) override { }
 	virtual void Save(const wstring& path) override { }
@@ -55,6 +60,13 @@ public:
 	float				m_maxSpeed = 0;
 	float				m_startScale = 70.f;
 	float				m_endScale = 70.f;
+
+	int					m_row = 5;
+	int					m_column = 5;
+
+	bool				m_singleType = false;
+
+	ParticleType		m_particleType = EXPLOSION;
 
 	bool m_isSpawn = false;
 };
