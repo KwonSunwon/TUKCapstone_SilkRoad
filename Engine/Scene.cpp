@@ -28,6 +28,7 @@
 #include "TextObject.h"
 
 #include "AstarGrid.h"
+#include "DifficultyManager.h"
 
 Scene::Scene()
 {
@@ -52,7 +53,7 @@ void Scene::Start()
 
 void Scene::Update()
 {
-
+	GET_SINGLE(DifficultyManager)->Update();
 	for(const shared_ptr<GameObject>& gameObject : m_gameObjects)
 	{
 		gameObject->Update();

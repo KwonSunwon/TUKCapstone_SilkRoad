@@ -157,6 +157,7 @@ void Player::LateUpdate()
 		playerPacket->m_rotation = transform->GetLocalRotation();
 		playerPacket->m_animationIndex = GetAnimator()->GetCurrentClipIndex();
 		playerPacket->m_hp = m_hp;
+		playerPacket->m_maxHp = m_maxHP;
 		SEND(playerPacket)
 	}
 }

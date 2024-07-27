@@ -12,6 +12,7 @@
 #include "Network.h"
 #include "SoundManager.h"
 #include "UpgradeManager.h"
+#include "DifficultyManager.h"
 
 void Engine::Init(const WindowInfo& info)
 {
@@ -45,6 +46,7 @@ void Engine::Init(const WindowInfo& info)
 	GET_SINGLE(Resources)->Init();
 	GET_SINGLE(SoundManager)->Init();
 	GET_SINGLE(UpgradeManager)->Init();
+	GET_SINGLE(DifficultyManager)->Init();
 
 	// 서버 생성
 	GET_SINGLE(NetworkManager)->Initialize();

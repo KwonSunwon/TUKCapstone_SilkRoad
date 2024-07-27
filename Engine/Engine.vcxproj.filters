@@ -328,6 +328,9 @@
     <ClCompile Include="TestController.cpp">
       <Filter>Object\Player</Filter>
     </ClCompile>
+    <ClCompile Include="DifficultyManager.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -591,6 +594,9 @@
     </ClInclude>
     <ClInclude Include="TestController.h">
       <Filter>Object\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="DifficultyManager.h">
+      <Filter>Manager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

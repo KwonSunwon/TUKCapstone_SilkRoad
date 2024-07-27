@@ -14,6 +14,9 @@
 #include "SceneManager.h"
 #include "Player.h"
 #include "Timer.h"
+#include "RigidBody.h"
+#include "NetworkPlayer.h"
+#include "DifficultyManager.h"
 
 void UIObject::OnMouseEvent(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) { }
 void UIObject::OnMouseEvent(HWND hWnd) { }
@@ -344,10 +347,151 @@ void PlayerSkillCoolTimeUI::Update()
 
 void MiniMapUI::Update()
 {
+	for (int i = 0; i < m_miniMapIcons.size(); ++i)
+		m_miniMapIcons[i]->SetToggle(false);
+
+	vector<shared_ptr<GameObject>>gameObjects = GET_SINGLE(SceneManager)->GetActiveScene()->GetCollidableGameObjects();
+	shared_ptr<Player> player = GET_SINGLE(SceneManager)->GetActiveScene()->GetMainPlayerScript();
+	
+	int iconIdx = 0;
+	for (auto& go : gameObjects)
+	{
+		if (iconIdx >= m_miniMapIcons.size())
+			break;
+
+		if (go->GetMonobehaviour("Enemy"))
+		{
+			if (go->GetRigidBody()->GetStatic())
+				continue;
+			auto enemypos = go->GetTransform()->GetLocalPosition();
+			auto playerpos = player->GetTransform()->GetLocalPosition();
+			float dist = sqrt(pow(enemypos.x - playerpos.x, 2) + pow(enemypos.z - playerpos.z, 2));
+			if (dist > 9700.f)
+				continue;
+
+			m_miniMapIcons[iconIdx]->SetToggle(true);
+			m_miniMapIcons[iconIdx]->SetPosition(Vec2( ((enemypos.x - playerpos.x) / 100) - 100,
+				((enemypos.z - playerpos.z) / 100) - 100 ));
+			++iconIdx;
+		}
+	}
+
+	UIObject::Update();
+}
+
+void MiniMapPlayerIcon::Update()
+{
 	auto player = GET_SINGLE(SceneManager)->GetActiveScene()->GetMainPlayerScript();
 	auto playerRot = player->GetTransform()->GetLocalRotation();
 
-	GetTransform()->SetLocalRotation(Vec3(0, 0, playerRot.y));
+	GetTransform()->SetLocalRotation(Vec3(0, 0, -playerRot.y));
 
+	UIObject::Update();
+}
+
+void NetworkPlayerHPBarBase::Update()
+{
+	auto networkPlayers = GET_SINGLE(SceneManager)->GetActiveScene()->GetNetworkPlayers();
+
+	SetToggle(false);
+
+	if (m_networkPlayerIndex >= networkPlayers.size())
+	{
+		return;
+	}
+	if (networkPlayers[m_networkPlayerIndex] == nullptr)
+	{
+		return;
+	}
+	if (!networkPlayers[m_networkPlayerIndex]->IsActivated())
+	{
+		return;
+	}
+
+	SetToggle(true);
+	UIObject::Update();
+
+
+}
+
+void NetworkPlayerHPBar::Update()
+{
+	auto networkPlayers = GET_SINGLE(SceneManager)->GetActiveScene()->GetNetworkPlayers();
+
+	SetToggle(false);
+
+	if (m_networkPlayerIndex >= networkPlayers.size())
+	{
+		return;
+	}
+	if (networkPlayers[m_networkPlayerIndex] == nullptr)
+	{
+		return;
+	}
+	if (!networkPlayers[m_networkPlayerIndex]->IsActivated())
+	{
+		return;
+	}
+	if (networkPlayers[m_networkPlayerIndex]->GetHP() <= 0)
+	{
+		SetWidth(0);
+		UIObject::Update();
+		return;
+	}
+
+	SetToggle(true);
+	auto networkPlayer = networkPlayers[m_networkPlayerIndex];
+	float hp = networkPlayer->GetHP();
+	float maxHp = networkPlayer->GetMaxHp();
+	float ratio = hp / maxHp;
+
+	SetWidth(max(ratio * 95.f, 0.0f));
+	UIObject::Update();
+}
+
+void NetworkPlayerIcon::Update()
+{
+	auto networkPlayers = GET_SINGLE(SceneManager)->GetActiveScene()->GetNetworkPlayers();
+
+	SetToggle(false);
+	if (m_networkPlayerIndex >= networkPlayers.size())
+	{
+		return;
+	}
+	if (networkPlayers[m_networkPlayerIndex] == nullptr)
+	{
+		return;
+	}
+	if (!networkPlayers[m_networkPlayerIndex]->IsActivated())
+	{
+		return;
+	}
+	int classIdx = networkPlayers[m_networkPlayerIndex]->GetClassIdx();
+	GetGameObject()->GetMeshRenderer()->GetMaterial()->SetTexture(0, GET_SINGLE(Resources)->LoadPlayerIconTexture(classIdx));
+	
+	SetToggle(true);
+	UIObject::Update();
+}
+
+void DifficultyBar::Update()
+{
+	Difficulty diff = GET_SINGLE(DifficultyManager)->GetDifficulty();
+
+	switch (diff)
+	{
+	case Difficulty::EASY:
+		GetMeshRenderer()->GetMaterial()->SetTexture(0, GET_SINGLE(Resources)->Load<Texture>(L"Difficulty_EASY", L"..\\Resources\\Texture\\Difficulty_EASY.png"));
+		break;
+	case Difficulty::NORMAL:
+		GetMeshRenderer()->GetMaterial()->SetTexture(0, GET_SINGLE(Resources)->Load<Texture>(L"Difficulty_NORMAL", L"..\\Resources\\Texture\\Difficulty_NORMAL.png"));
+		break;
+	case Difficulty::HARD:
+		GetMeshRenderer()->GetMaterial()->SetTexture(0, GET_SINGLE(Resources)->Load<Texture>(L"Difficulty_HARD", L"..\\Resources\\Texture\\Difficulty_HARD.png"));
+		break;
+	case Difficulty::VERYHARD:
+		GetMeshRenderer()->GetMaterial()->SetTexture(0, GET_SINGLE(Resources)->Load<Texture>(L"Difficulty_VERYHARD", L"..\\Resources\\Texture\\Difficulty_VERYHARD.png"));
+		break;
+	}
+	
 	UIObject::Update();
 }

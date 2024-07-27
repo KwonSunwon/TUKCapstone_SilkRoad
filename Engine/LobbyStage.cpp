@@ -354,7 +354,7 @@ shared_ptr<class Scene> LoadLobbyScene()
 		scene->AddTextObject(debugText);
 
 		auto interact = make_shared<InteractiveObjectText>();
-		interact->SetFormat("24L");
+		interact->SetFormat("24C");
 		interact->SetBrush("WHITE");
 		interact->SetText(L"+");
 		interact->SetPivot(ePivot::CENTERBOT);

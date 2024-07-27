@@ -596,18 +596,53 @@ shared_ptr<class Scene> LoadMainScene1()
 
 				meshRenderer->SetMaterial(material);
 			}
-			shared_ptr<MiniMapUI> uiObject = make_shared<MiniMapUI>();
-			uiObject->SetPivot(ePivot::RIGHTTOP);
-			uiObject->SetScreenPivot(ePivot::RIGHTTOP);
-			uiObject->SetWidth(200.f);
-			uiObject->SetHeight(200.f);
-			uiObject->SetPosition(Vec2(0, 0));
-			uiObject->SetZOrder(500);
+			shared_ptr<MiniMapUI> minimap = make_shared<MiniMapUI>();
+			minimap->SetPivot(ePivot::RIGHTTOP);
+			minimap->SetScreenPivot(ePivot::RIGHTTOP);
+			minimap->SetWidth(200.f);
+			minimap->SetHeight(200.f);
+			minimap->SetPosition(Vec2(0, 0));
+			minimap->SetZOrder(500);
 
-			obj->AddComponent(uiObject);
+			obj->AddComponent(minimap);
 
 			obj->AddComponent(meshRenderer);
 			scene->AddGameObject(obj);
+
+			// 미니맵 아이콘
+			for(int i = 0; i < 50; ++i)
+			{
+				shared_ptr<GameObject> obj = make_shared<GameObject>();
+				obj->SetLayerIndex(GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI")); // UI
+				obj->AddComponent(make_shared<Transform>());
+				shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
+				{
+					shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadRectangleMesh();
+					meshRenderer->SetMesh(mesh);
+				}
+				{
+					shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"AlphaTexture");
+					shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"minimap_enemy", L"..\\Resources\\Texture\\minimap_enemy.png");
+					shared_ptr<Material> material = make_shared<Material>();
+					material->SetShader(shader);
+					material->SetTexture(0, texture);
+
+					meshRenderer->SetMaterial(material);
+				}
+				shared_ptr<UIToggleObject> uiObject = make_shared<UIToggleObject>();
+				uiObject->SetToggleKey(KEY_TYPE::F12);
+				uiObject->SetPivot(ePivot::CENTER);
+				uiObject->SetScreenPivot(ePivot::RIGHTTOP);
+				uiObject->SetWidth(8.f);
+				uiObject->SetHeight(8.f);
+				uiObject->SetPosition(Vec2(80, 80));
+				uiObject->SetZOrder(490);
+
+				minimap->addMiniMapIcon(uiObject);
+				obj->AddComponent(uiObject);
+				obj->AddComponent(meshRenderer);
+				scene->AddGameObject(obj);
+			}
 		}
 		{
 			shared_ptr<GameObject> obj = make_shared<GameObject>();
@@ -627,13 +662,13 @@ shared_ptr<class Scene> LoadMainScene1()
 
 				meshRenderer->SetMaterial(material);
 			}
-			shared_ptr<UIObject> uiObject = make_shared<UIObject>();
+			shared_ptr<MiniMapPlayerIcon> uiObject = make_shared<MiniMapPlayerIcon>();
 			uiObject->SetPivot(ePivot::RIGHTTOP);
 			uiObject->SetScreenPivot(ePivot::RIGHTTOP);
 			uiObject->SetWidth(200.f);
 			uiObject->SetHeight(200.f);
 			uiObject->SetPosition(Vec2(0, 0));
-			uiObject->SetZOrder(490);
+			uiObject->SetZOrder(480);
 
 			obj->AddComponent(uiObject);
 
@@ -1031,9 +1066,205 @@ shared_ptr<class Scene> LoadMainScene1()
 		scene->AddGameObject(go);
 
 	}
+#pragma endregion
 
+#pragma NetworkPlayerHUD
+	{
+		// 네트워크 플레이어 체력바
+		{
+			// 체력바 베이스
+			for (int i = 0; i < 2; ++i)
+			{
+				shared_ptr<GameObject> obj = make_shared<GameObject>();
+				obj->SetLayerIndex(GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI")); // UI
+				obj->AddComponent(make_shared<Transform>());
+				shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
+				{
+					shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadRectangleMesh();
+					meshRenderer->SetMesh(mesh);
+				}
+				{
+					shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"AlphaTexture");
+					shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"PlayerHPBarBase", L"..\\Resources\\Texture\\PlayerHPBarBase.png");
+					shared_ptr<Material> material = make_shared<Material>();
+					material->SetShader(shader);
+					material->SetTexture(0, texture);
 
+					meshRenderer->SetMaterial(material);
+				}
+				shared_ptr<NetworkPlayerHPBarBase> uiObject = make_shared<NetworkPlayerHPBarBase>();
+				uiObject->SetToggleKey(KEY_TYPE::F12);
+				uiObject->SetPivot(ePivot::LEFTCENTER);
+				uiObject->SetScreenPivot(ePivot::RIGHTCENTER);
+				uiObject->SetNetworkPlayerIndex(i);
+				uiObject->SetWidth(100.f);
+				uiObject->SetHeight(20.f);
+				uiObject->SetPosition(Vec2(-100, 0 - (i * 110)));
+				uiObject->SetZOrder(500);
 
+				obj->AddComponent(uiObject);
+
+				obj->AddComponent(meshRenderer);
+				scene->AddGameObject(obj);
+			}
+
+			// 체력바
+			for (int i = 0; i < 2; ++i)
+			{
+				shared_ptr<GameObject> obj = make_shared<GameObject>();
+				obj->SetLayerIndex(GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI")); // UI
+				obj->AddComponent(make_shared<Transform>());
+				shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
+				{
+					shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadRectangleMesh();
+					meshRenderer->SetMesh(mesh);
+				}
+				{
+					shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"AlphaTexture");
+					shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"PlayerHPBar", L"..\\Resources\\Texture\\PlayerHPBar.png");
+					shared_ptr<Material> material = make_shared<Material>();
+					material->SetShader(shader);
+					material->SetTexture(0, texture);
+
+					meshRenderer->SetMaterial(material);
+				}
+				shared_ptr<NetworkPlayerHPBar> uiObject = make_shared<NetworkPlayerHPBar>();
+				uiObject->SetToggleKey(KEY_TYPE::F12);
+				uiObject->SetPivot(ePivot::LEFTCENTER);
+				uiObject->SetScreenPivot(ePivot::RIGHTCENTER);
+				uiObject->SetNetworkPlayerIndex(i);
+				uiObject->SetWidth(95.f);
+				uiObject->SetHeight(15.f);
+				uiObject->SetPosition(Vec2(-97.5, 0 - (i * 110)));
+				uiObject->SetZOrder(490);
+
+				obj->AddComponent(uiObject);
+
+				obj->AddComponent(meshRenderer);
+				scene->AddGameObject(obj);
+			}
+
+			// 체력 텍스트
+			for (int i = 0; i < 2; ++i)
+			{
+				auto hpText = make_shared<NetworkPlayerHPTextObject>();
+				hpText->SetFormat("15C");
+				hpText->SetToggleKey(KEY_TYPE::F12);
+				hpText->SetBrush("WHITE");
+				hpText->SetPivot(ePivot::CENTER);
+				hpText->SetScreenPivot(ePivot::RIGHTCENTER);
+				hpText->SetText(L"999/999");
+				hpText->SetPosition(Vec2(-50, -3 + (i * 110)));
+				hpText->SetNetworkPlayerIdx(i);
+				scene->AddTextObject(hpText);
+
+			}
+
+			// 초상화
+			for (int i = 0; i < 2; ++i)
+			{
+				shared_ptr<GameObject> obj = make_shared<GameObject>();
+				obj->SetLayerIndex(GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI")); // UI
+				obj->AddComponent(make_shared<Transform>());
+				shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
+				{
+					shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadRectangleMesh();
+					meshRenderer->SetMesh(mesh);
+				}
+				{
+					shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"AlphaTexture");
+					shared_ptr<Texture> texture = GET_SINGLE(Resources)->LoadPlayerIconTexture(5);
+					shared_ptr<Material> material = make_shared<Material>();
+					material->SetShader(shader);
+					material->SetTexture(0, texture);
+
+					meshRenderer->SetMaterial(material);
+				}
+				shared_ptr<NetworkPlayerIcon> uiObject = make_shared<NetworkPlayerIcon>();
+				uiObject->SetToggleKey(KEY_TYPE::F12);
+				uiObject->SetPivot(ePivot::RIGHTBOT);
+				uiObject->SetScreenPivot(ePivot::RIGHTCENTER);
+				uiObject->SetNetworkPlayerIndex(i);
+				uiObject->SetWidth(50.f);
+				uiObject->SetHeight(50.f);
+				uiObject->SetPosition(Vec2(0, 10 - (i * 110)));
+				uiObject->SetZOrder(500);
+
+				obj->AddComponent(uiObject);
+
+				obj->AddComponent(meshRenderer);
+				scene->AddGameObject(obj);
+			}
+		}
+
+		// 플레이타임
+		{
+			auto playTimeText = make_shared<PlayTimeTextObject>();
+			playTimeText->SetFormat("15C");
+			playTimeText->SetBrush("WHITE");
+			playTimeText->SetPivot(ePivot::CENTERTOP);
+			playTimeText->SetScreenPivot(ePivot::LEFTTOP);
+			playTimeText->SetText(L"00:00");
+			playTimeText->SetPosition(Vec2(80, 5));
+			scene->AddTextObject(playTimeText);
+		}
+		// 난이도 바
+		{
+			shared_ptr<GameObject> obj = make_shared<GameObject>();
+			obj->SetLayerIndex(GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI")); // UI
+			obj->AddComponent(make_shared<Transform>());
+			shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
+			{
+				shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadRectangleMesh();
+				meshRenderer->SetMesh(mesh);
+			}
+			{
+				shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"AlphaTexture");
+				shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"Difficulty_EASY", L"..\\Resources\\Texture\\Difficulty_EASY.png");
+				shared_ptr<Material> material = make_shared<Material>();
+				material->SetShader(shader);
+				material->SetTexture(0, texture);
+
+				meshRenderer->SetMaterial(material);
+			}
+			shared_ptr<DifficultyBar> uiObject = make_shared<DifficultyBar>();
+			uiObject->SetPivot(ePivot::CENTER);
+			uiObject->SetScreenPivot(ePivot::LEFTTOP);
+			uiObject->SetWidth(150.f);
+			uiObject->SetHeight(50.f);
+			uiObject->SetPosition(Vec2(80, -50));
+			uiObject->SetZOrder(200);
+
+			obj->AddComponent(uiObject);
+
+			obj->AddComponent(meshRenderer);
+			scene->AddGameObject(obj);
+		}
+		// 난이도 텍스트
+		{
+			auto difficultyText = make_shared<DifficultyTextObject>();
+			difficultyText->SetFormat("24C");
+			difficultyText->SetBrush("WHITE");
+			difficultyText->SetPivot(ePivot::CENTER);
+			difficultyText->SetScreenPivot(ePivot::LEFTTOP);
+			difficultyText->SetText(L"EASY");
+			difficultyText->SetPosition(Vec2(80, 50));
+			scene->AddTextObject(difficultyText);
+
+		}
+		// 다음 난이도 안내 텍스트
+		{
+			auto nextDifficultyText = make_shared<DifficultyInfoTextObject>();
+			nextDifficultyText->SetFormat("15C");
+			nextDifficultyText->SetBrush("WHITE");
+			nextDifficultyText->SetPivot(ePivot::CENTER);
+			nextDifficultyText->SetScreenPivot(ePivot::LEFTTOP);
+			nextDifficultyText->SetText(L"Next Difficulty : NORMAL");
+			nextDifficultyText->SetPosition(Vec2(80, 100));
+			scene->AddTextObject(nextDifficultyText);
+
+		}
+	}
 #pragma endregion
 
 #pragma region Enemy

@@ -42,6 +42,7 @@ void NetworkPlayer::ProcessPacket(shared_ptr<PlayerPacket> packet)
 	if(GetAnimator()->GetCurrentClipIndex() != packet->m_animationIndex)
 		GetAnimator()->Play(packet->m_animationIndex);
 	m_hp = packet->m_hp;
+	m_maxHp = packet->m_maxHp;
 }
 
 void NetworkPlayer::ChangeClass(shared_ptr<PlayerClassChangePacket> packet)
@@ -66,6 +67,8 @@ void NetworkPlayer::ChangeClass(shared_ptr<PlayerClassChangePacket> packet)
 		meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Character_Tanker.fbx");
 		break;
 	}
+
+	m_classIdx = id;
 	vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
 	GetMeshRenderer()->SetMesh(gameObjects[0]->GetMeshRenderer()->GetMesh());
 	GetGameObject()->AddComponent(gameObjects[0]->GetAnimator());

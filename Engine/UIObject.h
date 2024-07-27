@@ -111,4 +111,52 @@ class MiniMapUI : public UIObject
 {
 public:
 	virtual void Update() override;
+
+	void addMiniMapIcon(shared_ptr<UIToggleObject> icon) { m_miniMapIcons.push_back(icon); }
+
+private:
+	vector<shared_ptr<UIToggleObject>> m_miniMapIcons;
+};
+
+class MiniMapPlayerIcon : public UIObject
+{
+public:
+	virtual void Update() override;
+};
+
+class NetworkPlayerHPBarBase : public UIToggleObject
+{
+public:
+	virtual void Update() override;
+
+	void SetNetworkPlayerIndex(float index) { m_networkPlayerIndex = index; }
+private:
+	float m_networkPlayerIndex = 0;
+
+};
+
+class NetworkPlayerHPBar : public UIToggleObject
+{
+public:
+	virtual void Update() override;
+
+	void SetNetworkPlayerIndex(float index) { m_networkPlayerIndex = index; }
+private:
+	float m_networkPlayerIndex = 0;
+};
+
+class NetworkPlayerIcon : public UIToggleObject
+{
+public:
+	virtual void Update() override;
+
+	void SetNetworkPlayerIndex(float index) { m_networkPlayerIndex = index; }
+
+private:
+	float m_networkPlayerIndex = 0;
+};
+
+class DifficultyBar : public UIObject
+{
+	virtual void Update() override;
 };

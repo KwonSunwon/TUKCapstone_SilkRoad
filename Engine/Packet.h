@@ -91,6 +91,7 @@ public:
 	uint32 m_animationIndex;
 
 	float m_hp;
+	float m_maxHp;
 };
 
 class PlayerClassChangePacket : public Packet {

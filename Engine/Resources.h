@@ -34,6 +34,7 @@ public:
 
 	shared_ptr<Texture> LoadSkillIconTexture(int id);
 	shared_ptr<Texture> LoadItemIconTexture(int id);
+	shared_ptr<Texture> LoadPlayerIconTexture(int id);
 	wstring GetItemDesc(int id);
 
 	//Prefabs

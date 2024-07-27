@@ -208,3 +208,44 @@ public:
 private:
 	wstring m_skillReamainText;
 };
+
+class NetworkPlayerHPTextObject : public TextToggleObject
+{
+public:
+	NetworkPlayerHPTextObject();
+	~NetworkPlayerHPTextObject() = default;
+
+	virtual void Update() override;
+
+	void SetNetworkPlayerIdx(int idx) { m_networkPlayerIdx = idx; }
+
+private:
+	int m_networkPlayerIdx;
+};
+
+class PlayTimeTextObject : public TextObject
+{
+public:
+	PlayTimeTextObject();
+	~PlayTimeTextObject() = default;
+
+	virtual void Update() override;
+};
+
+class DifficultyTextObject : public TextObject
+{
+public:
+	DifficultyTextObject();
+	~DifficultyTextObject() = default;
+
+	virtual void Update() override;
+};
+
+class DifficultyInfoTextObject : public TextObject
+{
+public:
+	DifficultyInfoTextObject();
+	~DifficultyInfoTextObject() = default;
+
+	virtual void Update() override;
+};
