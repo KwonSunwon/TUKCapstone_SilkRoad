@@ -355,10 +355,11 @@ void Player::ProcessGetItem()
 		if(scriptI) {
 			shared_ptr<Item> itemScript = dynamic_pointer_cast<Item>(scriptI);
 
+			itemScript->GetRigidBody()->SetStatic(true);
 			itemScript->AddGetItemText();
 			GET_SINGLE(SoundManager)->soundPlay(Sounds::ENV_EAT_ITEM);
 
-			col->m_rb2->MoveTo(Vec3(0, 1000000, 0));
+			col->m_rb2->MoveTo(Vec3(-50000, 1000000, 0));
 			GET_SINGLE(UpgradeManager)->ApplyItem(itemScript->GetItemID());
 		}
 	}

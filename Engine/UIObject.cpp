@@ -372,6 +372,42 @@ void MiniMapUI::Update()
 			m_miniMapIcons[iconIdx]->SetToggle(true);
 			m_miniMapIcons[iconIdx]->SetPosition(Vec2( ((enemypos.x - playerpos.x) / 100) - 100,
 				((enemypos.z - playerpos.z) / 100) - 100 ));
+			m_miniMapIcons[iconIdx]->GetMeshRenderer()->GetMaterial()->SetTexture(0, GET_SINGLE(Resources)->Load<Texture>(L"minimap_enemy", L"..\\Resources\\Texture\\minimap_enemy.png"));
+			++iconIdx;
+		}
+		else if (go->GetMonobehaviour("NetworkPlayer"))
+		{
+			auto networkPlayer = dynamic_pointer_cast<NetworkPlayer>(go->GetMonobehaviour("NetworkPlayer"));
+			if (networkPlayer->GetHP() <= 0)
+				continue;
+			auto partnerpos = go->GetTransform()->GetLocalPosition();
+			auto playerpos = player->GetTransform()->GetLocalPosition();
+			float dist = sqrt(pow(partnerpos.x - playerpos.x, 2) + pow(partnerpos.z - playerpos.z, 2));
+			if (dist > 9700.f)
+				continue;
+			if (networkPlayer->IsActivated() == false)
+				continue;
+
+			m_miniMapIcons[iconIdx]->SetToggle(true);
+			m_miniMapIcons[iconIdx]->SetPosition(Vec2(((partnerpos.x - playerpos.x) / 100) - 100,
+				((partnerpos.z - playerpos.z) / 100) - 100));
+			m_miniMapIcons[iconIdx]->GetMeshRenderer()->GetMaterial()->SetTexture(0, GET_SINGLE(Resources)->Load<Texture>(L"minimap_partner", L"..\\Resources\\Texture\\minimap_partner.png"));
+			++iconIdx;
+		}
+		else if (go->GetMonobehaviour("Item"))
+		{
+			if (go->GetRigidBody()->GetStatic())
+				continue;
+			auto itempos = go->GetTransform()->GetLocalPosition();
+			auto playerpos = player->GetTransform()->GetLocalPosition();
+			float dist = sqrt(pow(itempos.x - playerpos.x, 2) + pow(itempos.z - playerpos.z, 2));
+			if (dist > 9700.f)
+				continue;
+
+			m_miniMapIcons[iconIdx]->SetToggle(true);
+			m_miniMapIcons[iconIdx]->SetPosition(Vec2(((itempos.x - playerpos.x) / 100) - 100,
+				((itempos.z - playerpos.z) / 100) - 100));
+			m_miniMapIcons[iconIdx]->GetMeshRenderer()->GetMaterial()->SetTexture(0, GET_SINGLE(Resources)->Load<Texture>(L"minimap_item", L"..\\Resources\\Texture\\minimap_item.png"));
 			++iconIdx;
 		}
 	}

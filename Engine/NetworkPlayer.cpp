@@ -16,6 +16,8 @@
 
 void NetworkPlayer::Awake()
 {
+	SetMonovihaviourName("NetworkPlayer");
+
 	shared_ptr<RigidBody> rb = GetRigidBody();
 	rb->SetStatic(false);
 }
