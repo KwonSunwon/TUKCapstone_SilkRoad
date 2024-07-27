@@ -28,6 +28,8 @@
 #include "NetworkObject.h"
 #include "HealerSkill.h"
 #include "TankerSkill.h"
+#include "ParticleSystem.h"
+
 void Player::Awake()
 {
 	GET_SINGLE(UpgradeManager)->SetClass();
@@ -100,13 +102,11 @@ void Player::Update()
 
 		GET_SINGLE(UpgradeManager)->ClassChange(chaClass);
 	}
-	if (INPUT->GetButtonDown(KEY_TYPE::Z))
+	if(INPUT->GetButtonDown(KEY_TYPE::Z))
 	{
-
 		GET_SINGLE(UpgradeManager)->AddGold(100.f);
-		GET_SINGLE(SceneManager)->GetActiveScene()->m_testType = (GET_SINGLE(SceneManager)->GetActiveScene()->m_testType + 1) % 6;
 	}
-	if (INPUT->GetButtonDown(KEY_TYPE::C))
+	if(INPUT->GetButtonDown(KEY_TYPE::C))
 	{
 
 		SetHP(10.f);
@@ -210,10 +210,10 @@ void Player::Fire()
 
 	shared_ptr<MonoBehaviour> scriptE = picked->GetMonobehaviour("Enemy");
 	Vec3 damagePos = cameraPos + cameraDir * minDistance + Vec3(0.f, 100.f, 0.f);
-	Vec3 particlePos = cameraPos + cameraDir * minDistance  - cameraDir * 100.f;
+	Vec3 particlePos = cameraPos + cameraDir * minDistance - cameraDir * 100.f;
 	float finalDamage = 0.f;
 
-	if (picked->GetRigidBody()) {
+	if(picked->GetRigidBody()) {
 		GET_SINGLE(SceneManager)->GetActiveScene()->SpawnParticle(particlePos, ParticleType::EXPLOSION);
 		//GET_SINGLE(SceneManager)->GetActiveScene()->SpawnParticle(particlePos, ParticleType::PARTICLE_PORTAL);
 	}
@@ -228,7 +228,7 @@ void Player::Fire()
 
 			enemyScript->GetDamage(finalDamage);
 			enemyScript->MakeDamageIndicator(finalDamage, damagePos, m_isCritical);
-			
+
 			GET_SINGLE(SoundManager)->soundPlay(Sounds::ENV_HIT_ENEMY);
 		}
 		break;
@@ -241,14 +241,14 @@ void Player::Fire()
 		m_bomb->SetBombPosition(damagePos);
 		m_bomb->SetBombActive();
 
-		if (GET_SINGLE(NetworkManager)->GetNetworkState() != NETWORK_STATE::SINGLE) {
+		if(GET_SINGLE(NetworkManager)->GetNetworkState() != NETWORK_STATE::SINGLE) {
 			shared_ptr<SkillPacket> packet = make_shared<SkillPacket>();
 			packet->m_skillType = GET_SINGLE(UpgradeManager)->GetClass();
 			packet->m_pos = damagePos;
 			packet->m_isBomb = true;
 			SEND(packet);
 		}
-		
+
 		break;
 
 	}
@@ -454,8 +454,8 @@ void Player::Skill()
 
 void Player::SkillDealer()
 {
-	GET_SINGLE(SceneManager)->GetActiveScene()->SpawnParticle(Vec3(0.f,0.f,100.f), ParticleType::PARTICLE_PORTAL);
-	
+	GET_SINGLE(SceneManager)->GetActiveScene()->SpawnParticle(Vec3(0.f, 0.f, 100.f), ParticleType::PARTICLE_PORTAL);
+
 	GET_SINGLE(Resources)->Get<Material>(L"Final")->SetInt(0, 1);
 	m_isRage = true;
 }
@@ -474,7 +474,7 @@ void Player::SkillHealer()
 	//m_guardObject->GetRigidBody()->SetStatic(false);
 	m_healObject->GetRigidBody()->MoveTo(pos);
 	auto hScript = m_healObject->GetMonobehaviour("HealerSkill");
-	if (hScript) {
+	if(hScript) {
 		shared_ptr<HealerSkill> healScript = dynamic_pointer_cast<HealerSkill>(hScript);
 		healScript->m_time = 0.f;
 	}
@@ -505,7 +505,7 @@ void Player::SkillTanker()
 	m_guardObject->GetTransform()->LookAt(look);
 
 	auto hScript = m_healObject->GetMonobehaviour("TankerSkill");
-	if (hScript) {
+	if(hScript) {
 		shared_ptr<TankerSkill> healScript = dynamic_pointer_cast<TankerSkill>(hScript);
 		healScript->m_time = 0.f;
 	}
@@ -537,18 +537,32 @@ void Player::SkillManage()
 void Player::NetworkSkill(shared_ptr<SkillPacket> packet)
 {
 	switch(packet->m_skillType) {
-	case CharacterClass::HEALER:
+	case CharacterClass::HEALER: {
 		if(!m_healObject)
 			return;
 		m_healObject->GetRigidBody()->MoveTo(packet->m_pos);
+
+		auto hScript = m_healObject->GetMonobehaviour("HealerSkill");
+		if(hScript) {
+			shared_ptr<HealerSkill> healScript = dynamic_pointer_cast<HealerSkill>(hScript);
+			healScript->m_time = 0.f;
+		}
 		break;
-	case CharacterClass::TANKER:
+	}
+	case CharacterClass::TANKER: {
 		if(!m_guardObject)
 			return;
 		m_guardObject->GetRigidBody()->SetStatic(false);
 		m_guardObject->GetRigidBody()->MoveTo(packet->m_dropPos);
 		m_guardObject->GetTransform()->LookAt(packet->m_look);
+
+		auto hScript = m_healObject->GetMonobehaviour("TankerSkill");
+		if(hScript) {
+			shared_ptr<TankerSkill> healScript = dynamic_pointer_cast<TankerSkill>(hScript);
+			healScript->m_time = 0.f;
+		}
 		break;
+	}
 	case CharacterClass::LAUNCHER:
 		if(packet->m_isBomb) {
 			m_bomb->SetBombSize(500.f);
