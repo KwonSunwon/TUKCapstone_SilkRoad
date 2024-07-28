@@ -116,7 +116,7 @@ void EnemyAttackState::OnEnter()
 		Vec3 playerPos = GET_SINGLE(SceneManager)->GetActiveScene()->GetMainPlayerScript()->GetTransform()->GetWorldPosition();
 		playerPos += Vec3(0.f, 100.f, 0.f);
 		if((pos - playerPos).Length() < 300.f) {
-			GET_SINGLE(SceneManager)->GetActiveScene()->GetMainPlayerScript()->SetHP(10.f);
+			GET_SINGLE(SceneManager)->GetActiveScene()->GetMainPlayerScript()->ApplyDamage(10.f);
 		}
 		});
 	m_enemy->GetAnimator()->SetEventFunction(static_cast<uint32>(ENEMY_STATE::ATTACK), 1.f, [tempE]() {

@@ -56,7 +56,7 @@ void Network::Update()
 			}
 			break;
 		case PACKET_TYPE::PT_PLAYER_HIT:
-			GET_SINGLE(SceneManager)->GetActiveScene()->m_mainPlayerScript->SetHP(reinterpret_pointer_cast<PlayerHitPacket>(packet)->m_damage);
+			GET_SINGLE(SceneManager)->GetActiveScene()->m_mainPlayerScript->ApplyDamage(reinterpret_pointer_cast<PlayerHitPacket>(packet)->m_damage);
 			break;
 		case PACKET_TYPE::PT_SKILL:
 			GET_SINGLE(SceneManager)->GetActiveScene()->m_mainPlayerScript->NetworkSkill(reinterpret_pointer_cast<SkillPacket>(packet));
