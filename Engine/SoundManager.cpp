@@ -9,10 +9,13 @@ void SoundManager::Init()
 
     m_soundSystem->createSound("..\\Resources\\Sound\\BGM_Space.mp3", FMOD_LOOP_NORMAL, 0, &m_sound[BGM_SPACE]);
     m_soundSystem->createSound("..\\Resources\\Sound\\BGM_Desert.mp3", FMOD_LOOP_NORMAL, 0, &m_sound[BGM_DESERT]);
+    m_soundSystem->createSound("..\\Resources\\Sound\\BGM_Snowfield.mp3", FMOD_LOOP_NORMAL, 0, &m_sound[BGM_SNOWFIELD]);
+    m_soundSystem->createSound("..\\Resources\\Sound\\BGM_Corruption.mp3", FMOD_LOOP_NORMAL, 0, &m_sound[BGM_CORRUPTION]);
     m_soundSystem->createSound("..\\Resources\\Sound\\Weapon_Assult_Fire.wav", FMOD_DEFAULT, 0, &m_sound[WEAPON_ASSULT_FIRE]);
     m_soundSystem->createSound("..\\Resources\\Sound\\Env_Hit_Enemy.wav", FMOD_DEFAULT, 0, &m_sound[ENV_HIT_ENEMY]);
     m_soundSystem->createSound("..\\Resources\\Sound\\Env_Eat_Item.wav", FMOD_DEFAULT, 0, &m_sound[ENV_EAT_ITEM]);
     m_soundSystem->createSound("..\\Resources\\Sound\\Skill_Tanker.wav", FMOD_DEFAULT, 0, &m_sound[SKILL_TANKER]);
+    m_soundSystem->createSound("..\\Resources\\Sound\\Skill_Healer.wav", FMOD_DEFAULT, 0, &m_sound[SKILL_HEALER]);
 
 
 

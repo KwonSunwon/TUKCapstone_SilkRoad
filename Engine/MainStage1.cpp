@@ -52,7 +52,10 @@
 shared_ptr<class Scene> LoadMainScene1()
 {
 	GET_SINGLE(SoundManager)->soundStop(Sounds::BGM_SPACE);
-	GET_SINGLE(SoundManager)->soundPlay(Sounds::BGM_SPACE);
+	GET_SINGLE(SoundManager)->soundStop(Sounds::BGM_DESERT);
+	GET_SINGLE(SoundManager)->soundStop(Sounds::BGM_SNOWFIELD);
+	GET_SINGLE(SoundManager)->soundStop(Sounds::BGM_CORRUPTION);
+	GET_SINGLE(SoundManager)->soundPlay(Sounds::BGM_DESERT);
 
 #pragma region LayerMask
 

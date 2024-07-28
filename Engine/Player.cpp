@@ -475,6 +475,7 @@ void Player::SkillHealer()
 
 	//m_guardObject->GetTransform()->LookAt(look);
 	GET_SINGLE(SceneManager)->GetActiveScene()->SpawnParticle(pos, ParticleType::HEAL);
+	GET_SINGLE(SoundManager)->soundPlay(Sounds::SKILL_HEALER);
 }
 
 void Player::SkillLauncher()
