@@ -103,11 +103,20 @@ shared_ptr<EnemyState> EnemyAttackState::OnLateUpdateState()
 
 void EnemyAttackState::OnEnter()
 {
-	Vec3 pos = m_enemy->GetTransform()->GetWorldPosition();
-	Vec3 look = m_enemy->GetTransform()->GetLook();
-	pos += look * 200.f + Vec3(0.f, 150.f, 0.f);
+	shared_ptr<Enemy> tempE = m_enemy;
 	m_enemy->GetAnimator()->Play(static_cast<uint32>(ENEMY_STATE::ATTACK));
-	m_enemy->GetAnimator()->SetEventFunction(static_cast<uint32>(ENEMY_STATE::ATTACK), 1.f, [pos]() {GET_SINGLE(SceneManager)->GetActiveScene()->SpawnParticle(pos, ParticleType::PARTICLE_ENEMY); });
+	m_enemy->GetAnimator()->SetEventFunction(static_cast<uint32>(ENEMY_STATE::ATTACK), 1.f, [tempE]()
+		{
+			Vec3 pos = tempE->GetTransform()->GetWorldPosition();
+			Vec3 look = tempE->GetTransform()->GetLook();
+			pos += look * 200.f + Vec3(0.f, 100.f, 0.f);
+			Vec3 playerPos = GET_SINGLE(SceneManager)->GetActiveScene()->GetMainPlayerScript()->GetTransform()->GetWorldPosition();
+			playerPos += Vec3(0.f, 100.f, 0.f);
+			if ((pos - playerPos).Length() < 300.f) {
+				GET_SINGLE(SceneManager)->GetActiveScene()->GetMainPlayerScript()->SetHP(10.f);
+			}
+		
+		});
 	
 }
 

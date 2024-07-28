@@ -8,6 +8,7 @@
 #include "SceneManager.h"
 #include "GameObject.h"
 #include "Camera.h"
+#include "RigidBody.h"
 
 ParticleSystem::ParticleSystem(ParticleType type) : Component(COMPONENT_TYPE::PARTICLE_SYSTEM)
 {
