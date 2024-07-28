@@ -1540,7 +1540,7 @@ shared_ptr<class Scene> LoadMainScene3()
 
 				scene->AddGameObject(particle);
 			}
-			for (int i = 0; i < 20; ++i)
+			for (int i = 0; i < 35; ++i)
 			{
 				shared_ptr<GameObject> particle = make_shared<GameObject>();
 				particle->AddComponent(make_shared<Transform>());

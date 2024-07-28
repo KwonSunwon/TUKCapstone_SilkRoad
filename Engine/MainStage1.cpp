@@ -1469,9 +1469,9 @@ shared_ptr<class Scene> LoadMainScene1()
 
 
 
-	for(int j = 0; j < 2; ++j) {
-		for(int i = 0; i < 2; ++i) {
-			GET_SINGLE(Resources)->LoadCratePrefab(Vec3(12750 + 100 * i, 1500.f + 400.f * j, 15000 + 100 * j), scene);
+	for(int j = 0; j < 3; ++j) {
+		for(int i = 0; i < 3; ++i) {
+			GET_SINGLE(Resources)->LoadCratePrefab(Vec3(12750, 1500.f + 400.f * j, 15000 + 100 * i + 10 * j), scene);
 
 			
 		}
@@ -1552,7 +1552,7 @@ shared_ptr<class Scene> LoadMainScene1()
 
 				scene->AddGameObject(particle);
 			}
-			for(int i = 0; i < 20; ++i)
+			for(int i = 0; i < 35; ++i)
 			{
 				shared_ptr<GameObject> particle = make_shared<GameObject>();
 				particle->AddComponent(make_shared<Transform>());
