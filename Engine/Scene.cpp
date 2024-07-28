@@ -486,18 +486,15 @@ shared_ptr<GameObject> Scene::SpawnParticle(Vec3 pos, int type, bool network)
 	m_particleCycle[type] = (m_particleCycle[type] + 1) % m_particles[type].size();
 
 	if(!network) {
-		if(GET_SINGLE(NetworkManager)->GetNetworkState() != NETWORK_STATE::SINGLE)
-		{
-			shared_ptr<ParticlePacket> packet = make_shared<ParticlePacket>();
-			packet->m_pos = pos;
-			packet->m_particleIndex = type;
-			SEND(packet);
-			
+		if(GET_SINGLE(NetworkManager)->GetNetworkState() != NETWORK_STATE::SINGLE) {
+			if(GET_SINGLE(NetworkManager)->m_isSend) {
+				shared_ptr<ParticlePacket> packet = make_shared<ParticlePacket>();
+				packet->m_pos = pos;
+				packet->m_particleIndex = type;
+				SEND(packet);
+			}
 		}
-
-		
 	}
-
 	return rv;
 }
 
