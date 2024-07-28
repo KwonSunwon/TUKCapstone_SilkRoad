@@ -63,6 +63,7 @@ public:
 	uint16 m_size;
 	PACKET_TYPE m_type;
 	uint32 m_targetId;
+	uint16 m_stageIndex;
 };
 
 class InitPacket : public Packet {

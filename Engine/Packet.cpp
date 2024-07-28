@@ -1,5 +1,7 @@
 #include "pch.h"
 #include "Packet.h"
+#include "Scene.h"
+#include "SceneManager.h"
 
 Buffer::Buffer()
 {
@@ -113,98 +115,84 @@ bool Buffer::Empty() const
 
 Packet::Packet()
 {
-	m_size = 0;
-	m_type = PACKET_TYPE::PT_NONE;
 	m_targetId = -1;
+	m_stageIndex = GET_SINGLE(SceneManager)->GetStageIndex();
 }
 
-InitPacket::InitPacket()
+InitPacket::InitPacket() : Packet()
 {
 	m_size = sizeof(InitPacket);
 	m_type = PACKET_TYPE::PT_INIT;
-	m_targetId = -1;
 }
 
-PlayerPacket::PlayerPacket()
+PlayerPacket::PlayerPacket() : Packet()
 {
 	m_size = sizeof(PlayerPacket);
 	m_type = PACKET_TYPE::PT_PLAYER;
-	m_targetId = -1;
 }
 
-EnemyPacket::EnemyPacket()
+EnemyPacket::EnemyPacket() : Packet()
 {
 	m_size = sizeof(EnemyPacket);
-	m_targetId = -1;
 	m_type = PACKET_TYPE::PT_ENEMY;
 }
 
-EnemyHitPacket::EnemyHitPacket()
+EnemyHitPacket::EnemyHitPacket() : Packet()
 {
 	m_size = sizeof(EnemyHitPacket);
-	m_targetId = -1;
 	m_type = PACKET_TYPE::PT_ENEMY_HIT;
 }
 
-StageChangePacket::StageChangePacket()
+StageChangePacket::StageChangePacket() : Packet()
 {
 	m_size = sizeof(StageChangePacket);
-	m_targetId = -1;
 	m_type = PACKET_TYPE::PT_STAGE_CHANGE;
 }
 
-PlayerClassChangePacket::PlayerClassChangePacket()
+PlayerClassChangePacket::PlayerClassChangePacket() : Packet()
 {
 	m_size = sizeof(PlayerClassChangePacket);
-	m_targetId = -1;
 	m_type = PACKET_TYPE::PT_PLAYER_CLASS_CHANGE;
 }
 
-SkillPacket::SkillPacket()
+SkillPacket::SkillPacket() : Packet()
 {
 	m_size = sizeof(SkillPacket);
-	m_targetId = -1;
 	m_type = PACKET_TYPE::PT_SKILL;
 }
 
-ItemPacket::ItemPacket()
+ItemPacket::ItemPacket() : Packet()
 {
 	m_size = sizeof(ItemPacket);
-	m_targetId = -1;
 	m_type = PACKET_TYPE::PT_ITEM;
 }
 
-GuestInitPacket::GuestInitPacket()
+GuestInitPacket::GuestInitPacket() : Packet()
 {
 	m_size = sizeof(GuestInitPacket);
-	m_targetId = -1;
 	m_type = PACKET_TYPE::PT_GUEST_INIT;
 }
 
-ParticlePacket::ParticlePacket()
+ParticlePacket::ParticlePacket() : Packet()
 {
 	m_size = sizeof(ParticlePacket);
-	m_targetId = -1;
 	m_type = PACKET_TYPE::PT_PARTICLE;
 }
 
-ForcePacket::ForcePacket()
+ForcePacket::ForcePacket() : Packet()
 {
 	m_size = sizeof(ForcePacket);
-	m_targetId = -1;
 	m_type = PACKET_TYPE::PT_FORCE;
 }
 
-PlayerHitPacket::PlayerHitPacket()
+PlayerHitPacket::PlayerHitPacket() : Packet()
 {
 	m_size = sizeof(PlayerHitPacket);
-	m_targetId = -1;
 	m_type = PACKET_TYPE::PT_PLAYER_HIT;
 }
 
-PortalOnPacket::PortalOnPacket()
+PortalOnPacket::PortalOnPacket() : Packet()
 {
 	m_size = sizeof(PortalOnPacket);
-	m_targetId = -1;
 	m_type = PACKET_TYPE::PT_PORTAL_ON;
 }

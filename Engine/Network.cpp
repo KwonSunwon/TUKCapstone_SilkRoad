@@ -35,6 +35,8 @@ void Network::Update()
 	int id;
 	//while(Recv(m_packetBuffer)) {
 	while(m_receivedPacketQue.TryPop(packet)) {
+		if(packet->m_stageIndex != GET_SINGLE(SceneManager)->GetStageIndex())
+			continue;
 		switch(packet->m_type) {
 		case PACKET_TYPE::PT_NONE:
 			break;
