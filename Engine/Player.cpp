@@ -283,6 +283,9 @@ void Player::ApplyDamage(float damage)
 	m_hp -= damage;
 	if(m_hp <= 0.f) {
 		m_hp = 0.f;
+		GetRigidBody()->MoveTo(Vec3(-100000.f, 0.f, 0.f));
+		GetRigidBody()->SetStatic(true);
+
 
 		auto players = GET_SINGLE(SceneManager)->GetActiveScene()->GetNetworkPlayers();
 		for(int idx = 0; idx < 2; idx++) {
@@ -291,6 +294,9 @@ void Player::ApplyDamage(float damage)
 				break;
 			}
 		}
+
+		//여기에 인터페이스 띄우기
+
 	}
 }
 
