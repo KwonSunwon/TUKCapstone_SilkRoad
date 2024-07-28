@@ -26,6 +26,7 @@
 #include "Resources.h"
 #include "Bomb.h"
 #include "NetworkObject.h"
+#include "NetworkPlayer.h"
 #include "HealerSkill.h"
 #include "TankerSkill.h"
 #include "ParticleSystem.h"
@@ -187,7 +188,7 @@ void Player::Fire()
 		if(gameObject->GetMonobehaviour("Bomb"))
 			continue;
 
-		if (gameObject->GetMonobehaviour("HealerSkill"))
+		if(gameObject->GetMonobehaviour("HealerSkill"))
 			continue;
 
 
@@ -275,6 +276,28 @@ void Player::Fire()
 void Player::AddBullet(shared_ptr<class PlayerBullet> bullet)
 {
 	m_bullets.push_back(bullet);
+}
+
+void Player::ApplyDamage(float damage)
+{
+	m_hp -= damage;
+	if(m_hp <= 0.f) {
+		m_hp = 0.f;
+		GetRigidBody()->MoveTo(Vec3(-100000.f, 0.f, 0.f));
+		GetRigidBody()->SetStatic(true);
+
+
+		auto players = GET_SINGLE(SceneManager)->GetActiveScene()->GetNetworkPlayers();
+		for(int idx = 0; idx < 2; idx++) {
+			if(players[idx]->IsActivated()) {
+				GET_SINGLE(SceneManager)->GetActiveScene()->ChangeSpectate(static_cast<PlayerType>(idx + 1));
+				break;
+			}
+		}
+
+		//여기에 인터페이스 띄우기
+
+	}
 }
 
 
@@ -475,6 +498,7 @@ void Player::SkillHealer()
 
 	//m_guardObject->GetTransform()->LookAt(look);
 	GET_SINGLE(SceneManager)->GetActiveScene()->SpawnParticle(pos, ParticleType::HEAL);
+	GET_SINGLE(SoundManager)->soundPlay(Sounds::SKILL_HEALER);
 }
 
 void Player::SkillLauncher()

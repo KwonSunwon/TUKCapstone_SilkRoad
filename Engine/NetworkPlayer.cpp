@@ -28,6 +28,9 @@ void NetworkPlayer::Update()
 
 void NetworkPlayer::LateUpdate()
 {
+	if(m_hp <= 0) {
+		m_isActivated = false;
+	}
 }
 
 void NetworkPlayer::ProcessPacket(shared_ptr<PlayerPacket> packet)

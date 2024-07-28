@@ -45,6 +45,15 @@ void RigidBody::FinalUpdate()
 		}
 	}
 	GetTransform()->SetLocalPosition(m_position);
+
+	if (m_position.x < -10000.f)
+		m_isStatic = true;
+	else if (m_position.x > 60000.f)
+		m_isStatic = true;
+	else if (m_position.z < -10000.f)
+		m_isStatic = true;
+	else if (m_position.z > 60000.f)
+		m_isStatic = true;
 }
 
 void RigidBody::Move(Vec3 amount)

@@ -6,7 +6,7 @@
 struct FireInfo {
 	BulletType bulletType = BulletType::BASIC;
 	float bulletDamage = 0.f;
-	
+
 	float explosionDamage = 0.f;
 	float explosionSize = 0.f;
 };
@@ -26,9 +26,11 @@ public:
 	shared_ptr<Camera> GetPlayerCamera() { return m_playerCamera; }
 	void SetPlayerCamera(shared_ptr<Camera> camera) { m_playerCamera = camera; }
 
+	void ApplyDamage(float damage);
+
 public:
 	float GetHP() { return m_hp; }
-	void SetHP(float hp) { m_hp = hp; if (m_hp > m_maxHP) m_hp = m_maxHP; }
+	void SetHP(float hp) { m_hp = hp; if(m_hp > m_maxHP) m_hp = m_maxHP; }
 
 	float GetMaxHP() { return m_maxHP; }
 	void SetMaxHP(float maxHP) { m_maxHP = maxHP; }
@@ -62,7 +64,6 @@ public:
 
 	float GetMinusDamage() { return m_minusDamage; }
 	void SetMinusDamage(float minusDamage) { m_minusDamage = minusDamage; }
-
 
 	float GetPlusDamage() { return m_plusDamage; }
 	void SetPlusDamage(float plusDamage) { m_plusDamage = plusDamage; }

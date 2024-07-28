@@ -52,7 +52,10 @@
 shared_ptr<class Scene> LoadMainScene1()
 {
 	GET_SINGLE(SoundManager)->soundStop(Sounds::BGM_SPACE);
-	GET_SINGLE(SoundManager)->soundPlay(Sounds::BGM_SPACE);
+	GET_SINGLE(SoundManager)->soundStop(Sounds::BGM_DESERT);
+	GET_SINGLE(SoundManager)->soundStop(Sounds::BGM_SNOWFIELD);
+	GET_SINGLE(SoundManager)->soundStop(Sounds::BGM_CORRUPTION);
+	GET_SINGLE(SoundManager)->soundPlay(Sounds::BGM_DESERT);
 
 #pragma region LayerMask
 
@@ -1641,18 +1644,18 @@ shared_ptr<class Scene> LoadMainScene1()
 				scene->AddGameObject(particle);
 			}
 
-			for(int i = 0; i < 20; ++i)
+			for (int i = 0; i < 1; ++i)
 			{
 				shared_ptr<GameObject> particle = make_shared<GameObject>();
 				particle->AddComponent(make_shared<Transform>());
-				particle->AddComponent(make_shared<ParticleSystem>(ParticleType::PARTICLE_ENEMY));
+				particle->AddComponent(make_shared<ParticleSystem>(ParticleType::PARTICLE_DUST));
 				particle->SetCheckFrustum(false);
 				particle->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 0.f));
 
 				scene->AddGameObject(particle);
 			}
 		}
-		scene->SpawnParticle(Vec3(25000.f, 2000.f, 23000.f), ParticleType::PARTICLE_BIRD);
+		scene->SpawnParticle(Vec3(25000.f, 1000.f, 23000.f), ParticleType::PARTICLE_DUST);
 		scene->SpawnParticle(Vec3(25000.f, 1000.f, 23000.f), ParticleType::PARTICLE_THUNDER);
 	}
 #pragma endregion
