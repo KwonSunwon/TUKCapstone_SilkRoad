@@ -49,6 +49,18 @@ void SoundManager::soundPlay(int _type)
     {
         m_channel[_type]->setVolume(0.3f); // 볼륨을 10%로 설정
     }
+    else if (_type == ENV_THUNDER)
+    {
+        m_channel[_type]->setVolume(0.7f); // 볼륨을 10%로 설정
+    }
+    else if (_type == ENV_WARP)
+    {
+        m_channel[_type]->setVolume(0.7f); // 볼륨을 10%로 설정
+    }
+    else if (_type == ENV_GATE_ON)
+    {
+        m_channel[_type]->setVolume(0.6f); // 볼륨을 10%로 설정
+    }
 
     m_soundSystem->update();
 }

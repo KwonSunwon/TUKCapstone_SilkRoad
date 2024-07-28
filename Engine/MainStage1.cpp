@@ -255,7 +255,7 @@ shared_ptr<class Scene> LoadMainScene1()
 			obj->AddComponent(uiObject);
 		}
 		obj->AddComponent(meshRenderer);
-		scene->AddGameObject(obj);
+		//scene->AddGameObject(obj);
 	}
 #pragma endregion
 
@@ -1374,92 +1374,7 @@ shared_ptr<class Scene> LoadMainScene1()
 		}
 	}
 #pragma endregion
-	//#pragma region Enemy
-	//	{
-	//		for(int i = 0; i < 6; ++i)
-	//		{
-	//			int idx = 0;
-	//			shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Enemy_Spike.fbx");
-	//			vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
-	//			shared_ptr<GameObject> go = gameObjects[idx];
-	//			//Transform 설정
-	//			{
-	//				shared_ptr<Transform> transform = go->GetTransform();
-	//				transform->SetLocalPosition(Vec3(34418 + (i / 3) * 1000.f, 1500.f, 30000 + i % 3 * 1000.f));
-	//				if(i == 5)
-	//					transform->SetLocalScale(Vec3(12.f, 12.f, 12.f));
-	//				else
-	//					transform->SetLocalScale(Vec3(1.2f, 1.2f, 1.2f));
-	//				//transform->SetLocalRotation(Vec3(XMConvertToRadians(0.f), XMConvertToRadians(0.f), XMConvertToRadians(0.f)));
-	//			}
-	//
-	//			//강체 설정
-	//			{
-	//				shared_ptr<RigidBody> rb = make_shared<RigidBody>();
-	//
-	//				rb->SetStatic(true);
-	//				rb->SetMass(15000.f);
-	//				if(i == 5)
-	//					rb->SetMass(1000000000.f);
-	//				rb->SetRestitution(0.f);
-	//				go->SetCheckFrustum(true);
-	//				go->AddComponent(rb);
-	//			}
-	//
-	//			//콜라이더 설정 
-	//			//콜라이더의 위치,회전은 Gameobject의 Transform을 사용
-	//			{
-	//				//OBB를 사용할 경우 이곳의 주석을 풀어서 사용
-	//				shared_ptr<OrientedBoxCollider> collider = make_shared<OrientedBoxCollider>();
-	//				if(i == 5)
-	//					collider->SetExtent(Vec3(500, 1000, 500));
-	//				else
-	//					collider->SetExtent(Vec3(50, 100, 50));
-	//
-	//				//Sphere를 사용할경우 이곳의 주석을 풀어서 사용
-	//				/*shared_ptr<SphereCollider> collider = make_shared<SphereCollider>();
-	//				collider->SetRadius(100.f);*/
-	//
-	//
-	//				if(i == 5)
-	//					collider->SetOffset(Vec3(0, 1000, 0));
-	//				else
-	//					collider->SetOffset(Vec3(0, 100, 0));
-	//				go->AddComponent(collider);
-	//			}
-	//
-	//			//디버그용 콜라이더 매쉬 설정
-	//			if(DEBUG_MODE)
-	//			{
-	//				scene->AddGameObject(go->GetCollider()->GetDebugCollider());
-	//			}
-	//
-	//			//Instancing 유무 설정(사용:0,0  미사용:0,1)
-	//			{
-	//				go->GetMeshRenderer()->GetMaterial()->SetInt(0, 0);
-	//			}
-	//
-	//			//추가적인 컴포넌트 부착
-	//			{
-	//				shared_ptr<Enemy> enemyScript = make_shared<Enemy>();
-	//				enemyScript->AddPlayer(scene->GetPlayers()[0]);
-	//				enemyScript->AddPlayer(scene->GetPlayers()[GUEST_PLAYER1]);
-	//				enemyScript->AddPlayer(scene->GetPlayers()[GUEST_PLAYER2]);
-	//				go->AddComponent(enemyScript);
-	//				go->SetShadow(true);
-	//				enemyScript->SetNetworkId(i + 15);
-	//				scene->m_enemies[i + 15] = enemyScript;
-	//				if(i == 5) {
-	//					enemyScript->SetHP(500);
-	//					scene->m_bossMonsterScript = enemyScript;
-	//				}
-	//				//go->AddComponent(make_shared<PlayerAnimation>());
-	//			}
-	//
-	//			scene->AddGameObject(go);
-	//		}
-	//	}
-	//#pragma endregion
+
 
 
 #pragma region Item
@@ -1558,49 +1473,7 @@ shared_ptr<class Scene> LoadMainScene1()
 		for(int i = 0; i < 2; ++i) {
 			GET_SINGLE(Resources)->LoadCratePrefab(Vec3(12750 + 100 * i, 1500.f + 400.f * j, 15000 + 100 * j), scene);
 
-			//int idx = 0;
-			//shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Prop_Crate_03.fbx");
-			//vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
-			//shared_ptr<GameObject> gm = gameObjects[idx];
-
-			//gm->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
-			//gm->GetTransform()->SetLocalPosition(Vec3(12750 + 100 * i, 1500.f + 400.f * i, 15000 + 100 * j));
-
-
-			//gm->AddComponent(make_shared<RigidBody>());
-			////gm->AddComponent(make_shared<TestDragon>());
-
-			//if(i & 1) {
-			//	gm->AddComponent(make_shared<OrientedBoxCollider>());
-			//	gm->GetCollider()->SetExtent(Vec3(50, 50, 50));
-			//	gm->GetCollider()->SetOffset(Vec3(0, 50, 0));
-
-
-			//	/*gm->AddComponent(make_shared<SphereCollider>());
-			//	gm->GetCollider()->SetRadius(100.f);*/
-
-
-			//}
-			//else {
-			//	gm->AddComponent(make_shared<SphereCollider>());
-			//	gm->GetCollider()->SetRadius(50.f);
-			//	gm->GetCollider()->SetOffset(Vec3(0, 50, 0));
-
-			//	/*gm->AddComponent(make_shared<OrientedBoxCollider>());
-			//	gm->GetCollider()->SetExtent(Vec3(75, 50, 50));*/
-
-
-			//}
-
-			////Instancing 유무 설정(사용:0,0  미사용:0,1)
-			//{
-			//	gm->GetMeshRenderer()->GetMaterial()->SetInt(0, 0);
-			//}
-
-			//if(gm->GetCollider()->GetDebugCollider() != nullptr)
-			//	scene->AddGameObject(gm->GetCollider()->GetDebugCollider());
-			//gm->SetShadow(true);
-			//scene->AddGameObject(gm);
+			
 		}
 	}
 

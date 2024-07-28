@@ -65,11 +65,11 @@ void Input::Update()
 
 
 	// 테스트용 키
-	if (INPUT->GetButton(KEY_TYPE::KEY_4))
+	if (INPUT->GetButtonDown(KEY_TYPE::KEY_4))
 	{
 		GET_SINGLE(SceneManager)->ResetStage();
 	}
-	if (INPUT->GetButton(KEY_TYPE::KEY_5))
+	if (INPUT->GetButtonDown(KEY_TYPE::KEY_5))
 	{
 		GET_SINGLE(SceneManager)->StartNextStage();
 		if (GET_SINGLE(NetworkManager)->GetNetworkState() == NETWORK_STATE::HOST) {
