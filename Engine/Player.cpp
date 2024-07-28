@@ -55,10 +55,13 @@ void Player::Update()
 
 	SetHP(GetHP() + m_hpRegen * DELTA_TIME);
 
-	if(INPUT->GetButtonDown(KEY_TYPE::F))
+	if (INPUT->GetButtonDown(KEY_TYPE::Q))
 	{
 		Skill();
+	}
 
+	if (INPUT->GetButtonDown(KEY_TYPE::F))
+	{
 		float minDistance = FLT_MAX;
 		vector<shared_ptr<GameObject>>gameObjects = GET_SINGLE(SceneManager)->GetActiveScene()->GetInteractiveGameObjects();
 		Vec3 cameraPos = m_playerCamera->GetTransform()->GetWorldPosition();
@@ -90,8 +93,6 @@ void Player::Update()
 
 		if(picked)
 			picked->GetInteractiveObject()->InteractiveFunction();
-
-
 	}
 
 	if(INPUT->GetButtonDown(KEY_TYPE::C))

@@ -20,7 +20,7 @@ void Enemy::Awake()
 	SetMonovihaviourName("Enemy");
 
 	shared_ptr<RigidBody> rb = GetRigidBody();
-	rb->SetStatic(false);
+	//rb->SetStatic(false);
 	rb->SetMaxSpeed(m_maxWalkSpeed);
 	rb->SetMass(80.f);
 	m_pathFinding = make_shared<PathFinding>();
