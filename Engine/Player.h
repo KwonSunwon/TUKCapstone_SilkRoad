@@ -73,6 +73,10 @@ public:
 
 	void SetSkillObject(int id, shared_ptr<GameObject> gm);
 	void SetBomb(shared_ptr<Bomb> bomb) { m_bomb = bomb; }
+
+	void SetAlive(bool isAlive) { m_isAlive = isAlive; }
+	bool IsAlive() { return m_isAlive; }
+
 private:
 	shared_ptr<class PlayerState> m_curState;
 	shared_ptr<Camera> m_playerCamera;
@@ -89,36 +93,35 @@ private:
 	float m_skillCoolTime = 12.f;
 	float m_skillRemainingTime = 0.f;
 
-
-	
 private:
 	//Player Stat
-	float m_hp					= 100.f;
-	float m_maxHP				= 100.f;				
-	float m_defense				= 5.f;
-	float m_hpRegen				= 5.f;
+	float m_hp = 100.f;
+	float m_maxHP = 100.f;
+	float m_defense = 5.f;
+	float m_hpRegen = 5.f;
 
-	float m_maxWalkSpeed		= 1300.f;
-	float m_maxJumpSpeed		= 1000.f;
-	float m_maxAimSpeed			= 500.f;
+	float m_maxWalkSpeed = 1300.f;
+	float m_maxJumpSpeed = 1000.f;
+	float m_maxAimSpeed = 500.f;
 
-	float m_minusDamage			= 0.2f;
-	float m_plusDamage			= 0.2f;
+	float m_minusDamage = 0.2f;
+	float m_plusDamage = 0.2f;
 
-	float m_criticalPercentage	= 0.3f;
-	float m_criticalDamage		= 1.7f;
+	float m_criticalPercentage = 0.3f;
+	float m_criticalDamage = 1.7f;
 
-	float m_knockBackPower		= 10.f;
-	float m_bulletDamage		= 20.f;
+	float m_knockBackPower = 10.f;
+	float m_bulletDamage = 20.f;
 
 	bool m_isCritical = false;
 
-	
 	float m_rageTime = 0.f;
 	float m_bombTime = 0.f;
 	bool m_isRage = false;
 	bool m_isBombTime = false;
 	shared_ptr<Bomb> m_bomb;
+
+	bool m_isAlive = true;
 
 private:
 	void InteracitveObjectPick();
