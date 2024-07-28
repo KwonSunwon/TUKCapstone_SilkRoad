@@ -74,6 +74,7 @@ public:
 	virtual void Send(Packet packet, int id) {};
 	virtual void Send(char* data, int size) {};
 	virtual void Send(shared_ptr<char[]> data, int size) {};
+	virtual void Send(shared_ptr<char[]> data, int size, int guestId) {};
 	//virtual Packet Recv();
 	virtual bool Recv(shared_ptr<Packet> packet) { return false; }
 
@@ -120,6 +121,7 @@ public:
 	void Send(Packet packet, int id) override;
 	//void Send(char* data, int size) override;
 	void Send(shared_ptr<char[]> data, int size) override;
+	void Send(shared_ptr<char[]> data, int size, int guestId) override;
 	bool Recv(shared_ptr<Packet> packet) override;
 
 	bool IsThroughPacket(PACKET_TYPE type);
@@ -152,6 +154,7 @@ public:
 	void Send(Packet packet, int id) override;
 	void Send(char* data, int size) override;
 	void Send(shared_ptr<char[]> data, int size) override;
+	void Send(shared_ptr<char[]> data, int size, int guestId) override {};
 	bool Recv(shared_ptr<Packet> packet) override;
 private:
 
@@ -181,6 +184,7 @@ public:
 	void Send(Packet packet);
 	void Send(char* data, int size);
 	void Send(shared_ptr<char[]> data, int size);
+	void Send(shared_ptr<char[]> data, int size, int guestId);
 	bool Recv(shared_ptr<Packet> packet);
 
 	char* GetMyIP() { return dynamic_cast<Host*>(m_network.get())->m_myIP; }

@@ -14,10 +14,15 @@
 #include "AstarGrid.h"
 #include "MeshRenderer.h"
 #include "Material.h"
+#include "ParticleSystem.h"
+#include "NetworkPlayer.h"
+#include "Packet.h"
+#include "Network.h"
+#include "NetworkObject.h"
 
 shared_ptr<EnemyState> EnemyState::OnUpdateState()
 {
-	if (m_enemy->GetHP() <= 0)
+	if(m_enemy->GetHP() <= 0)
 		return make_shared<EnemyDieState>(m_enemy);
 	return nullptr;
 }
@@ -25,12 +30,12 @@ shared_ptr<EnemyState> EnemyState::OnUpdateState()
 
 shared_ptr<EnemyState> EnemyIdleState::OnUpdateState()
 {
-	for (int i = 0; i < m_enemy->GetPlayers().size(); ++i)
+	for(int i = 0; i < m_enemy->GetPlayers().size(); ++i)
 	{
 		shared_ptr<GameObject> player = m_enemy->GetPlayers()[i];
 		Vec3 toPlayer = player->GetTransform()->GetLocalPosition() - m_enemy->GetTransform()->GetLocalPosition();
 		float dist = toPlayer.Length();
-		if (dist < m_enemy->GetChaseRange())
+		if(dist < m_enemy->GetChaseRange())
 		{
 			m_enemy->SetTargetPlayerIndex(i);
 			return make_shared<EnemyWalkState>(m_enemy);
@@ -55,12 +60,12 @@ shared_ptr<EnemyState> EnemyWalkState::OnUpdateState()
 		toPath = GET_SINGLE(SceneManager)->GetActiveScene()->GetAstarGrid()->GetPosition(path.front().m_idx) - m_enemy->GetRigidBody()->GetPosition();
 	}*/
 	float dist = toPlayer.Length();
-	if (dist < m_enemy->GetAttackRange())
+	if(dist < m_enemy->GetAttackRange())
 	{
 		if(m_enemy->GetAttackReady())
 			return make_shared<EnemyAttackState>(m_enemy);
 	}
-	else if (dist > m_enemy->GetChaseRange())
+	else if(dist > m_enemy->GetChaseRange())
 	{
 		return make_shared<EnemyIdleState>(m_enemy);
 	}
@@ -94,7 +99,7 @@ shared_ptr<EnemyState> EnemyAttackState::OnUpdateState()
 
 shared_ptr<EnemyState> EnemyAttackState::OnLateUpdateState()
 {
-	if (m_enemy->GetAnimator()->IsAnimationEndOnThisFrame())
+	if(m_enemy->GetAnimator()->IsAnimationEndOnThisFrame())
 	{
 		return make_shared<EnemyIdleState>(m_enemy);
 	}
@@ -102,7 +107,33 @@ shared_ptr<EnemyState> EnemyAttackState::OnLateUpdateState()
 
 void EnemyAttackState::OnEnter()
 {
+	shared_ptr<Enemy> tempE = m_enemy;
 	m_enemy->GetAnimator()->Play(static_cast<uint32>(ENEMY_STATE::ATTACK));
+	m_enemy->GetAnimator()->SetEventFunction(static_cast<uint32>(ENEMY_STATE::ATTACK), 1.f, [tempE]() {
+		Vec3 pos = tempE->GetTransform()->GetWorldPosition();
+		Vec3 look = tempE->GetTransform()->GetLook();
+		pos += look * 200.f + Vec3(0.f, 100.f, 0.f);
+		Vec3 playerPos = GET_SINGLE(SceneManager)->GetActiveScene()->GetMainPlayerScript()->GetTransform()->GetWorldPosition();
+		playerPos += Vec3(0.f, 100.f, 0.f);
+		if((pos - playerPos).Length() < 300.f) {
+			GET_SINGLE(SceneManager)->GetActiveScene()->GetMainPlayerScript()->SetHP(10.f);
+		}
+		});
+	m_enemy->GetAnimator()->SetEventFunction(static_cast<uint32>(ENEMY_STATE::ATTACK), 1.f, [tempE]() {
+		auto players = GET_SINGLE(SceneManager)->GetActiveScene()->GetNetworkPlayers();
+		for(int idx = 0; idx < 2; idx++) {
+			Vec3 pos = tempE->GetTransform()->GetWorldPosition();
+			Vec3 look = tempE->GetTransform()->GetLook();
+			pos += look * 200.f + Vec3(0.f, 100.f, 0.f);
+			Vec3 playerPos = players[idx]->GetTransform()->GetWorldPosition();
+			playerPos += Vec3(0.f, 100.f, 0.f);
+			if((pos - playerPos).Length() < 300.f) {
+				shared_ptr<PlayerHitPacket> packet = make_shared<PlayerHitPacket>();
+				packet->m_damage = 10.f;
+				GET_SINGLE(NetworkManager)->Send(reinterpret_pointer_cast<char[]>(packet), packet->m_size, idx);
+			}
+		}
+		});
 }
 
 shared_ptr<EnemyState> EnemyDieState::OnUpdateState()
@@ -125,10 +156,11 @@ shared_ptr<EnemyState> EnemyDieState::OnLateUpdateState()
 	m_enemy->GetMeshRenderer()->GetMaterial()->SetFloat(3, m_dieTime);
 	m_dieTime += DELTA_TIME;
 
-	if (m_enemy->GetAnimator()->IsAnimationEndOnThisFrame())
+	if(m_enemy->GetAnimator()->IsAnimationEndOnThisFrame())
 	{
 		m_enemy->GetTransform()->SetLocalPosition(Vec3(0, 0, 0));
 		m_enemy->GetRigidBody()->MoveTo(Vec3(-1.f, 0, 0));
+		m_enemy->GetNetworkObject()->SetActive(false);
 		return make_shared<EnemyIdleState>(m_enemy);
 	}
 }

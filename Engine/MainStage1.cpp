@@ -864,7 +864,7 @@ shared_ptr<class Scene> LoadMainScene1()
 		vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
 		shared_ptr<GameObject> gm = gameObjects[idx];
 
-		gm->GetTransform()->SetLocalScale(Vec3(10.f, 10.f, 3.f));
+		gm->GetTransform()->SetLocalScale(Vec3(10.f, 5.f, 10.f));
 		gm->GetTransform()->SetLocalPosition(Vec3(500, 500.f, 500.f));
 
 		shared_ptr<RigidBody> rbb = make_shared<RigidBody>();
@@ -874,11 +874,35 @@ shared_ptr<class Scene> LoadMainScene1()
 		gm->AddComponent(make_shared<TankerSkill>());
 
 		gm->AddComponent(make_shared<OrientedBoxCollider>());
-		gm->GetCollider()->SetExtent(Vec3(500, 500, 150));
-		gm->GetCollider()->SetOffset(Vec3(0, 500, 0));
+		gm->SetCheckFrustum(true);
 
 
+		Vec3 localPos, localRot, colliderCenter, ColliderSize;
+		localPos = Vec3(758.f, 2089.f, -2360.f);
+		localRot = Vec3(90.f, 0.f, 0.f);
+		colliderCenter = Vec3(0.f, 0.f, 0.f);
+		ColliderSize = Vec3(1.46f*10.f, 0.28f*5.f, 0.65f*10.f);
 
+		localPos.x += 25000.f;
+		localPos.z += 25000.f;
+		gm->GetTransform()->SetLocalPosition(localPos);
+		localRot.y -= 180.f;
+		localRot.x = XMConvertToRadians(localRot.x);
+		localRot.y = XMConvertToRadians(localRot.y);
+		localRot.z = XMConvertToRadians(localRot.z);
+		gm->GetTransform()->SetLocalRotation(localRot);
+
+		colliderCenter *= 100.f;
+		gm->GetCollider()->SetOffset(colliderCenter);
+
+		ColliderSize *= (100.f / 2.f);
+		gm->GetCollider()->SetExtent(ColliderSize);
+		Vec3 rot = gm->GetTransform()->GetLocalRotation();
+		Matrix rotationMatrix = XMMatrixRotationX(rot.x) * XMMatrixRotationY(rot.y + 3.141592f) * XMMatrixRotationZ(rot.z);
+		Vec3 center = XMVector3Transform(gm->GetCollider()->GetOffset(), rotationMatrix);
+		gm->GetCollider()->SetOffset(center);
+
+	
 		//Instancing 유무 설정(사용:0,0  미사용:0,1)
 		{
 			gm->GetMeshRenderer()->GetMaterial()->SetInt(0, 0);
@@ -886,6 +910,7 @@ shared_ptr<class Scene> LoadMainScene1()
 
 		if(gm->GetCollider()->GetDebugCollider() != nullptr)
 			scene->AddGameObject(gm->GetCollider()->GetDebugCollider());
+
 		gm->SetShadow(true);
 		scene->AddGameObject(gm);
 
@@ -1478,8 +1503,8 @@ shared_ptr<class Scene> LoadMainScene1()
 
 
 
-	for(int j = 0; j < 5; ++j) {
-		for(int i = 0; i < 5; ++i) {
+	for(int j = 0; j < 2; ++j) {
+		for(int i = 0; i < 2; ++i) {
 			GET_SINGLE(Resources)->LoadCratePrefab(Vec3(12750 + 100 * i, 1500.f + 400.f * j, 15000 + 100 * j), scene);
 
 			//int idx = 0;
@@ -1608,6 +1633,17 @@ shared_ptr<class Scene> LoadMainScene1()
 				shared_ptr<GameObject> particle = make_shared<GameObject>();
 				particle->AddComponent(make_shared<Transform>());
 				particle->AddComponent(make_shared<ParticleSystem>(ParticleType::PARTICLE_ITEM));
+				particle->SetCheckFrustum(false);
+				particle->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 0.f));
+
+				scene->AddGameObject(particle);
+			}
+
+			for (int i = 0; i < 20; ++i)
+			{
+				shared_ptr<GameObject> particle = make_shared<GameObject>();
+				particle->AddComponent(make_shared<Transform>());
+				particle->AddComponent(make_shared<ParticleSystem>(ParticleType::PARTICLE_ENEMY));
 				particle->SetCheckFrustum(false);
 				particle->GetTransform()->SetLocalPosition(Vec3(0.f, 0.f, 0.f));
 

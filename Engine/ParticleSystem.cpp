@@ -5,6 +5,10 @@
 #include "Resources.h"
 #include "Transform.h"
 #include "Timer.h"
+#include "SceneManager.h"
+#include "GameObject.h"
+#include "Camera.h"
+#include "RigidBody.h"
 
 ParticleSystem::ParticleSystem(ParticleType type) : Component(COMPONENT_TYPE::PARTICLE_SYSTEM)
 {
@@ -112,6 +116,8 @@ ParticleSystem::ParticleSystem(ParticleType type) : Component(COMPONENT_TYPE::PA
 
 		m_computeMaterial->SetInt(3, 0);
 		m_exposeTime = 5.f;
+
+		m_activeLength = 3000.f;
 		break;
 	}
 
@@ -136,6 +142,8 @@ ParticleSystem::ParticleSystem(ParticleType type) : Component(COMPONENT_TYPE::PA
 
 		m_computeMaterial->SetInt(3, 2);
 		m_exposeTime = 10000.f;
+
+		m_activeLength = 1000000.f;
 		break;
 	}
 
@@ -161,6 +169,8 @@ ParticleSystem::ParticleSystem(ParticleType type) : Component(COMPONENT_TYPE::PA
 		m_computeMaterial->SetInt(3, 3);
 		m_exposeTime = 10000.f;
 		m_createInterval = 0.5f;
+
+		m_activeLength = 1000000.f;
 		break;
 	}
 
@@ -186,6 +196,31 @@ ParticleSystem::ParticleSystem(ParticleType type) : Component(COMPONENT_TYPE::PA
 		m_computeMaterial->SetInt(3, 0);
 		m_exposeTime = 10000.f;
 		
+		break;
+	}
+
+	case PARTICLE_ENEMY:
+	{
+		m_material = GET_SINGLE(Resources)->Get<Material>(L"Particle7");
+		m_computeMaterial = GET_SINGLE(Resources)->Get<Material>(L"ComputeParticle7");
+
+		m_singleType = true;
+		m_maxParticle = 1;
+		shared_ptr<Texture> tex = GET_SINGLE(Resources)->Load<Texture>(
+			L"EnemyP", L"..\\Resources\\Texture\\Particle\\Enemy.png");
+		m_material->SetTexture(0, tex);
+		m_startScale = 300.f;
+		m_endScale = 300.f;
+		m_minSpeed = 0.f;
+		m_maxSpeed = 0.f;
+		m_minLifeTime = 0.5f;
+		m_maxLifeTime = 0.5;
+		m_column = 2;
+		m_row = 3;
+
+		m_computeMaterial->SetInt(3, 0);
+		m_exposeTime = 0.5;
+
 		break;
 	}
 
@@ -248,6 +283,14 @@ void ParticleSystem::Render()
 {
 	if (!m_isSpawn)
 		return;
+
+
+	Vec3 camPos =GET_SINGLE(SceneManager)->GetActiveScene()->GetMainCamera()->GetTransform()->GetWorldPosition();
+	Vec3 pos = GetTransform()->GetWorldPosition();
+	if ((pos - camPos).Length() > m_activeLength) {
+		return;
+	}
+		
 
 	GetTransform()->PushData();
 

@@ -50,10 +50,13 @@ void Network::Update()
 			break;
 		case PACKET_TYPE::PT_PLAYER_CLASS_CHANGE:
 			id = ProcessPlayerID(packet->m_targetId);
-			if (id != -1) {
+			if(id != -1) {
 				players[id]->ChangeClass(reinterpret_pointer_cast<PlayerClassChangePacket>(packet)->m_classIndex);
 				players[id]->SetActivated(true);
 			}
+			break;
+		case PACKET_TYPE::PT_PLAYER_HIT:
+			GET_SINGLE(SceneManager)->GetActiveScene()->m_mainPlayerScript->SetHP(reinterpret_pointer_cast<PlayerHitPacket>(packet)->m_damage);
 			break;
 		case PACKET_TYPE::PT_SKILL:
 			GET_SINGLE(SceneManager)->GetActiveScene()->m_mainPlayerScript->NetworkSkill(reinterpret_pointer_cast<SkillPacket>(packet));
@@ -123,6 +126,8 @@ shared_ptr<Packet> Network::PacketProcess(int idx)
 	case PACKET_TYPE::PT_FORCE:
 		packet = make_shared<ForcePacket>();
 		break;
+	case PACKET_TYPE::PT_PLAYER_HIT:
+		packet = make_shared<PlayerHitPacket>();
 	}
 
 	if(!m_buffer[idx].Read(reinterpret_cast<char*>(packet.get()), packet->m_size)) {
@@ -356,6 +361,13 @@ void Host::Send(shared_ptr<char[]> data, int size)
 	for(auto& guest : m_guestInfos) {
 		send(guest.socket, data.get(), size, 0);
 	}
+}
+
+void Host::Send(shared_ptr<char[]> data, int size, int guestId)
+{
+	if(m_guestInfos.empty())
+		return;
+	send(m_guestInfos[guestId].socket, data.get(), size, 0);
 }
 
 bool Host::Recv(shared_ptr<Packet> packet)
@@ -665,6 +677,12 @@ void NetworkManager::Send(shared_ptr<char[]> data, int size)
 {
 	if(GetNetworkState() != NETWORK_STATE::SINGLE)
 		m_network->Send(data, size);
+}
+
+void NetworkManager::Send(shared_ptr<char[]> data, int size, int guestId)
+{
+	if(GetNetworkState() != NETWORK_STATE::SINGLE)
+		m_network->Send(data, size, guestId);
 }
 
 bool NetworkManager::Recv(shared_ptr<Packet> packet)

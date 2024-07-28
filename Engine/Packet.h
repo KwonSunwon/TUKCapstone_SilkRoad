@@ -41,6 +41,7 @@ enum class PACKET_TYPE : BYTE {
 	PT_GUEST_INIT,
 	PT_PLAYER,
 	PT_PLAYER_CLASS_CHANGE,
+	PT_PLAYER_HIT,
 	PT_ENEMY,
 	PT_ENEMY_HIT,
 	PT_STAGE_CHANGE,
@@ -105,6 +106,15 @@ public:
 
 public:
 	int32 m_classIndex;
+};
+
+class PlayerHitPacket : public Packet {
+public:
+	PlayerHitPacket();
+	~PlayerHitPacket() {}
+
+public:
+	float m_damage;
 };
 
 class EnemyPacket : public Packet {
