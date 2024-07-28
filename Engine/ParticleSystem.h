@@ -13,6 +13,7 @@ enum ParticleType {
 	PARTICLE_BIRD,
 	PARTICLE_THUNDER,
 	PARTICLE_ITEM,
+	PARTICLE_ENEMY,
 	PARTICLE_TYPE_COUNT
 };
 
@@ -70,6 +71,8 @@ public:
 
 	float				m_exposeTime = 0.f;
 	float				m_makeTime = 0.f;
+
+	float				m_activeLength = 10000.f;
 
 	int					m_row = 6;
 	int					m_column = 6;

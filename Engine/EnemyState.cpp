@@ -14,6 +14,7 @@
 #include "AstarGrid.h"
 #include "MeshRenderer.h"
 #include "Material.h"
+#include "ParticleSystem.h"
 
 shared_ptr<EnemyState> EnemyState::OnUpdateState()
 {
@@ -102,7 +103,12 @@ shared_ptr<EnemyState> EnemyAttackState::OnLateUpdateState()
 
 void EnemyAttackState::OnEnter()
 {
+	Vec3 pos = m_enemy->GetTransform()->GetWorldPosition();
+	Vec3 look = m_enemy->GetTransform()->GetLook();
+	pos += look * 200.f + Vec3(0.f, 150.f, 0.f);
 	m_enemy->GetAnimator()->Play(static_cast<uint32>(ENEMY_STATE::ATTACK));
+	m_enemy->GetAnimator()->SetEventFunction(static_cast<uint32>(ENEMY_STATE::ATTACK), 1.f, [pos]() {GET_SINGLE(SceneManager)->GetActiveScene()->SpawnParticle(pos, ParticleType::PARTICLE_ENEMY); });
+	
 }
 
 shared_ptr<EnemyState> EnemyDieState::OnUpdateState()

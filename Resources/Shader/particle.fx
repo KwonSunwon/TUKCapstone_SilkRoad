@@ -92,10 +92,10 @@ void GS_Main(point VS_OUT input[1], inout TriangleStream<GS_OUT> outputStream)
     uint currentFrame = min((uint) (ratio * totalFrames), totalFrames - 1);
 
     uint frameX = currentFrame % g_int_1;
-    uint frameY = currentFrame / g_int_0;
+    uint frameY = currentFrame / g_int_1;
 
-    float uvOffsetX = frameX * (1.f/g_int_1);
-    float uvOffsetY = frameY * (1.f/g_int_0);
+    float uvOffsetX = frameX * (1.f / g_int_1);
+    float uvOffsetY = frameY * (1.f / g_int_0);
 
     output[0].uv = float2(uvOffsetX, uvOffsetY);
     output[1].uv = float2(uvOffsetX + 1.f / g_int_1, uvOffsetY);
