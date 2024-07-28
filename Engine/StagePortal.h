@@ -9,6 +9,8 @@ public:
 	virtual void PrintInteractiveText() override;
 	virtual void InteractiveFunction() override;
 
+	bool m_isPacketProcess = false;
+
 private:
 	bool m_isActivated = false;
 	float m_spawnTimer = 0.f;

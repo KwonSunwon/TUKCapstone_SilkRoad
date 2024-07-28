@@ -81,9 +81,12 @@ void Network::Update()
 			GET_SINGLE(SceneManager)->GetActiveScene()->SpawnParticle(reinterpret_pointer_cast<ParticlePacket>(packet)->m_pos, reinterpret_pointer_cast<ParticlePacket>(packet)->m_particleIndex, true);
 			break;
 		}
-		case PACKET_TYPE::PT_PORTAL_ON:
-			GET_SINGLE(SceneManager)->GetActiveScene()->GetStagePortal()->InteractiveFunction();
+		case PACKET_TYPE::PT_PORTAL_ON: {
+			auto portal = GET_SINGLE(SceneManager)->GetActiveScene()->GetStagePortal();
+			portal->m_isPacketProcess = true;
+			portal->InteractiveFunction();
 			break;
+		}
 		default:
 			break;
 		}
