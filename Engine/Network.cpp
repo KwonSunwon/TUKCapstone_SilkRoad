@@ -70,7 +70,7 @@ void Network::Update()
 			objects[packet->m_targetId]->ProcessPacket(packet);
 			break;
 		case PACKET_TYPE::PT_STAGE_CHANGE:
-			if (reinterpret_pointer_cast<StageChangePacket>(packet)->m_stageIndex == 0) {
+			if(reinterpret_pointer_cast<StageChangePacket>(packet)->m_stageIndex == 0) {
 				m_receivedPacketQue.Clear();
 				GET_SINGLE(DifficultyManager)->ReturnToLobby();
 			}
@@ -302,13 +302,13 @@ void Host::Connection(ushort id)
 	// 게스트와 패킷 송수신
 	int retval;
 	while(GetState() == NETWORK_STATE::HOST) {
-		startTime = chrono::steady_clock::now();
-
+		//startTime = chrono::steady_clock::now();
 		{
-			Packet packet;
+			//OutputDebugString(L"Connection Send\n");
 			// 서버에서 게스트로 보내는 패킷
+			pair<shared_ptr<char[]>, ushort> packet;
 			while(eventQue->toClient.TryPop(packet)) {
-				retval = send(socket, (char*)&packet, packet.m_size, 0);
+				retval = send(socket, packet.first.get(), packet.second, 0);
 				if(retval == SOCKET_ERROR) {
 					// disconnect
 					OutputDebugString(L"Disconnect in Connection send\n");
@@ -340,7 +340,8 @@ void Host::Connection(ushort id)
 				}
 
 				if(m_guestInfos.size() > 1 && IsThroughPacket(packet->m_type)) {
-					send(m_guestInfos[otherId].socket, (char*)packet.get(), packet->m_size, 0);
+					//send(m_guestInfos[otherId].socket, (char*)packet.get(), packet->m_size, 0);
+					m_guestInfos[otherId].eventQue->toClient.Push(make_pair(reinterpret_pointer_cast<char[]>(packet), packet->m_size));
 				}
 				m_receivedPacketQue.Push(packet);
 
@@ -353,21 +354,21 @@ void Host::Connection(ushort id)
 				packetSize = m_buffer[bufferIdx].Peek();
 			}
 		}
-		endTime = chrono::steady_clock::now();
+		/*endTime = chrono::steady_clock::now();
 		elapsedTime = chrono::duration<float>(endTime - startTime).count();
 		remainTime = SEND_PACKET_PER_SEC - elapsedTime;
 		if(remainTime > 0.f) {
 			this_thread::sleep_for(chrono::duration<float>(remainTime));
-		}
+		}*/
 	}
 }
 void Host::Send(Packet packet, int id)
 {
 	//m_eventQue.toServer.Push(packet);
 	//packet.header.clientID = id;
-	for(auto& guest : m_guestInfos) {
-		guest.eventQue->toClient.Push(packet);
-	}
+	//for(auto& guest : m_guestInfos) {
+	//	guest.eventQue->toClient.Push(packet);
+	//}
 
 }
 
@@ -376,7 +377,8 @@ void Host::Send(shared_ptr<char[]> data, int size)
 	if(m_guestInfos.empty())
 		return;
 	for(auto& guest : m_guestInfos) {
-		send(guest.socket, data.get(), size, 0);
+		//send(guest.socket, data.get(), size, 0);
+		guest.eventQue->toClient.Push(make_pair(data, size));
 	}
 }
 
@@ -384,7 +386,8 @@ void Host::Send(shared_ptr<char[]> data, int size, int guestId)
 {
 	if(m_guestInfos.empty())
 		return;
-	send(m_guestInfos[guestId].socket, data.get(), size, 0);
+	//send(m_guestInfos[guestId].socket, data.get(), size, 0);
+	m_guestInfos[guestId].eventQue->toClient.Push(make_pair(data, size));
 }
 
 bool Host::Recv(shared_ptr<Packet> packet)
@@ -497,25 +500,6 @@ void Guest::Sender()
 	Packet packet;
 
 	while(GetState() == NETWORK_STATE::GUEST) {
-		//while(m_toServerEventQue.TryPop(packet)) {
-		//	retval = send(m_socket, (char*)&packet, packet.m_size, 0);
-		//	if(retval == SOCKET_ERROR) {
-		//		// disconnect
-		//		OutputDebugString(L"Disconnect in Sender()\n");
-		//		closesocket(m_socket);
-		//	}
-		//}
-//#define DEBUG
-//#ifdef DEBUG
-//		shared_ptr<PlayerPacket> testPlayerPacket = make_shared<PlayerPacket>();
-//		testPlayerPacket->m_position = { 3500.f, 1500.f, 2500.f };
-//		testPlayerPacket->m_rotation = { 0.f, 0.f, 0.f };
-//		testPlayerPacket->m_velocity = { 100.f, 0.f, 0.f };
-//		testPlayerPacket->m_animationIndex = 2;
-//
-//		//m_receivedPacketQue.Push(testPlayerPacket);
-//		send(m_socket, (char*)testPlayerPacket.get(), testPlayerPacket->m_size, 0);
-//#endif // DEBUG
 		pair<shared_ptr<char[]>, ushort> data;
 		while(m_toServerDataQue.TryPop(data)) {
 			retval = send(m_socket, data.first.get(), data.second, 0);

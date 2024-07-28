@@ -10,32 +10,6 @@ static const int TIMEOUT = 5;
 
 #define SEND_PACKET_PER_SEC 1.f / 30.f
 
-// Packet Type
-//enum class PACKET_TYPE {
-//	PLAYER,
-//	ENEMY,
-//	ITEM,
-//	// ...
-//	NET,
-//	END
-//};
-
-// Packet Struct
-//struct PacketHeader {
-//	ushort clientID;
-//	uint16 size;
-//	PACKET_TYPE type;
-//};
-
-//struct Packet {
-//	PacketHeader header;
-//	char data[1024];
-//
-//	// TEMP
-//	Vec3 pos;
-//	ushort id;
-//};
-
 enum class NETWORK_STATE {
 	SINGLE,
 	HOST,
@@ -44,7 +18,7 @@ enum class NETWORK_STATE {
 
 struct PacketQueue {
 	LockQueue<Packet> toServer;
-	LockQueue<Packet> toClient;
+	LockQueue<pair<shared_ptr<char[]>, ushort>> toClient;
 };
 
 struct GuestInfo {
@@ -52,17 +26,6 @@ struct GuestInfo {
 	SOCKET socket;
 	shared_ptr<PacketQueue> eventQue = make_shared<PacketQueue>();
 };
-
-//struct PlayerData {
-//	Vec3 pos;
-//	ushort id;
-//	// ... Class, Hp, Item, ...
-//};
-//
-//struct GameData {
-//	PlayerData playerData[MAX_PLAYER];
-//	// ... Enemy, Item, ...
-//};
 
 class Network {
 public:
@@ -122,6 +85,7 @@ public:
 	//void Send(char* data, int size) override;
 	void Send(shared_ptr<char[]> data, int size) override;
 	void Send(shared_ptr<char[]> data, int size, int guestId) override;
+
 	bool Recv(shared_ptr<Packet> packet) override;
 
 	bool IsThroughPacket(PACKET_TYPE type);
