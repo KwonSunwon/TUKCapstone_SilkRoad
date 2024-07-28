@@ -12,6 +12,9 @@
 #include "MeshRenderer.h"
 #include "Animator.h"
 #include "UpgradeManager.h"
+#include "Scene.h"
+#include "SceneManager.h"
+#include "Player.h"
 #include <chrono>
 
 void NetworkPlayer::Awake()
@@ -30,6 +33,17 @@ void NetworkPlayer::LateUpdate()
 {
 	if(m_hp <= 0) {
 		m_isActivated = false;
+
+		auto scene = GET_SINGLE(SceneManager)->GetActiveScene();
+		if(!scene->GetMainPlayerScript()->IsAlive()) {
+			auto players = scene->GetNetworkPlayers();
+			for(int idx = 0; idx < 2; idx++) {
+				if(players[idx]->IsActivated()) {
+					scene->ChangeSpectate(static_cast<PlayerType>(idx + 1));
+					break;
+				}
+			}
+		}
 	}
 }
 

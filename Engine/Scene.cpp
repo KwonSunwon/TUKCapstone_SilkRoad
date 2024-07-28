@@ -427,33 +427,33 @@ void Scene::testCollision()
 	}*/
 	vector<shared_ptr<GameObject>> staticCols;
 	vector<shared_ptr<GameObject>> movableCols;
-	for (auto go : m_collidableGameObjects) {
+	for(auto go : m_collidableGameObjects) {
 		Vec3 pos = go->GetTransform()->GetWorldPosition();
-		if (pos.x < -10000.f)
+		if(pos.x < -10000.f)
 			continue;
-		else if (pos.x > 60000.f)
+		else if(pos.x > 60000.f)
 			continue;
-		else if (pos.z > 60000.f)
+		else if(pos.z > 60000.f)
 			continue;
-		else if (pos.z < -10000.f)
+		else if(pos.z < -10000.f)
 			continue;
-		
-		if (go->GetRigidBody()->GetStatic())
+
+		if(go->GetRigidBody()->GetStatic())
 			staticCols.push_back(go);
 		else
 			movableCols.push_back(go);
 	}
-	for (int i = 0; i < staticCols.size(); ++i) {
-		for (int j = 0; j < movableCols.size(); ++j) {
+	for(int i = 0; i < staticCols.size(); ++i) {
+		for(int j = 0; j < movableCols.size(); ++j) {
 			IntersectColliders(staticCols[i]->GetCollider(), movableCols[j]->GetCollider());
 		}
 	}
-	for (int i = 0; i < movableCols.size(); ++i) {
-		for (int j = i + 1; j < movableCols.size(); ++j) {
+	for(int i = 0; i < movableCols.size(); ++i) {
+		for(int j = i + 1; j < movableCols.size(); ++j) {
 			IntersectColliders(movableCols[i]->GetCollider(), movableCols[j]->GetCollider());
 		}
 	}
-	
+
 
 	/*for(int i = 0; i < m_collidableGameObjects.size(); ++i) {
 		for(int j = i + 1; j < m_collidableGameObjects.size(); ++j) {
@@ -500,18 +500,18 @@ shared_ptr<GameObject> Scene::SpawnParticle(Vec3 pos, int type, bool network)
 
 bool Scene::ChangeSpectate(PlayerType type)
 {
-	auto mainCamera = GetMainCamera();
+	auto mainCamera = GetMainCamera()->GetTransform();
 	switch(type) {
 	case MAIN_PLAYER:
-		mainCamera->GetTransform()->SetParent(m_mainPlayerScript->GetTransform());
+		mainCamera->SetParent(m_mainPlayerScript->GetTransform());
 		return true;
 	case GUEST_PLAYER1:
 		if(!m_networkPlayers[0]->IsActivated()) break;
-		mainCamera->GetTransform()->SetParent(m_networkPlayers[0]->GetTransform());
+		mainCamera->SetParent(m_networkPlayers[0]->GetTransform());
 		return true;
 	case GUEST_PLAYER2:
 		if(!m_networkPlayers[1]->IsActivated()) break;
-		mainCamera->GetTransform()->SetParent(m_networkPlayers[1]->GetTransform());
+		mainCamera->SetParent(m_networkPlayers[1]->GetTransform());
 		return true;
 	}
 	return false;

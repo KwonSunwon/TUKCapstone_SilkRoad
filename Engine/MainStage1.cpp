@@ -886,8 +886,8 @@ shared_ptr<class Scene> LoadMainScene1()
 		colliderCenter = Vec3(0.f, 0.f, 0.f);
 		ColliderSize = Vec3(1.46f * 10.f, 0.28f * 5.f, 0.65f * 10.f);
 
-		localPos.x += 25000.f;
-		localPos.z += 25000.f;
+		localPos.x -= 25000.f;
+		localPos.z -= 25000.f;
 		gm->GetTransform()->SetLocalPosition(localPos);
 		localRot.y -= 180.f;
 		localRot.x = XMConvertToRadians(localRot.x);
@@ -928,7 +928,7 @@ shared_ptr<class Scene> LoadMainScene1()
 		shared_ptr<GameObject> gm = gameObjects[idx];
 
 		gm->GetTransform()->SetLocalScale(Vec3(50.f, 0.1f, 50.f));
-		gm->GetTransform()->SetLocalPosition(Vec3(500, 500.f, 500.f));
+		gm->GetTransform()->SetLocalPosition(Vec3(-100500, 500.f, 500.f));
 
 		shared_ptr<RigidBody> rbb = make_shared<RigidBody>();
 		rbb->SetStatic(true);
@@ -1569,7 +1569,7 @@ shared_ptr<class Scene> LoadMainScene1()
 				particle->AddComponent(make_shared<Transform>());
 				particle->AddComponent(make_shared<ParticleSystem>(ParticleType::EXPLOSION));
 				particle->SetCheckFrustum(false);
-				particle->GetTransform()->SetLocalPosition(Vec3(3000.f, 300.f, 3000.f));
+				particle->GetTransform()->SetLocalPosition(Vec3(-100000.f, 300.f, 3000.f));
 				scene->AddGameObject(particle);
 			}
 		}
@@ -1580,7 +1580,7 @@ shared_ptr<class Scene> LoadMainScene1()
 				particle->AddComponent(make_shared<Transform>());
 				particle->AddComponent(make_shared<ParticleSystem>(ParticleType::HEAL));
 				particle->SetCheckFrustum(false);
-				particle->GetTransform()->SetLocalPosition(Vec3(3000.f, 300.f, 3000.f));
+				particle->GetTransform()->SetLocalPosition(Vec3(-100000.f, 300.f, 3000.f));
 
 				scene->AddGameObject(particle);
 			}
@@ -1592,7 +1592,7 @@ shared_ptr<class Scene> LoadMainScene1()
 				particle->AddComponent(make_shared<Transform>());
 				particle->AddComponent(make_shared<ParticleSystem>(ParticleType::PARTICLE_LAUNCHER));
 				particle->SetCheckFrustum(false);
-				particle->GetTransform()->SetLocalPosition(Vec3(3000.f, 300.f, 3000.f));
+				particle->GetTransform()->SetLocalPosition(Vec3(-100000.f, 300.f, 3000.f));
 
 				scene->AddGameObject(particle);
 			}
@@ -1654,9 +1654,39 @@ shared_ptr<class Scene> LoadMainScene1()
 
 				scene->AddGameObject(particle);
 			}
+			for (int i = 0; i < 1; ++i)
+			{
+				shared_ptr<GameObject> particle = make_shared<GameObject>();
+				particle->AddComponent(make_shared<Transform>());
+				particle->AddComponent(make_shared<ParticleSystem>(ParticleType::PARTICLE_BEAM));
+				particle->SetCheckFrustum(false);
+				particle->GetTransform()->SetLocalPosition(Vec3(-100000.f, 0.f, 0.f));
+
+				scene->AddGameObject(particle);
+			}
+			for (int i = 0; i < 1; ++i)
+			{
+				shared_ptr<GameObject> particle = make_shared<GameObject>();
+				particle->AddComponent(make_shared<Transform>());
+				particle->AddComponent(make_shared<ParticleSystem>(ParticleType::PARTICLE_GATE));
+				particle->SetCheckFrustum(false);
+				particle->GetTransform()->SetLocalPosition(Vec3(-100000.f, 0.f, 0.f));
+
+				scene->AddGameObject(particle);
+			}
+			for (int i = 0; i < 1; ++i)
+			{
+				shared_ptr<GameObject> particle = make_shared<GameObject>();
+				particle->AddComponent(make_shared<Transform>());
+				particle->AddComponent(make_shared<ParticleSystem>(ParticleType::PARTICLE_GATE_COMP));
+				particle->SetCheckFrustum(false);
+				particle->GetTransform()->SetLocalPosition(Vec3(-100000.f, 0.f, 0.f));
+
+				scene->AddGameObject(particle);
+			}
 		}
 		scene->SpawnParticle(Vec3(25000.f, 1000.f, 23000.f), ParticleType::PARTICLE_DUST);
-		scene->SpawnParticle(Vec3(25000.f, 1000.f, 23000.f), ParticleType::PARTICLE_THUNDER);
+		scene->SpawnParticle(Vec3(25000.f, 2500.f, 23000.f), ParticleType::PARTICLE_THUNDER);
 	}
 #pragma endregion
 

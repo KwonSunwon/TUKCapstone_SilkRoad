@@ -54,14 +54,16 @@ void Player::Update()
 	ProcessGetItem();
 	InteracitveObjectPick();
 
-	SetHP(GetHP() + m_hpRegen * DELTA_TIME);
+	if(m_isAlive) {
+		SetHP(GetHP() + m_hpRegen * DELTA_TIME);
 
-	if (INPUT->GetButtonDown(KEY_TYPE::Q))
-	{
-		Skill();
+		if(INPUT->GetButtonDown(KEY_TYPE::Q))
+		{
+			Skill();
+		}
 	}
 
-	if (INPUT->GetButtonDown(KEY_TYPE::F))
+	if(INPUT->GetButtonDown(KEY_TYPE::F))
 	{
 		float minDistance = FLT_MAX;
 		vector<shared_ptr<GameObject>>gameObjects = GET_SINGLE(SceneManager)->GetActiveScene()->GetInteractiveGameObjects();
@@ -282,15 +284,16 @@ void Player::ApplyDamage(float damage)
 {
 	m_hp -= damage;
 	if(m_hp <= 0.f) {
+		m_isAlive = false;
 		m_hp = 0.f;
 		GetRigidBody()->MoveTo(Vec3(-100000.f, 0.f, 0.f));
 		GetRigidBody()->SetStatic(true);
 
-
-		auto players = GET_SINGLE(SceneManager)->GetActiveScene()->GetNetworkPlayers();
+		auto scene = GET_SINGLE(SceneManager)->GetActiveScene();
+		auto players = scene->GetNetworkPlayers();
 		for(int idx = 0; idx < 2; idx++) {
 			if(players[idx]->IsActivated()) {
-				GET_SINGLE(SceneManager)->GetActiveScene()->ChangeSpectate(static_cast<PlayerType>(idx + 1));
+				scene->ChangeSpectate(static_cast<PlayerType>(idx + 1));
 				break;
 			}
 		}
