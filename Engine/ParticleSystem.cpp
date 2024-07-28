@@ -135,9 +135,9 @@ ParticleSystem::ParticleSystem(ParticleType type) : Component(COMPONENT_TYPE::PA
 		m_startScale = 100.f;
 		m_endScale = 100.f;
 		m_minSpeed = 200.f;
-		m_maxSpeed = 500.f;
-		m_minLifeTime = 2.f;
-		m_maxLifeTime = 10.f;
+		m_maxSpeed = 1000.f;
+		m_minLifeTime = 15.f;
+		m_maxLifeTime = 45.f;
 		m_column = 3;
 		m_row = 3;
 
