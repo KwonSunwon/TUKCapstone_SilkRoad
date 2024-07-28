@@ -189,10 +189,18 @@ void Player::Fire()
 
 		if(gameObject->GetMonobehaviour("Bomb"))
 			continue;
-
+		if (gameObject->GetMonobehaviour("Item"))
+			continue;
 		if(gameObject->GetMonobehaviour("HealerSkill"))
 			continue;
+		if (gameObject->GetMonobehaviour("Enemy"))
+		{
+			shared_ptr<MonoBehaviour> scriptEE = gameObject->GetMonobehaviour("Enemy");
+			shared_ptr<Enemy> enemyScript = dynamic_pointer_cast<Enemy>(scriptEE);
 
+			if (enemyScript->IsDie())
+				continue;
+		}
 
 		if(distance < minDistance)
 		{
