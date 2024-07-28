@@ -201,3 +201,10 @@ PlayerHitPacket::PlayerHitPacket()
 	m_targetId = -1;
 	m_type = PACKET_TYPE::PT_PLAYER_HIT;
 }
+
+PortalOnPacket::PortalOnPacket()
+{
+	m_size = sizeof(PortalOnPacket);
+	m_targetId = -1;
+	m_type = PACKET_TYPE::PT_PORTAL_ON;
+}

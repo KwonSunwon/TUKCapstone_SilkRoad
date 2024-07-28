@@ -881,7 +881,7 @@ shared_ptr<class Scene> LoadMainScene1()
 		localPos = Vec3(758.f, 2089.f, -2360.f);
 		localRot = Vec3(90.f, 0.f, 0.f);
 		colliderCenter = Vec3(0.f, 0.f, 0.f);
-		ColliderSize = Vec3(1.46f*10.f, 0.28f*5.f, 0.65f*10.f);
+		ColliderSize = Vec3(1.46f * 10.f, 0.28f * 5.f, 0.65f * 10.f);
 
 		localPos.x += 25000.f;
 		localPos.z += 25000.f;
@@ -902,7 +902,7 @@ shared_ptr<class Scene> LoadMainScene1()
 		Vec3 center = XMVector3Transform(gm->GetCollider()->GetOffset(), rotationMatrix);
 		gm->GetCollider()->SetOffset(center);
 
-	
+
 		//Instancing 유무 설정(사용:0,0  미사용:0,1)
 		{
 			gm->GetMeshRenderer()->GetMaterial()->SetInt(0, 0);
@@ -1111,7 +1111,7 @@ shared_ptr<class Scene> LoadMainScene1()
 		// 네트워크 플레이어 체력바
 		{
 			// 체력바 베이스
-			for (int i = 0; i < 2; ++i)
+			for(int i = 0; i < 2; ++i)
 			{
 				shared_ptr<GameObject> obj = make_shared<GameObject>();
 				obj->SetLayerIndex(GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI")); // UI
@@ -1147,7 +1147,7 @@ shared_ptr<class Scene> LoadMainScene1()
 			}
 
 			// 체력바
-			for (int i = 0; i < 2; ++i)
+			for(int i = 0; i < 2; ++i)
 			{
 				shared_ptr<GameObject> obj = make_shared<GameObject>();
 				obj->SetLayerIndex(GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI")); // UI
@@ -1183,7 +1183,7 @@ shared_ptr<class Scene> LoadMainScene1()
 			}
 
 			// 체력 텍스트
-			for (int i = 0; i < 2; ++i)
+			for(int i = 0; i < 2; ++i)
 			{
 				auto hpText = make_shared<NetworkPlayerHPTextObject>();
 				hpText->SetFormat("15C");
@@ -1199,7 +1199,7 @@ shared_ptr<class Scene> LoadMainScene1()
 			}
 
 			// 초상화
-			for (int i = 0; i < 2; ++i)
+			for(int i = 0; i < 2; ++i)
 			{
 				shared_ptr<GameObject> obj = make_shared<GameObject>();
 				obj->SetLayerIndex(GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI")); // UI
@@ -1319,9 +1319,9 @@ shared_ptr<class Scene> LoadMainScene1()
 
 #pragma region LastWaveEnemy
 	{
-		for (int i = 0; i < 30; ++i)
+		for(int i = 0; i < 30; ++i)
 		{
-			GET_SINGLE(Resources)->LoadEnemyPrefab(i%5, Vec3(-1000000, 1500.f, 0), Vec3(1.2f, 1.2f, 1.2f), 100.f, scene, true);
+			GET_SINGLE(Resources)->LoadEnemyPrefab(i % 5, Vec3(-1000000, 1500.f, 0), Vec3(1.2f, 1.2f, 1.2f), 100.f, scene, true);
 		}
 	}
 #pragma endregion
@@ -1437,7 +1437,7 @@ shared_ptr<class Scene> LoadMainScene1()
 
 #pragma endregion
 
-#pragma StagePortal
+#pragma region StagePortal
 	{
 		shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Bld_Portal_01.fbx");
 		vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
@@ -1457,7 +1457,7 @@ shared_ptr<class Scene> LoadMainScene1()
 		//Instancing 유무 설정(사용:0,0  미사용:0,1)
 		gm->GetMeshRenderer()->GetMaterial()->SetInt(0, 0);
 
-		if (gm->GetCollider()->GetDebugCollider() != nullptr)
+		if(gm->GetCollider()->GetDebugCollider() != nullptr)
 			scene->AddGameObject(gm->GetCollider()->GetDebugCollider());
 		gm->SetShadow(true);
 		gm->SetCheckFrustum(true);
@@ -1493,7 +1493,9 @@ shared_ptr<class Scene> LoadMainScene1()
 		Vec3 center = XMVector3Transform(gm->GetCollider()->GetOffset(), rotationMatrix);
 		gm->GetCollider()->SetOffset(center);
 
-		gm->AddComponent(make_shared<StagePortal>());
+		auto portal = make_shared<StagePortal>();
+		gm->AddComponent(portal);
+		scene->SetStagePortal(portal);
 
 		scene->AddGameObject(gm);
 	}
@@ -1558,7 +1560,7 @@ shared_ptr<class Scene> LoadMainScene1()
 #pragma region ParticleSystem
 	{
 		{
-			for (int i = 0; i < 20; ++i)
+			for(int i = 0; i < 20; ++i)
 			{
 				shared_ptr<GameObject> particle = make_shared<GameObject>();
 				particle->AddComponent(make_shared<Transform>());
@@ -1569,31 +1571,31 @@ shared_ptr<class Scene> LoadMainScene1()
 			}
 		}
 		{
-			for (int i = 0; i < 2; ++i)
+			for(int i = 0; i < 2; ++i)
 			{
 				shared_ptr<GameObject> particle = make_shared<GameObject>();
 				particle->AddComponent(make_shared<Transform>());
 				particle->AddComponent(make_shared<ParticleSystem>(ParticleType::HEAL));
 				particle->SetCheckFrustum(false);
 				particle->GetTransform()->SetLocalPosition(Vec3(3000.f, 300.f, 3000.f));
-				
+
 				scene->AddGameObject(particle);
 			}
 		}
 		{
-			for (int i = 0; i < 1; ++i)
+			for(int i = 0; i < 1; ++i)
 			{
 				shared_ptr<GameObject> particle = make_shared<GameObject>();
 				particle->AddComponent(make_shared<Transform>());
 				particle->AddComponent(make_shared<ParticleSystem>(ParticleType::PARTICLE_LAUNCHER));
 				particle->SetCheckFrustum(false);
 				particle->GetTransform()->SetLocalPosition(Vec3(3000.f, 300.f, 3000.f));
-				
+
 				scene->AddGameObject(particle);
 			}
 		}
 		{
-			for (int i = 0; i < 1; ++i)
+			for(int i = 0; i < 1; ++i)
 			{
 				shared_ptr<GameObject> particle = make_shared<GameObject>();
 				particle->AddComponent(make_shared<Transform>());
@@ -1606,7 +1608,7 @@ shared_ptr<class Scene> LoadMainScene1()
 			}
 		}
 		{
-			for (int i = 0; i < 1; ++i)
+			for(int i = 0; i < 1; ++i)
 			{
 				shared_ptr<GameObject> particle = make_shared<GameObject>();
 				particle->AddComponent(make_shared<Transform>());
@@ -1618,7 +1620,7 @@ shared_ptr<class Scene> LoadMainScene1()
 			}
 		}
 		{
-			for (int i = 0; i < 1; ++i)
+			for(int i = 0; i < 1; ++i)
 			{
 				shared_ptr<GameObject> particle = make_shared<GameObject>();
 				particle->AddComponent(make_shared<Transform>());
@@ -1628,7 +1630,7 @@ shared_ptr<class Scene> LoadMainScene1()
 
 				scene->AddGameObject(particle);
 			}
-			for (int i = 0; i < 20; ++i)
+			for(int i = 0; i < 20; ++i)
 			{
 				shared_ptr<GameObject> particle = make_shared<GameObject>();
 				particle->AddComponent(make_shared<Transform>());
@@ -1639,7 +1641,7 @@ shared_ptr<class Scene> LoadMainScene1()
 				scene->AddGameObject(particle);
 			}
 
-			for (int i = 0; i < 20; ++i)
+			for(int i = 0; i < 20; ++i)
 			{
 				shared_ptr<GameObject> particle = make_shared<GameObject>();
 				particle->AddComponent(make_shared<Transform>());

@@ -45,6 +45,7 @@ enum class PACKET_TYPE : BYTE {
 	PT_ENEMY,
 	PT_ENEMY_HIT,
 	PT_STAGE_CHANGE,
+	PT_PORTAL_ON,
 	PT_SKILL,
 	PT_ITEM,
 	PT_PARTICLE,
@@ -193,6 +194,12 @@ public:
 
 public:
 	Vec3 m_force;
+};
+
+class PortalOnPacket : public Packet {
+public:
+	PortalOnPacket();
+	~PortalOnPacket() {}
 };
 
 #pragma pack(pop)

@@ -83,6 +83,9 @@ public:
 	void SetSceneName(string name) { m_sceneName = name; }
 	string GetSceneName() { return m_sceneName; }
 
+	void SetStagePortal(shared_ptr<class StagePortal> portal) { m_stagePortal = portal; }
+	shared_ptr<class StagePortal> GetStagePortal() { return m_stagePortal; }
+
 	shared_ptr<Terrain> m_terrain;
 
 	array<shared_ptr<class NetworkPlayer>, 2> m_networkPlayers;
@@ -110,11 +113,11 @@ private:
 
 	vector<shared_ptr<class Enemy>>		m_lastWaveEnemies;
 
-	array<vector<shared_ptr<GameObject>>,ParticleType::PARTICLE_TYPE_COUNT>	m_particles;
-	array<int, ParticleType::PARTICLE_TYPE_COUNT>m_particleCycle = {0};
+	array<vector<shared_ptr<GameObject>>, ParticleType::PARTICLE_TYPE_COUNT>	m_particles;
+	array<int, ParticleType::PARTICLE_TYPE_COUNT>m_particleCycle = { 0 };
 
+	shared_ptr<class StagePortal> m_stagePortal;
 
-	
 private:
 	int m_numOfNetworkObject = 0;
 	shared_ptr<AstarGrid> m_astarGrid = make_shared<AstarGrid>();
