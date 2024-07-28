@@ -15,5 +15,6 @@ private:
 	bool m_isActivated = false;
 	float m_spawnTimer = 0.f;
 	int m_spawnIdx = 0;
+	bool m_spawnP = false;
 };
 

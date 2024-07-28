@@ -82,6 +82,21 @@ void GS_Main(point VS_OUT input[1], inout TriangleStream<GS_OUT> outputStream)
     output[2].position = vtx.viewPos + float4(scale, -scale, 0.f, 0.f);
     output[3].position = vtx.viewPos + float4(-scale, -scale, 0.f, 0.f);
 
+    if (g_int_2 == 1)
+    {
+        output[0].position = vtx.viewPos + float4(-scale/10, scale, 0.f, 0.f);
+        output[1].position = vtx.viewPos + float4(scale/10, scale, 0.f, 0.f);
+        output[2].position = vtx.viewPos + float4(scale/10, -scale, 0.f, 0.f);
+        output[3].position = vtx.viewPos + float4(-scale/10, -scale, 0.f, 0.f);
+    }
+    if (g_int_2 == 2)
+    {
+        output[0].position = vtx.viewPos + float4(-scale / 5, scale, 0.f, 0.f);
+        output[1].position = vtx.viewPos + float4(scale / 5, scale, 0.f, 0.f);
+        output[2].position = vtx.viewPos + float4(scale / 5, -scale, 0.f, 0.f);
+        output[3].position = vtx.viewPos + float4(-scale / 5, -scale, 0.f, 0.f);
+    }
+    
     // Projection Space
     output[0].position = mul(output[0].position, g_matProjection);
     output[1].position = mul(output[1].position, g_matProjection);
