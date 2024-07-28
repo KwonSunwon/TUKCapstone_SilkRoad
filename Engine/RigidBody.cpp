@@ -50,9 +50,9 @@ void RigidBody::FinalUpdate()
 		m_isStatic = true;
 	else if (m_position.x > 60000.f)
 		m_isStatic = true;
-	else if (m_position.y < -10000.f)
+	else if (m_position.z < -10000.f)
 		m_isStatic = true;
-	else if (m_position.y > 60000.f)
+	else if (m_position.z > 60000.f)
 		m_isStatic = true;
 }
 
