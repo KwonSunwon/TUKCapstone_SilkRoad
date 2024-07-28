@@ -40,6 +40,9 @@ void UpgradeManager::Init()
 
 void UpgradeManager::ClassChange(int id)
 {
+	m_usedClass[m_charClass - 5] = true;
+	m_usedClass[id - 5] = false;
+
 	GET_SINGLE(SoundManager)->soundPlay(Sounds::ENV_EAT_ITEM);
 	shared_ptr<GameObject> mainPlayer = GET_SINGLE(SceneManager)->GetActiveScene()->m_mainPlayerScript->GetGameObject();
 	shared_ptr<MeshData> meshData;

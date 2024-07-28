@@ -11,7 +11,7 @@
 #include "MeshData.h"
 #include "MeshRenderer.h"
 #include "Animator.h"
-
+#include "UpgradeManager.h"
 #include <chrono>
 
 void NetworkPlayer::Awake()
@@ -50,6 +50,8 @@ void NetworkPlayer::ProcessPacket(shared_ptr<PlayerPacket> packet)
 
 void NetworkPlayer::ChangeClass(int classIndex)
 {
+	GET_SINGLE(UpgradeManager)->m_usedClass[m_classIdx - 5] = true;
+	GET_SINGLE(UpgradeManager)->m_usedClass[classIndex - 5] = false;
 	m_classIdx = classIndex;
 	shared_ptr<MeshData> meshData;
 	switch(m_classIdx) {
