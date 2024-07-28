@@ -273,7 +273,7 @@ ParticleSystem::ParticleSystem(ParticleType type) : Component(COMPONENT_TYPE::PA
 
 		//m_material->SetInt(2, 1);
 		m_computeMaterial->SetInt(3, 0);
-		m_exposeTime = 60.f;
+		m_exposeTime = 20.f;
 		m_activeLength = 1000000.f;
 		break;
 	}
