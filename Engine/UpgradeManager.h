@@ -21,6 +21,7 @@ public:
     void SetStat();
 
 	int GetItemLevel(int id) { return m_itemLevels[id]; }
+	void SetItemLevel(int id, int level) { m_itemLevels[id] = level; }
 	int GetUpgradeLevel(int id) { return m_upgradeLevels[id]; }
 	int GetClass() { return m_charClass; }
     int GetGold() { return m_upgradeLevels[5]; }

@@ -13,6 +13,7 @@
 #include "Player.h"
 #include "UpgradeManager.h"
 #include "StagePortal.h"
+#include "DifficultyManager.h"
 
 Network::Network()
 {
@@ -69,9 +70,14 @@ void Network::Update()
 			objects[packet->m_targetId]->ProcessPacket(packet);
 			break;
 		case PACKET_TYPE::PT_STAGE_CHANGE:
-			if(m_networkState == NETWORK_STATE::GUEST) {
+			if (reinterpret_pointer_cast<StageChangePacket>(packet)->m_stageIndex == 0) {
+				m_receivedPacketQue.Clear();
+				GET_SINGLE(DifficultyManager)->ReturnToLobby();
+			}
+			else {
 				m_receivedPacketQue.Clear();
 				GET_SINGLE(SceneManager)->StartNextStage();
+				GET_SINGLE(DifficultyManager)->SetIsGameOver(false);
 			}
 			break;
 		case PACKET_TYPE::PT_PARTICLE: {

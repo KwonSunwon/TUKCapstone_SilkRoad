@@ -27,6 +27,9 @@ public:
 	Difficulty GetDifficulty() { return m_difficulty; }
 	bool GetIsGameOver() { return m_isGameOver; }
 	void SetIsGameOver(bool isGameOver) { m_isGameOver = isGameOver; }
+	float GetGameOverTime() { return m_gameOverTime; }
+
+	void ReturnToLobby();
 
 private:
 	Difficulty m_difficulty = Difficulty::EASY;

@@ -249,3 +249,12 @@ public:
 
 	virtual void Update() override;
 };
+
+class GameOverTextObject : public TextToggleObject
+{
+public:
+	GameOverTextObject();
+	~GameOverTextObject() = default;
+
+	virtual void Update() override;
+};

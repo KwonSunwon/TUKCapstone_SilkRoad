@@ -59,6 +59,7 @@ void SceneManager::Update()
 
 	if (reset)
 	{
+		GET_SINGLE(DifficultyManager)->SetIsGameOver(false);
 		if (s == 0)
 		{
 			m_activeScene = LoadLobbyScene();

@@ -692,6 +692,51 @@ shared_ptr<class Scene> LoadMainScene1()
 			scene->AddGameObject(obj);
 		}
 
+		// 게임오버
+		{
+			shared_ptr<GameObject> obj = make_shared<GameObject>();
+			obj->SetLayerIndex(GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI")); // UI
+			obj->AddComponent(make_shared<Transform>());
+			shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
+			{
+				shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadRectangleMesh();
+				meshRenderer->SetMesh(mesh);
+			}
+			{
+				shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"AlphaTexture");
+				shared_ptr<Texture> texture = GET_SINGLE(Resources)->Load<Texture>(L"gameover", L"..\\Resources\\Texture\\gameover.png");
+				shared_ptr<Material> material = make_shared<Material>();
+				material->SetShader(shader);
+				material->SetTexture(0, texture);
+
+				meshRenderer->SetMaterial(material);
+			}
+			shared_ptr<GameOverUI> uiObject = make_shared<GameOverUI>();
+			uiObject->SetToggleKey(KEY_TYPE::F12);
+			uiObject->SetPivot(ePivot::CENTER);
+			uiObject->SetScreenPivot(ePivot::CENTER);
+			uiObject->SetWidth(1600.f);
+			uiObject->SetHeight(900.f);
+			uiObject->SetPosition(Vec2(0, 0));
+			uiObject->SetZOrder(100);
+
+			obj->AddComponent(uiObject);
+			obj->AddComponent(meshRenderer);
+			scene->AddGameObject(obj);
+		}
+		// 게임오버 텍스트
+		{
+			auto gameOverText = make_shared<GameOverTextObject>();
+			gameOverText->SetFormat("34C");
+			gameOverText->SetBrush("WHITE");
+			gameOverText->SetText(L"GAME OVER");
+			gameOverText->SetPivot(ePivot::CENTER);
+			gameOverText->SetScreenPivot(ePivot::CENTER);
+			gameOverText->SetPosition(Vec2(0, 0));
+			scene->AddTextObject(gameOverText);
+
+		}
+
 	}
 #pragma endregion
 
