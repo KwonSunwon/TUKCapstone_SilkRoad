@@ -30,6 +30,8 @@ shared_ptr<EnemyState> EnemyState::OnUpdateState()
 
 shared_ptr<EnemyState> EnemyIdleState::OnUpdateState()
 {
+	bool isPlayerNear = false;
+	float nearDist = 9999999.f;
 	for(int i = 0; i < m_enemy->GetPlayers().size(); ++i)
 	{
 		shared_ptr<GameObject> player = m_enemy->GetPlayers()[i];
@@ -37,12 +39,19 @@ shared_ptr<EnemyState> EnemyIdleState::OnUpdateState()
 		float dist = toPlayer.Length();
 		if(dist < m_enemy->GetChaseRange())
 		{
-			m_enemy->SetTargetPlayerIndex(i);
-			return make_shared<EnemyWalkState>(m_enemy);
+			if (dist < nearDist)
+			{
+				nearDist = dist;
+				m_enemy->SetTargetPlayerIndex(i);
+				isPlayerNear = true;
+			}
 		}
-
 	}
-	return EnemyState::OnUpdateState();
+
+	if(isPlayerNear)
+		return make_shared<EnemyWalkState>(m_enemy);
+	else
+		return EnemyState::OnUpdateState();
 }
 
 void EnemyIdleState::OnEnter()
