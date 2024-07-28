@@ -11,16 +11,19 @@
 #include "Packet.h"
 #include "NetworkObject.h"
 #include "Resources.h"
+#include "ParticleSystem.h"
 
 void Item::Awake()
 {
 	SetMonovihaviourName("Item");
 	m_startHeight = GetTransform()->GetLocalPosition().y;
-
+	auto go = GET_SINGLE(SceneManager)->GetActiveScene()->SpawnParticle(Vec3(0.f,0.f,0.f), ParticleType::PARTICLE_ITEM);
+	go->GetTransform()->SetParent(GetTransform());
 
 }
 void Item::Update()
 {
+	
 	FloatingItem();
 	RotateItem();
 }
