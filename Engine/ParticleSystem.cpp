@@ -157,18 +157,19 @@ ParticleSystem::ParticleSystem(ParticleType type) : Component(COMPONENT_TYPE::PA
 		shared_ptr<Texture> tex = GET_SINGLE(Resources)->Load<Texture>(
 			L"ThunderP", L"..\\Resources\\Texture\\Particle\\Thunder.png");
 		m_material->SetTexture(0, tex);
-		m_startScale = 3000.f;
-		m_endScale = 3000.f;
+		m_startScale = 5000.;
+		m_endScale = 5000.f;
 		m_minSpeed = 0.f;
 		m_maxSpeed = 0.f;
-		m_minLifeTime = 1.f;
-		m_maxLifeTime = 2.f;
+		m_minLifeTime = 0.3f;
+		m_maxLifeTime = 0.5f;
 		m_column = 4;
 		m_row = 2;
 
+		m_material->SetInt(2, 2);
 		m_computeMaterial->SetInt(3, 3);
 		m_exposeTime = 10000.f;
-		m_createInterval = 0.5f;
+		m_createInterval = 5.f;
 
 		m_activeLength = 1000000.f;
 		break;
@@ -219,6 +220,84 @@ ParticleSystem::ParticleSystem(ParticleType type) : Component(COMPONENT_TYPE::PA
 		m_row = 3;
 
 		m_computeMaterial->SetInt(3, 4);
+		m_exposeTime = 10000.f;
+		m_activeLength = 1000000.f;
+		break;
+	}
+
+	case PARTICLE_BEAM:
+	{
+		m_material = GET_SINGLE(Resources)->Get<Material>(L"Particle8");
+		m_computeMaterial = GET_SINGLE(Resources)->Get<Material>(L"ComputeParticle8");
+
+		m_singleType = true;
+		m_maxParticle = 1;
+		shared_ptr<Texture> tex = GET_SINGLE(Resources)->Load<Texture>(
+			L"BeamP", L"..\\Resources\\Texture\\Particle\\Beam.png");
+		m_material->SetTexture(0, tex);
+		m_startScale = 5000.f;
+		m_endScale = 5000.f;
+		m_minSpeed = 0.f;
+		m_maxSpeed = 0.f;
+		m_minLifeTime = 1.f;
+		m_maxLifeTime = 1.f;
+		m_column = 8;
+		m_row = 2;
+
+		m_material->SetInt(2, 1);
+		m_computeMaterial->SetInt(3, 0);
+		m_exposeTime = 60.f;
+		m_activeLength = 1000000.f;
+		break;
+	}
+
+	case PARTICLE_GATE:
+	{
+		m_material = GET_SINGLE(Resources)->Get<Material>(L"Particle9");
+		m_computeMaterial = GET_SINGLE(Resources)->Get<Material>(L"ComputeParticle9");
+
+		m_singleType = true;
+		m_maxParticle = 1;
+		shared_ptr<Texture> tex = GET_SINGLE(Resources)->Load<Texture>(
+			L"GateP", L"..\\Resources\\Texture\\Particle\\Gate.png");
+		m_material->SetTexture(0, tex);
+		m_startScale = 600.f;
+		m_endScale = 600.f;
+		m_minSpeed = 0.f;
+		m_maxSpeed = 0.f;
+		m_minLifeTime = 1.f;
+		m_maxLifeTime = 1.f;
+		m_column = 3;
+		m_row = 3;
+
+		//m_material->SetInt(2, 1);
+		m_computeMaterial->SetInt(3, 0);
+		m_exposeTime = 60.f;
+		m_activeLength = 1000000.f;
+		break;
+	}
+
+	case PARTICLE_GATE_COMP:
+	{
+		m_material = GET_SINGLE(Resources)->Get<Material>(L"Particle10");
+		m_computeMaterial = GET_SINGLE(Resources)->Get<Material>(L"ComputeParticle10");
+
+		m_singleType = true;
+		m_maxParticle = 1;
+		shared_ptr<Texture> tex = GET_SINGLE(Resources)->Load<Texture>(
+			L"GateCompP", L"..\\Resources\\Texture\\Particle\\GateComp.png");
+		m_material->SetTexture(0, tex);
+		m_startScale = 1000.f;
+		m_endScale = 1000.f;
+		m_minSpeed = 0.f;
+		m_maxSpeed = 0.f;
+		m_minLifeTime = 1.f;
+		m_maxLifeTime = 1.f;
+		m_column = 3;
+		m_row = 3;
+
+		//m_material->SetInt(2, 1);
+		m_computeMaterial->SetInt(3, 0);
 		m_exposeTime = 10000.f;
 		m_activeLength = 1000000.f;
 		break;
