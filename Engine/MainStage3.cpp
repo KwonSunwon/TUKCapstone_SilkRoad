@@ -1605,7 +1605,8 @@ shared_ptr<class Scene> LoadMainScene3()
 				scene->AddGameObject(particle);
 			}
 		}
-		scene->SpawnParticle(Vec3(25000.f, 1000.f, 23000.f), ParticleType::PARTICLE_BIRD);
+		scene->SpawnParticle(Vec3(25000.f, 1000.f, 23000.f), ParticleType::PARTICLE_DUST);
+		scene->SpawnParticle(Vec3(25000.f, 6000.f, 23000.f), ParticleType::PARTICLE_BIRD);
 		scene->SpawnParticle(Vec3(25000.f, 2500.f, 23000.f), ParticleType::PARTICLE_THUNDER);
 	}
 #pragma endregion
