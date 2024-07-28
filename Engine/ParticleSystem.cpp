@@ -115,45 +115,77 @@ ParticleSystem::ParticleSystem(ParticleType type) : Component(COMPONENT_TYPE::PA
 		break;
 	}
 
-	case EXPLOSION4:
+	case PARTICLE_BIRD:
 	{
-		m_material = GET_SINGLE(Resources)->Get<Material>(L"Particle0");
-		m_computeMaterial = GET_SINGLE(Resources)->Get<Material>(L"ComputeParticle0");
+		m_material = GET_SINGLE(Resources)->Get<Material>(L"Particle4");
+		m_computeMaterial = GET_SINGLE(Resources)->Get<Material>(L"ComputeParticle4");
 
-		m_singleType = true;
-		m_maxParticle = 1;
+		m_singleType = false;
+		m_maxParticle = 1000;
 		shared_ptr<Texture> tex = GET_SINGLE(Resources)->Load<Texture>(
-			L"Explosion4", L"..\\Resources\\Texture\\Particle\\Explosion4.png");
+			L"BirdP", L"..\\Resources\\Texture\\Particle\\Bird.png");
 		m_material->SetTexture(0, tex);
 		m_startScale = 100.f;
 		m_endScale = 100.f;
-		m_minSpeed = 0.f;
-		m_maxSpeed = 0.f;
-		m_minLifeTime = 0.75f;
-		m_maxLifeTime = 0.75f;
-		m_column = 5;
-		m_row = 5;
+		m_minSpeed = 200.f;
+		m_maxSpeed = 500.f;
+		m_minLifeTime = 2.f;
+		m_maxLifeTime = 10.f;
+		m_column = 3;
+		m_row = 3;
+
+		m_computeMaterial->SetInt(3, 2);
+		m_exposeTime = 10000.f;
 		break;
 	}
 
-	case EXPLOSION5:
+	case PARTICLE_THUNDER:
 	{
-		m_material = GET_SINGLE(Resources)->Get<Material>(L"Particle0");
-		m_computeMaterial = GET_SINGLE(Resources)->Get<Material>(L"ComputeParticle0");
+		m_material = GET_SINGLE(Resources)->Get<Material>(L"Particle5");
+		m_computeMaterial = GET_SINGLE(Resources)->Get<Material>(L"ComputeParticle5");
+
+		m_singleType = false;
+		m_maxParticle = 1;
+		shared_ptr<Texture> tex = GET_SINGLE(Resources)->Load<Texture>(
+			L"ThunderP", L"..\\Resources\\Texture\\Particle\\Thunder.png");
+		m_material->SetTexture(0, tex);
+		m_startScale = 3000.f;
+		m_endScale = 3000.f;
+		m_minSpeed = 0.f;
+		m_maxSpeed = 0.f;
+		m_minLifeTime = 1.f;
+		m_maxLifeTime = 2.f;
+		m_column = 4;
+		m_row = 2;
+
+		m_computeMaterial->SetInt(3, 3);
+		m_exposeTime = 10000.f;
+		m_createInterval = 0.5f;
+		break;
+	}
+
+	case PARTICLE_ITEM:
+	{
+		m_material = GET_SINGLE(Resources)->Get<Material>(L"Particle6");
+		m_computeMaterial = GET_SINGLE(Resources)->Get<Material>(L"ComputeParticle6");
 
 		m_singleType = true;
 		m_maxParticle = 1;
 		shared_ptr<Texture> tex = GET_SINGLE(Resources)->Load<Texture>(
-			L"Explosion5", L"..\\Resources\\Texture\\Particle\\Explosion5.png");
+			L"InterP", L"..\\Resources\\Texture\\Particle\\Inter.png");
 		m_material->SetTexture(0, tex);
-		m_startScale = 100.f;
-		m_endScale = 100.f;
+		m_startScale = 300.f;
+		m_endScale = 300.f;
 		m_minSpeed = 0.f;
 		m_maxSpeed = 0.f;
-		m_minLifeTime = 0.75f;
-		m_maxLifeTime = 0.75f;
+		m_minLifeTime = 1.f;
+		m_maxLifeTime = 1.f;
 		m_column = 5;
 		m_row = 5;
+
+		m_computeMaterial->SetInt(3, 0);
+		m_exposeTime = 10000.f;
+		
 		break;
 	}
 
