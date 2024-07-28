@@ -255,7 +255,7 @@ shared_ptr<class Scene> LoadMainScene1()
 			obj->AddComponent(uiObject);
 		}
 		obj->AddComponent(meshRenderer);
-		//scene->AddGameObject(obj);
+		scene->AddGameObject(obj);
 	}
 #pragma endregion
 
@@ -1329,7 +1329,7 @@ shared_ptr<class Scene> LoadMainScene1()
 		}
 		// 다음 난이도 안내 텍스트
 		{
-			auto nextDifficultyText = make_shared<DifficultyInfoTextObject>();
+			auto nextDifficultyText = make_shared<TextObject>();
 			nextDifficultyText->SetFormat("15C");
 			nextDifficultyText->SetBrush("WHITE");
 			nextDifficultyText->SetPivot(ePivot::CENTER);

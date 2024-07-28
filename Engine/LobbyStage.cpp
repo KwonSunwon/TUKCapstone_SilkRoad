@@ -414,8 +414,19 @@ shared_ptr<class Scene> LoadLobbyScene()
 			material->SetTexture(0, texture);
 			meshRenderer->SetMaterial(material);
 		}
+		{
+			shared_ptr<UIToggleObject> uiObject = make_shared<UIToggleObject>();
+			uiObject->SetPivot(ePivot::CENTER);
+			uiObject->SetScreenPivot(ePivot::CENTER);
+			uiObject->SetWidth(100.f);
+			uiObject->SetHeight(100.f);
+			uiObject->SetZOrder(100);
+			uiObject->SetPosition(Vec2(-350.0f + (i * 120), 250));
+			uiObject->SetToggleKey(KEY_TYPE::F1);
+			obj->AddComponent(uiObject);
+		}
 		obj->AddComponent(meshRenderer);
-		//scene->AddGameObject(obj);
+		scene->AddGameObject(obj);
 	}
 #pragma endregion
 
