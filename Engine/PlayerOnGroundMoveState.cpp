@@ -10,9 +10,17 @@
 #include "Timer.h"
 #include "Input.h"
 #include "Manifold.h"
+#include "SoundManager.h"
 
 shared_ptr<PlayerState> PlayerOnGroundMoveState::OnUpdateState()
 {
+	if(m_player->GetRigidBody()->GetLinearVelocity().Length()>10.f)
+		m_footTime += DELTA_TIME;
+	if (m_footTime > 0.3f) {
+		m_footTime = 0.f;
+		GET_SINGLE(SoundManager)->soundPlay(Sounds::ENV_FOORSTEP);
+	}
+
 	shared_ptr<RigidBody> rb = m_player->GetRigidBody();
 	shared_ptr<Transform> transform = m_player->GetTransform();
 	shared_ptr<Animator> animator = m_player->GetAnimator();

@@ -11,6 +11,7 @@ public:
 private:
 	float m_onAirCheckTime = 0.5f;
 	float m_onAirTime = 0.f;
+	float m_footTime = 0.f;
 };
 
 class PlayerWalkState : public PlayerOnGroundMoveState
@@ -33,7 +34,7 @@ public:
 	virtual shared_ptr<PlayerState> OnLateUpdateState() override;
 
 private:
-	bool m_isFireAnimationAgain = false;	// °ø¼ÓÀÌ ¾Ö´Ï¸ŞÀÌ¼Ç ¼Óµµº¸´Ù ºü¸£¸é ½ºÅ×ÀÌÆ® Á¶±â Á¾·á ÈÄ idle·Î µ¹¾Æ°¡ ´Ù½Ã ¹ß»ç ÁØºñ
+	bool m_isFireAnimationAgain = false;	// ê³µì†ì´ ì• ë‹ˆë©”ì´ì…˜ ì†ë„ë³´ë‹¤ ë¹ ë¥´ë©´ ìŠ¤í…Œì´íŠ¸ ì¡°ê¸° ì¢…ë£Œ í›„ idleë¡œ ëŒì•„ê°€ ë‹¤ì‹œ ë°œì‚¬ ì¤€ë¹„
 
 };
 
@@ -47,7 +48,7 @@ public:
 
 
 private:
-	bool m_isFireAnimationAgain = false;	// °ø¼ÓÀÌ ¾Ö´Ï¸ŞÀÌ¼Ç ¼Óµµº¸´Ù ºü¸£¸é ½ºÅ×ÀÌÆ® Á¶±â Á¾·á ÈÄ idle·Î µ¹¾Æ°¡ ´Ù½Ã ¹ß»ç ÁØºñ
+	bool m_isFireAnimationAgain = false;	// ê³µì†ì´ ì• ë‹ˆë©”ì´ì…˜ ì†ë„ë³´ë‹¤ ë¹ ë¥´ë©´ ìŠ¤í…Œì´íŠ¸ ì¡°ê¸° ì¢…ë£Œ í›„ idleë¡œ ëŒì•„ê°€ ë‹¤ì‹œ ë°œì‚¬ ì¤€ë¹„
 
 };
 
