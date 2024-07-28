@@ -199,28 +199,28 @@ ParticleSystem::ParticleSystem(ParticleType type) : Component(COMPONENT_TYPE::PA
 		break;
 	}
 
-	case PARTICLE_ENEMY:
+	case PARTICLE_DUST:
 	{
 		m_material = GET_SINGLE(Resources)->Get<Material>(L"Particle7");
 		m_computeMaterial = GET_SINGLE(Resources)->Get<Material>(L"ComputeParticle7");
 
-		m_singleType = true;
-		m_maxParticle = 1;
+		m_singleType = false;
+		m_maxParticle = 1000;
 		shared_ptr<Texture> tex = GET_SINGLE(Resources)->Load<Texture>(
-			L"EnemyP", L"..\\Resources\\Texture\\Particle\\Enemy.png");
+			L"DustP", L"..\\Resources\\Texture\\Particle\\Dust.png");
 		m_material->SetTexture(0, tex);
-		m_startScale = 300.f;
-		m_endScale = 300.f;
-		m_minSpeed = 0.f;
-		m_maxSpeed = 0.f;
-		m_minLifeTime = 0.5f;
-		m_maxLifeTime = 0.5;
-		m_column = 2;
+		m_startScale = 60.f;
+		m_endScale = 60.f;
+		m_minSpeed = 200.f;
+		m_maxSpeed = 1000.f;
+		m_minLifeTime = 1.f;
+		m_maxLifeTime = 2.f;
+		m_column = 3;
 		m_row = 3;
 
-		m_computeMaterial->SetInt(3, 0);
-		m_exposeTime = 0.5;
-
+		m_computeMaterial->SetInt(3, 4);
+		m_exposeTime = 10000.f;
+		m_activeLength = 1000000.f;
 		break;
 	}
 
@@ -273,7 +273,7 @@ void ParticleSystem::FinalUpdate()
 	m_computeMaterial->SetInt(0, m_maxParticle);
 	m_computeMaterial->SetInt(1, add);
 
-	m_computeMaterial->SetVec2(1, Vec2(DELTA_TIME, m_accTime));
+	m_computeMaterial->SetVec2(1, Vec2(DELTA_TIME, 1/m_accTime));
 	m_computeMaterial->SetVec4(0, Vec4(m_minLifeTime, m_maxLifeTime, m_minSpeed, m_maxSpeed));
 
 	m_computeMaterial->Dispatch(1, 1, 1);

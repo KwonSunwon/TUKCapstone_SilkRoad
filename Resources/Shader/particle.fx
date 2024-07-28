@@ -229,6 +229,13 @@ void CS_Main(int3 threadIndex : SV_DispatchThreadID)
                 g_particle[threadIndex.x].worldPos.z = (noise.z - 0.5f) * 50000;
                 g_particle[threadIndex.x].worldPos.y = (noise.y - 0.5f) * 1000;
             }
+            if (g_int_3 == 4)
+            {
+                g_particle[threadIndex.x].worldDir = normalize(dir);
+                g_particle[threadIndex.x].worldPos.x = (noise.x - 0.5f) * 50000;
+                g_particle[threadIndex.x].worldPos.z = (noise.z - 0.5f) * 50000;
+                g_particle[threadIndex.x].worldPos.y = (noise.y - 0.5f) * 1000;
+            }
 
            
             g_particle[threadIndex.x].lifeTime = ((maxLifeTime - minLifeTime) * noise.x) + minLifeTime;
