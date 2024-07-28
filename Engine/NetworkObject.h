@@ -16,7 +16,11 @@ public:
 	void SetDefaultPacket(bool isDefaultPacket) { m_isDefaultPacket = isDefaultPacket; }
 	bool IsDefaultPacket() { return m_isDefaultPacket; }
 
+	void SetActive(bool isActivated) { m_isActive = isActivated; }
+	bool IsActive() { return m_isActive; }
+
 private:
 	uint32 m_networkId;
 	bool m_isDefaultPacket = false;
+	bool m_isActive = true;
 };

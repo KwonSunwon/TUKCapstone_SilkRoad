@@ -18,6 +18,7 @@
 #include "NetworkPlayer.h"
 #include "Packet.h"
 #include "Network.h"
+#include "NetworkObject.h"
 
 shared_ptr<EnemyState> EnemyState::OnUpdateState()
 {
@@ -159,6 +160,7 @@ shared_ptr<EnemyState> EnemyDieState::OnLateUpdateState()
 	{
 		m_enemy->GetTransform()->SetLocalPosition(Vec3(0, 0, 0));
 		m_enemy->GetRigidBody()->MoveTo(Vec3(-1.f, 0, 0));
+		m_enemy->GetNetworkObject()->SetActive(false);
 		return make_shared<EnemyIdleState>(m_enemy);
 	}
 }
