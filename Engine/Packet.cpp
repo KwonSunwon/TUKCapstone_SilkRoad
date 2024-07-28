@@ -194,3 +194,10 @@ ForcePacket::ForcePacket()
 	m_targetId = -1;
 	m_type = PACKET_TYPE::PT_FORCE;
 }
+
+PlayerHitPacket::PlayerHitPacket()
+{
+	m_size = sizeof(PlayerHitPacket);
+	m_targetId = -1;
+	m_type = PACKET_TYPE::PT_PLAYER_HIT;
+}
