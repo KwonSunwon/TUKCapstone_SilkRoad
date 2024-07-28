@@ -27,6 +27,8 @@ public:
     void AddGold(int gold) { m_upgradeLevels[5] += gold; }
     void UseGold(int gold){ m_upgradeLevels[5] -= gold; }
 
+    array<bool, 4> m_usedClass = { false,true,true,true };
+    bool CanClassChange(int id) { return m_usedClass[id-5]; }
 private:
 
     array<int, 6> m_upgradeLevels;
