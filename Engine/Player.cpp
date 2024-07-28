@@ -55,7 +55,7 @@ void Player::Update()
 
 	SetHP(GetHP() + m_hpRegen * DELTA_TIME);
 
-	if(INPUT->GetButtonDown(KEY_TYPE::Q))
+	if(INPUT->GetButtonDown(KEY_TYPE::F))
 	{
 		Skill();
 
@@ -94,21 +94,8 @@ void Player::Update()
 
 	}
 
-
-	if(INPUT->GetButtonDown(KEY_TYPE::E))
-	{
-		int chaClass = GET_SINGLE(UpgradeManager)->GetClass() + 1;
-		if(chaClass == 9) chaClass = 5;
-
-		GET_SINGLE(UpgradeManager)->ClassChange(chaClass);
-	}
-	if(INPUT->GetButtonDown(KEY_TYPE::Z))
-	{
-		GET_SINGLE(UpgradeManager)->AddGold(100.f);
-	}
 	if(INPUT->GetButtonDown(KEY_TYPE::C))
 	{
-
 		SetHP(10.f);
 	}
 

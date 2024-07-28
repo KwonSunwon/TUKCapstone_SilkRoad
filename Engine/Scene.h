@@ -70,6 +70,8 @@ public:
 	const vector<shared_ptr<GameObject>>& GetCollidableGameObjects() { return m_collidableGameObjects; }
 	const vector<shared_ptr<GameObject>>& GetInteractiveGameObjects() { return m_interactiveGameObjects; }
 	const vector<shared_ptr<TextObject>>& GetTextObjects() { return m_textObjects; }
+	const vector<shared_ptr<class Enemy>>& GetLastWaveEnemies() { return m_lastWaveEnemies; }
+	void AddLastWaveEnemy(shared_ptr<class Enemy> enemy) { m_lastWaveEnemies.push_back(enemy); }
 
 	const vector<shared_ptr<class NetworkObject>>& GetNetworkObjects() { return m_networkObjects; }
 	const array<shared_ptr<class NetworkPlayer>, 2>& GetNetworkPlayers() { return m_networkPlayers; }
@@ -105,6 +107,8 @@ private:
 	vector<shared_ptr<class Manifold>>	m_contacts;
 	// 네트워크 객체 목록 추가
 	vector<shared_ptr<class NetworkObject>> m_networkObjects;
+
+	vector<shared_ptr<class Enemy>>		m_lastWaveEnemies;
 
 	array<vector<shared_ptr<GameObject>>,ParticleType::PARTICLE_TYPE_COUNT>	m_particles;
 	array<int, ParticleType::PARTICLE_TYPE_COUNT>m_particleCycle = {0};

@@ -39,7 +39,7 @@ public:
 
 	//Prefabs
 	shared_ptr<GameObject> LoadItemPrefab(int id, Vec3 Location, shared_ptr<Scene>  scene);
-	void LoadEnemyPrefab(int modelNum, Vec3 Location, Vec3 Scale, float hp, shared_ptr<Scene> scene);
+	void LoadEnemyPrefab(int modelNum, Vec3 Location, Vec3 Scale, float hp, shared_ptr<Scene> scene, bool isLastWaveEnemy = false);
 	shared_ptr<GameObject> LoadBombPrefab(Vec3 Location);
 
 	void LoadCratePrefab(Vec3 pos, shared_ptr<Scene> scene);

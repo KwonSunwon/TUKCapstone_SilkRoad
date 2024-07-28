@@ -44,6 +44,8 @@
 #include "TankerSkill.h"
 #include "HealerSkill.h"
 #include "UpgradeManager.h"
+#include "InteractiveObject.h"
+#include "StagePortal.h"
 
 #include "Input.h"
 
@@ -1289,6 +1291,15 @@ shared_ptr<class Scene> LoadMainScene1()
 		}
 	}
 #pragma endregion
+
+#pragma region LastWaveEnemy
+	{
+		for (int i = 0; i < 100; ++i)
+		{
+			GET_SINGLE(Resources)->LoadEnemyPrefab(i%5, Vec3(-20000, 1500.f, 0), Vec3(1.2f, 1.2f, 1.2f), 100.f, scene, true);
+		}
+	}
+#pragma endregion
 	//#pragma region Enemy
 	//	{
 	//		for(int i = 0; i < 6; ++i)
@@ -1401,7 +1412,67 @@ shared_ptr<class Scene> LoadMainScene1()
 
 #pragma endregion
 
+#pragma StagePortal
+	{
+		shared_ptr<MeshData> meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\SM_Bld_Portal_01.fbx");
+		vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
+		shared_ptr<GameObject> gm = gameObjects[0];
 
+		gm->GetTransform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
+		gm->GetTransform()->SetLocalPosition(Vec3(0, 0, 0));
+
+
+		gm->AddComponent(make_shared<RigidBody>());
+		gm->AddComponent(make_shared<OrientedBoxCollider>());
+
+		gm->GetRigidBody()->SetStatic(true);
+		gm->GetRigidBody()->SetMass(99999.f);
+		gm->GetRigidBody()->SetRestitution(0.f);
+
+		//Instancing 유무 설정(사용:0,0  미사용:0,1)
+		gm->GetMeshRenderer()->GetMaterial()->SetInt(0, 0);
+
+		if (gm->GetCollider()->GetDebugCollider() != nullptr)
+			scene->AddGameObject(gm->GetCollider()->GetDebugCollider());
+		gm->SetShadow(true);
+		gm->SetCheckFrustum(true);
+
+		Vec3 localPos, localRot, colliderCenter, ColliderSize;
+
+		// 스테이지 포탈
+		localPos = Vec3(-2280.f, 0.f, -11560.f);
+		localRot = Vec3(0.f, 0.f, 0.f);
+		colliderCenter = Vec3(0.0f, 3.519f, 0.f);
+		ColliderSize = Vec3(8.644f, 7.039f, 3.01f);
+
+
+		localPos.x += 25000.f;
+		localPos.z += 25000.f;
+		gm->GetTransform()->SetLocalPosition(localPos);
+
+		localRot.y -= 180.f;
+		localRot.x = XMConvertToRadians(localRot.x);
+		localRot.y = XMConvertToRadians(localRot.y);
+		localRot.z = XMConvertToRadians(localRot.z);
+		gm->GetTransform()->SetLocalRotation(localRot);
+
+		colliderCenter *= 100.f;
+		gm->GetCollider()->SetOffset(colliderCenter);
+
+		ColliderSize *= (100.f / 2.f);
+		gm->GetCollider()->SetExtent(ColliderSize);
+
+
+		Vec3 rot = gm->GetTransform()->GetLocalRotation();
+		Matrix rotationMatrix = XMMatrixRotationX(rot.x) * XMMatrixRotationY(rot.y + 3.141592f) * XMMatrixRotationZ(rot.z);
+		Vec3 center = XMVector3Transform(gm->GetCollider()->GetOffset(), rotationMatrix);
+		gm->GetCollider()->SetOffset(center);
+
+		gm->AddComponent(make_shared<StagePortal>());
+
+		scene->AddGameObject(gm);
+	}
+#pragma endregion
 
 #pragma region test
 
