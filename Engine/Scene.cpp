@@ -300,8 +300,7 @@ void Scene::IntersectColliders(shared_ptr<BaseCollider> bs, shared_ptr<BaseColli
 {
 	shared_ptr<RigidBody> rb1 = bs->GetRigidBody();
 	shared_ptr<RigidBody> rb2 = bsDst->GetRigidBody();
-	if(rb1->GetStatic() && rb2->GetStatic())
-		return;
+
 
 
 
@@ -420,7 +419,7 @@ void Scene::testCollision()
 	m_contacts.clear();
 	for(auto& cgo : m_collidableGameObjects)
 	{
-		cgo->GetCollider()->setColor(Vec4(0, 0, 0, 0), false);
+		//cgo->GetCollider()->setColor(Vec4(0, 0, 0, 0), false);
 		cgo->GetRigidBody()->GetCollideEvent()->clear();
 	}
 
@@ -428,12 +427,41 @@ void Scene::testCollision()
 	{
 		m_ocTree->CollisionInspection(cgo->GetCollider());
 	}*/
+	vector<shared_ptr<GameObject>> staticCols;
+	vector<shared_ptr<GameObject>> movableCols;
+	for (auto go : m_collidableGameObjects) {
+		Vec3 pos = go->GetTransform()->GetWorldPosition();
+		if (pos.x < -10000.f)
+			continue;
+		else if (pos.x > 60000.f)
+			continue;
+		else if (pos.z > 60000.f)
+			continue;
+		else if (pos.z < -10000.f)
+			continue;
+		
+		if (go->GetRigidBody()->GetStatic())
+			staticCols.push_back(go);
+		else
+			movableCols.push_back(go);
+	}
+	for (int i = 0; i < staticCols.size(); ++i) {
+		for (int j = 0; j < movableCols.size(); ++j) {
+			IntersectColliders(staticCols[i]->GetCollider(), movableCols[j]->GetCollider());
+		}
+	}
+	for (int i = 0; i < movableCols.size(); ++i) {
+		for (int j = i + 1; j < movableCols.size(); ++j) {
+			IntersectColliders(movableCols[i]->GetCollider(), movableCols[j]->GetCollider());
+		}
+	}
+	
 
-	for(int i = 0; i < m_collidableGameObjects.size(); ++i) {
+	/*for(int i = 0; i < m_collidableGameObjects.size(); ++i) {
 		for(int j = i + 1; j < m_collidableGameObjects.size(); ++j) {
 			IntersectColliders(m_collidableGameObjects[i]->GetCollider(), m_collidableGameObjects[j]->GetCollider());
 		}
-	}
+	}*/
 
 	Resolution();
 
