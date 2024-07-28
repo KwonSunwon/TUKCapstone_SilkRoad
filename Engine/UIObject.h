@@ -160,3 +160,8 @@ class DifficultyBar : public UIObject
 {
 	virtual void Update() override;
 };
+
+class GameOverUI : public UIToggleObject
+{
+	virtual void Update() override;
+};

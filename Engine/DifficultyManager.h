@@ -25,8 +25,13 @@ public:
 	void Update();
 	float GetTimer() { return m_timer; }
 	Difficulty GetDifficulty() { return m_difficulty; }
+	bool GetIsGameOver() { return m_isGameOver; }
+	void SetIsGameOver(bool isGameOver) { m_isGameOver = isGameOver; }
 
 private:
 	Difficulty m_difficulty = Difficulty::EASY;
 	float m_timer = 0;
+
+	bool m_isGameOver = false;
+	float m_gameOverTime = 0;
 };

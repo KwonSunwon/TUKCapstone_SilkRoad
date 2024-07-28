@@ -534,3 +534,16 @@ void DifficultyBar::Update()
 	
 	UIObject::Update();
 }
+
+void GameOverUI::Update()
+{
+	if (GET_SINGLE(DifficultyManager)->GetIsGameOver())
+	{
+		SetToggle(true);
+	}
+	else
+	{
+		SetToggle(false);
+	}
+	UIObject::Update();
+}

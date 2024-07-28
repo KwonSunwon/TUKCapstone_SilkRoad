@@ -487,12 +487,12 @@ shared_ptr<GameObject> Scene::SpawnParticle(Vec3 pos, int type, bool network)
 
 	if(!network) {
 		if(GET_SINGLE(NetworkManager)->GetNetworkState() != NETWORK_STATE::SINGLE) {
-			if(GET_SINGLE(NetworkManager)->m_isSend) {
+			//if(GET_SINGLE(NetworkManager)->m_isSend) {
 				shared_ptr<ParticlePacket> packet = make_shared<ParticlePacket>();
 				packet->m_pos = pos;
 				packet->m_particleIndex = type;
 				SEND(packet);
-			}
+			//}
 		}
 	}
 	return rv;

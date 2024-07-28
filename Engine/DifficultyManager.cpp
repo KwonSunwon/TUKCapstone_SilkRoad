@@ -1,6 +1,7 @@
 #include"pch.h"
 #include"DifficultyManager.h"
 #include "Timer.h"
+#include "Input.h"
 
 void DifficultyManager::Init()
 {
@@ -23,5 +24,11 @@ void DifficultyManager::Update()
 	if (m_timer > DifficultyTime::VERYHARD_TIME)
 	{
 		m_difficulty = Difficulty::VERYHARD;
+	}
+
+	if (GET_SINGLE(Input)->GetButtonDown(KEY_TYPE::F11))
+	{
+		m_isGameOver = true;
+		m_gameOverTime = m_timer;
 	}
 }
