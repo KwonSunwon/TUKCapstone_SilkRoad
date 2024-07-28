@@ -1297,14 +1297,14 @@ shared_ptr<class Scene> LoadMainScene1()
 	{
 		for(int i = 0; i < 5; ++i)
 		{
-			GET_SINGLE(Resources)->LoadEnemyPrefab(i, Vec3(10000 + (i / 2) * 1000.f, 1500.f, 6721 + i % 2 * 1000.f), Vec3(1.2f, 1.2f, 1.2f), 100.f, scene, true);
+			//GET_SINGLE(Resources)->LoadEnemyPrefab(i, Vec3(10000 + (i / 2) * 1000.f, 1500.f, 6721 + i % 2 * 1000.f), Vec3(1.2f, 1.2f, 1.2f), 100.f, scene);
 		}
 	}
 
 	{
 		for(int i = 0; i < 5; ++i)
 		{
-			GET_SINGLE(Resources)->LoadEnemyPrefab(i, Vec3(27328 + (i / 2) * 1000.f, 1500.f, 7446 + i % 2 * 1000.f), Vec3(1.2f, 1.2f, 1.2f), 100.f, scene);
+			//GET_SINGLE(Resources)->LoadEnemyPrefab(i, Vec3(27328 + (i / 2) * 1000.f, 1500.f, 7446 + i % 2 * 1000.f), Vec3(1.2f, 1.2f, 1.2f), 100.f, scene);
 
 		}
 	}
@@ -1312,16 +1312,16 @@ shared_ptr<class Scene> LoadMainScene1()
 	{
 		for(int i = 0; i < 5; ++i)
 		{
-			GET_SINGLE(Resources)->LoadEnemyPrefab(i, Vec3(28623 + (i / 2) * 1000.f, 1500.f, 15045 + i % 2 * 1000.f), Vec3(1.2f, 1.2f, 1.2f), 100.f, scene);
+			//GET_SINGLE(Resources)->LoadEnemyPrefab(i, Vec3(28623 + (i / 2) * 1000.f, 1500.f, 15045 + i % 2 * 1000.f), Vec3(1.2f, 1.2f, 1.2f), 100.f, scene);
 		}
 	}
 #pragma endregion
 
 #pragma region LastWaveEnemy
 	{
-		for (int i = 0; i < 100; ++i)
+		for (int i = 0; i < 30; ++i)
 		{
-			//GET_SINGLE(Resources)->LoadEnemyPrefab(i%5, Vec3(-1000000, 1500.f, 0), Vec3(1.2f, 1.2f, 1.2f), 100.f, scene, true);
+			GET_SINGLE(Resources)->LoadEnemyPrefab(i%5, Vec3(-1000000, 1500.f, 0), Vec3(1.2f, 1.2f, 1.2f), 100.f, scene, true);
 		}
 	}
 #pragma endregion

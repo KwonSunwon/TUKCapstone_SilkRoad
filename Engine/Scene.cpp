@@ -85,7 +85,6 @@ void Scene::FinalUpdate()
 	{
 		gameObject->FinalUpdate();
 	}
-	m_ocTree->Update();
 }
 
 shared_ptr<Camera> Scene::GetMainCamera()
@@ -225,7 +224,6 @@ void Scene::AddGameObject(shared_ptr<GameObject> gameObject)
 	if(gameObject->GetRigidBody() != nullptr)
 	{
 		m_collidableGameObjects.push_back(gameObject);
-		m_ocTree->InsertObjectCollider(gameObject->GetCollider());
 	}
 
 	if(gameObject->GetInteractiveObject() != nullptr)

@@ -117,7 +117,6 @@ private:
 	
 private:
 	int m_numOfNetworkObject = 0;
-	shared_ptr<OcTree> m_ocTree = make_shared<OcTree>(100000, 1000);
 	shared_ptr<AstarGrid> m_astarGrid = make_shared<AstarGrid>();
 	string m_sceneName = "";
 
