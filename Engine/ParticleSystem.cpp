@@ -9,6 +9,7 @@
 #include "GameObject.h"
 #include "Camera.h"
 #include "RigidBody.h"
+#include "SoundManager.h"
 
 ParticleSystem::ParticleSystem(ParticleType type) : Component(COMPONENT_TYPE::PARTICLE_SYSTEM)
 {
@@ -339,6 +340,11 @@ void ParticleSystem::FinalUpdate()
 	else if (!m_singleType) {
 		if (m_createInterval < m_makeTime)
 		{
+			if (m_particleType == PARTICLE_THUNDER) {
+				GET_SINGLE(SoundManager)->soundPlay(Sounds::ENV_THUNDER);
+			}
+
+
 			m_makeTime = m_makeTime - m_createInterval;
 			add = 1;
 		}

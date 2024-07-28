@@ -244,6 +244,7 @@ void Player::Fire()
 		m_bomb->SetBombSize(500.f);
 		m_bomb->SetBombPosition(damagePos);
 		m_bomb->SetBombActive();
+		GET_SINGLE(SoundManager)->soundPlay(Sounds::SKILL_LAUNCHER);
 
 		if(GET_SINGLE(NetworkManager)->GetNetworkState() != NETWORK_STATE::SINGLE) {
 			shared_ptr<SkillPacket> packet = make_shared<SkillPacket>();
@@ -290,6 +291,7 @@ void Player::AddBullet(shared_ptr<class PlayerBullet> bullet)
 
 void Player::ApplyDamage(float damage)
 {
+	GET_SINGLE(SoundManager)->soundPlay(Sounds::ENV_HIT_BY_ENEMY);
 	m_hp -= damage;
 	if(m_hp <= 0.f) {
 		m_isAlive = false;

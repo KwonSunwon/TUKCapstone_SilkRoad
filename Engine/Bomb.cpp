@@ -50,8 +50,8 @@ void Bomb::Update()
 		shared_ptr<MonoBehaviour> scriptE = col->m_rb2->GetGameObject()->GetMonobehaviour("Enemy");
 		if (scriptE) {
 			shared_ptr<Enemy> enemyScript = dynamic_pointer_cast<Enemy>(scriptE);
-			enemyScript->GetDamage(100.f*DELTA_TIME);
-			enemyScript->MakeDamageIndicator(100.f*DELTA_TIME, col->m_rb2->GetPosition() + Vec3(0.f, 150.f, 0.f), false);
+			enemyScript->GetDamage(1000.f*DELTA_TIME);
+			enemyScript->MakeDamageIndicator(10000.f*DELTA_TIME, col->m_rb2->GetPosition() + Vec3(0.f, 150.f, 0.f), true);
 		}
 	}
 
