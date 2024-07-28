@@ -216,13 +216,13 @@ shared_ptr<class Scene> LoadMainScene2()
 
 
 #pragma region UI_Test
-	for(int32 i = 0; i < 6; i++)
+	for (int32 i = 0; i < 6; i++)
 	{
 		shared_ptr<GameObject> obj = make_shared<GameObject>();
 		obj->SetLayerIndex(GET_SINGLE(SceneManager)->LayerNameToIndex(L"UI")); // UI
 		obj->AddComponent(make_shared<Transform>());
 		obj->GetTransform()->SetLocalScale(Vec3(100.f, 100.f, 100.f));
-		obj->GetTransform()->SetLocalPosition(Vec3(3000.f + (i * 120), 250.f, 3000.f));
+		obj->GetTransform()->SetLocalPosition(Vec3(-350.f + (i * 120), 250.f, 500.f));
 		shared_ptr<MeshRenderer> meshRenderer = make_shared<MeshRenderer>();
 		{
 			shared_ptr<Mesh> mesh = GET_SINGLE(Resources)->LoadRectangleMesh();
@@ -232,9 +232,9 @@ shared_ptr<class Scene> LoadMainScene2()
 			shared_ptr<Shader> shader = GET_SINGLE(Resources)->Get<Shader>(L"Texture");
 
 			shared_ptr<Texture> texture;
-			if(i < 3)
+			if (i < 3)
 				texture = GEngine->GetRTGroup(RENDER_TARGET_GROUP_TYPE::G_BUFFER)->GetRTTexture(i);
-			else if(i < 5)
+			else if (i < 5)
 				texture = GEngine->GetRTGroup(RENDER_TARGET_GROUP_TYPE::LIGHTING)->GetRTTexture(i - 3);
 			else
 				texture = GEngine->GetRTGroup(RENDER_TARGET_GROUP_TYPE::SHADOW)->GetRTTexture(0);
@@ -244,8 +244,19 @@ shared_ptr<class Scene> LoadMainScene2()
 			material->SetTexture(0, texture);
 			meshRenderer->SetMaterial(material);
 		}
+		{
+			shared_ptr<UIToggleObject> uiObject = make_shared<UIToggleObject>();
+			uiObject->SetPivot(ePivot::CENTER);
+			uiObject->SetScreenPivot(ePivot::CENTER);
+			uiObject->SetWidth(100.f);
+			uiObject->SetHeight(100.f);
+			uiObject->SetZOrder(100);
+			uiObject->SetPosition(Vec2(-350.0f + (i * 120), 250));
+			uiObject->SetToggleKey(KEY_TYPE::F1);
+			obj->AddComponent(uiObject);
+		}
 		obj->AddComponent(meshRenderer);
-		//scene->AddGameObject(obj);
+		scene->AddGameObject(obj);
 	}
 #pragma endregion
 
@@ -1323,7 +1334,7 @@ shared_ptr<class Scene> LoadMainScene2()
 		}
 		// 다음 난이도 안내 텍스트
 		{
-			auto nextDifficultyText = make_shared<DifficultyInfoTextObject>();
+			auto nextDifficultyText = make_shared<TextObject>();
 			nextDifficultyText->SetFormat("15C");
 			nextDifficultyText->SetBrush("WHITE");
 			nextDifficultyText->SetPivot(ePivot::CENTER);
@@ -1542,7 +1553,7 @@ shared_ptr<class Scene> LoadMainScene2()
 
 				scene->AddGameObject(particle);
 			}
-			for (int i = 0; i < 20; ++i)
+			for (int i = 0; i < 35; ++i)
 			{
 				shared_ptr<GameObject> particle = make_shared<GameObject>();
 				particle->AddComponent(make_shared<Transform>());

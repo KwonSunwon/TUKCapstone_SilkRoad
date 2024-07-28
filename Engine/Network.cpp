@@ -265,8 +265,8 @@ void Host::WaitLoop()
 
 		DWORD optval = TIMEOUT;
 		setsockopt(tempSocket, SOL_SOCKET, SO_RCVTIMEO, (const char*)&optval, sizeof(optval));
-		/*optval = TRUE;
-		setsockopt(tempSocket, IPPROTO_TCP, TCP_NODELAY, (const char*)&optval, sizeof(optval));*/
+		optval = TRUE;
+		setsockopt(tempSocket, IPPROTO_TCP, TCP_NODELAY, (const char*)&optval, sizeof(optval));
 
 		thread connectionThread = thread{ &Host::Connection, this, guest.id };
 		connectionThread.detach();
@@ -470,8 +470,8 @@ void Guest::Connect()
 
 	DWORD optval = TIMEOUT;
 	setsockopt(m_socket, SOL_SOCKET, SO_RCVTIMEO, (const char*)&optval, sizeof(optval));
-	/*optval = TRUE;
-	setsockopt(m_socket, IPPROTO_TCP, TCP_NODELAY, (const char*)&optval, sizeof(optval));*/
+	optval = TRUE;
+	setsockopt(m_socket, IPPROTO_TCP, TCP_NODELAY, (const char*)&optval, sizeof(optval));
 
 	GET_SINGLE(SceneManager)->GetActiveScene()->m_networkPlayers[0]->m_myNetworkId = 0;
 	if(initPacket.m_networkId == 1) {
