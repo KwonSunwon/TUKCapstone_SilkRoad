@@ -862,7 +862,7 @@ shared_ptr<class Scene> LoadMainScene1()
 		vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
 		shared_ptr<GameObject> gm = gameObjects[idx];
 
-		gm->GetTransform()->SetLocalScale(Vec3(10.f, 10.f, 3.f));
+		gm->GetTransform()->SetLocalScale(Vec3(10.f, 5.f, 10.f));
 		gm->GetTransform()->SetLocalPosition(Vec3(500, 500.f, 500.f));
 
 		shared_ptr<RigidBody> rbb = make_shared<RigidBody>();
@@ -877,9 +877,9 @@ shared_ptr<class Scene> LoadMainScene1()
 
 		Vec3 localPos, localRot, colliderCenter, ColliderSize;
 		localPos = Vec3(758.f, 2089.f, -2360.f);
-		localRot = Vec3(0.f, 90.f, 0.f);
+		localRot = Vec3(90.f, 0.f, 0.f);
 		colliderCenter = Vec3(0.f, 0.f, 0.f);
-		ColliderSize = Vec3(1.46f*10.f, 0.28f*10.f, 0.65f*3.f);
+		ColliderSize = Vec3(1.46f*10.f, 0.28f*5.f, 0.65f*10.f);
 
 		localPos.x += 25000.f;
 		localPos.z += 25000.f;

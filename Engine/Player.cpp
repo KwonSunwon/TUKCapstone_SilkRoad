@@ -497,11 +497,14 @@ void Player::SkillTanker()
 	shared_ptr<Transform> transform = GetTransform();
 	Vec3 pos = transform->GetLocalPosition();
 	Vec3 look = transform->GetLook();
+	Vec3 rot = transform->GetLocalRotation();
+	rot.x = 3.1415f / 2;
 	Vec3 dropPos = pos + look * 700.f + Vec3(0.f, 1000.f, 0.f);
 
 	m_guardObject->GetRigidBody()->SetStatic(false);
 	m_guardObject->GetRigidBody()->MoveTo(dropPos);
-	m_guardObject->GetTransform()->LookAt(look);
+	//m_guardObject->GetTransform()->LookAt(look);
+	m_guardObject->GetTransform()->SetLocalRotation(rot);
 
 	auto hScript = m_healObject->GetMonobehaviour("TankerSkill");
 	if(hScript) {
