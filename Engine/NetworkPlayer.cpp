@@ -15,6 +15,7 @@
 #include "Scene.h"
 #include "SceneManager.h"
 #include "Player.h"
+#include "OrientedBoxCollider.h"
 #include <chrono>
 
 void NetworkPlayer::Awake()
@@ -71,18 +72,22 @@ void NetworkPlayer::ChangeClass(int classIndex)
 	switch(m_classIdx) {
 	case EnumInteract::CHARACTER_CHANGER1:
 		meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Character_Dealer.fbx");
+		GetGameObject()->GetCollider()->SetOffset(Vec3(0, 100, 0));
 		break;
 
 	case EnumInteract::CHARACTER_CHANGER2:
 		meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Character_Healer.fbx");
+		GetGameObject()->GetCollider()->SetOffset(Vec3(0, 100, 0));
 		break;
 
 	case EnumInteract::CHARACTER_CHANGER3:
 		meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Character_Launcher.fbx");
+		GetGameObject()->GetCollider()->SetOffset(Vec3(0, 100, 0));
 		break;
 
 	case EnumInteract::CHARACTER_CHANGER4:
 		meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Character_Tanker.fbx");
+		GetGameObject()->GetCollider()->SetOffset(Vec3(0, 100, 0));
 		break;
 	}
 

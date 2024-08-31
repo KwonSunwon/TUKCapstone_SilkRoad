@@ -14,6 +14,7 @@
 #include "Transform.h"
 #include "Packet.h"
 #include "Network.h"
+#include "OrientedBoxCollider.h"
 
 void UpgradeManager::Init()
 {//hp,maxHp,bulletDamage, hpregen, maxwalkSpeed, maxJumpSpeed, maxAimSpeed, cri percent, cri damage, m_fireRate
@@ -46,27 +47,31 @@ void UpgradeManager::ClassChange(int id)
 	GET_SINGLE(SoundManager)->soundPlay(Sounds::ENV_EAT_ITEM);
 	shared_ptr<GameObject> mainPlayer = GET_SINGLE(SceneManager)->GetActiveScene()->m_mainPlayerScript->GetGameObject();
 	shared_ptr<MeshData> meshData;
-
+	Vec3 offset;
 	switch(id)
 	{
 	case DEALER:
 		meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Character_Dealer.fbx");
 		GET_SINGLE(SceneManager)->GetActiveScene()->GetMainCamera()->GetTransform()->SetLocalPosition(Vec3(0.f, 180.f, 40.f));
+		offset = Vec3(0,100,0);
 		break;
 
 	case HEALER:
 		meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Character_Healer.fbx");
 		GET_SINGLE(SceneManager)->GetActiveScene()->GetMainCamera()->GetTransform()->SetLocalPosition(Vec3(0.f, 170.f, 40.f));
+		offset = Vec3(0, 100, 0);
 		break;
 
 	case LAUNCHER:
 		meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Character_Launcher.fbx");
 		GET_SINGLE(SceneManager)->GetActiveScene()->GetMainCamera()->GetTransform()->SetLocalPosition(Vec3(0.f, 190.f, 40.f));
+		offset = Vec3(0, 100, 0);
 		break;
 
 	case TANKER:
 		meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Character_Tanker.fbx");
 		GET_SINGLE(SceneManager)->GetActiveScene()->GetMainCamera()->GetTransform()->SetLocalPosition(Vec3(0.f, 165.f, 40.f));
+		offset = Vec3(0, 100, 0);
 		break;
 
 	default:
@@ -76,6 +81,7 @@ void UpgradeManager::ClassChange(int id)
 	vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
 	mainPlayer->GetMeshRenderer()->SetMesh(gameObjects[0]->GetMeshRenderer()->GetMesh());
 	mainPlayer->AddComponent(gameObjects[0]->GetAnimator());
+	mainPlayer->GetCollider()->SetOffset(offset);
 
 	SetStat();
 
@@ -91,27 +97,32 @@ void UpgradeManager::SetClass()
 {
 	shared_ptr<GameObject> mainPlayer = GET_SINGLE(SceneManager)->GetActiveScene()->m_mainPlayerScript->GetGameObject();
 	shared_ptr<MeshData> meshData;
+	Vec3 offset;
 
 	switch(m_charClass)
 	{
 	case DEALER:
 		meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Character_Dealer.fbx");
 		GET_SINGLE(SceneManager)->GetActiveScene()->GetMainCamera()->GetTransform()->SetLocalPosition(Vec3(0.f, 180.f, 40.f));
+		offset = Vec3(0, 100, 0);
 		break;
 
 	case HEALER:
 		meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Character_Healer.fbx");
 		GET_SINGLE(SceneManager)->GetActiveScene()->GetMainCamera()->GetTransform()->SetLocalPosition(Vec3(0.f, 170.f, 40.f));
+		offset = Vec3(0, 100, 0);
 		break;
 
 	case LAUNCHER:
 		meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Character_Launcher.fbx");
 		GET_SINGLE(SceneManager)->GetActiveScene()->GetMainCamera()->GetTransform()->SetLocalPosition(Vec3(0.f, 190.f, 40.f));
+		offset = Vec3(0, 100, 0);
 		break;
 
 	case TANKER:
 		meshData = GET_SINGLE(Resources)->LoadFBX(L"..\\Resources\\FBX\\Character_Tanker.fbx");
 		GET_SINGLE(SceneManager)->GetActiveScene()->GetMainCamera()->GetTransform()->SetLocalPosition(Vec3(0.f, 165.f, 40.f));
+		offset = Vec3(0, 100, 0);
 		break;
 
 	default:
@@ -121,6 +132,7 @@ void UpgradeManager::SetClass()
 	vector<shared_ptr<GameObject>> gameObjects = meshData->Instantiate();
 	mainPlayer->GetMeshRenderer()->SetMesh(gameObjects[0]->GetMeshRenderer()->GetMesh());
 	mainPlayer->AddComponent(gameObjects[0]->GetAnimator());
+	mainPlayer->GetCollider()->SetOffset(offset);
 
 	SetStat();
 
